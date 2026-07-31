@@ -203,10 +203,10 @@
 
   {%- comment -%}── 10 + 11. FONTS ────────────────────────────────────────────
     fonts.liquid: body_regular (woff2 preload + @font-face swap)
-                  heading_font (Bebas Neue, fetchpriority=low)
-    lb-bebas-neue: self-hosted Bebas Neue @font-face declarations
-    Only two preloads remain (trimmed May 2026, v23) — four others removed
-    to unblock the 18.6KB hero poster on slow 4G.
+                  heading_font/Bebas Neue (woff2 preload, fetchpriority=low — queues after poster)
+    lb-bebas-neue: product RTE typography styles (font loading removed in v1.1.0)
+    Two preloads active (visual-clarity pass, Jul 2026) — fetchpriority=low on
+    heading keeps it from competing with the 18.6KB hero poster on slow 4G.
   {%- endcomment -%}
   {%- render 'fonts' -%}
   {%- render 'lb-bebas-neue' -%}

@@ -18,8 +18,10 @@ product-card {
   cursor: pointer;
 }
 
-.product-card {
-  will-change: transform;
+@media (hover: hover) {
+  .product-card:hover {
+    will-change: transform;
+  }
 }
 
 .product-card__content {

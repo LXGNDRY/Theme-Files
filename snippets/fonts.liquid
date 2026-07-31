@@ -54,4 +54,19 @@
   {%- endif -%}
 {%- endunless -%}
 
+{% # Heading font (Bebas Neue) preload — fetchpriority=low so it queues behind the hero poster %}
+{%- unless settings.type_heading_font.system? -%}
+  {%- assign heading_regular = settings.type_heading_font | font_modify: 'weight', '400' -%}
+  {%- if heading_regular != blank -%}
+    <link
+      rel="preload"
+      as="font"
+      href="{{ heading_regular | font_url }}"
+      type="font/woff2"
+      crossorigin
+      fetchpriority="low"
+    >
+  {%- endif -%}
+{%- endunless -%}
+
 {% # theme-check-enable %}
