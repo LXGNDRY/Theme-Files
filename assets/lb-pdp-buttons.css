@@ -69,7 +69,9 @@ add-to-cart-component {
 .product-details add-to-cart-component button.button,
 .product-details add-to-cart-component .button,
 product-form add-to-cart-component button.button,
-product-form add-to-cart-component .button {
+product-form add-to-cart-component .button,
+.featured-product-section add-to-cart-component button.button,
+.featured-product-section add-to-cart-component .button {
   /* Layout */
   display: flex;
   align-items: center;
@@ -109,7 +111,9 @@ product-form add-to-cart-component .button {
   .product-details add-to-cart-component button.button:hover,
   .product-details add-to-cart-component .button:hover,
   product-form add-to-cart-component button.button:hover,
-  product-form add-to-cart-component .button:hover {
+  product-form add-to-cart-component .button:hover,
+  .featured-product-section add-to-cart-component button.button:hover,
+  .featured-product-section add-to-cart-component .button:hover {
     background-color: #1A1A1A;
     border-color: #1A1A1A;
     color: #F5F5F0;
@@ -117,19 +121,22 @@ product-form add-to-cart-component .button {
 }
 
 .product-details add-to-cart-component button.button:active,
-product-form add-to-cart-component button.button:active {
+product-form add-to-cart-component button.button:active,
+.featured-product-section add-to-cart-component button.button:active {
   transform: scale(0.97);
 }
 
 .product-details add-to-cart-component button.button:focus-visible,
-product-form add-to-cart-component button.button:focus-visible {
+product-form add-to-cart-component button.button:focus-visible,
+.featured-product-section add-to-cart-component button.button:focus-visible {
   outline: 2px solid #0A0A0A;
   outline-offset: 3px;
 }
 
 /* Sold out / unavailable state */
 .product-details add-to-cart-component button.button:disabled,
-product-form add-to-cart-component button.button:disabled {
+product-form add-to-cart-component button.button:disabled,
+.featured-product-section add-to-cart-component button.button:disabled {
   background-color: #EDEDED;
   border-color: #EDEDED;
   color: #888888;
@@ -138,12 +145,14 @@ product-form add-to-cart-component button.button:disabled {
 
 /* ATC icon — keep visible, inherit color */
 .product-details add-to-cart-component .add-to-cart-icon,
-product-form add-to-cart-component .add-to-cart-icon {
+product-form add-to-cart-component .add-to-cart-icon,
+.featured-product-section add-to-cart-component .add-to-cart-icon {
   color: inherit;
   flex-shrink: 0;
 }
 .product-details add-to-cart-component .add-to-cart-icon svg,
-product-form add-to-cart-component .add-to-cart-icon svg {
+product-form add-to-cart-component .add-to-cart-icon svg,
+.featured-product-section add-to-cart-component .add-to-cart-icon svg {
   width: 18px;
   height: 18px;
   stroke: currentColor;
@@ -152,7 +161,8 @@ product-form add-to-cart-component .add-to-cart-icon svg {
 
 /* Dark mode */
 html[data-theme="dark"] .product-details add-to-cart-component button.button,
-html[data-theme="dark"] product-form add-to-cart-component button.button {
+html[data-theme="dark"] product-form add-to-cart-component button.button,
+html[data-theme="dark"] .featured-product-section add-to-cart-component button.button {
   background-color: #F2F2F2;
   border-color: #F2F2F2;
   color: #0A0A0A;
@@ -160,7 +170,8 @@ html[data-theme="dark"] product-form add-to-cart-component button.button {
 
 @media (hover: hover) {
   html[data-theme="dark"] .product-details add-to-cart-component button.button:hover,
-  html[data-theme="dark"] product-form add-to-cart-component button.button:hover {
+  html[data-theme="dark"] product-form add-to-cart-component button.button:hover,
+  html[data-theme="dark"] .featured-product-section add-to-cart-component button.button:hover {
     background-color: #EDEDE8;
     border-color: #EDEDE8;
     color: #0A0A0A;
@@ -168,7 +179,8 @@ html[data-theme="dark"] product-form add-to-cart-component button.button {
 }
 
 html[data-theme="dark"] .product-details add-to-cart-component button.button:disabled,
-html[data-theme="dark"] product-form add-to-cart-component button.button:disabled {
+html[data-theme="dark"] product-form add-to-cart-component button.button:disabled,
+html[data-theme="dark"] .featured-product-section add-to-cart-component button.button:disabled {
   background-color: #1A1A1A;
   border-color: #1A1A1A;
   color: #444444;
@@ -286,7 +298,8 @@ html[data-theme="dark"] a.shopify-payment-button__more-options {
 
 @media screen and (max-width: 749px) {
   .product-details add-to-cart-component button.button,
-  product-form add-to-cart-component button.button {
+  product-form add-to-cart-component button.button,
+  .featured-product-section add-to-cart-component button.button {
     min-height: 56px;
     font-size: 20px;
     letter-spacing: 0.09em;
