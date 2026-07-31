@@ -1,1 +1,300 @@
-product-card{cursor:pointer}.product-card{will-change:transform}.product-card__content{transition:transform 180ms cubic-bezier(0.25,0.46,0.45,0.94),box-shadow 180ms cubic-bezier(0.25,0.46,0.45,0.94)}@media (hover:hover){.product-card:hover .product-card__content{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.10)}}@keyframes lb-atc-pulse{0%,100%{opacity:1}50%{opacity:0.65}}add-to-cart-component button[disabled]:not([data-unavailable]){position:relative;overflow:hidden}add-to-cart-component.is-loading button{pointer-events:none;animation:lb-atc-pulse 900ms ease-in-out infinite}add-to-cart-component.is-loading .add-to-cart-text__content{opacity:0.5}@keyframes lb-atc-confirm{0%{transform:scale(1)}40%{transform:scale(1.04)}100%{transform:scale(1)}}add-to-cart-component.is-added button{animation:lb-atc-confirm 300ms cubic-bezier(0.34,1.56,0.64,1) forwards}.swatch{transition:transform 120ms ease-out,outline-offset 120ms ease-out,outline-color 120ms ease-out;outline:2px solid transparent;outline-offset:0px;cursor:pointer}@media (hover:hover){.swatch:hover{transform:scale(1.12)}}.swatch[aria-checked="true"],.swatch.is-active,[aria-selected="true"]>.swatch{outline-color:currentColor;outline-offset:3px;transform:scale(1)}.swatch--unavailable{position:relative;opacity:0.45}.swatch--unavailable::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom right,transparent calc(50% - 0.5px),currentColor calc(50% - 0.5px),currentColor calc(50% + 0.5px),transparent calc(50% + 0.5px));opacity:0.6;pointer-events:none;border-radius:inherit}@keyframes lb-modal-in{from{opacity:0;transform:scale(0.97) translateY(-6px)}to{opacity:1;transform:scale(1) translateY(0)}}.search-modal,.predictive-search-modal{animation:lb-modal-in 200ms cubic-bezier(0.25,0.46,0.45,0.94) both}.search-modal-overlay,[data-modal-overlay]{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:opacity 200ms ease}.predictive-search-products-list__item,.predictive-search__item{transition:border-left-color 120ms ease,background-color 120ms ease;border-left:2px solid transparent;padding-left:0.5rem}@media (hover:hover){.predictive-search-products-list__item:hover,.predictive-search__item:hover{border-left-color:currentColor;background-color:color-mix(in srgb,currentColor 5%,transparent)}}@media (hover:none){.product-card{touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0)}.product-card__link{cursor:pointer;touch-action:manipulation}.product-card swatches-variant-picker-component,.product-card variant-picker-component,.product-card [class*="swatch"],.product-card [class*="variant-picker"],.product-card [class*="variant-option"],.product-card .quick-add,.product-card [class*="quick-add"],.product-card add-to-cart-component{display:none!important}.product-card *{pointer-events:none!important}.product-card__link{pointer-events:auto!important}.product-card__content{position:relative;isolation:isolate}.product-card__content::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0);border-radius:inherit;pointer-events:none;transition:background 180ms ease-out;z-index:10}.product-card.lb-tapped .product-card__content::after{background:rgba(255,255,255,0.45);transition:background 0ms}}.product-card__media-wrapper{position:relative;overflow:hidden}.product-card__img--primary{transition:opacity 0.25s ease}.product-card__img--hover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.25s ease;pointer-events:none}@media (hover:hover){.product-card:hover .product-card__img--primary{opacity:0}.product-card:hover .product-card__img--hover{opacity:1}}
+/*
+ * lb-product-card.css
+ * Phase 2 — Legendary Branding Theme
+ * Micro-interactions: card hover, ATC loading state,
+ * swatch ring/scale, search modal entrance
+ * Keeps all Phase 1 foundations intact.
+ */
+
+/* ─────────────────────────────────────────
+   1. PRODUCT CARD — Hover Lift
+   Target: .product-card__content
+───────────────────────────────────────── */
+
+/* iOS Safari requires cursor:pointer on the element itself to fire a tap
+   as a click event on first touch. Without it, tap 1 = hover/focus,
+   tap 2 = actual click. Setting it on the custom element tag fixes this. */
+product-card {
+  cursor: pointer;
+}
+
+.product-card {
+  will-change: transform;
+}
+
+.product-card__content {
+  transition:
+    transform 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@media (hover: hover) {
+  .product-card:hover .product-card__content {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+  }
+}
+
+/* ─────────────────────────────────────────
+   2. PRODUCT CARD — Image Skeleton Loader
+   Removed (2026-05-23): shimmer animation deleted per product decision.
+   Cards render at natural background with no loading animation.
+───────────────────────────────────────── */
+
+
+/* ─────────────────────────────────────────
+   3. ADD-TO-CART BUTTON — Loading State
+   Shimmer on the button while API resolves
+───────────────────────────────────────── */
+
+@keyframes lb-atc-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.65; }
+}
+
+add-to-cart-component button[disabled]:not([data-unavailable]) {
+  /* Only when disabled due to loading (not sold out) */
+  position: relative;
+  overflow: hidden;
+}
+
+add-to-cart-component.is-loading button {
+  pointer-events: none;
+  animation: lb-atc-pulse 900ms ease-in-out infinite;
+}
+
+add-to-cart-component.is-loading .add-to-cart-text__content {
+  opacity: 0.5;
+}
+
+/* Success micro-pulse on add confirmation */
+@keyframes lb-atc-confirm {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+add-to-cart-component.is-added button {
+  animation: lb-atc-confirm 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ─────────────────────────────────────────
+   4. SWATCH — Micro-interactions
+   Active ring, hover scale, unavailable slash
+───────────────────────────────────────── */
+
+.swatch {
+  transition:
+    transform 120ms ease-out,
+    outline-offset 120ms ease-out,
+    outline-color 120ms ease-out;
+  outline: 2px solid transparent;
+  outline-offset: 0px;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .swatch:hover {
+    transform: scale(1.12);
+  }
+}
+
+/* Active state — clean outer ring */
+.swatch[aria-checked="true"],
+.swatch.is-active,
+[aria-selected="true"] > .swatch {
+  outline-color: currentColor;
+  outline-offset: 3px;
+  transform: scale(1);
+}
+
+/* Unavailable — diagonal slash via pseudo-element */
+.swatch--unavailable {
+  position: relative;
+  opacity: 0.45;
+}
+
+.swatch--unavailable::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom right,
+    transparent calc(50% - 0.5px),
+    currentColor calc(50% - 0.5px),
+    currentColor calc(50% + 0.5px),
+    transparent calc(50% + 0.5px)
+  );
+  opacity: 0.6;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* ─────────────────────────────────────────
+   5. SEARCH MODAL — Entrance Animation
+   Fade + scale-in, frosted backdrop
+───────────────────────────────────────── */
+
+@keyframes lb-modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.search-modal,
+.predictive-search-modal {
+  animation: lb-modal-in 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+/* Backdrop blur on overlay */
+.search-modal-overlay,
+[data-modal-overlay] {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: opacity 200ms ease;
+}
+
+/* Search result card hover accent */
+.predictive-search-products-list__item,
+.predictive-search__item {
+  transition:
+    border-left-color 120ms ease,
+    background-color 120ms ease;
+  border-left: 2px solid transparent;
+  padding-left: 0.5rem;
+}
+
+@media (hover: hover) {
+  .predictive-search-products-list__item:hover,
+  .predictive-search__item:hover {
+    border-left-color: currentColor;
+    background-color: color-mix(in srgb, currentColor 5%, transparent);
+  }
+}
+
+
+/* ─────────────────────────────────────────
+   6. MOBILE TAP FIX
+   Root cause: iOS Safari fires a synthetic mouseover/focus on the
+   first tap before navigating (ghost click), causing a 2-tap problem.
+   touch-action: manipulation disables double-tap-to-zoom which
+   eliminates the 300ms delay and the ghost click entirely.
+
+   Feedback: white flash via ::after pseudo-element on :active —
+   immediate, visible, feels native. Replaces the opacity dip which
+   was too slow and too subtle on bright product images.
+───────────────────────────────────────── */
+
+@media (hover: none) {
+  /* ─ SENSITIVITY: eliminate 300ms delay + ghost click on iOS ──────────
+     touch-action: manipulation = no double-tap zoom, no delay.
+     Suppresses iOS system grey tap highlight (we use our own flash). */
+  .product-card {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+
+  /* Ensure the card link is always the hit target */
+  .product-card__link {
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  /* Hide every interactive overlay that can intercept a tap */
+  .product-card swatches-variant-picker-component,
+  .product-card variant-picker-component,
+  .product-card [class*="swatch"],
+  .product-card [class*="variant-picker"],
+  .product-card [class*="variant-option"],
+  .product-card .quick-add,
+  .product-card [class*="quick-add"],
+  .product-card add-to-cart-component {
+    display: none !important;
+  }
+
+  /* Kill pointer-events on card children — link wins via absolute cover */
+  .product-card * {
+    pointer-events: none !important;
+  }
+  .product-card__link {
+    pointer-events: auto !important;
+  }
+
+  /* ─ TAP FLASH ────────────────────────────────────────────
+     JS adds .lb-tapped to product-card on touchstart (see
+     lb-product-card-tap.js). CSS :active is unreliable on iOS
+     Safari — it only triggers if the finger holds still long
+     enough before iOS decides it might be a scroll, so navigation
+     can fire before :active ever applies and the flash is never seen.
+
+     Class-driven approach guarantees the flash renders on the
+     very first touchstart frame, before any navigation fires. */
+  .product-card__content {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .product-card__content::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0);
+    border-radius: inherit;
+    pointer-events: none;
+    transition: background 180ms ease-out;
+    z-index: 10;
+  }
+
+  /* Flash in instantly on touchstart (JS adds .lb-tapped) */
+  .product-card.lb-tapped .product-card__content::after {
+    background: rgba(255, 255, 255, 0.45);
+    transition: background 0ms;
+  }
+}
+
+/* ─────────────────────────────────────────
+   7. PRODUCT CARD — Hover Image Swap
+   (formerly §8 — renumbered after variant pills moved to lb-variant-selectors.css)
+   Universal rule replacing per-card inline <style> blocks.
+   Previously each card with a second media item emitted its own
+   scoped <style> block in product-card.liquid, generating up to
+   24 separate style recalculations on a collection page (~14KB).
+   Now handled once here for all cards globally.
+   Requires: product-card.liquid renders .product-card__img--hover
+   as a sibling to .product-card__img--primary inside
+   .product-card__media-wrapper.
+───────────────────────────────────────── */
+
+.product-card__media-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card__img--primary {
+  transition: opacity 0.25s ease;
+}
+
+.product-card__img--hover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .product-card:hover .product-card__img--primary {
+    opacity: 0;
+  }
+  .product-card:hover .product-card__img--hover {
+    opacity: 1;
+  }
+}

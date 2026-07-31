@@ -1,0 +1,47 @@
+{%- if section.blocks.size > 0 -%}
+<div class="lb-ticker" aria-hidden="true">
+  <div class="lb-ticker__track">
+    {%- for block in section.blocks -%}
+      <span class="lb-ticker__word">{{ block.settings.text }}<span class="lb-ticker__dot">·</span></span>
+    {%- endfor -%}
+    {%- for block in section.blocks -%}
+      <span class="lb-ticker__word">{{ block.settings.text }}<span class="lb-ticker__dot">·</span></span>
+    {%- endfor -%}
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Brand Ticker",
+  "tag": "section",
+  "class": "lb-ticker-section",
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Ticker Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "LEGENDARY BRANDING"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Ticker",
+      "blocks": [
+        { "type": "item", "settings": { "text": "HEAVYWEIGHT" } },
+        { "type": "item", "settings": { "text": "LEGENDARY BRANDING" } },
+        { "type": "item", "settings": { "text": "LIMITED RUNS" } },
+        { "type": "item", "settings": { "text": "DTG PRINTED" } },
+        { "type": "item", "settings": { "text": "QUALITY OVER QUANTITY" } },
+        { "type": "item", "settings": { "text": "SS26" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

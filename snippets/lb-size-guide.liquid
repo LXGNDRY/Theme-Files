@@ -1,0 +1,210 @@
+{%- doc -%}
+  Size guide disclosure for the PDP variant picker.
+  Zero JS — uses <details> for show/hide.
+  Falls back to hardcoded measurements; accepts custom.size_guide metafield (JSON) for per-product override.
+
+  @param {object} product - The product object.
+{%- enddoc -%}
+
+{%- liquid
+  assign sg_custom = product.metafields.custom.size_guide.value
+  assign sg_unit = 'in'
+-%}
+
+<div class="lb-size-guide">
+  <details class="lb-size-guide__details">
+    <summary class="lb-size-guide__trigger" aria-label="Open size guide">
+      <svg class="lb-size-guide__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10H3M16 6l5 4-5 4"/></svg>
+      SIZE GUIDE
+    </summary>
+
+    <div class="lb-size-guide__panel">
+
+      {%- if sg_custom != blank -%}
+        {{- sg_custom -}}
+      {%- else -%}
+        {%- comment -%} CSS-only tabs using hidden radio inputs {%- endcomment -%}
+        <div class="lb-size-guide__tabs">
+          <input class="lb-sgt__radio" type="radio" name="lb-sg-{{ product.id }}" id="lb-sg-tee-{{ product.id }}" checked>
+          <input class="lb-sgt__radio" type="radio" name="lb-sg-{{ product.id }}" id="lb-sg-hoodie-{{ product.id }}">
+
+          <div class="lb-size-guide__tab-labels">
+            <label class="lb-size-guide__tab-label" for="lb-sg-tee-{{ product.id }}">Tees</label>
+            <label class="lb-size-guide__tab-label" for="lb-sg-hoodie-{{ product.id }}">Hoodies</label>
+          </div>
+
+          <div class="lb-size-guide__tab-panels">
+            <div class="lb-size-guide__tab-panel lb-size-guide__tab-panel--tees">
+              <table class="lb-size-guide__table">
+                <thead>
+                  <tr>
+                    <th>Size</th>
+                    <th>Chest (in)</th>
+                    <th>Length (in)</th>
+                    <th>Shoulder (in)</th>
+                    <th>Chest (cm)</th>
+                    <th>Length (cm)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>S</td><td>19.5</td><td>28</td><td>17.5</td><td>49.5</td><td>71</td></tr>
+                  <tr><td>M</td><td>21</td><td>29.5</td><td>18.5</td><td>53.5</td><td>75</td></tr>
+                  <tr><td>L</td><td>22.5</td><td>31</td><td>19.5</td><td>57</td><td>78.5</td></tr>
+                  <tr><td>XL</td><td>24</td><td>32.5</td><td>21</td><td>61</td><td>82.5</td></tr>
+                  <tr><td>2XL</td><td>25.5</td><td>34</td><td>22.5</td><td>64.5</td><td>86.5</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="lb-size-guide__tab-panel lb-size-guide__tab-panel--hoodies">
+              <table class="lb-size-guide__table">
+                <thead>
+                  <tr>
+                    <th>Size</th>
+                    <th>Chest (in)</th>
+                    <th>Length (in)</th>
+                    <th>Shoulder (in)</th>
+                    <th>Chest (cm)</th>
+                    <th>Length (cm)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>S</td><td>20.5</td><td>26.5</td><td>18</td><td>52</td><td>67.5</td></tr>
+                  <tr><td>M</td><td>22</td><td>28</td><td>19</td><td>56</td><td>71</td></tr>
+                  <tr><td>L</td><td>23.5</td><td>29.5</td><td>20</td><td>59.5</td><td>75</td></tr>
+                  <tr><td>XL</td><td>25</td><td>31</td><td>21.5</td><td>63.5</td><td>78.5</td></tr>
+                  <tr><td>2XL</td><td>26.5</td><td>32.5</td><td>23</td><td>67.5</td><td>82.5</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <p class="lb-size-guide__note">Measurements are in inches. Model wears size M.</p>
+      {%- endif -%}
+
+    </div>
+  </details>
+</div>
+
+{% style %}
+.lb-size-guide {
+  margin-top: 12px;
+}
+
+.lb-size-guide__details {
+  border-top: 1px solid rgba(var(--color-foreground-rgb, 0,0,0), 0.1);
+  padding-top: 10px;
+}
+
+.lb-size-guide__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgb(var(--color-foreground, 0 0 0));
+  cursor: pointer;
+  list-style: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 140ms ease, color 140ms ease;
+  padding-bottom: 2px;
+}
+.lb-size-guide__trigger::-webkit-details-marker { display: none; }
+
+@media (hover: hover) {
+  .lb-size-guide__trigger:hover {
+    color: #C9A84C;
+    border-bottom-color: #C9A84C;
+  }
+}
+
+details[open] .lb-size-guide__trigger {
+  color: #C9A84C;
+}
+
+.lb-size-guide__panel {
+  margin-top: 14px;
+  padding-bottom: 4px;
+}
+
+.lb-sgt__radio {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lb-size-guide__tab-labels {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid rgba(var(--color-foreground-rgb, 0,0,0), 0.1);
+  margin-bottom: 14px;
+}
+
+.lb-size-guide__tab-label {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 16px 8px;
+  cursor: pointer;
+  color: rgba(var(--color-foreground-rgb, 0,0,0), 0.45);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+#lb-sg-tee-{{ product.id }}:checked ~ .lb-size-guide__tab-labels label[for="lb-sg-tee-{{ product.id }}"],
+#lb-sg-hoodie-{{ product.id }}:checked ~ .lb-size-guide__tab-labels label[for="lb-sg-hoodie-{{ product.id }}"] {
+  color: #C9A84C;
+  border-bottom-color: #C9A84C;
+}
+
+.lb-size-guide__tab-panel { display: none; }
+
+#lb-sg-tee-{{ product.id }}:checked ~ .lb-size-guide__tab-panels .lb-size-guide__tab-panel--tees,
+#lb-sg-hoodie-{{ product.id }}:checked ~ .lb-size-guide__tab-panels .lb-size-guide__tab-panel--hoodies {
+  display: block;
+}
+
+.lb-size-guide__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.lb-size-guide__table th {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground-rgb, 0,0,0), 0.5);
+  padding: 4px 8px;
+  text-align: left;
+  border-bottom: 1px solid rgba(var(--color-foreground-rgb, 0,0,0), 0.08);
+  white-space: nowrap;
+}
+
+.lb-size-guide__table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(var(--color-foreground-rgb, 0,0,0), 0.05);
+  color: rgb(var(--color-foreground, 0 0 0));
+}
+
+.lb-size-guide__table td:first-child {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.lb-size-guide__note {
+  font-size: 11px;
+  color: rgba(var(--color-foreground-rgb, 0,0,0), 0.45);
+  margin-top: 10px;
+  font-style: italic;
+}
+{% endstyle %}

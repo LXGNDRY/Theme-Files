@@ -1,0 +1,57 @@
+{%- if section.blocks.size > 0 -%}
+<div class="lb-stats color-{{ section.settings.color_scheme | default: 'scheme-1' }}">
+  {%- for block in section.blocks -%}
+    <div class="lb-stat" {{ block.shopify_attributes }}>
+      <span class="lb-stat__num">{{ block.settings.number }}</span>
+      <span class="lb-stat__label">{{ block.settings.label }}</span>
+    </div>
+  {%- endfor -%}
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Stat Strip",
+  "tag": "section",
+  "class": "lb-stat-strip-section",
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number / Value",
+          "default": "235GSM+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "FABRIC WEIGHT"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Stat Strip",
+      "blocks": [
+        { "type": "stat", "settings": { "number": "235GSM+", "label": "FABRIC WEIGHT" } },
+        { "type": "stat", "settings": { "number": "380–460GSM", "label": "HOODIES" } },
+        { "type": "stat", "settings": { "number": "30 DAYS", "label": "FREE RETURNS" } },
+        { "type": "stat", "settings": { "number": "FREE US SHIPPING", "label": "ORDERS $100+" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
