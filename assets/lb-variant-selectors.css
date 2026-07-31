@@ -10,10 +10,11 @@
  *         and desktop hover styles on collection cards are intentionally
  *         minimal to keep the grid clean).
  *
- *  Design: SS26 monochrome neubrutalist chip. Unselected sits raised
- *          (offset hard shadow); selected punches in flush — white fill,
- *          black text, inset shadow — reading as a physically pressed
- *          button. Gold accent (#C9A84C) is NOT used here.
+ *  Design: 15px border-radius pill, 3D lifted shadow stack, spring
+ *          bounce on hover (lb-variant-bounce), sink/press on selected.
+ *          Gold accent (#C9A84C) is NOT used here — the theme's own
+ *          --color-variant-* custom properties control selected bg/border,
+ *          keeping Admin color-scheme control intact.
  *
  *  Extracted from: lb-product-card.css §7 (commit 702aa98)
  *  Reason: lb-product-card.css owns collection-card micro-interactions.
@@ -52,29 +53,21 @@
 }
 
 
-/* ─── 3. THEME PILL — suppress Dawn's sliding pill (we own the selected bg) ── */
-
-.variant-option__button-label__pill {
-  display: none !important;
-}
-
-
-/* ─── 4. SELECTED / PRESSED — punched-in white chip, black text ──────────── */
+/* ─── 3. SELECTED / PRESSED — filled black, shadow collapses ─────────────── */
 
 .variant-option__button-label:has(:checked),
 .variant-option__button-label:has([data-current-checked="true"]),
 .variant-option__button-label.is-active,
 .variant-option__button-label.selected {
-  background: #FFFFFF !important;
-  color: #0A0A0A !important;
-  border-color: #0A0A0A !important;
+  background: #0A0A0A !important;
+  color: #F5F5F0 !important;
   transform: translate(1px, 1px) !important;
-  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: none !important;
   animation: none !important;
 }
 
 
-/* ─── 5. DARK MODE ────────────────────────────────────────────────────────── */
+/* ─── 4. DARK MODE ────────────────────────────────────────────────────────── */
 
 html[data-theme="dark"] .variant-option__button-label {
   background: #1A1A1A !important;
@@ -96,7 +89,5 @@ html[data-theme="dark"] .variant-option__button-label.is-active,
 html[data-theme="dark"] .variant-option__button-label.selected {
   background: #F0EDE8 !important;
   color: #0A0A0A !important;
-  border-color: #F0EDE8 !important;
-  transform: translate(1px, 1px) !important;
-  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.35) !important;
+  box-shadow: none !important;
 }

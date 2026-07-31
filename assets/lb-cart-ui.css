@@ -1,1 +1,153 @@
-.lb-cart-trust{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0.5rem 1.25rem;padding:0.75rem 0 1rem;border-top:1px solid rgba(var(--color-foreground),0.08)}.lb-cart-trust__item{display:inline-flex;align-items:center;gap:0.35rem;font-size:0.7rem;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;color:rgba(var(--color-foreground),0.55);white-space:nowrap}.lb-cart-trust__item svg{flex-shrink:0;opacity:0.65;color:inherit}[aria-busy="true"].predictive-search-results{position:relative;pointer-events:none}[aria-busy="true"].predictive-search-results::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(var(--color-foreground),0.04) 50%,transparent 100%);background-size:200% 100%;animation:lb-search-shimmer 1.2s ease-in-out infinite}@keyframes lb-search-shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}.lb-rzp-separator{display:flex;align-items:center;gap:10px;margin:14px 0 10px;color:rgba(var(--color-foreground),0.4);font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase}.lb-rzp-separator::before,.lb-rzp-separator::after{content:'';flex:1;height:1px;background:rgba(var(--color-foreground),0.1)}.lb-razorpay-upi-wrapper{display:flex;flex-direction:column;align-items:stretch;width:100%;gap:8px}.lb-razorpay-upi-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px 20px;background:linear-gradient(135deg,#072654 0%,#1a56db 100%);border:none;border-radius:8px;cursor:pointer;box-sizing:border-box;font-size:14px;font-weight:600;line-height:1;color:#fff;letter-spacing:0.02em;transition:opacity 0.18s ease,transform 0.12s ease;box-shadow:0 2px 8px rgba(26,86,219,0.3)}.lb-razorpay-upi-btn:hover{opacity:0.92;transform:translateY(-1px);box-shadow:0 4px 14px rgba(26,86,219,0.45)}.lb-razorpay-upi-btn:active{transform:translateY(0);opacity:1}.lb-razorpay-upi-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}.lb-razorpay-upi-btn svg{flex-shrink:0}.lb-rzp-methods{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:5px}.lb-rzp-method-badge{display:inline-flex;align-items:center;padding:3px 7px;border:1px solid rgba(var(--color-foreground),0.12);border-radius:4px;font-size:10px;font-weight:600;letter-spacing:0.04em;color:rgba(var(--color-foreground),0.5);background:rgba(var(--color-foreground),0.03)}.lb-razorpay-upi-badge{display:flex;align-items:center;justify-content:center;gap:5px;font-size:10.5px;color:rgba(var(--color-foreground),0.4);letter-spacing:0.02em;margin-top:2px}.cart__checkout-text{font-size:17px;font-weight:700;letter-spacing:0.04em}.lb-404{text-align:center;padding:60px 20px}.lb-404__code{font-size:6rem;margin:0;line-height:1}.lb-404__title{margin:12px 0 8px}.lb-404__message{margin:0 0 28px;opacity:0.7}.lb-404__cta{display:inline-block;padding:14px 32px;background:rgb(var(--color-foreground));color:rgb(var(--color-background));text-decoration:none;font-weight:600;letter-spacing:0.05em;text-transform:uppercase}}
+/* ==========================================================================
+   lb-cart-ui.css
+   Legendary Branding — Cart UI enhancements
+   Covers: Trust Badge bar · Complete the Fit upsell row
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Trust Badge Bar
+   .lb-cart-trust  >  .lb-cart-trust__item
+   Sits between the totals block and the checkout button.
+   -------------------------------------------------------------------------- */
+
+.lb-cart-trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem 1.25rem;
+  padding: 0.75rem 0 1rem;
+  border-top: 1px solid rgba(var(--color-foreground), 0.08);
+}
+
+.lb-cart-trust__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground), 0.55);
+  white-space: nowrap;
+}
+
+.lb-cart-trust__item svg {
+  flex-shrink: 0;
+  opacity: 0.65;
+  color: inherit;
+}
+
+/* --------------------------------------------------------------------------
+   Predictive Search — Loading State
+   aria-busy="true" is set on the results container during fetch.
+   -------------------------------------------------------------------------- */
+
+[aria-busy="true"].predictive-search-results {
+  position: relative;
+  pointer-events: none;
+}
+
+[aria-busy="true"].predictive-search-results::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(var(--color-foreground), 0.04) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: lb-search-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes lb-search-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* --------------------------------------------------------------------------
+   Razorpay UPI Badge
+   .lb-razorpay-upi-wrapper > .lb-razorpay-upi-btn
+   Gated behind settings.razorpay_badge_enabled in cart-summary.liquid.
+   -------------------------------------------------------------------------- */
+
+.lb-razorpay-upi-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.lb-razorpay-upi-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(var(--color-foreground), 0.05);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-size: 14px;
+  line-height: 1;
+  color: rgb(var(--color-foreground));
+  transition: background 0.18s ease;
+}
+
+.lb-razorpay-upi-btn:hover {
+  background: rgba(var(--color-foreground), 0.08);
+}
+
+.lb-razorpay-upi-btn svg {
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Checkout Button
+   -------------------------------------------------------------------------- */
+
+.cart__checkout-text {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* --------------------------------------------------------------------------
+   404 Page
+   -------------------------------------------------------------------------- */
+
+.lb-404 {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.lb-404__code {
+  font-size: 6rem;
+  margin: 0;
+  line-height: 1;
+}
+
+.lb-404__title {
+  margin: 12px 0 8px;
+}
+
+.lb-404__message {
+  margin: 0 0 28px;
+  opacity: 0.7;
+}
+
+.lb-404__cta {
+  display: inline-block;
+  padding: 14px 32px;
+  background: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  }
+}
