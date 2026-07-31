@@ -264,7 +264,7 @@
                 "accordion_row_NdBezV": {
                   "type": "_accordion-row",
                   "settings": {
-                    "heading": "Product Description",
+                    "heading": "Product Description & Size Guide",
                     "open_by_default": false,
                     "icon": "chat_bubble",
                     "width": 20
