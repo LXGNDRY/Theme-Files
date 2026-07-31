@@ -1,0 +1,201 @@
+{%- if section.settings.before_image != blank and section.settings.after_image != blank -%}
+<section class="lb-before-after-section color-{{ section.settings.color_scheme }}">
+  {%- if section.settings.heading != blank -%}
+    <div class="lb-before-after-section__header page-width">
+      <h2 class="lb-before-after-section__heading lb-display-md">{{ section.settings.heading }}</h2>
+    </div>
+  {%- endif -%}
+
+  <div class="lb-ba" role="img" aria-label="{{ section.settings.heading | default: 'Before and after comparison' | escape }}">
+    <div class="lb-ba__before">
+      <img
+        src="{{ section.settings.before_image | image_url: width: 1400 }}"
+        srcset="{{ section.settings.before_image | image_url: width: 750 }} 750w, {{ section.settings.before_image | image_url: width: 1100 }} 1100w, {{ section.settings.before_image | image_url: width: 1400 }} 1400w"
+        sizes="100vw"
+        alt="{{ section.settings.before_label | default: 'Before' | escape }}"
+        width="{{ section.settings.before_image.width }}"
+        height="{{ section.settings.before_image.height }}"
+        draggable="false"
+        class="lb-ba__img"
+      >
+      {%- if section.settings.before_label != blank -%}
+        <span class="lb-ba__badge lb-ba__badge--before">{{ section.settings.before_label }}</span>
+      {%- endif -%}
+    </div>
+
+    <div class="lb-ba__after">
+      <img
+        src="{{ section.settings.after_image | image_url: width: 1400 }}"
+        srcset="{{ section.settings.after_image | image_url: width: 750 }} 750w, {{ section.settings.after_image | image_url: width: 1100 }} 1100w, {{ section.settings.after_image | image_url: width: 1400 }} 1400w"
+        sizes="100vw"
+        alt="{{ section.settings.after_label | default: 'After' | escape }}"
+        width="{{ section.settings.after_image.width }}"
+        height="{{ section.settings.after_image.height }}"
+        draggable="false"
+        class="lb-ba__img"
+      >
+      {%- if section.settings.after_label != blank -%}
+        <span class="lb-ba__badge lb-ba__badge--after">{{ section.settings.after_label }}</span>
+      {%- endif -%}
+    </div>
+
+    <div class="lb-ba__handle" role="slider" tabindex="0" aria-label="Drag to compare" aria-valuemin="2" aria-valuemax="98" aria-valuenow="50">
+      <span class="lb-ba__handle-line"></span>
+      <span class="lb-ba__handle-grip" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M7 5L2 10L7 15M13 5L18 10L13 15" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="lb-ba__handle-line"></span>
+    </div>
+  </div>
+</section>
+
+<script src="{{ 'lb-before-after.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+{% stylesheet %}
+.lb-before-after-section__header {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--lb-sp-xl, 48px) var(--lb-sp-md, 20px) var(--lb-sp-lg, 32px);
+}
+
+.lb-before-after-section__heading {
+  margin: 0;
+}
+
+.lb-ba {
+  position: relative;
+  overflow: hidden;
+  line-height: 0;
+  cursor: col-resize;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.lb-ba__before,
+.lb-ba__after {
+  position: relative;
+  line-height: 0;
+}
+
+.lb-ba__after {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 0 0 50%);
+}
+
+.lb-ba__img {
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+}
+
+.lb-ba__badge {
+  position: absolute;
+  top: 16px;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: rgba(10, 10, 10, 0.75);
+  color: #F2F2F2;
+  padding: 5px 10px;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.lb-ba__badge--before { left: 16px; }
+.lb-ba__badge--after  { right: 16px; }
+
+.lb-ba__handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40px;
+  cursor: col-resize;
+  z-index: 3;
+}
+
+.lb-ba__handle-line {
+  flex: 1;
+  width: 2px;
+  background: #C9A84C;
+  display: block;
+}
+
+.lb-ba__handle-grip {
+  width: 40px;
+  height: 40px;
+  background: #0A0A0A;
+  border: 2px solid #C9A84C;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+}
+
+.lb-ba__handle:focus-visible {
+  outline: 2px solid #C9A84C;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Before / After",
+  "tag": "section",
+  "class": "lb-before-after-wrap",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "THE DIFFERENCE IS QUALITY"
+    },
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "Before image"
+    },
+    {
+      "type": "text",
+      "id": "before_label",
+      "label": "Before label",
+      "default": "Before"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "After image"
+    },
+    {
+      "type": "text",
+      "id": "after_label",
+      "label": "After label",
+      "default": "After"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Before / After"
+    }
+  ]
+}
+{% endschema %}
