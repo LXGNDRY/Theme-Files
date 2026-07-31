@@ -25,13 +25,14 @@ product-card {
 .product-card__content {
   transition:
     transform 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    filter    180ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 @media (hover: hover) {
   .product-card:hover .product-card__content {
     transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+    /* filter:drop-shadow is not clipped by parent overflow:hidden (unlike box-shadow) */
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.10));
   }
 }
 
