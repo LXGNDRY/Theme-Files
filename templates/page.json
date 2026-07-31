@@ -16,11 +16,11 @@
           "type": "text",
           "name": "Title",
           "settings": {
-            "text": "<h1>{{ closest.page.title }}</h1>",
+            "text": "<h1><em><strong>{{ closest.page.title }}</strong></em></h1>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
-            "type_preset": "h2",
+            "type_preset": "h1",
             "font": "var(--font-body--family)",
             "font_size": "1rem",
             "line_height": "normal",
@@ -50,7 +50,7 @@
       ],
       "settings": {
         "content_direction": "column",
-        "gap": 0,
+        "gap": 32,
         "color_scheme": "scheme-2",
         "padding-block-start": 40,
         "padding-block-end": 80

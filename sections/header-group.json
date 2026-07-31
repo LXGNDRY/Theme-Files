@@ -17,47 +17,19 @@
         "announcement_zprb7R": {
           "type": "_announcement",
           "settings": {
-            "text": "FREE US SHIPPING ON ORDERS $100+",
+            "text": "<strong>20% Off First Order — FREE SHIPPING ON ORDERS $100+</strong>",
             "link": "",
             "font": "var(--font-body--family)",
-            "font_size": "0.875rem",
+            "font_size": "1.125rem",
             "weight": "",
             "letter_spacing": "normal",
-            "case": "uppercase"
-          },
-          "blocks": {}
-        },
-        "announcement_fabric": {
-          "type": "_announcement",
-          "settings": {
-            "text": "235GSM+ TEES · 380GSM HOODIES · BUILT TO LAST",
-            "link": "",
-            "font": "var(--font-body--family)",
-            "font_size": "0.875rem",
-            "weight": "",
-            "letter_spacing": "normal",
-            "case": "uppercase"
-          },
-          "blocks": {}
-        },
-        "announcement_returns": {
-          "type": "_announcement",
-          "settings": {
-            "text": "30-DAY RETURNS · SECURE CHECKOUT",
-            "link": "",
-            "font": "var(--font-body--family)",
-            "font_size": "0.875rem",
-            "weight": "",
-            "letter_spacing": "normal",
-            "case": "uppercase"
+            "case": "none"
           },
           "blocks": {}
         }
       },
       "block_order": [
-        "announcement_zprb7R",
-        "announcement_fabric",
-        "announcement_returns"
+        "announcement_zprb7R"
       ],
       "name": "t:names.announcement_bar",
       "settings": {
