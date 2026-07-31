@@ -766,7 +766,7 @@
             "horizontal_alignment_flex_direction_column": "center",
             "vertical_alignment_flex_direction_column": "center",
             "gap": 12,
-            "width": "custom",
+            "width": "fill",
             "custom_width": 100,
             "width_mobile": "fill",
             "custom_width_mobile": 100,
@@ -788,8 +788,8 @@
             "link": "",
             "open_in_new_tab": false,
             "placeholder": "",
-            "padding-block-start": 70,
-            "padding-block-end": 15,
+            "padding-block-start": 8,
+            "padding-block-end": 8,
             "padding-inline-start": 0,
             "padding-inline-end": 0
           },
@@ -798,7 +798,7 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<p><span style=\"text-decoration:underline\"><em><strong>Shop by category</strong></em></span></p>",
+                "text": "<p><a href=\"/collections\" title=\"All collections\"><span style=\"text-decoration:underline\"><em><strong>Shop by category</strong></em></span></a></p>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
