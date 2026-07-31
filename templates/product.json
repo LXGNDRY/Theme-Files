@@ -175,6 +175,7 @@
               "settings": {
                 "variant_style": "buttons",
                 "show_swatches": true,
+                "hide_lb_utils": true,
                 "alignment": "center",
                 "padding-block-start": 12,
                 "padding-block-end": 24,
@@ -182,6 +183,27 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "lb_size_guide_pdp": {
+              "type": "lb-size-guide",
+              "settings": {}
+            },
+            "lb_low_stock_pdp": {
+              "type": "lb-low-stock",
+              "settings": {}
+            },
+            "lb_stat_strip_pdp": {
+              "type": "lb-stat-strip",
+              "settings": {
+                "stat_1_number": "460GSM",
+                "stat_1_label": "FABRIC WEIGHT",
+                "stat_2_number": "100% Cotton",
+                "stat_2_label": "RING-SPUN",
+                "stat_3_number": "30 Days",
+                "stat_3_label": "FREE RETURNS",
+                "stat_4_number": "Free",
+                "stat_4_label": "WORLDWIDE SHIPPING"
+              }
             },
             "buy_buttons_eYQEYi": {
               "type": "buy-buttons",
@@ -506,6 +528,9 @@
             "text_enejcM",
             "image_WpKDGh",
             "variant_picker_R3rGDr",
+            "lb_size_guide_pdp",
+            "lb_low_stock_pdp",
+            "lb_stat_strip_pdp",
             "buy_buttons_eYQEYi",
             "image_wUdQUh",
             "accordion_NKWPiW",
@@ -1383,6 +1408,28 @@
         "padding-block-end": 12
       }
     },
+    "lb_brand_story_pdp": {
+      "type": "lb-brand-story",
+      "settings": {
+        "image_side": "left",
+        "eyebrow": "Our Story",
+        "heading": "QUALITY OVER QUANTITY",
+        "body": "<p>We build for the ones who know the difference. 460GSM hoodies. 235GSM+ tees. Every garment DTG printed and built to outlast.</p><p>Legendary Branding isn’t a brand — it’s a standard.</p>",
+        "button_label": "OUR PROCESS",
+        "button_url": "/pages/about",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "lb_fit_check_pdp": {
+      "type": "lb-fit-check",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "heading": "THE FIT CHECK",
+        "subheading": "Tap the dots to shop the look",
+        "color_scheme": "scheme-1"
+      }
+    },
     "product_list_qjFJXe": {
       "type": "product-list",
       "blocks": {
@@ -1546,7 +1593,6 @@
           ]
         }
       },
-      "disabled": true,
       "name": "t:names.products_carousel",
       "settings": {
         "collection": "all-products",
@@ -1575,6 +1621,8 @@
     "section_LPjgbx",
     "section_pJjjiN",
     "section_n8MUft",
+    "lb_brand_story_pdp",
+    "lb_fit_check_pdp",
     "product_recommendations_qnzPkn",
     "product_list_qjFJXe"
   ]

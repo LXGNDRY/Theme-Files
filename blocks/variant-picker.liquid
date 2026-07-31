@@ -8,7 +8,7 @@
 -%}
 
 {% unless product_resource == blank %}
-  {% render 'variant-main-picker', product_resource: product_resource, section: section, product: product %}
+  {% render 'variant-main-picker', product_resource: product_resource, section: section, product: product, hide_lb_utils: block.settings.hide_lb_utils %}
 {% endunless %}
 
 {% schema %}
@@ -45,6 +45,13 @@
       "id": "show_swatches",
       "label": "t:settings.swatches",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_lb_utils",
+      "label": "Hide embedded size guide & low stock badge",
+      "info": "Turn on when you're using the Size Guide and Low Stock Badge blocks instead.",
+      "default": false
     },
     {
       "type": "text_alignment",
