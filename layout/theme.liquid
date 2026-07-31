@@ -247,7 +247,7 @@
     Load order within this group:
       1. chaos-theme-styles.css  — theme base (largest, needs most lead time)
       2. lb-cart-ui.css          — cart drawer styles
-      3. lb-pdp-buttons.css      — ATC + dynamic checkout
+      3. lb-pdp-buttons.css      — ATC + dynamic checkout (product + homepage)
       4. lb-variant-selectors.css — variant pills (product + homepage)
   {%- endcomment -%}
   <link rel="preload" href="{{ 'chaos-theme-styles.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
@@ -256,7 +256,7 @@
   <link rel="preload" href="{{ 'lb-cart-ui.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
   <noscript><link rel="stylesheet" href="{{ 'lb-cart-ui.css' | asset_url }}"></noscript>
 
-  {%- if template.name == 'product' -%}
+  {%- if template.name == 'product' or template.name == 'index' -%}
   <link rel="preload" href="{{ 'lb-pdp-buttons.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
   <noscript><link rel="stylesheet" href="{{ 'lb-pdp-buttons.css' | asset_url }}"></noscript>
   {%- endif -%}
@@ -273,7 +273,7 @@
 
   {%- comment -%}── 15. VIEW TRANSITIONS (guarded) ───────────────────────────
     <link rel="expect" href="#MainContent"> explicitly gates rendering
-    until #MainContent is parsed. Only inject when transitions are enabled
+    until #MainContent is parsed. Only inject when transitions are active
     in theme settings — do not leave it in unconditionally.
   {%- endcomment -%}
   {%- if settings.transition_to_main_product or settings.page_transition_enabled -%}
