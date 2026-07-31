@@ -17,7 +17,7 @@
   align-items: center;
   gap: 0.5rem 1.25rem;
   padding: 0.75rem 0 1rem;
-  border-top: 1px solid rgba(var(--color-foreground), 0.08);
+  border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.08);
 }
 
 .lb-cart-trust__item {
@@ -28,7 +28,7 @@
   font-weight: 500;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: rgba(var(--color-foreground), 0.55);
+  color: rgb(var(--color-foreground-rgb) / 0.55);
   white-space: nowrap;
 }
 
@@ -55,7 +55,7 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(var(--color-foreground), 0.04) 50%,
+    rgb(var(--color-foreground-rgb) / 0.04) 50%,
     transparent 100%
   );
   background-size: 200% 100%;
@@ -85,7 +85,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  background: rgba(var(--color-foreground), 0.05);
+  background: rgb(var(--color-foreground-rgb) / 0.05);
   border: none;
   border-radius: 999px;
   cursor: pointer;
@@ -94,12 +94,12 @@
   box-sizing: border-box;
   font-size: 14px;
   line-height: 1;
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground-rgb));
   transition: background 0.18s ease;
 }
 
 .lb-razorpay-upi-btn:hover {
-  background: rgba(var(--color-foreground), 0.08);
+  background: rgb(var(--color-foreground-rgb) / 0.08);
 }
 
 .lb-razorpay-upi-btn svg {
@@ -151,7 +151,7 @@
 .lb-404__cta {
   display: inline-block;
   padding: 14px 32px;
-  background: rgb(var(--color-foreground));
+  background: rgb(var(--color-foreground-rgb));
   color: rgb(var(--color-background));
   text-decoration: none;
   font-weight: 600;

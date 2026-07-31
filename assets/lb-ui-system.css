@@ -322,33 +322,7 @@ html.lb-theme-switching * {
 html[data-theme="dark"] .lb-icon-moon { display: none; }
 html[data-theme="dark"] .lb-icon-sun  { display: block; }
 
-/* ─── 9. HEADER SCROLL BEHAVIOR ───────────────────────────────────────────── */
-
-/* The existing header-component gets these classes from lb-theme-toggle.js */
-.lb-header-scroll-wrap {
-  transition:
-    background-color var(--lb-dur-base) var(--lb-ease),
-    backdrop-filter  var(--lb-dur-base) var(--lb-ease),
-    border-color     var(--lb-dur-base) var(--lb-ease),
-    box-shadow       var(--lb-dur-base) var(--lb-ease);
-}
-
-/* Transparent at top of page — header sections opt in via data attribute */
-header-component[data-lb-transparent] {
-  --color-background: transparent;
-  border-bottom-color: transparent !important;
-}
-
-/* Scrolled state */
-header-component.lb-scrolled {
-  background: var(--lb-bg) !important;
-  border-bottom: 1px solid var(--lb-border) !important;
-  box-shadow: var(--lb-shadow);
-}
-
-html[data-theme="dark"] header-component.lb-scrolled {
-  box-shadow: 0 1px 32px rgba(0,0,0,0.55);
-}
+/* ─── 9. HEADER NAV LINK UNDERLINE ────────────────────────────────────────── */
 
 /* Nav link gold underline slide-in */
 .header__link,
@@ -372,48 +346,7 @@ html[data-theme="dark"] header-component.lb-scrolled {
   width: 100%;
 }
 
-/* ─── 10. ANNOUNCEMENT BAR ────────────────────────────────────────────────── */
-
-/* Overrides the existing header-announcements section */
-.lb-bar {
-  background: var(--lb-black);
-  overflow: hidden;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-
-.lb-bar__track {
-  display: flex;
-  width: max-content;
-  animation: lb-marquee 50s linear infinite;
-  white-space: nowrap;
-}
-
-.lb-bar__item {
-  font-family: var(--lb-font-mono);
-  font-size: 10px;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: rgba(240, 237, 232, 0.85);
-  padding-inline: 56px;
-}
-
-.lb-bar__item::after {
-  content: '·';
-  margin-left: 56px;
-  color: rgba(240, 237, 232, 0.4);
-}
-
-.lb-bar:hover .lb-bar__track { animation-play-state: paused; }
-
-@keyframes lb-marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-/* ─── 11. HERO OVERRIDES ──────────────────────────────────────────────────── */
+/* ─── 10. HERO OVERRIDES ──────────────────────────────────────────────────── */
 
 /* Cinematic gradient over full-bleed video/image */
 .lb-hero-overlay {
@@ -624,8 +557,15 @@ html[data-theme="dark"] header-component.lb-scrolled {
 /* Extends lb-product-card.css (Phase 2 kept). Adds gold quick-add bar + border. */
 
 .product-card {
-  /* Ensure overflow hidden for quick-add bar slide */
   overflow: hidden;
+  border: 1px solid transparent;
+  transition:
+    border-color var(--lb-dur-base) var(--lb-ease),
+    transform 180ms cubic-bezier(0.25,0.46,0.45,0.94),
+    box-shadow 180ms cubic-bezier(0.25,0.46,0.45,0.94);
+}
+@media (hover: hover) {
+  .product-card:hover { border-color: rgba(10, 10, 10, 0.2); }
 }
 
 /* Monochromatic quick-add bar sliding up from bottom */
@@ -656,18 +596,6 @@ html[data-theme="dark"] header-component.lb-scrolled {
 
 @media (hover: hover) {
   .product-card:hover .lb-quick-add-bar { transform: translateY(0); }
-}
-
-/* Gold border on card hover */
-.product-card {
-  border: 1px solid transparent;
-  transition:
-    border-color var(--lb-dur-base) var(--lb-ease),
-    transform 180ms cubic-bezier(0.25,0.46,0.45,0.94),
-    box-shadow 180ms cubic-bezier(0.25,0.46,0.45,0.94);
-}
-@media (hover: hover) {
-  .product-card:hover { border-color: rgba(10, 10, 10, 0.2); }
 }
 
 /* Badge system */
