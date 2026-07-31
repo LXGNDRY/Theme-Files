@@ -30,6 +30,21 @@
   text-transform: uppercase;
   color: rgba(var(--color-foreground-rgb, 0,0,0), 0.5);
 }
+
+/* Mobile: 3-column grid, 4th stat centred on its own row */
+@media screen and (max-width: 749px) {
+  .lb-pdp-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px 8px;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .lb-pdp-stat:nth-child(4) {
+    grid-column: 2;
+  }
+}
 {% endstyle %}
 
 <div class="lb-pdp-stats" {{ block.shopify_attributes }}>
