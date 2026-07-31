@@ -18,10 +18,10 @@
           "settings": {
             "title": "<em><strong>Bag:</strong></em>",
             "show_count": true,
-            "type_preset": "h1",
-            "alignment": "center",
-            "padding-block-start": 100,
-            "padding-block-end": 100,
+            "type_preset": "h4",
+            "alignment": "left",
+            "padding-block-start": 8,
+            "padding-block-end": 8,
             "padding-inline-start": 0,
             "padding-inline-end": 0
           },
