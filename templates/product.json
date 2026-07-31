@@ -533,6 +533,7 @@
         "video_krRV9a": {
           "type": "video",
           "name": "t:names.video",
+          "disabled": true,
           "settings": {
             "source": "uploaded",
             "video": "shopify://files/videos/copy_D06E8003-C07D-4346-9279-356AF7ED5349.mov",
@@ -614,7 +615,7 @@
       "settings": {
         "content_direction": "row",
         "vertical_on_mobile": true,
-        "horizontal_alignment": "center",
+        "horizontal_alignment": "flex-start",
         "vertical_alignment": "center",
         "align_baseline": false,
         "horizontal_alignment_flex_direction_column": "center",
