@@ -33,9 +33,9 @@ Claude should use this file as the operating guide for theme work in this repo. 
 
 ## Safe workflow for Claude
 
-- Work in a feature branch.
+- All edits go to the `edits-here` branch: https://github.com/LXGNDRY/Theme-Files/tree/edits-here
+- Never push directly to `main` — changes reach main only via a PR from `edits-here`.
 - Make small, scoped changes.
-- Do not push directly to main.
 - Do not add secrets, tokens, or credentials.
 - Ask before deleting or heavily refactoring files.
 - When changing schema, verify all dependent sections and templates.
