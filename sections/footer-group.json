@@ -17,6 +17,7 @@
         "logo_M99jWJ": {
           "type": "logo",
           "name": "t:names.logo",
+          "disabled": true,
           "settings": {
             "inverse": false,
             "font": "heading",
