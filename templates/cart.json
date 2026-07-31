@@ -16,7 +16,7 @@
           "type": "_cart-title",
           "static": true,
           "settings": {
-            "title": "<em><strong>Bag:</strong></em>",
+            "title": "<em><strong>My Bag:</strong></em>",
             "show_count": true,
             "type_preset": "h4",
             "alignment": "left",
