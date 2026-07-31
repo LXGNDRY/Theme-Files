@@ -184,16 +184,6 @@
               },
               "blocks": {}
             },
-            "lb_size_guide_pdp": {
-              "type": "lb-size-guide",
-              "settings": {},
-              "blocks": {}
-            },
-            "lb_low_stock_pdp": {
-              "type": "lb-low-stock",
-              "settings": {},
-              "blocks": {}
-            },
             "lb_stat_strip_pdp": {
               "type": "lb-stat-strip",
               "settings": {
@@ -206,6 +196,16 @@
                 "stat_4_number": "Free",
                 "stat_4_label": "WORLDWIDE SHIPPING"
               },
+              "blocks": {}
+            },
+            "lb_size_guide_pdp": {
+              "type": "lb-size-guide",
+              "settings": {},
+              "blocks": {}
+            },
+            "lb_low_stock_pdp": {
+              "type": "lb-low-stock",
+              "settings": {},
               "blocks": {}
             },
             "buy_buttons_eYQEYi": {
@@ -531,9 +531,9 @@
             "text_enejcM",
             "image_WpKDGh",
             "variant_picker_R3rGDr",
+            "lb_stat_strip_pdp",
             "lb_size_guide_pdp",
             "lb_low_stock_pdp",
-            "lb_stat_strip_pdp",
             "buy_buttons_eYQEYi",
             "image_wUdQUh",
             "accordion_NKWPiW",
