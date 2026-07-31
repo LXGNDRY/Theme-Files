@@ -186,11 +186,13 @@
             },
             "lb_size_guide_pdp": {
               "type": "lb-size-guide",
-              "settings": {}
+              "settings": {},
+              "blocks": {}
             },
             "lb_low_stock_pdp": {
               "type": "lb-low-stock",
-              "settings": {}
+              "settings": {},
+              "blocks": {}
             },
             "lb_stat_strip_pdp": {
               "type": "lb-stat-strip",
@@ -203,7 +205,8 @@
                 "stat_3_label": "FREE RETURNS",
                 "stat_4_number": "Free",
                 "stat_4_label": "WORLDWIDE SHIPPING"
-              }
+              },
+              "blocks": {}
             },
             "buy_buttons_eYQEYi": {
               "type": "buy-buttons",
@@ -1102,6 +1105,26 @@
         "padding-block-end": 12
       }
     },
+    "lb_brand_story_pdp": {
+      "type": "lb-brand-story",
+      "settings": {
+        "image_side": "left",
+        "eyebrow": "Our Story",
+        "heading": "QUALITY OVER QUANTITY",
+        "body": "<p>We build for the ones who know the difference. 460GSM hoodies. 235GSM+ tees. Every garment DTG printed and built to outlast.</p><p>Legendary Branding isn’t a brand — it’s a standard.</p>",
+        "button_label": "OUR PROCESS",
+        "button_url": "/pages/about",
+        "color_scheme": "scheme-2"
+      }
+    },
+    "lb_fit_check_pdp": {
+      "type": "lb-fit-check",
+      "settings": {
+        "heading": "THE FIT CHECK",
+        "subheading": "Tap the dots to shop the look",
+        "color_scheme": "scheme-1"
+      }
+    },
     "product_recommendations_qnzPkn": {
       "type": "product-recommendations",
       "blocks": {
@@ -1408,28 +1431,6 @@
         "padding-block-end": 12
       }
     },
-    "lb_brand_story_pdp": {
-      "type": "lb-brand-story",
-      "settings": {
-        "image_side": "left",
-        "eyebrow": "Our Story",
-        "heading": "QUALITY OVER QUANTITY",
-        "body": "<p>We build for the ones who know the difference. 460GSM hoodies. 235GSM+ tees. Every garment DTG printed and built to outlast.</p><p>Legendary Branding isn’t a brand — it’s a standard.</p>",
-        "button_label": "OUR PROCESS",
-        "button_url": "/pages/about",
-        "color_scheme": "scheme-2"
-      }
-    },
-    "lb_fit_check_pdp": {
-      "type": "lb-fit-check",
-      "blocks": {},
-      "block_order": [],
-      "settings": {
-        "heading": "THE FIT CHECK",
-        "subheading": "Tap the dots to shop the look",
-        "color_scheme": "scheme-1"
-      }
-    },
     "product_list_qjFJXe": {
       "type": "product-list",
       "blocks": {
@@ -1593,6 +1594,7 @@
           ]
         }
       },
+      "disabled": true,
       "name": "t:names.products_carousel",
       "settings": {
         "collection": "all-products",
