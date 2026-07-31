@@ -31,9 +31,19 @@ Claude should use this file as the operating guide for theme work in this repo. 
 - Do not introduce build output that breaks Shopify theme sync unless a separate deploy branch strategy is in place.
 - Treat GitHub as the source of truth and Shopify as the publishing target.
 
+## Branch workflow — REQUIRED
+
+**All edits to this repo must be made on `make-edits-here-branch` only.**
+**Changes reach `main` exclusively through pull requests from `make-edits-here-branch`.**
+This is the only and standard process for this repository — no exceptions.
+
+- Never commit directly to `main`.
+- Never push to any branch other than `make-edits-here-branch`.
+- Always open a PR from `make-edits-here-branch` → `main` when changes are ready.
+
 ## Safe workflow for Claude
 
-- Work in a feature branch.
+- Work on `make-edits-here-branch` only (see Branch workflow above).
 - Make small, scoped changes.
 - Do not push directly to main.
 - Do not add secrets, tokens, or credentials.
