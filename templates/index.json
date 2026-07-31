@@ -899,7 +899,7 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<h2><span style=\"text-decoration:underline\"><em><strong>{{ closest.collection.title }}</strong></em></span></h2>",
+                "text": "<h2><a href=\"/collections/shirts-tops\" title=\"T-SHIRTS\"><span style=\"text-decoration:underline\"><em><strong>{{ closest.collection.title }}</strong></em></span></a></h2>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -1098,7 +1098,7 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<h2><span style=\"text-decoration:underline\"><em><strong>{{ closest.collection.title }}</strong></em></span></h2>",
+                "text": "<h2><a href=\"/collections/hoodies-jackets\" title=\"OUTERWEAR\"><span style=\"text-decoration:underline\"><em><strong>{{ closest.collection.title }}</strong></em></span></a></h2>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -2299,7 +2299,7 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<p><span style=\"text-decoration:underline\"><em><strong>Beyond the Basics</strong></em></span></p>",
+                "text": "<p><em><strong>Beyond the Basics</strong></em></p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
