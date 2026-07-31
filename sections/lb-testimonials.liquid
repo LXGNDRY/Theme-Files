@@ -1,0 +1,203 @@
+{%- if section.blocks.size > 0 -%}
+<section class="lb-testimonials color-{{ section.settings.color_scheme }}">
+  <div class="lb-testimonials__inner page-width">
+    {%- if section.settings.heading != blank -%}
+      <p class="lb-testimonials__label">{{ section.settings.heading }}</p>
+    {%- endif -%}
+
+    <div class="lb-testimonials__grid">
+      {%- for block in section.blocks -%}
+        <blockquote class="lb-testimonial" {{ block.shopify_attributes }}>
+          {%- if block.settings.stars > 0 -%}
+            <div class="lb-testimonial__stars" aria-label="{{ block.settings.stars }} out of 5 stars">
+              {%- for i in (1..5) -%}
+                <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="{% if i <= block.settings.stars %}#C9A84C{% else %}transparent{% endif %}" stroke="#C9A84C" stroke-width="1.5"/></svg>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          <p class="lb-testimonial__quote">{{ block.settings.quote }}</p>
+
+          <footer class="lb-testimonial__footer">
+            <cite class="lb-testimonial__name">{{ block.settings.name }}</cite>
+            {%- if block.settings.location != blank -%}
+              <span class="lb-testimonial__location">{{ block.settings.location }}</span>
+            {%- endif -%}
+          </footer>
+        </blockquote>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% stylesheet %}
+.lb-testimonials {
+  padding: var(--lb-sp-2xl, 72px) 0;
+}
+
+.lb-testimonials__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-inline: var(--lb-sp-md, 20px);
+}
+
+.lb-testimonials__label {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #C9A84C;
+  margin: 0 0 var(--lb-sp-lg, 32px);
+}
+
+.lb-testimonials__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 899px) {
+  .lb-testimonials__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 599px) {
+  .lb-testimonials__grid { grid-template-columns: 1fr; }
+}
+
+.lb-testimonial {
+  background: #111111;
+  border-left: 3px solid #C9A84C;
+  padding: 28px 24px 24px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 2px;
+}
+
+.lb-testimonial__stars {
+  display: flex;
+  gap: 2px;
+}
+
+.lb-testimonial__quote {
+  font-size: 15px;
+  line-height: 1.55;
+  color: #C8C8C8;
+  margin: 0;
+  flex: 1;
+}
+.lb-testimonial__quote::before { content: '\201C'; }
+.lb-testimonial__quote::after  { content: '\201D'; }
+
+.lb-testimonial__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lb-testimonial__name {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  font-style: normal;
+  color: #F2F2F2;
+}
+
+.lb-testimonial__location {
+  font-size: 11px;
+  color: #606060;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "tag": "section",
+  "class": "lb-testimonials-section",
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "Best heavyweight tee I've ever owned. The quality is unreal for the price."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Customer name",
+          "default": "Jordan M."
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location (optional)",
+          "default": "Atlanta, GA"
+        },
+        {
+          "type": "range",
+          "id": "stars",
+          "label": "Star rating",
+          "min": 0,
+          "max": 5,
+          "default": 5
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section label",
+      "default": "What customers are saying"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Best heavyweight tee I've ever owned. The quality is unreal for the price.",
+            "name": "Jordan M.",
+            "location": "Atlanta, GA",
+            "stars": 5
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "The 460GSM hoodie is insane. Thick, structured, and the DTG print didn't crack after 20 washes.",
+            "name": "Kayla T.",
+            "location": "Chicago, IL",
+            "stars": 5
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Finally a brand that actually delivers on the heavyweight promise. Sizing was perfect too.",
+            "name": "Marcus D.",
+            "location": "Houston, TX",
+            "stars": 5
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

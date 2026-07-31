@@ -1351,6 +1351,44 @@
         "padding-block-end": 0
       }
     },
+    "lb_testimonials_001": {
+      "type": "lb-testimonials",
+      "blocks": {
+        "testi_1": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Best heavyweight tee I've ever owned. The quality is unreal for the price.",
+            "name": "Jordan M.",
+            "location": "Atlanta, GA",
+            "stars": 5
+          }
+        },
+        "testi_2": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "The 460GSM hoodie is insane. Thick, structured, and the DTG print didn't crack after 20 washes.",
+            "name": "Kayla T.",
+            "location": "Chicago, IL",
+            "stars": 5
+          }
+        },
+        "testi_3": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Finally a brand that delivers on the heavyweight promise. Sizing was spot on.",
+            "name": "Marcus D.",
+            "location": "Houston, TX",
+            "stars": 5
+          }
+        }
+      },
+      "block_order": ["testi_1","testi_2","testi_3"],
+      "name": "Testimonials",
+      "settings": {
+        "heading": "What customers are saying",
+        "color_scheme": "scheme-1"
+      }
+    },
     "product_list_HmQckK": {
       "type": "product-list",
       "blocks": {
@@ -2684,6 +2722,7 @@
     "product_list_ptQh4Y",
     "product_list_YKNbn7",
     "178539945673bb8be3",
+    "lb_testimonials_001",
     "product_list_HmQckK",
     "product_list_UwRqN4",
     "section_F9fMc4",
