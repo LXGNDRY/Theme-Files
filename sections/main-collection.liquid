@@ -59,8 +59,30 @@
           <a href="{{ collection.url }}" class="button button--secondary">Clear all filters</a>
         </div>
       {% else %}
+        {%- assign promo_blocks = section.blocks | where: 'type', 'promo_tile' -%}
         {% capture children %}
           {% for product in collection.products %}
+            {%- assign item_index = forloop.index -%}
+            {%- for promo in promo_blocks -%}
+              {%- if promo.settings.position == item_index -%}
+                <li class="product-grid__item lb-promo-tile" style="{% if promo.settings.bg_color != blank %}background: {{ promo.settings.bg_color }};{% endif %}" {{ promo.shopify_attributes }}>
+                  {%- if promo.settings.image != blank -%}
+                    <img src="{{ promo.settings.image | image_url: width: 600 }}" alt="{{ promo.settings.headline | escape }}" loading="lazy" class="lb-promo-tile__bg-img">
+                  {%- endif -%}
+                  <div class="lb-promo-tile__content">
+                    {%- if promo.settings.headline != blank -%}
+                      <p class="lb-promo-tile__headline lb-display-md">{{ promo.settings.headline }}</p>
+                    {%- endif -%}
+                    {%- if promo.settings.subtext != blank -%}
+                      <p class="lb-promo-tile__sub">{{ promo.settings.subtext }}</p>
+                    {%- endif -%}
+                    {%- if promo.settings.cta_label != blank and promo.settings.cta_url != blank -%}
+                      <a href="{{ promo.settings.cta_url }}" class="lb-promo-tile__cta lb-btn lb-btn--sm">{{ promo.settings.cta_label }}</a>
+                    {%- endif -%}
+                  </div>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
             <li
               id="{{ section.id }}-{{ product.id }}"
               class="product-grid__item product-grid__item--{{ forloop.index0 }}"
@@ -300,6 +322,108 @@
       "default": 8
     }
   ],
+  "blocks": [
+    {
+      "type": "promo_tile",
+      "name": "Promo tile",
+      "settings": [
+        {
+          "type": "range",
+          "id": "position",
+          "label": "Grid position (insert before item #)",
+          "min": 1,
+          "max": 24,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "headline",
+          "label": "Headline",
+          "default": "NEW DROP"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "Subtext",
+          "default": "Limited quantities. No restocks."
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Button label",
+          "default": "SHOP NOW"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "Button URL"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background image (optional)"
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background color",
+          "default": "#111111"
+        }
+      ]
+    }
+  ],
   "presets": []
 }
 {% endschema %}
+
+{% stylesheet %}
+.lb-promo-tile {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  min-height: 320px;
+  background: #111111;
+}
+
+.lb-promo-tile__bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.45;
+}
+
+.lb-promo-tile__content {
+  position: relative;
+  z-index: 1;
+  padding: 24px 20px;
+}
+
+.lb-promo-tile__headline {
+  color: #F5F5F0;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+  line-height: 0.92;
+}
+
+.lb-promo-tile__sub {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgba(245, 245, 240, 0.6);
+  margin: 0 0 16px;
+}
+
+.lb-promo-tile__cta {
+  display: inline-block;
+}
+
+.lb-btn--sm {
+  font-size: 11px;
+  padding: 8px 16px;
+}
+{% endstylesheet %}

@@ -1,0 +1,70 @@
+{%- liquid
+  assign sub_refs = collection.metafields.custom.subcollections.value
+  if sub_refs == blank
+    assign sub_refs = nil
+  endif
+-%}
+
+{%- if sub_refs != nil and sub_refs.size > 0 -%}
+<nav class="lb-subcol-nav" aria-label="Sub-collections">
+  <div class="lb-subcol-nav__inner">
+    {%- for sub in sub_refs -%}
+      <a
+        href="{{ sub.url }}"
+        class="lb-subcol-nav__pill{% if sub.handle == collection.handle %} lb-subcol-nav__pill--active{% endif %}"
+        {% if sub.handle == collection.handle %}aria-current="page"{% endif %}
+      >
+        {{ sub.title }}
+      </a>
+    {%- endfor -%}
+  </div>
+</nav>
+
+{% style %}
+.lb-subcol-nav {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.lb-subcol-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.lb-subcol-nav__inner {
+  display: flex;
+  gap: 8px;
+  padding: 12px var(--lb-sp-md, 20px);
+  max-width: 1200px;
+  margin: 0 auto;
+  width: max-content;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+.lb-subcol-nav__pill {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1px solid rgba(var(--color-foreground-rgb, 0,0,0), 0.18);
+  color: rgba(var(--color-foreground-rgb, 0,0,0), 0.6);
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.lb-subcol-nav__pill:hover {
+  border-color: rgba(var(--color-foreground-rgb, 0,0,0), 0.45);
+  color: rgb(var(--color-foreground-rgb, 0,0,0));
+}
+
+.lb-subcol-nav__pill--active {
+  background: rgb(var(--color-foreground-rgb, 0,0,0));
+  color: rgb(var(--color-background-rgb, 255,255,255));
+  border-color: transparent;
+}
+{% endstyle %}
+{%- endif -%}

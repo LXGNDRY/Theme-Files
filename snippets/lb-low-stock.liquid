@@ -1,0 +1,88 @@
+{%- doc -%}
+  Low stock urgency badge for the PDP.
+  Shows "ONLY N LEFT" for variants with 1–9 units when inventory is Shopify-managed.
+  Updates dynamically on variant switch by listening to 'variant:update'.
+
+  @param {object} product - The product object.
+  @param {object} variant - The currently selected variant.
+{%- enddoc -%}
+
+{%- liquid
+  assign show_badge = false
+  assign stock_qty = 0
+  if variant.inventory_management == 'shopify'
+    if variant.inventory_quantity >= 1 and variant.inventory_quantity <= 9
+      assign show_badge = true
+      assign stock_qty = variant.inventory_quantity
+    endif
+  endif
+-%}
+
+<div
+  class="lb-low-stock"
+  data-product-id="{{ product.id }}"
+  aria-live="polite"
+  {% unless show_badge %}style="display:none"{% endunless %}
+>
+  <span class="lb-low-stock__inner">
+    <svg class="lb-low-stock__icon" width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">
+      <circle cx="5" cy="5" r="4"/>
+    </svg>
+    ONLY <span class="lb-low-stock__count">{{ stock_qty }}</span> LEFT
+  </span>
+</div>
+
+<script>
+(function() {
+  var el = document.querySelector('[data-product-id="{{ product.id }}"].lb-low-stock');
+  if (!el) return;
+
+  document.addEventListener('variant:update', function(e) {
+    var v = e.detail && e.detail.variant;
+    if (!v) return;
+
+    var qty = v.inventory_quantity;
+    var managed = v.inventory_management === 'shopify';
+
+    if (managed && qty >= 1 && qty <= 9) {
+      el.querySelector('.lb-low-stock__count').textContent = qty;
+      el.style.display = '';
+    } else {
+      el.style.display = 'none';
+    }
+  });
+})();
+</script>
+
+{% style %}
+.lb-low-stock {
+  margin-top: 8px;
+}
+
+.lb-low-stock__inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: #C9A84C;
+}
+
+.lb-low-stock__icon {
+  flex-shrink: 0;
+  color: #C9A84C;
+  animation: lb-low-stock-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes lb-low-stock-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lb-low-stock__icon { animation: none; }
+}
+{% endstyle %}
