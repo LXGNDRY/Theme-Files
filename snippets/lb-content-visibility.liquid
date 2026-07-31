@@ -1,0 +1,54 @@
+{%- comment -%}
+  lb-content-visibility.liquid
+  Version:      1.1.0
+  Last updated: 2026-05-20
+
+  Purpose:
+    Applies content-visibility: auto to below-the-fold sections so the
+    browser skips paint and layout for off-screen content until it
+    approaches the viewport, reducing initial render time.
+
+  Changes v1.1.0:
+    - contain-intrinsic-size raised from 600px → 900px. 600px was a
+      rough guess that underestimated typical section heights (product
+      grids, hero-like media sections) causing visible scrollbar jump
+      as sections painted and the layout shrank from the guessed height
+      to actual height. 900px is a closer midpoint for the section mix
+      on this store. The 'auto' prefix means the browser caches the
+      real height after first paint so subsequent scrolls have zero jank.
+    - Added explicit content-visibility: visible overrides for the
+      announcement bar (.header-section, aside[class*="announcement"]).
+      Previously the announcement bar could receive content-visibility:
+      auto if Shopify section ordering placed it as a non-first child,
+      hiding it until the viewport reached it — which on some browsers
+      caused the bar to flash in on load. Announcement bar is above the
+      fold by definition, so it must always be visible.
+    - Added [data-sticky] and .sticky-content overrides for completeness.
+
+  Targets: .shopify-section that is NOT the first section in the page.
+  Safe list: header group, footer, announcement bar, sticky elements.
+{%- endcomment -%}
+
+<style>
+  /* Skip rendering for off-screen sections — browser recalculates on scroll.
+     'auto 900px' = browser uses cached real height after first paint,
+     falls back to 900px placeholder before first paint to prevent CLS. */
+  .shopify-section:not(:first-child) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+  }
+
+  /* Never apply to header, footer, announcement bar, or sticky elements.
+     These are either above the fold or must remain layout-present at all times. */
+  #header-group .shopify-section,
+  footer .shopify-section,
+  aside.announcement-bar,
+  aside[class*="announcement"],
+  .header-section,
+  [data-sticky],
+  .sticky-content,
+  .sticky-content--desktop {
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+  }
+</style>

@@ -1,0 +1,67 @@
+{%- doc -%}
+  @param {string} [class]
+  @param {string} [fallback_text]
+  @param {object} [block]
+  @param {string} [width]
+{%- enddoc -%}
+
+{% liquid
+  assign s = block.settings
+  assign plain_text = s.text | strip_newlines | strip
+  assign visible_text = plain_text | strip_html
+  assign text_width = width | default: s.width
+
+  if s.font_size contains 'heading-lg' or s.font_size contains 'heading-xl'
+    assign type = 'display'
+  elsif s.font_size contains 'heading'
+    assign type = 'heading'
+  else
+    assign type = 'body'
+  endif
+
+  if s.type_preset == 'rte' or s.type_preset == 'paragraph'
+    assign is_rte = true
+  endif
+
+  capture tbc
+    if text_width == '100%'
+      echo 'text-block--align-' | append: s.alignment
+      if s.max_width == 'none'
+        echo ' text-block--full-width'
+      endif
+    endif
+    if s.type_preset == 'custom'
+      echo ' custom-typography'
+      if s.font_size != ''
+        echo ' custom-font-size'
+      endif
+      if s.color != ''
+        echo ' custom-color'
+      endif
+    endif
+    if s.background
+      echo ' text-block--background'
+    endif
+    if is_rte
+      echo ' rte'
+    endif
+  endcapture
+
+  assign element = 'div'
+  if is_rte
+    assign element = 'rte-formatter'
+  endif
+%}
+
+{% capture attr %}
+  class="{{ class }} spacing-style text-block text-block--{{ block.id }} {{ s.type_preset }} {{ tbc }}"
+  style="{% render 'spacing-padding', settings: s %}{% render 'typography-style', settings: s %}--width:{{ text_width }};--max-width:var(--max-width--{{ type }}-{{ s.max_width }});{% if text_width == '100%' %}--text-align:{{ s.alignment }};{% endif %}{% if s.background %}--text-background-color:{{ s.background_color | default: 'rgb(255 255 255 / 1.0)' }};--text-corner-radius:{{ s.corner_radius }}px;--text-padding:max(var(--padding-2xs),calc((var(--text-corner-radius) + var(--padding-xs)) * (1 - cos(45deg))));{% endif %}"
+  {{ block.shopify_attributes }}
+{% endcapture %}
+
+{% if fallback_text != blank and visible_text == blank %}
+  <div {{ attr | strip_newlines | strip }}>{{ fallback_text }}</div>
+{% elsif plain_text != blank %}
+  <{{ element }} {{ attr | strip_newlines | strip }}>{{ s.text }}</{{ element }}>
+{% endif %}
+

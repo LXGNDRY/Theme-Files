@@ -1,0 +1,56 @@
+{%- comment -%}
+  chaos_unleashed_master.liquid
+  Version:      1.1.0
+  Last updated: 2026-05-17
+  Branch:       feature/repo-structure
+
+  Purpose:
+    Orchestrator for the 7 independent chaos_unleashed performance snippets.
+    Renders sub-snippets in the correct load order.
+
+    Replace these 7 individual calls in layout/theme.liquid:
+      {% render 'chaos_unleashed_performance_deferrer' %}
+      {% render 'chaos_unleashed_hitbox_suspend' %}
+      {% render 'chaos_unleashed_third_party_defer' %}
+      {% render 'chaos_unleashed_hero_video_defer' %}
+      {% render 'chaos_unleashed_font_preload' %}
+      {% render 'chaos_unleashed_lcp_preload' %}
+      {% render 'chaos_unleashed_font_priority' %}
+
+    With this single call:
+      {%- render 'chaos_unleashed_master' -%}
+
+  !! NOT INCLUDED — chaos_unleashed_cfh_defer !!
+    cfh_defer requires the Chaos_Raw_CFH variable (captured from
+    content_for_header) passed as a parameter. It must remain inline
+    in theme.liquid immediately after the capture block:
+
+      {%- capture Chaos_Raw_CFH -%}{{ content_for_header }}{%- endcapture -%}
+      {%- render 'chaos_unleashed_cfh_defer', raw_cfh: Chaos_Raw_CFH -%}
+
+  Load Order (do not reorder without testing):
+    1. font_priority        — critical font face declarations
+    2. font_preload         — <link rel="preload"> hints for font files
+    3. lcp_preload          — <link rel="preload"> hints for LCP image
+    4. performance_deferrer — defers non-critical JS/CSS resources
+    5. third_party_defer    — defers third-party scripts (apps, chat, reviews)
+    6. hitbox_suspend       — suspends interaction handlers until idle
+    7. hero_video_defer     — lazy-loads hero section video
+
+  Dependencies:
+    snippets/chaos_unleashed_font_priority.liquid
+    snippets/chaos_unleashed_font_preload.liquid
+    snippets/chaos_unleashed_lcp_preload.liquid
+    snippets/chaos_unleashed_performance_deferrer.liquid
+    snippets/chaos_unleashed_third_party_defer.liquid
+    snippets/chaos_unleashed_hitbox_suspend.liquid
+    snippets/chaos_unleashed_hero_video_defer.liquid
+{%- endcomment -%}
+
+{%- render 'chaos_unleashed_font_priority' -%}
+{%- render 'chaos_unleashed_font_preload' -%}
+{%- render 'chaos_unleashed_lcp_preload' -%}
+{%- render 'chaos_unleashed_performance_deferrer' -%}
+{%- render 'chaos_unleashed_third_party_defer' -%}
+{%- render 'chaos_unleashed_hitbox_suspend' -%}
+{%- render 'chaos_unleashed_hero_video_defer' -%}

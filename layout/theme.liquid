@@ -1,0 +1,453 @@
+<!doctype html>
+<html {% if request.design_mode %}class="shopify-design-mode"{% endif %} lang="{{ request.locale.iso_code }}">
+<head>
+
+  {%- comment -%}
+  ═══════════════════════════════════════════════════════════════════════════
+  layout/theme.liquid — Legendary Branding
+  Branch: ui-redesign-2026
+  Rewrite: 2026-05-22
+
+  Load order (do not reorder without PSI testing):
+    1.  <meta charset> — before anything else touches encoding
+    2.  Preconnects + DNS-prefetch — warm origins before any resource fires
+    3.  LCP image preload — fires at HTML head parse, earliest possible
+    4.  Chaos Unleashed master — intercepts CFH before content_for_header
+    5.  content_for_header capture + cfh_defer — app scripts deferred
+    6.  dataLayer init (single, authoritative) — before GTM
+    7.  GTM — async-injected after DOMContentLoaded, not render-blocking
+    8.  Meta tags, SEO, hreflang, schema
+    9.  Critical CSS inline — covers header + hero so first paint is correct
+    10. Font preloads + @font-face
+    11. Bebas Neue self-hosted font
+    12. Theme flash prevention (localStorage read, zero network cost)
+    13. CSS custom properties (theme variables, color schemes)
+    14. Non-critical CSS — preload-swap (async)
+    15. View transition opt-in (guarded — only when setting is active)
+    16. Theme editor (design mode only)
+    17. Module importmap + modulepreload hints (fetchpriority=low)
+    18. lb-app-css-defer — catches runtime-injected app CSS
+    19. lb-ghost-code-auditor
+    20. lb-speculation-rules — prefetch/prerender on hover (Chrome 109+)
+  ═══════════════════════════════════════════════════════════════════════════
+  {%- endcomment -%}
+
+  {%- comment -%}── 1. ENCODING ──────────────────────────────────────────────{%- endcomment -%}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+
+  {%- comment -%}── 2. PRECONNECTS ────────────────────────────────────────────
+    Order matters: most latency-critical origins first.
+    GTM is first because it injects GA4 + ad pixels — warming it early
+    saves ~80ms on the first GTM payload. Shopify CDN second because
+    it serves every asset (JS, CSS, fonts, images).
+    Third-party pixels (FB, Pinterest, Snapchat) last — they load after
+    idle so their preconnects are advisory, not critical-path.
+  {%- endcomment -%}
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  <link rel="dns-prefetch" href="https://www.google-analytics.com">
+  <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
+  <link rel="preconnect" href="https://s.pinimg.com" crossorigin>
+  <link rel="preconnect" href="https://sc-static.net" crossorigin>
+  <link rel="dns-prefetch" href="//connect.facebook.net">
+  <link rel="dns-prefetch" href="//s.pinimg.com">
+  <link rel="dns-prefetch" href="//sc-static.net">
+
+  {%- comment -%}── 3. LCP PRELOAD ────────────────────────────────────────────
+    seo-preconnect runs here to warm the CDN before the preload resolves.
+    lb-hero-lcp-preload fires immediately after — browser starts fetching
+    the hero poster before the parser reaches the hero section (~5-6s later
+    on slow mobile without this).
+    Scope: homepage only (template.name == 'index').
+  {%- endcomment -%}
+  {%- render 'seo-preconnect' -%}
+  {%- render 'lb-hero-lcp-preload' -%}
+
+  {%- comment -%}── 4 + 5. CHAOS UNLEASHED ────────────────────────────────────
+    Must render BEFORE content_for_header is emitted so Chaos can
+    intercept and defer app CSS/JS injected by Shopify into CFH.
+    cfh_defer receives the raw CFH string as a parameter — it parses it
+    server-side and re-emits only non-blocking resources.
+  {%- endcomment -%}
+  {%- render 'chaos_unleashed_master' -%}
+  {%- capture Chaos_Raw_CFH -%}{{ content_for_header }}{%- endcapture -%}
+  {%- render 'chaos_unleashed_cfh_defer', raw_cfh: Chaos_Raw_CFH -%}
+
+  {%- comment -%}── 6. DATALAYER (single authoritative init) ─────────────────
+    Must exist before GTM and before any app script pushes events.
+    Zero network cost — pure JS array declaration.
+    Single init here replaces the three separate declarations that
+    existed in the previous version.
+  {%- endcomment -%}
+  <script>window.dataLayer=window.dataLayer||[];</script>
+
+  {%- comment -%}── 7. GOOGLE TAG MANAGER ────────────────────────────────────────
+    GTM loading strategy:
+
+    — Product / cart / collection pages: load on DOMContentLoaded.
+      These pages start conversion funnel events immediately on user
+      interaction (add_to_cart, begin_checkout). GTM must be ready
+      before the first click — idle-load risks missing early funnel
+      events on fast shoppers, producing (not set) source attribution.
+
+    — All other pages: 3-tier idle strategy (requestIdleCallback →
+      4s fallback → interaction backstop). Safe to defer because no
+      conversion events fire until the user navigates to a product.
+
+    Tier 1 — requestIdleCallback: fires when the main thread is free
+    Tier 2 — 4s hard fallback: guarantees GTM loads on slow devices
+    Tier 3 — user interaction backstop: loads on first intent
+
+    The noscript <iframe> fallback is still in <body> (required by
+    Google). The preconnect at step 2 warms the GTM origin.
+  {%- endcomment -%}
+  {%- comment -%}
+    Analytics suppression flag — set server-side from Shopify request context.
+    GTM must NOT load (and dataLayer must not seed gtm.js) in any non-customer
+    context, otherwise the theme editor / preview / app-callback renders
+    pollute GA4 sessions and split attribution (the (direct)/(none) noise that
+    inflated Shopify sessions far above GA4's real customer sessions).
+
+    Suppressed contexts:
+      - request.design_mode      → Theme editor live preview
+      - request.visual_preview_mode → Theme library "Preview" + checkout editor
+    Client-side, the bootstrap additionally suppresses when the URL carries
+    preview/debug params that Shopify and apps append in non-customer renders.
+  {%- endcomment -%}
+  <script>
+  window.__lbSuppressAnalytics = {% if request.design_mode or request.visual_preview_mode %}true{% else %}false{% endif %};
+  </script>
+  <script>
+  (function(){
+    var INTERACTION_EVENTS=['mousedown','touchstart','keydown','scroll','click'];
+    // Client-side suppression backstop: preview/debug/sandbox URL params that
+    // appear only in non-customer renders. Keeps real customer tracking intact
+    // because these params never appear on organic/paid customer landings.
+    function isNoiseContext(){
+      if(window.__lbSuppressAnalytics) return true;
+      try{
+        // Web pixel sandbox / app callback renders run cross-origin in an iframe.
+        if(window.top !== window.self) return true;
+        var qs = window.location.search;
+        if(!qs) return false;
+        var NOISE = ['preview_theme_id','_ab','_fd','_sc','_ssvprev','webPixelDebug','webPixelsManagerSandbox','_bt','pb=0'];
+        for(var i=0;i<NOISE.length;i++){ if(qs.indexOf(NOISE[i]) !== -1) return true; }
+      }catch(e){ return true; } // cross-origin access throw → we're framed → suppress
+      return false;
+    }
+    if(isNoiseContext()){ window.__lbSuppressAnalytics = true; return; }
+    function loadGTM(){
+      if(window.__gtmLoaded)return;
+      if(window.__lbSuppressAnalytics)return;
+      window.__gtmLoaded=true;
+      INTERACTION_EVENTS.forEach(function(e){
+        document.removeEventListener(e,onInteract,{passive:true,capture:true});
+      });
+      var f=document.getElementsByTagName('script')[0];
+      var j=document.createElement('script');
+      j.async=true;
+      j.src='https://www.googletagmanager.com/gtm.js?id={{ settings.gtm_container_id | default: "GTM-58KH82X" }}';
+      f.parentNode.insertBefore(j,f);
+    }
+    function onInteract(){ loadGTM(); }
+    window.dataLayer.push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+    // Conversion-critical page types — load GTM immediately on DOMContentLoaded
+    // to ensure session context is captured before any funnel events fire.
+    var pageType = {{ request.page_type | json }};
+    var CONVERSION_PAGES = ['product','collection','cart','index'];
+    var isConversionPage = CONVERSION_PAGES.indexOf(pageType) !== -1;
+    function scheduleGTM(){
+      if(isConversionPage){
+        // Load immediately — do not defer on conversion-critical pages
+        loadGTM();
+        return;
+      }
+      // Non-conversion pages: 3-tier idle strategy
+      INTERACTION_EVENTS.forEach(function(e){
+        document.addEventListener(e,onInteract,{passive:true,capture:true,once:true});
+      });
+      if('requestIdleCallback' in window){
+        requestIdleCallback(loadGTM,{timeout:4000});
+      } else {
+        setTimeout(loadGTM,4000);
+      }
+    }
+    if(document.readyState==='loading'){
+      document.addEventListener('DOMContentLoaded',scheduleGTM);
+    } else {
+      scheduleGTM();
+    }
+  })();
+  </script>
+
+  {%- comment -%}── 8. META / SEO / FAVICON ──────────────────────────────────{%- endcomment -%}
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+  {%- endif -%}
+  {%- render 'seo-meta' -%}
+  {%- render 'lb-param-noindex' -%}
+  {%- render 'lb-hreflang' -%}
+  {%- render 'seo-schema' -%}
+
+  {%- comment -%}── 9. CRITICAL CSS (inline) ──────────────────────────────────
+    Covers header layout + hero dimensions so the first paint renders
+    correctly before chaos-theme-styles.css and base.aio.min.css arrive.
+    Keeping this here (not in stylesheets.liquid) makes the critical path
+    explicit and easy to audit.
+    All rules are minified — whitespace has real cost on slow connections.
+  {%- endcomment -%}
+  {%- render 'stylesheets' -%}
+
+  {%- comment -%}── 10 + 11. FONTS ────────────────────────────────────────────
+    fonts.liquid: body_regular (woff2 preload + @font-face swap)
+                  heading_font (Bebas Neue, fetchpriority=low)
+    lb-bebas-neue: self-hosted Bebas Neue @font-face declarations
+    Only two preloads remain (trimmed May 2026, v23) — four others removed
+    to unblock the 18.6KB hero poster on slow 4G.
+  {%- endcomment -%}
+  {%- render 'fonts' -%}
+  {%- render 'lb-bebas-neue' -%}
+
+  {%- comment -%}── 12. THEME FLASH PREVENTION ────────────────────────────────
+    Reads localStorage('lb-theme') and sets data-theme on <html> before
+    first paint so dark/light mode never flashes the wrong theme.
+    Zero network cost — pure JS with a try/catch for private browsing.
+  {%- endcomment -%}
+  <script>
+  (function(){
+    try{
+      document.documentElement.setAttribute(
+        'data-theme',
+        localStorage.getItem('lb-theme')||'light'
+      );
+    }catch(e){}
+  })();
+  </script>
+
+  {%- comment -%}── 13. CSS CUSTOM PROPERTIES + COLOR SCHEMES ────────────────
+    theme-styles-variables: CSS vars for spacing, typography, layout
+    color-schemes: per-section color tokens (background, text, border)
+    lb-content-visibility: content-visibility: auto on below-fold sections
+  {%- endcomment -%}
+  {%- render 'theme-styles-variables' -%}
+  {%- render 'color-schemes' -%}
+  {%- render 'lb-content-visibility' -%}
+
+  {%- comment -%}── 14. NON-CRITICAL CSS (preload-swap / async) ───────────────
+    All three stylesheets use the preload-swap pattern:
+      rel="preload" as="style" onload="this.rel='stylesheet'"
+    This means they download in parallel but do NOT block rendering.
+    The critical-css.liquid inline block (step 9) covers all layout rules
+    needed for first paint, so deferred arrival is a no-op re-apply.
+    noscript fallbacks ensure CSS loads for users with JS disabled.
+
+    Load order within this group:
+      1. chaos-theme-styles.css  — theme base (largest, needs most lead time)
+      2. lb-cart-ui.css          — cart drawer styles
+      3. lb-pdp-buttons.css      — ATC + dynamic checkout
+      4. lb-variant-selectors.css — PDP variant pills
+  {%- endcomment -%}
+  <link rel="preload" href="{{ 'chaos-theme-styles.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
+  <noscript><link rel="stylesheet" href="{{ 'chaos-theme-styles.css' | asset_url }}"></noscript>
+
+  <link rel="preload" href="{{ 'lb-cart-ui.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
+  <noscript><link rel="stylesheet" href="{{ 'lb-cart-ui.css' | asset_url }}"></noscript>
+
+  {%- if template.name == 'product' -%}
+  <link rel="preload" href="{{ 'lb-pdp-buttons.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
+  <noscript><link rel="stylesheet" href="{{ 'lb-pdp-buttons.css' | asset_url }}"></noscript>
+
+  <link rel="preload" href="{{ 'lb-variant-selectors.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
+  <noscript><link rel="stylesheet" href="{{ 'lb-variant-selectors.css' | asset_url }}"></noscript>
+  {%- endif -%}
+
+  {%- if template.name == 'collection' or template.name == 'search' -%}
+  <link rel="preload" href="{{ 'lb-collection.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
+  <noscript><link rel="stylesheet" href="{{ 'lb-collection.css' | asset_url }}"></noscript>
+  {%- endif -%}
+
+  {%- comment -%}── 15. VIEW TRANSITIONS (guarded) ───────────────────────────
+    <link rel="expect" href="#MainContent"> explicitly gates rendering
+    until #MainContent is parsed. Only inject when transitions are enabled
+    in theme settings — do not leave it in unconditionally.
+  {%- endcomment -%}
+  {%- if settings.transition_to_main_product or settings.page_transition_enabled -%}
+    <link rel="expect" href="#MainContent" id="view-transition-render-blocker">
+  {%- endif -%}
+
+  {%- comment -%}── 16. THEME EDITOR (design mode only) ──────────────────────{%- endcomment -%}
+  {%- if request.design_mode -%}{%- render 'theme-editor' -%}{%- endif -%}
+
+  {%- comment -%}── 17. MODULE IMPORTMAP + MODULEPRELOAD HINTS ────────────────
+    scripts.liquid emits:
+      - <script type="importmap"> for all theme ES modules
+      - <link rel="modulepreload"> for hot-path modules (utilities, component,
+        section-renderer, section-hydration, morph)
+      - <script type="module"> lazy loads at fetchpriority=low for all
+        non-critical modules (product-card, variant-picker, media-gallery…)
+      - Template-conditional preloads (collection/search: paginated-list)
+      - idleScripts array loaded via requestIdleCallback (accordion, slideshow…)
+    All module scripts have fetchpriority="low" — they never compete with
+    the LCP image or critical CSS.
+  {%- endcomment -%}
+  {%- render 'scripts' -%}
+
+  {%- comment -%}── 18–21. PERFORMANCE SAFETY NETS ───────────────────────────
+    lb-app-css-defer:     MutationObserver catches runtime-injected app CSS
+                          (Klaviyo popups) and defers via print swap.
+                          Runs inline in <head> — must be here, not in <body>.
+    lb-ghost-code-auditor: Dev-mode only — logs unused Shopify app scripts.
+    lb-speculation-rules: Speculation Rules API — prefetch/prerender product
+                          and collection pages on link hover (Chrome 109+).
+                          Graceful no-op in unsupported browsers.
+  {%- endcomment -%}
+  {%- render 'lb-app-css-defer' -%}
+  {%- if settings.enable_dev_tools -%}{%- render 'lb-ghost-code-auditor' -%}{%- endif -%}
+  {%- render 'lb-speculation-rules' -%}
+
+</head>
+
+<body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
+
+  {%- comment -%}── GTM NOSCRIPT (required by Google, must be first in <body>) ─
+    Gated out of theme editor / visual preview so editor renders never log a
+    GTM noscript hit. Customer renders are unaffected.
+  {%- endcomment -%}
+  {%- unless request.design_mode or request.visual_preview_mode -%}
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id={{ settings.gtm_container_id | default: "GTM-58KH82X" }}"
+            height="0" width="0" style="display:none;visibility:hidden"
+            title="Google Tag Manager"></iframe>
+  </noscript>
+  {%- endunless -%}
+
+  {%- comment -%}── SVG SPRITE ────────────────────────────────────────────────
+    Injected once, hidden. All icon.liquid calls reference these symbols via
+    <use href="#icon-{name}">, eliminating per-call 133KB snippet parsing.
+  {%- endcomment -%}
+  {%- render 'lb-svg-sprite' -%}
+
+  {%- comment -%}── SKIP LINK ────────────────────────────────────────────────{%- endcomment -%}
+  {%- render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' -%}
+
+  {%- comment -%}── HEADER ────────────────────────────────────────────────────
+    Header CSS variables (--header-group-height, --top-row-height,
+    --transparent-header-offset-boolean) are set via rAF to avoid
+    forced synchronous layout reads during parse.
+    The header-group div is pre-sized via critical CSS (min-height:80px)
+    so there is no CLS before JS runs.
+  {%- endcomment -%}
+  <div id="header-group">
+    {%- sections 'header-group' -%}
+  </div>
+
+  <script>
+  // Header CSS var measurement — deferred to rAF so reads happen after
+  // the browser has completed its first layout pass. This eliminates the
+  // forced synchronous layout (FSL) that previously blocked the main thread
+  // during HTML parse.
+  requestAnimationFrame(function(){
+    var hg  = document.getElementById('header-group');
+    var hc  = hg && hg.querySelector('header-component');
+    if(!hg || !hc) return;
+
+    var bs = document.body.style;
+
+    // ── Header group height (announcement bars above the header) ──
+    var groupH = 0;
+    for(var i=0,c=hg.children;i<c.length;i++){
+      var el=c[i];
+      if(el===hc||el.contains(hc)||!(el instanceof HTMLElement))continue;
+      groupH+=el.offsetHeight;
+    }
+    bs.setProperty('--header-group-height', groupH+'px');
+
+    // ── Top row height ──
+    var topRow = hc.querySelector('.header__row--top');
+    if(topRow) bs.setProperty('--top-row-height', topRow.offsetHeight+'px');
+
+    // ── Transparent header offset ──
+    var headerSection = hg.querySelector('.header-section');
+    if(!headerSection || !hc.hasAttribute('transparent')){
+      bs.setProperty('--transparent-header-offset-boolean','0');
+      return;
+    }
+    var nextSection = headerSection.nextElementSibling;
+    var hasImmediate = nextSection && nextSection.classList.contains('shopify-section');
+    bs.setProperty('--transparent-header-offset-boolean', hasImmediate ? '0' : '1');
+  });
+
+  // ── Menu style detection (drawer vs inline) ──
+  // Runs synchronously — no layout read, just feature detection.
+  (function(){
+    var hc = document.getElementById('header-component')
+          || document.querySelector('header-component');
+    if(!hc) return;
+    var touch = 'ontouchstart' in window && navigator.maxTouchPoints > 0;
+    var ol    = hc.querySelector('overflow-list');
+    hc.dataset.menuStyle = (touch || (ol && ol.hasAttribute('minimum-reached')))
+      ? 'drawer'
+      : 'menu';
+  })();
+  </script>
+
+  {%- comment -%}── MAIN CONTENT ─────────────────────────────────────────────{%- endcomment -%}
+  <main id="MainContent"
+        class="content-for-layout"
+        data-page-transition-enabled="{{ settings.page_transition_enabled }}"
+        data-product-transition="{{ settings.transition_to_main_product }}"
+        data-template="{{ template }}">
+    {{ content_for_layout }}
+  </main>
+
+  {%- comment -%}── FOOTER ────────────────────────────────────────────────────{%- endcomment -%}
+  <footer>
+    {%- sections 'footer-group' -%}
+  </footer>
+
+  {%- comment -%}── MODALS ────────────────────────────────────────────────────{%- endcomment -%}
+  {%- render 'search-modal' -%}
+  {%- if settings.quick_add or settings.mobile_quick_add -%}
+    {%- render 'quick-add-modal' -%}
+  {%- endif -%}
+
+  {%- comment -%}── LB CUSTOM SCRIPTS (just before </body>) ──────────────────
+    Moved from <head defer> to end of <body> to eliminate parse cost
+    during initial load. Script only activates after DOMContentLoaded
+    so placement here is functionally identical to defer — with the bonus
+    that it doesn't add to TBT during HTML head parse.
+      lb-product-card-tap.js — iOS single-tap flash via touchstart
+    NOTE: lb-theme-toggle.js removed 2026-05-22 — file never existed in
+    assets/, causing a 404 + MIME-type console error on every page load.
+    Dark/light mode is handled by <meta name="theme-color"> in <head>;
+    header scroll is handled by HeaderComponent in header.js;
+    scroll reveal is handled by lb-idle-defer [data-lb-defer="visible"].
+  {%- endcomment -%}
+  <script src="{{ 'lb-product-card-tap.js' | asset_url }}" defer></script>
+
+  {%- comment -%}── JUDGE.ME INTERSECTION OBSERVER ──────────────────────────────
+    lb-judgeme-carousel-css: delays Judge.me widget init until the reviews
+    section enters the viewport (400px rootMargin). Works in concert with
+    chaos_unleashed_third_party_defer which holds the Judge.me script until
+    first user interaction. Only fires on product templates where the reviews
+    widget is present. No-op on all other templates.
+  {%- endcomment -%}
+  {%- if template.name == 'product' -%}
+    {%- render 'lb-judgeme-carousel-css' -%}
+  {%- endif -%}
+
+  {%- comment -%}── IDLE DEFER (last — catches everything below-fold) ─────────
+    lb-idle-defer runs after all content is in the DOM. It uses
+    requestIdleCallback to load lb-video-optimizer, lb-cart-animations,
+    lb-image-optimizer and to activate [data-lb-defer] elements.
+    Must be last in <body> — placing it earlier reduces the pool of
+    elements it can observe on first run.
+  {%- endcomment -%}
+  {%- render 'lb-idle-defer' -%}
+
+  {%- render 'lb-ga4-events' -%}
+</body>
+</html>

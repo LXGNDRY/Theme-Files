@@ -1,0 +1,17 @@
+{%- comment -%}
+  lb-font-unicode-range.liquid
+  Outputs @font-face rules with unicode-range descriptors so the browser
+  only downloads the font file subsets that are actually used on the page.
+  This pairs with the fonts loaded by snippets/fonts.liquid.
+
+  Targets Latin + Latin Extended only — covers all Legendary Branding
+  copy. CJK/Cyrillic/etc subsets are excluded.
+{%- endcomment -%}
+
+{%- comment -%}
+  DISABLED: The original @font-face rule used `font-family: inherit` which is
+  invalid in an @font-face declaration. To enable unicode-range subsetting,
+  each @font-face rule needs explicit font-family names with src descriptors
+  matching the actual font files loaded by snippets/fonts.liquid.
+  Leaving this file as a no-op until proper font subsetting is implemented.
+{%- endcomment -%}

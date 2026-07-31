@@ -1,0 +1,64 @@
+{% comment %}
+  Renders an image at maximum quality using a responsive srcset.
+
+  Usage:
+    {% render 'optimized-image', image: image %}
+
+  With all options:
+    {% render 'optimized-image',
+      image: section.settings.hero_image,
+      widths: '750,1100,1500,2048,3840',
+      sizes: '100vw',
+      loading: 'eager',
+      fetchpriority: 'high',
+      class: 'hero__image'
+    %}
+
+  Parameters:
+    - image         {Object}  Required. The Shopify image object.
+    - widths        {String}  Optional. Comma-separated list of widths for srcset. Default: '375,750,1100,1500,1920,2048'
+    - sizes         {String}  Optional. The HTML sizes attribute. Default: '(min-width: 1200px) 50vw, 100vw'
+    - loading       {String}  Optional. 'lazy' (default) or 'eager' for hero/LCP images.
+    - fetchpriority {String}  Optional. 'auto' (default) or 'high' for above-the-fold images.
+    - class         {String}  Optional. CSS class(es) to apply to the <img> tag.
+    - alt           {String}  Optional. Override alt text. Falls back to image.alt.
+
+  Notes:
+    - Shopify CDN will never upscale beyond the original uploaded resolution.
+    - Upload product images at 2048x2048px minimum for best results.
+    - Shopify CDN max width cap is 5760px.
+    - Use loading: 'eager' and fetchpriority: 'high' ONLY on the first visible
+      (hero/LCP) image per page. All other images should use loading: 'lazy'.
+{% endcomment %}
+
+{%- liquid
+  assign widths       = widths        | default: '375,750,1100,1500,1920,2048'
+  assign sizes        = sizes         | default: '(min-width: 1200px) 50vw, 100vw'
+  assign loading      = loading       | default: 'lazy'
+  assign fetchpriority = fetchpriority | default: 'auto'
+  assign alt_text     = alt           | default: image.alt | escape
+  assign widths_array = widths | split: ','
+-%}
+
+{%- if image != blank -%}
+  <img
+    src="{{ image | image_url: width: 1500, format: 'webp' }}"
+    srcset="
+      {%- for w in widths_array -%}
+        {{ image | image_url: width: w, format: 'webp' }} {{ w | strip }}w{%- unless forloop.last %},
+        {%- endunless %}
+      {%- endfor -%}
+    "
+    sizes="{{ sizes }}"
+    alt="{{ alt_text }}"
+    width="{{ image.width }}"
+    height="{{ image.height }}"
+    loading="{{ loading }}"
+    fetchpriority="{{ fetchpriority }}"
+    decoding="async"
+    {%- if class != blank %} class="{{ class }}"{% endif %}
+    {%- if style != blank %} style="{{ style }}"{% endif %}
+  >
+{%- elsif text_fallback != blank -%}
+  {{ text_fallback }}
+{%- endif -%}

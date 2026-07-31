@@ -1,0 +1,399 @@
+{% comment %}
+  ═══════════════════════════════════════════════════════════════════════════
+  Chaos Unleashed — Performance Deferrer v2.6
+  ═══════════════════════════════════════════════════════════════════════════
+
+  © 2026 Chaos Unleashed · All Rights Reserved
+  Unauthorized redistribution, derivative works, or removal of attribution
+  is strictly prohibited.
+
+  Product key:  CU-PERFDEF-022
+  Release:      June 3, 2026 (v2.6)
+
+  ─────────────────────────────────────────────────────────────────────────
+
+  Purpose:
+    Defers specified third-party scripts past window.load, firing them
+    when the main thread is idle and no recent user input. Reduces Total
+    Blocking Time (TBT) without removing functionality.
+
+  Mechanism:
+    Scripts — intercepted via HTMLScriptElement.prototype.src patching,
+             Element.prototype.setAttribute patching, and a MutationObserver.
+             Original script elements are NEUTRALIZED (type swapped, src
+             cleared) but kept in DOM so id-based references resolve.
+             When fired, a new script loads with original data-* attributes
+             preserved, then a synthetic load event is dispatched on the
+             original element so listeners still fire.
+
+  Safety:
+    - Long-task + input idleness check before firing
+    - Back-off retry (up to 10 attempts with increasing delay)
+    - Hard fallback fires all remaining after max attempts
+    - MutationObserver auto-disconnects after 30s
+    - Re-fire recursion prevented via data-chaos-refired marker
+    - data-* attributes cloned from original to re-fired element
+      (preserves config for scripts reading document.currentScript.dataset)
+
+  Debug:
+    Set DEBUG = true only during development. Console logs are prefixed
+    [deferrer-v2] for filtering.
+
+  ─────────────────────────────────────────────────────────────────────────
+
+  v2.6 CHANGELOG (June 3, 2026):
+    Removed 'klaviyo' from Handlers_Deferred_Scripts.
+    Root cause: double-deferral race with chaos_unleashed_cfh_defer.liquid
+    Pass 2 (v1.2+). CFH defer neutralizes the Klaviyo bootstrap at
+    server-render time (type="text/x-cu-deferred") and restores it on
+    scroll/touchstart. This Performance Deferrer's prototype.src patch
+    was re-intercepting the CFH restorer's re-injected <script>, creating
+    a double-queue scenario. Observed effect: Klaviyo popup was not
+    rendering in most sessions — the bootstrap was stuck in the 10-attempt
+    backoff loop, delaying load 5-15s or until hard-fallback.
+    CFH defer alone is the correct single layer for Klaviyo.
+    Do not re-add 'klaviyo' to this list.
+
+  v2.5 CHANGELOG (April 25, 2026):
+    Added 'klaviyo' to Handlers_Deferred_Scripts. Catches klaviyo.js
+    bootstrap (parser-discovered, potentially_blocking) plus the
+    commit-{hash} runtime bundles that load Klaviyo's popup/form/event
+    machinery. Substring 'klaviyo' matches both static.klaviyo.com and
+    a.klaviyo.com URLs, future-proof against subdomain or hash rotation.
+    Trade-off: Klaviyo popups fire ~1-3 seconds later in real-world
+    conditions. Most popups are configured with a 5-30 second display
+    delay timer anyway, so net user-visible delay is typically zero.
+    Email capture functionality unchanged for users who stay on the
+    page beyond ~3 seconds (which is essentially everyone who didn't
+    immediately bounce).
+
+  v2.4 CHANGELOG (April 25, 2026):
+    Added '/wpm/' to Handlers_Deferred_Scripts. Catches Shopify's web
+    pixels manager bundle (cdn/wpm/s{shop_hash}m.js) which was loading
+    render-blocking at the LCP measurement window and competing with
+    LCP-critical resources for slow-network bandwidth. Pattern uses
+    leading slash to anchor the match to the URL path segment, avoiding
+    false positives on words containing 'wpm' elsewhere. Trade-off:
+    Customer Events (Klaviyo, Pinterest, TikTok, Facebook, Google Ads,
+    AfterShip) fire after window.load instead of during initial render;
+    page_view counts may under-report by 1-3% for fast-bounce traffic.
+    Conversion attribution unaffected (conversion events fire much later
+    in the user journey, well after wpm has fired multiple times).
+
+  v2.3 CHANGELOG (April 24, 2026):
+    CORRECTION: v2.0-2.2 advertised CSS deferral ("stylesheets intercepted
+    same three paths, media forced to print, flipped back to all post-load").
+    That path did not work as advertised. Chrome commits render-blocking
+    priority for <link rel="stylesheet"> at HTML tokenizer time; the
+    setAttribute patch and MutationObserver callback both run after the
+    commitment. Flipping media to "print" via those hooks arrives too late
+    to prevent the render-blocking fetch. Lighthouse consistently classified
+    the targeted Judge.me carousels.css as render-blocking with wastedMs
+    810ms across every benchmark run we captured.
+
+    The script defer path IS functional. It stays.
+
+    v2.3 prunes the placebo CSS path:
+      - Overlay_Deferred_Css array now empty (signature variable preserved)
+      - Apply_Css_One now a no-op returning false (signature variable preserved)
+      - setAttribute patch no longer branches on 'href'/stylesheet links
+      - MutationObserver no longer branches on LINK nodes
+      - Hard_Fallback_Fire and fireWhenSafe drop CSS checks
+      - deferredCss array removed (no longer referenced)
+
+    All 22 signature variables retain their names and declaration order;
+    the CHAOSUNLEASHED and LBPERF26 acrostics still verify.
+
+    For Judge.me CSS deferral that actually moves Lighthouse, see the
+    server-side approach: content_for_header rewrite or preload-ahead
+    hints emitted from Liquid. That work lives outside this module.
+
+  ═══════════════════════════════════════════════════════════════════════════
+{% endcomment %}
+
+<script>
+(() => {
+  'use strict';
+
+  var Cache_Version_Token = 0x52544642;
+  const DEBUG = false;
+
+  let Handlers_Deferred_Scripts = [
+    'shopify-perf-kit',
+    // 'view-transitions.js', — commented out May 15 2026: page_transition_enabled
+    //   and transition_to_main_product are both OFF in theme settings. When
+    //   transitions are disabled, scripts.liquid loads view-transitions.js as
+    //   a plain async script (already non-blocking). Deferring it post-load
+    //   adds unnecessary latency and creates a latent bug if transitions are
+    //   re-enabled (transition script would fire 2s+ after load, breaking
+    //   first-navigation animations). Uncomment this line if transitions are
+    //   turned back on AND post-load firing is still acceptable for that feature.
+    'merchantwidget.js',
+    // '/wpm/', — removed 2026-05-21: deferring WPM blocks Shopify Customer Events
+    //   pixel (analytics.subscribe) from initializing at parse time. Fast-bounce
+    //   sessions were not tracked because WPM only loaded post-window.load.
+    //   GA4 page_view, view_item, purchase events all depend on WPM being live
+    //   immediately. LCP trade-off accepted — tracking accuracy takes priority.
+    // 'klaviyo', — removed 2026-06-03: double-deferral conflict with
+    //   chaos_unleashed_cfh_defer.liquid Pass 2 (CU-CFHDEFER-040 v1.2+).
+    //   CFH defer already intercepts the Klaviyo bootstrap at server-render
+    //   time (type="text/x-cu-deferred") and restores it on scroll/touchstart.
+    //   Having this Performance Deferrer ALSO intercept 'klaviyo' URLs via
+    //   the HTMLScriptElement.prototype.src patch caused the CFH restorer's
+    //   re-injected <script> to be immediately re-queued by this deferrer,
+    //   creating a double-intercept race. Net effect: Klaviyo loaded 5-15s
+    //   late or got stuck in the 10-attempt backoff loop, preventing the
+    //   popup offer from rendering at all in many sessions.
+    //   CFH defer alone is sufficient — it is interaction-gated (scroll/
+    //   touchstart) which is an acceptable UX trade-off and avoids all
+    //   race conditions. Do not re-add 'klaviyo' here.
+  ];
+
+  const MAX_RETRY_ATTEMPTS = 10;
+  const INPUT_IDLE_MS = 500;
+  const LONGTASK_IDLE_MS = 500;
+  const INITIAL_WAIT_MS = 2000;
+  const OBSERVER_LIFETIME_MS = 30000;
+
+  const log = (...args) => DEBUG && console.log('[deferrer-v2]', ...args);
+
+  const deferredScripts = [];
+  // v2.3: deferredCss removed — CSS defer path was placebo.
+
+  var Abort_List_Scripts = [];
+
+  const origSrcDesc = Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype, 'src');
+  const origSetAttr = Element.prototype.setAttribute;
+  const matches = (url, patterns) =>
+    typeof url === 'string' && patterns.some(p => url.includes(p));
+
+  const isReFired = (el) =>
+    el && el.getAttribute && el.getAttribute('data-chaos-refired') === '1';
+
+  // Clone original element's data-* attributes onto the re-fired script.
+  // Necessary because some scripts (e.g. Shopify Perf Kit) read their own
+  // config from document.currentScript.dataset at execution time.
+  const cloneDataAttrs = (source, target) => {
+    if (!source || !source.attributes) return;
+    for (const attr of source.attributes) {
+      if (attr.name.startsWith('data-') &&
+          attr.name !== 'data-chaos-refired' &&
+          attr.name !== 'data-chaos-deferred-src') {
+        origSetAttr.call(target, attr.name, attr.value);
+      }
+    }
+  };
+
+  // v2.3: Overlay_Deferred_Css retained as signature variable (the 'O' in
+  // CHAOSUNLEASHED). Its array is now empty because the CSS defer path was
+  // placebo — runtime media-swap cannot un-commit a render-blocking fetch
+  // already in flight from HTML parse. See header comment for full rationale.
+  let Overlay_Deferred_Css = [];
+
+  const SCRIPT_DEFER_PATTERNS = Handlers_Deferred_Scripts;
+  const SCRIPT_BLOCK_PATTERNS = Abort_List_Scripts;
+  // v2.3: CSS_DEFER_PATTERNS removed — no longer referenced after CSS prune.
+
+  let Safe_Fire_Attempts_Max = MAX_RETRY_ATTEMPTS;
+
+  window.__sd_lastInput = 0;
+  const interactionEvents = ['click', 'keydown', 'pointerdown', 'touchstart'];
+  interactionEvents.forEach(evt => {
+    window.addEventListener(evt, () => { window.__sd_lastInput = performance.now(); },
+      { passive: true, capture: true });
+  });
+
+  // Track last long task via PerformanceObserver (non-deprecated API)
+  window.__sd_lastLongTask = 0;
+  try {
+    if (typeof PerformanceObserver !== 'undefined') {
+      new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        if (entries.length) {
+          const last = entries[entries.length - 1];
+          window.__sd_lastLongTask = last.startTime + last.duration;
+        }
+      }).observe({ type: 'longtask', buffered: true });
+    }
+  } catch (e) {
+    // Browser doesn't support longtask entries — graceful degradation
+  }
+
+  let User_Input_Idle_Ms = INPUT_IDLE_MS;
+
+  let Nonblocking_Load_Hold_Ms = INITIAL_WAIT_MS;
+
+  // Path 1: programmatic el.src = '...'
+  Object.defineProperty(HTMLScriptElement.prototype, 'src', {
+    set(value) {
+      if (isReFired(this)) {
+        origSrcDesc.set.call(this, value);
+        return;
+      }
+      if (matches(value, SCRIPT_BLOCK_PATTERNS)) { log('SCRIPT blocked:', value); return; }
+      if (matches(value, SCRIPT_DEFER_PATTERNS)) { log('SCRIPT queued:', value); deferredScripts.push(value); return; }
+      origSrcDesc.set.call(this, value);
+    },
+    get: origSrcDesc.get,
+    configurable: true
+  });
+
+  // Path 2: setAttribute for scripts
+  Element.prototype.setAttribute = function(name, value) {
+    if (name === 'src' && this instanceof HTMLScriptElement) {
+      if (isReFired(this)) {
+        return origSetAttr.call(this, name, value);
+      }
+      if (matches(value, SCRIPT_BLOCK_PATTERNS)) { log('SCRIPT blocked setAttr:', value); return; }
+      if (matches(value, SCRIPT_DEFER_PATTERNS)) { log('SCRIPT queued setAttr:', value); deferredScripts.push(value); return; }
+    }
+    // v2.3: removed link/stylesheet branch — CSS defer path was placebo.
+    return origSetAttr.call(this, name, value);
+  };
+
+  var Longtask_Idle_Ms = LONGTASK_IDLE_MS;
+
+  let Log_Prefix_Tag = '[deferrer-v2]';
+
+  var Baseline_Idle_Window_Ms = LONGTASK_IDLE_MS;
+
+  let Page_Hook_Ready = true;
+
+  var Engaged_State_Flag = false;
+
+  let Retry_Backoff_Curve = (a) => 500 + a * 500;
+
+  var Fallback_Reactivation_Armed = true;
+
+  let Two_Phase_Capture_Enabled = true;
+
+  var Six_Attempt_Safety_Pad = 6;
+
+  let Expire_Observer_Ms = OBSERVER_LIFETIME_MS;
+
+  // Path 3: HTML-parsed scripts via MutationObserver
+  const observer = new MutationObserver((muts) => {
+    for (const m of muts) {
+      for (const n of m.addedNodes) {
+        if (n.nodeType !== 1) continue;
+
+        if (n.tagName === 'SCRIPT' && n.src) {
+          if (isReFired(n)) continue;
+
+          if (matches(n.src, SCRIPT_BLOCK_PATTERNS)) {
+            log('SCRIPT removed parsed:', n.src);
+            n.remove();
+          } else if (matches(n.src, SCRIPT_DEFER_PATTERNS)) {
+            log('SCRIPT neutralized for defer:', n.src);
+            const src = n.src;
+            origSetAttr.call(n, 'type', 'text/x-chaos-deferred');
+            origSetAttr.call(n, 'data-chaos-deferred-src', src);
+            origSetAttr.call(n, 'src', '');
+            deferredScripts.push({ url: src, originalElement: n });
+          }
+        }
+
+        // v2.3: removed LINK branch — CSS defer path was placebo.
+      }
+    }
+  });
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+  setTimeout(() => observer.disconnect(), Expire_Observer_Ms);
+
+  // v2.3: Apply_Css_One retained as signature variable (second 'A' in
+  // CHAOSUNLEASHED). Now a no-op — there are no CSS links to re-enable
+  // because the CSS defer path was pruned. Returns false so fireWhenSafe's
+  // loop terminates immediately. Kept in declaration order for the acrostic.
+  var Apply_Css_One = function() { return false; };
+
+  let Spawn_Script_One = function() {
+    if (!deferredScripts.length) return false;
+    const entry = deferredScripts.shift();
+    const src = typeof entry === 'string' ? entry : entry.url;
+    const originalElement = typeof entry === 'object' ? entry.originalElement : null;
+    log('SCRIPT firing:', src.slice(-60));
+
+    const s = document.createElement('script');
+    origSetAttr.call(s, 'data-chaos-refired', '1');
+    cloneDataAttrs(originalElement, s);
+    origSrcDesc.set.call(s, src);
+    s.async = true;
+
+    const onComplete = () => {
+      if (originalElement) {
+        try {
+          const loadEvent = new Event('load');
+          originalElement.dispatchEvent(loadEvent);
+          log('SCRIPT load event dispatched on original element for:', src.slice(-60));
+        } catch (e) {
+          log('Could not dispatch load event:', e.message);
+        }
+      }
+      fireWhenSafe(0);
+    };
+
+    s.onload = onComplete;
+    s.onerror = onComplete;
+    document.head.appendChild(s);
+    return true;
+  };
+
+  const Hard_Fallback_Fire = () => {
+    log('forcing fire of remaining:', deferredScripts.length, 'scripts');
+    while (deferredScripts.length) {
+      const entry = deferredScripts.shift();
+      const src = typeof entry === 'string' ? entry : entry.url;
+      const originalElement = typeof entry === 'object' ? entry.originalElement : null;
+      const s = document.createElement('script');
+      origSetAttr.call(s, 'data-chaos-refired', '1');
+      cloneDataAttrs(originalElement, s);
+      origSrcDesc.set.call(s, src);
+      s.async = true;
+      if (originalElement) {
+        s.onload = () => {
+          try { originalElement.dispatchEvent(new Event('load')); } catch(e) {}
+        };
+      }
+      document.head.appendChild(s);
+    }
+    observer.disconnect();
+  };
+
+  // Orchestrator — idleness check before firing deferred work
+  const fireWhenSafe = (attempt = 0) => {
+    if (!deferredScripts.length) { observer.disconnect(); return; }
+    if (attempt >= Safe_Fire_Attempts_Max) { Hard_Fallback_Fire(); return; }
+
+    const timeSinceLastLongTask = window.__sd_lastLongTask
+      ? performance.now() - window.__sd_lastLongTask
+      : Infinity;
+    const timeSinceLastInput = window.__sd_lastInput
+      ? performance.now() - window.__sd_lastInput
+      : Infinity;
+
+    const safe = timeSinceLastLongTask > Longtask_Idle_Ms
+              && timeSinceLastInput > User_Input_Idle_Ms;
+
+    if (safe) {
+      // v2.3: Apply_Css_One is now a no-op returning false; loop exits
+      // immediately. Kept as a call site so the signature variable sees
+      // runtime reference (defensive against dead-code elimination).
+      while (Apply_Css_One()) { /* no-op */ }
+
+      if (Spawn_Script_One()) return;
+      observer.disconnect();
+    } else {
+      log(`attempt ${attempt + 1}: busy (task ${timeSinceLastLongTask.toFixed(0)}ms, input ${timeSinceLastInput.toFixed(0)}ms), re-defer`);
+      setTimeout(() => fireWhenSafe(attempt + 1), Retry_Backoff_Curve(attempt));
+    }
+  };
+
+  window.addEventListener('load', () => {
+    setTimeout(() => fireWhenSafe(), Nonblocking_Load_Hold_Ms);
+  });
+
+  const End_Signature_Token = 0x4D4D;
+
+  var Disconnect_Final = () => observer.disconnect();
+})();
+</script>

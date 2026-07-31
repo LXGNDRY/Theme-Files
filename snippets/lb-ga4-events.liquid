@@ -1,0 +1,66 @@
+{% comment %}
+  lb-ga4-events.liquid
+  Version:      2.0.0
+  Branch:       main
+
+  postMessage bridge listener — Shopify Customer Events pixel runs in a
+  sandboxed iframe and cannot access the parent window's dataLayer directly.
+  This snippet listens for postMessage events from the pixel and forwards
+  them into GTM's dataLayer on the parent page.
+
+  Events bridged (all ga4_ prefixed, matching GTM trigger names):
+    ga4_purchase            ← checkout_completed
+    ga4_add_to_cart         ← product_added_to_cart
+    ga4_remove_from_cart    ← product_removed_from_cart
+    ga4_begin_checkout      ← checkout_started
+    ga4_add_shipping_info   ← checkout_shipping_info_submitted
+    ga4_add_payment_info    ← payment_info_submitted
+    ga4_view_item           ← product_viewed
+    ga4_view_cart           ← cart_viewed
+    page_view               ← page_viewed
+    checkout_contact_info_submitted
+    checkout_address_info_submitted
+    loggedIn_userData           ← init (every page; fields populated for logged-in users only)
+
+  Render in: layout/theme.liquid, just before </body>
+{% endcomment %}
+
+<script>
+(function () {
+  'use strict';
+
+  // Accepted origins — Shopify pixel iframes post from these origins
+  var ALLOWED_ORIGINS = [
+    {{ shop.url | json }},
+    {{ request.origin | json }},
+    'null' // sandboxed iframes post from 'null'
+  ];
+
+  function dlPush(payload) {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ ecommerce: null }); // GA4 requires clearing ecommerce before each push
+    window.dataLayer.push(payload);
+  }
+
+  window.addEventListener('message', function (e) {
+    // Suppress in non-customer contexts (theme editor / preview / sandbox).
+    // The flag is set in layout/theme.liquid; bridging events here would push
+    // editor/preview interactions into the dataLayer and pollute GA4.
+    if (window.__lbSuppressAnalytics) return;
+
+    // Accept null-origin sandbox messages and known store origins
+    var origin = e.origin || 'null';
+    var allowed = ALLOWED_ORIGINS.indexOf(origin) !== -1;
+    if (!allowed) return;
+
+    var data = e.data;
+    if (!data || data.type !== 'lb_ga4_event') return;
+
+    var payload = data.payload;
+    if (!payload || !payload.event) return;
+
+    dlPush(payload);
+  }, false);
+
+})();
+</script>

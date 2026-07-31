@@ -1,0 +1,58 @@
+{%- comment -%}
+  lb-cart-upsell.liquid
+  Version:      1.1.0
+  Last updated: 2026-07-24
+  Purpose:      Renders product recommendations below cart items — up to 3
+                products from the first cart item's primary collection that
+                are not already in the cart. Uses lb-related-products CSS
+                from lb-seo-components.css (idle-deferred, always available).
+  Usage:        Rendered inside sections/main-cart.liquid (cart page only)
+  Dependencies: cart object, collections, lb-seo-components.css
+{%- endcomment -%}
+
+{%- liquid
+  assign upsell_source = cart.items.first.product.collections.first
+-%}
+
+{%- if upsell_source and upsell_source.products_count > cart.item_count -%}
+
+  {%- liquid
+    assign cart_ids = ''
+    for item in cart.items
+      assign cart_ids = cart_ids | append: ',' | append: item.product_id
+    endfor
+  -%}
+
+  <div class="lb-related-products">
+    <p class="lb-related-products__heading">{{ 'content.you_may_also_like' | t | default: 'You may also like' }}</p>
+    <ul class="lb-related-products__list">
+      {%- assign shown = 0 -%}
+      {%- for p in upsell_source.products limit: 8 -%}
+        {%- assign pid_str = ',' | append: p.id -%}
+        {%- unless cart_ids contains pid_str -%}
+          {%- assign first_image = p.featured_media.preview_image -%}
+          <li>
+            <a href="{{ p.url }}">
+              {%- if first_image -%}
+                <img
+                  src="{{ first_image | image_url: width: 280, format: 'webp' }}"
+                  srcset="{{ first_image | image_url: width: 140, format: 'webp' }} 140w, {{ first_image | image_url: width: 280, format: 'webp' }} 280w"
+                  sizes="140px"
+                  alt="{{ first_image.alt | escape }}"
+                  width="140"
+                  height="140"
+                  loading="lazy"
+                >
+              {%- endif -%}
+              <span class="lb-related-products__name">{{ p.title | truncate: 40 }}</span>
+              <span class="lb-related-products__price">{{ p.price | money }}</span>
+            </a>
+          </li>
+          {%- assign shown = shown | plus: 1 -%}
+          {%- if shown >= 3 -%}{%- break -%}{%- endif -%}
+        {%- endunless -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+
+{%- endif -%}

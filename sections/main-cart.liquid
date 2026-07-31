@@ -1,0 +1,210 @@
+
+
+{% capture cart_page_more_blocks_content %}
+  <div class="cart-page__more-blocks">
+    {%- content_for 'blocks' -%}
+  </div>
+{% endcapture %}
+
+{% capture cart_items_children %}
+  <template id="empty-cart-template">
+    <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+    <div
+      class="section color-{{ section.settings.color_scheme }} section--{{ section.settings.section_width }}"
+    >
+      <div
+        class="cart-page spacing-style{% if cart.empty? %} cart-page--empty{% endif %}"
+        style="{% render 'spacing-style', settings: section.settings %}"
+      >
+        <div class="cart-page__title">
+          {%- content_for 'block', id: 'cart-page-title', type: '_cart-title', force_empty: true %}
+        </div>
+        <div class="cart-page__items">
+          {%- content_for 'block', id: 'cart-page-items', type: '_cart-products', force_empty: true %}
+        </div>
+        {{ cart_page_more_blocks_content }}
+      </div>
+    </div>
+  </template>
+
+  {% # theme-check-disable UniqueStaticBlockId %}
+  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+  <div
+    class="section color-{{ section.settings.color_scheme }} section--{{ section.settings.section_width }}"
+    role="region"
+    aria-label="{{ 'accessibility.cart' | t }}"
+  >
+    <div
+      class="cart-page spacing-style{% if cart.empty? %} cart-page--empty{% endif %}"
+      style="{% render 'spacing-style', settings: section.settings %}"
+    >
+      <div class="cart-page__title">
+        {%- content_for 'block', id: 'cart-page-title', type: '_cart-title' %}
+      </div>
+
+      <div class="cart-page__items" aria-live="polite" aria-atomic="false" aria-relevant="additions removals">
+        {%- content_for 'block', id: 'cart-page-items', type: '_cart-products' %}
+      </div>
+
+      {%- unless cart.empty? -%}
+        <div class="cart-page__summary">
+          {%- content_for 'block', id: 'cart-page-summary', type: '_cart-summary' -%}
+        </div>
+      {%- endunless -%}
+
+      {{ cart_page_more_blocks_content }}
+    </div>
+  </div>
+  {% # theme-check-enable UniqueStaticBlockId %}
+{% endcapture %}
+{% render 'cart-items-component', children: cart_items_children, section_id: section.id %}
+
+{%- unless cart.empty? -%}
+  <div class="lb-cart-sticky-cta" id="lb-cart-sticky-cta" aria-hidden="true">
+    <div class="lb-cart-sticky-cta__inner">
+      <span class="lb-cart-sticky-cta__total">{{ cart.total_price | money }}</span>
+      <a href="/checkout" class="button button--primary lb-cart-sticky-cta__btn">
+        {{ 'cart.checkout' | t }}
+      </a>
+    </div>
+  </div>
+
+  <style>
+    .lb-cart-sticky-cta {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      background: rgb(var(--color-background));
+      border-top: 1px solid rgb(var(--color-border));
+      padding: 0.75rem 1rem env(safe-area-inset-bottom, 0);
+      transform: translateY(100%);
+      transition: transform 0.25s ease;
+      will-change: transform;
+    }
+    .lb-cart-sticky-cta.lb-cart-sticky-cta--visible {
+      transform: translateY(0);
+    }
+    .lb-cart-sticky-cta__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .lb-cart-sticky-cta__total {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .lb-cart-sticky-cta__btn {
+      flex-shrink: 0;
+    }
+    @media (min-width: 750px) {
+      .lb-cart-sticky-cta { display: none; }
+    }
+  </style>
+
+  <script>
+  (function () {
+    var cta = document.getElementById('lb-cart-sticky-cta');
+    if (!cta) return;
+    var sentinel = document.querySelector('.cart-page__summary');
+    if (!sentinel || typeof IntersectionObserver === 'undefined') return;
+    var io = new IntersectionObserver(function (entries) {
+      var visible = entries[0].isIntersecting;
+      cta.classList.toggle('lb-cart-sticky-cta--visible', !visible);
+      cta.setAttribute('aria-hidden', visible ? 'true' : 'false');
+    }, { threshold: 0 });
+    io.observe(sentinel);
+  })();
+  </script>
+{%- endunless -%}
+
+
+{% schema %}
+{
+  "name": "t:names.cart",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "blocks": [
+    {
+      "type": "@theme"
+    },
+    {
+      "type": "@app"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "icon"
+    },
+    {
+      "type": "image"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "video"
+    },
+    {
+      "type": "group"
+    },
+    {
+      "type": "spacer"
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}

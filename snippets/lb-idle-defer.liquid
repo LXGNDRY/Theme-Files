@@ -1,0 +1,273 @@
+{%- comment -%}
+  lb-idle-defer.liquid
+  Version:      1.0.0
+  Last updated: 2026-05-19
+
+  Purpose:
+    Universal idle-time deferral layer. Runs AFTER the Chaos Unleashed
+    system handles third-party script interception. This snippet catches
+    everything else — Shopify section JS, LB custom scripts, non-critical
+    CSS classes, and below-fold media — and delays execution until the
+    browser is genuinely idle.
+
+  What this defers:
+    1. lb-video-optimizer.js     — not needed until user scrolls to video
+    2. lb-cart-animations.js     — not needed until cart interaction
+    3. lb-image-optimizer.js     — not needed until images enter viewport
+    4. Any element with          — [data-lb-defer] attribute
+       data-lb-defer attribute
+    5. Below-fold <video>        — paused until IntersectionObserver fires
+    6. Non-critical CSS classes  — added after idle via requestIdleCallback
+
+  What this NEVER defers (safe list):
+    - Anything in <head> above the fold
+    - cart-notification, cart-drawer, cart-items (checkout flow)
+    - predictive-search (UX-critical)
+    - section--header, announcement-bar
+    - Any script with data-lb-critical="true"
+
+  Usage:
+    Place ONE call at the bottom of <body>, just before </body>:
+      {%- render 'lb-idle-defer' -%}
+
+    To mark any element as deferrable from Liquid:
+      <div data-lb-defer="visible">...</div>   ← loads when scrolled into view
+      <div data-lb-defer="idle">...</div>       ← loads when browser is idle
+
+  Trigger modes:
+    idle     — requestIdleCallback (fires when CPU is free, ~0-5s post load)
+    visible  — IntersectionObserver (fires when element enters viewport)
+    interact — fires on first user interaction (click/scroll/keydown)
+
+{%- endcomment -%}
+
+<script>
+(function () {
+  'use strict';
+
+  // ─── Config ───────────────────────────────────────────────────────────────
+  var LB_IDLE_TIMEOUT   = 4000;   // max ms to wait for idle before forcing
+  var LB_SCROLL_MARGIN  = '200px'; // how far off-screen to start loading
+  var LB_DEBUG          = false;
+
+  var log = function() {
+    if (LB_DEBUG) {
+      var args = Array.prototype.slice.call(arguments);
+      args.unshift('[lb-idle-defer]');
+      console.log.apply(console, args);
+    }
+  };
+
+  // ─── Utility: load a script URL lazily ────────────────────────────────────
+  var loadedScripts = {};
+  function lazyScript(src, onDone) {
+    if (loadedScripts[src]) return;
+    loadedScripts[src] = true;
+    var s = document.createElement('script');
+    s.src = src;
+    s.async = true;
+    if (onDone) s.onload = onDone;
+    document.body.appendChild(s);
+    log('loaded script:', src);
+  }
+
+  // ─── Utility: run work when CPU is idle ───────────────────────────────────
+  function whenIdle(fn) {
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(fn, { timeout: LB_IDLE_TIMEOUT });
+    } else {
+      // Safari fallback — requestAnimationFrame + setTimeout 0 approximates idle
+      requestAnimationFrame(function () { setTimeout(fn, 0); });
+    }
+  }
+
+  // ─── Utility: run work when element enters viewport ───────────────────────
+  function whenVisible(el, fn) {
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries, obs) {
+        if (entries[0].isIntersecting) {
+          obs.disconnect();
+          fn();
+        }
+      }, { rootMargin: LB_SCROLL_MARGIN });
+      io.observe(el);
+    } else {
+      // Fallback: just fire on idle
+      whenIdle(fn);
+    }
+  }
+
+  // ─── Utility: run work on first user interaction ──────────────────────────
+  var interactFired = false;
+  var interactQueue = [];
+  function onFirstInteract(fn) {
+    if (interactFired) { fn(); return; }
+    interactQueue.push(fn);
+  }
+  ['click','keydown','scroll','touchstart','pointerdown'].forEach(function(evt) {
+    window.addEventListener(evt, function fireInteract() {
+      if (interactFired) return;
+      interactFired = true;
+      window.removeEventListener(evt, fireInteract);
+      log('first interaction — firing', interactQueue.length, 'deferred tasks');
+      interactQueue.forEach(function(fn) { fn(); });
+      interactQueue = [];
+    }, { once: true, passive: true });
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  //  1. LB CUSTOM SCRIPTS — moved from defer to true idle/visible loading
+  //     These were loaded with `defer` in theme.liquid which still parses +
+  //     compiles them during initial page load, adding to TBT.
+  // ─────────────────────────────────────────────────────────────────────────
+  var lbScripts = [
+    {
+      // v1.0 2026-05-20: IntersectionObserver trigger for deferred-media[autoplay].
+      // Replaces the bare {{ media_content }} render in video.liquid that caused
+      // Chrome's preload scanner to fetch 4-5 MB of video bytes on every PDP load.
+      // Anchored to the first autoplay deferred-media element; falls back to idle
+      // on pages with no such elements (e.g. collection, cart).
+      src:     '{{ "lb-deferred-media-autoplay.js" | asset_url }}',
+      trigger: 'visible',
+      anchor:  'deferred-media[autoplay]'
+    },
+    {
+      src:     '{{ "lb-video-optimizer.js" | asset_url }}',
+      trigger: 'visible',
+      anchor:  'video, .hero__media--video, [data-video]'
+    },
+    {
+      src:     '{{ "lb-cart-animations.js" | asset_url }}',
+      trigger: 'interact'  // only needed once user touches cart
+    },
+    {
+      src:     '{{ "lb-image-optimizer.js" | asset_url }}',
+      trigger: 'idle'      // safe to run whenever CPU is free
+    }
+  ];
+
+  lbScripts.forEach(function (item) {
+    if (item.trigger === 'idle') {
+      whenIdle(function () { lazyScript(item.src); });
+
+    } else if (item.trigger === 'interact') {
+      onFirstInteract(function () { lazyScript(item.src); });
+
+    } else if (item.trigger === 'visible') {
+      var anchor = item.anchor && document.querySelector(item.anchor);
+      if (anchor) {
+        whenVisible(anchor, function () { lazyScript(item.src); });
+      } else {
+        // No matching element on this page — still load on idle as fallback
+        whenIdle(function () { lazyScript(item.src); });
+      }
+    }
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  //  2. BELOW-FOLD VIDEO — suspend autoplay until in viewport
+  //     Prevents video from eating bandwidth + CPU during initial load.
+  //     Hero video (above fold) is left untouched.
+  // ─────────────────────────────────────────────────────────────────────────
+  whenIdle(function () {
+    var videos = document.querySelectorAll('video[autoplay]');
+    videos.forEach(function (video) {
+      // Skip hero / above-fold videos
+      var rect = video.getBoundingClientRect();
+      if (rect.top < window.innerHeight) return; // already in view
+
+      video.pause();
+      video.removeAttribute('autoplay');
+      log('suspended off-screen video');
+
+      whenVisible(video, function () {
+        video.setAttribute('autoplay', '');
+        video.play().catch(function () {}); // ignore autoplay policy errors
+        log('resumed video in viewport');
+      });
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  //  3. DATA-LB-DEFER ELEMENTS — generic deferral via HTML attribute
+  //     Any Liquid section can opt-in:
+  //       <section data-lb-defer="visible">...</section>
+  //       <div data-lb-defer="idle">...</div>
+  //
+  //     On defer: section gets opacity:0 + pointer-events:none
+  //     On activate: class "lb-defer-active" added, opacity transitions in
+  // ─────────────────────────────────────────────────────────────────────────
+  whenIdle(function () {
+    var deferEls = document.querySelectorAll('[data-lb-defer]');
+    log('found', deferEls.length, '[data-lb-defer] elements');
+
+    deferEls.forEach(function (el) {
+      var mode = el.getAttribute('data-lb-defer') || 'idle';
+
+      // Hide until activated
+      el.style.opacity = '0';
+      el.style.transition = 'opacity 0.4s ease';
+      el.style.pointerEvents = 'none';
+      el.style.willChange = 'opacity';
+
+      function activate() {
+        el.style.opacity = '1';
+        el.style.pointerEvents = '';
+        el.style.willChange = 'auto';
+        el.classList.add('lb-defer-active');
+        el.removeAttribute('data-lb-defer');
+        log('activated:', el.tagName, el.className.slice(0, 40));
+      }
+
+      if (mode === 'visible') {
+        whenVisible(el, activate);
+      } else if (mode === 'interact') {
+        onFirstInteract(activate);
+      } else {
+        whenIdle(activate);
+      }
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  //  4. FORCED REFLOW GUARD — patches the two most common reflow triggers
+  //     Your PageSpeed report flagged forced reflow from JS reading
+  //     offsetWidth/offsetHeight after DOM writes. This patches the most
+  //     common pattern: reading layout properties inside rAF so reads +
+  //     writes are batched by the browser naturally.
+  //     NOTE: This is a diagnostic shim — it logs offenders in debug mode
+  //     so you can find + fix them at the source.
+  // ─────────────────────────────────────────────────────────────────────────
+  if (LB_DEBUG) {
+    var _origOffsetWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetWidth');
+    var _reflowStack = [];
+    Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
+      get: function () {
+        var stack = new Error().stack;
+        if (stack && !stack.includes('lb-idle-defer')) {
+          console.warn('[lb-idle-defer] forced reflow via offsetWidth\n', stack.split('\n').slice(2, 5).join('\n'));
+        }
+        return _origOffsetWidth.get.call(this);
+      },
+      configurable: true
+    });
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  //  5. BELOW-FOLD CSS — lb-seo-components.css
+  //     lb-keyword-footer, lb-related-collections, lb-collection-nav,
+  //     lb-related-products are below-the-fold components. Their CSS was
+  //     previously inlined in theme.liquid blocking first paint.
+  //     Loaded here via idle callback — no layout impact on above-fold. (2026-05-20)
+  // ─────────────────────────────────────────────────────────────────────────
+  whenIdle(function () {
+    var lbSeoLink = document.createElement('link');
+    lbSeoLink.rel = 'stylesheet';
+    lbSeoLink.href = {{ 'lb-seo-components.css' | asset_url | json }};
+    document.head.appendChild(lbSeoLink);
+  });
+
+  log('lb-idle-defer v1.0.0 initialized');
+
+})();
+</script>

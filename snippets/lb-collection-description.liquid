@@ -1,0 +1,59 @@
+{%- comment -%}
+  lb-collection-description.liquid
+  Version:      1.0.0
+  Last updated: 2026-06-02
+  Purpose:      Renders the collection's admin-managed description as visible,
+                crawlable on-page copy. The collection template (collection.json)
+                renders only the <h1> title and product grid, so the SEO copy
+                merchants write in Shopify admin (collection.description) never
+                appeared on the page — collection pages had no indexable body
+                text beyond product titles.
+
+                This snippet surfaces that copy WITHOUT changing admin content
+                and WITHOUT altering the grid design: it is opt-in per the
+                main-collection section setting `collection_description_position`
+                (none | top | bottom) and inherits the section color scheme.
+
+  Params:
+    collection (required) — the collection object
+    position   (required) — 'top' or 'bottom' (caller passes the setting)
+
+  Notes:
+    - collection.description is HTML authored in admin; rendered as-is.
+    - No-op when the description is blank, so empty collections add no markup.
+    - Long descriptions collapse behind a "Read more" toggle (details/summary)
+      so they never push the product grid down on first paint.
+{%- endcomment -%}
+{%- unless collection == blank or collection.description == blank -%}
+<div class="lb-collection-description lb-collection-description--{{ position | default: 'bottom' }} color-{{ section.settings.color_scheme }}">
+  {%- assign desc_length = collection.description | strip_html | size -%}
+  {%- if desc_length > 320 -%}
+    <details class="lb-collection-description__details">
+      <summary class="lb-collection-description__summary">{{ 'content.read_more' | t }}</summary>
+      <div class="lb-collection-description__body rte">{{ collection.description }}</div>
+    </details>
+  {%- else -%}
+    <div class="lb-collection-description__body rte">{{ collection.description }}</div>
+  {%- endif -%}
+</div>
+<style>
+  .lb-collection-description{
+    max-width:var(--page-width,72rem);
+    margin-inline:auto;
+    padding-inline:var(--page-margin,1.5rem);
+    padding-block:1.25rem;
+    font-size:0.95rem;
+    line-height:1.6;
+  }
+  .lb-collection-description--top{padding-block-end:0.5rem;}
+  .lb-collection-description__summary{
+    cursor:pointer;
+    font-weight:600;
+    list-style:none;
+  }
+  .lb-collection-description__summary::-webkit-details-marker{display:none;}
+  .lb-collection-description__details[open] .lb-collection-description__summary{
+    margin-block-end:0.5rem;
+  }
+</style>
+{%- endunless -%}

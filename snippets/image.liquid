@@ -1,0 +1,17 @@
+{%- if image != blank -%}
+  {%- assign image_height = height | default: image.height -%}
+  {%- assign image_height_2x = image_height | times: 2 -%}
+  {%- assign image_height_3x = image_height | times: 3 -%}
+  {%- assign image_alt_text = image.alt | default: alt_text_fallback | default: '' -%}
+  {%- assign image_loading = loading | default: 'lazy' -%}
+  {%- assign image_fetchpriority = fetchpriority | default: 'auto' -%}
+  {%- capture image_srcset -%}{{ image | image_url: height: image_height, format: 'webp' }} 1x, {{ image | image_url: height: image_height_2x, format: 'webp' }} 2x, {{ image | image_url: height: image_height_3x, format: 'webp' }} 3x{%- endcapture -%}
+  {%- if unset_image_tag -%}
+    {%- assign style_value = style | default: '' | append: 'object-position:inherit;' -%}
+  {%- else -%}
+    {%- assign style_value = style | default: '' -%}
+  {%- endif -%}
+  {{ image | image_url: height: image_height, format: 'webp' | image_tag: class: class, srcset: image_srcset, style: style_value, alt: image_alt_text, loading: image_loading, decoding: 'async', fetchpriority: image_fetchpriority, width: image.width, height: image_height }}
+{%- elsif text_fallback -%}
+  {{ text_fallback }}
+{%- endif -%}

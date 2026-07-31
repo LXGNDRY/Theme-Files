@@ -1,0 +1,188 @@
+{%- comment -%}
+  lb-schema-product.liquid
+  Version:      1.3.1
+  Last updated: 2026-07-24
+  Changes:
+    - v1.3.1: Moved hardcoded shipping/return values to theme settings
+              (settings_schema.json "Store policies" section). Changing
+              shipping country, free-shipping flag, handling days, transit
+              days, return window, or free-returns flag in the theme editor
+              now updates structured data automatically.
+    - v1.3.0: Added shippingDetails (OfferShippingDetails) and
+              hasMerchantReturnPolicy (MerchantReturnPolicy) inside
+              both Offer and AggregateOffer branches.
+    - v1.2.0: AggregateOffer for multi-variant, single Offer otherwise.
+              GTIN/MPN/SKU when present, AggregateRating from metafields.
+  Purpose:      Emits Product JSON-LD for Google rich results.
+                Includes name, sku, brand, image[], description,
+                AggregateOffer (multi-variant) or single Offer,
+                GTIN/MPN when present, AggregateRating/review
+                when product.metafields.reviews data exists,
+                shippingDetails, and hasMerchantReturnPolicy.
+  Usage:        Rendered by snippets/seo-schema.liquid on product templates.
+  Dependencies: Shopify product object, shop object, settings.
+{%- endcomment -%}
+{%- if product != blank and product != empty -%}
+  {%- liquid
+    assign product_url = shop.url | append: product.url
+    assign product_brand = product.vendor | default: shop.name
+    assign currency_code = cart.currency.iso_code | default: shop.currency
+    assign desc_text = product.description | strip_html | strip_newlines | escape
+
+    # Build image list (up to 6 for payload size)
+    assign image_list = product.images | map: 'src'
+
+    # Shipping / return policy from theme settings
+    assign schema_ship_country = settings.schema_shipping_country | default: 'US'
+    assign schema_ship_free = settings.schema_shipping_free
+    assign schema_handling_min = settings.schema_handling_min | default: 1
+    assign schema_handling_max = settings.schema_handling_max | default: 2
+    assign schema_transit_min = settings.schema_transit_min | default: 3
+    assign schema_transit_max = settings.schema_transit_max | default: 7
+    assign schema_return_country = settings.schema_return_country | default: 'US'
+    assign schema_return_days = settings.schema_return_days | default: 30
+    assign schema_return_free = settings.schema_return_free
+    if schema_ship_free
+      assign schema_ship_rate = '0.00'
+    else
+      assign schema_ship_rate = nil
+    endif
+    if schema_return_free
+      assign schema_return_fees = 'https://schema.org/FreeReturn'
+    else
+      assign schema_return_fees = 'https://schema.org/ReturnShippingFees'
+    endif
+  -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+    "description": {{ desc_text | json }},
+    "url": {{ product_url | json }},
+    {%- comment -%}
+      Only emit sku if a real SKU is set in Shopify admin. Falling back to
+      product.id emits a meaningless numeric Shopify internal ID as a product
+      identifier. mpn removed: it was a duplicate of sku with no semantic value.
+    {%- endcomment -%}
+    {%- if product.selected_or_first_available_variant.sku != blank -%}
+    "sku": {{ product.selected_or_first_available_variant.sku | json }},
+    {%- endif -%}
+    "brand": {
+      "@type": "Brand",
+      "name": {{ product_brand | json }}
+    },
+    "image": [
+      {%- for img in product.images limit: 6 -%}
+        {{ img | image_url: width: 1200 | prepend: 'https:' | json }}{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ],
+    {%- if product.variants.size > 1 -%}
+    "offers": {
+      "@type": "AggregateOffer",
+      "priceCurrency": {{ currency_code | json }},
+      "lowPrice": "{{ product.price_min | divided_by: 100.0 }}",
+      "highPrice": "{{ product.price_max | divided_by: 100.0 }}",
+      "offerCount": {{ product.variants.size }},
+      "availability": "{%- if product.available -%}https://schema.org/InStock{%- else -%}https://schema.org/OutOfStock{%- endif -%}",
+      "itemCondition": "https://schema.org/NewCondition",
+      "url": {{ product_url | json }},
+      "seller": {
+        "@type": "Organization",
+        "name": {{ shop.name | json }}
+      },
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": {{ schema_ship_rate | default: '0.00' | json }},
+          "currency": {{ currency_code | json }}
+        },
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": {{ schema_ship_country | json }}
+        },
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": {
+            "@type": "QuantitativeValue",
+            "minValue": {{ schema_handling_min }},
+            "maxValue": {{ schema_handling_max }},
+            "unitCode": "DAY"
+          },
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": {{ schema_transit_min }},
+            "maxValue": {{ schema_transit_max }},
+            "unitCode": "DAY"
+          }
+        }
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": {{ schema_return_country | json }},
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": {{ schema_return_days }},
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": {{ schema_return_fees | json }}
+      }
+    }
+    {%- else -%}
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": {{ currency_code | json }},
+      "price": "{{ product.selected_or_first_available_variant.price | divided_by: 100.0 }}",
+      "availability": "{%- if product.selected_or_first_available_variant.available -%}https://schema.org/InStock{%- else -%}https://schema.org/OutOfStock{%- endif -%}",
+      "url": {{ product_url | json }},
+      "itemCondition": "https://schema.org/NewCondition",
+      "seller": {
+        "@type": "Organization",
+        "name": {{ shop.name | json }}
+      },
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": {{ schema_ship_rate | default: '0.00' | json }},
+          "currency": {{ currency_code | json }}
+        },
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": {{ schema_ship_country | json }}
+        },
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": {
+            "@type": "QuantitativeValue",
+            "minValue": {{ schema_handling_min }},
+            "maxValue": {{ schema_handling_max }},
+            "unitCode": "DAY"
+          },
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": {{ schema_transit_min }},
+            "maxValue": {{ schema_transit_max }},
+            "unitCode": "DAY"
+          }
+        }
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": {{ schema_return_country | json }},
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": {{ schema_return_days }},
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": {{ schema_return_fees | json }}
+      }
+    }
+    {%- endif -%}
+    {%- if product.metafields.reviews.rating_count and product.metafields.reviews.rating_count != blank and product.metafields.reviews.rating_count > 0 -%}
+    ,"aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "{{ product.metafields.reviews.rating.value }}",
+      "reviewCount": "{{ product.metafields.reviews.rating_count }}"
+    }
+    {%- endif -%}
+  }
+  </script>
+{%- endif -%}

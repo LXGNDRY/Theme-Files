@@ -1,0 +1,196 @@
+{%- comment -%}
+  robots.txt.liquid
+  Version:      3.0.0
+  Last updated: 2026-07-24
+  Author:       Legendary Branding / Claude Code
+
+  Changes from v2.0.0:
+    — Added OAI-SearchBot (ChatGPT web search) and meta-externalagent (Meta AI)
+      as named AI bot blocks for agentic commerce discovery.
+    — Added Amazonbot named block for Amazon Alexa/shopping discovery.
+    — Blocked Shopify collection sort URLs (/*?*sort_by=) to eliminate
+      crawl-budget waste from sorted collection variants.
+    — Blocked /search? — internal search result pages have low SEO value
+      and create duplicate-content risk.
+    — Blocked /*/collections/vendors and /*/collections/types — Shopify
+      auto-generated taxonomy pages with no brand value.
+    — Fixed utm pattern inconsistency: AI bot blocks now use /*?*utm_source=
+      etc. (query-string-anchored) matching the wildcard group, replacing
+      the imprecise /*utm_* path-level pattern.
+    — Added no-slash locale variants (/de /fr /es) to all AI bot blocks,
+      matching the wildcard group's handling.
+    — Added explicit Sitemap directive to all named AI bot blocks so AI
+      crawlers can locate the product catalog directly.
+
+  Changes from v1.1.0 (see v2.0.0 header for full list).
+
+  Agentic Commerce note:
+    GPTBot (OpenAI training), OAI-SearchBot (ChatGPT web search/shopping),
+    ClaudeBot, PerplexityBot, Google-Extended, meta-externalagent, and
+    Amazonbot are explicitly allowed via named user-agent blocks.
+    Explicit Allow signals cooperative intent and improves AI discovery
+    ranking versus relying on inherited wildcard rules.
+{%- endcomment -%}
+
+{%- comment -%} ─── SHOPIFY DEFAULT GROUPS ────────────────────────────────── {%- endcomment -%}
+{%- for group in robots.default_groups -%}
+  {{- group.user_agent -}}
+
+  {%- for rule in group.rules -%}
+    {{- rule -}}
+  {%- endfor -%}
+
+  {%- comment -%} Inject custom rules for the wildcard (*) user-agent only {%- endcomment -%}
+  {%- if group.user_agent.value == '*' -%}
+
+    {%- comment -%} ── PARAMETERIZED URL BLOCKING ──────────────────────────── {%- endcomment -%}
+{{ 'Disallow: /*?*stkn=' }}
+{{ 'Disallow: /*?*com_cvv=' }}
+{{ 'Disallow: /*?*currency=' }}
+{{ 'Disallow: /*?*country=' }}
+{{ 'Disallow: /*?*sort_by=' }}
+{{ 'Disallow: /*?*utm_source=' }}
+{{ 'Disallow: /*?*utm_medium=' }}
+{{ 'Disallow: /*?*utm_campaign=' }}
+{{ 'Disallow: /*?*utm_content=' }}
+{{ 'Disallow: /*?*utm_term=' }}
+
+    {%- comment -%} ── LOW-VALUE SHOPIFY PAGES ─────────────────────────────── {%- endcomment -%}
+{{ 'Disallow: /search?' }}
+{{ 'Disallow: /*/collections/vendors' }}
+{{ 'Disallow: /*/collections/types' }}
+
+    {%- comment -%} ── PHANTOM LOCALE PATHS (not published, already indexed) ─ {%- endcomment -%}
+{{ 'Disallow: /de/' }}
+{{ 'Disallow: /de' }}
+{{ 'Disallow: /fr/' }}
+{{ 'Disallow: /fr' }}
+{{ 'Disallow: /es/' }}
+{{ 'Disallow: /es' }}
+{{ 'Disallow: /*/collections/all-products' }}
+{{ 'Disallow: /*/pages/html-sitemap' }}
+
+    {%- comment -%} ── CDN ASSET PATHS ─────────────────────────────────────── {%- endcomment -%}
+{{ 'Disallow: /cdn/shop/files/' }}
+
+  {%- endif -%}
+
+  {{- group.sitemap -}}
+{%- endfor -%}
+
+{%- comment -%} ─── AI AGENT CRAWLERS (allow content pages, block noise) ──── {%- endcomment -%}
+{%- comment -%}
+  Each named AI block:
+    Allow: /           — full site access for product/content discovery
+    Disallow locale    — phantom /de /fr /es paths (with and without trailing slash)
+    Disallow params    — UTM, currency, country query strings (query-anchored pattern)
+    Sitemap            — explicit pointer so AI crawlers find the product catalog
+{%- endcomment -%}
+{{ 'User-agent: GPTBot' }}
+{{ 'Allow: /' }}
+{{ 'Disallow: /de/' }}
+{{ 'Disallow: /de' }}
+{{ 'Disallow: /fr/' }}
+{{ 'Disallow: /fr' }}
+{{ 'Disallow: /es/' }}
+{{ 'Disallow: /es' }}
+{{ 'Disallow: /*?*utm_source=' }}
+{{ 'Disallow: /*?*utm_medium=' }}
+{{ 'Disallow: /*?*utm_campaign=' }}
+{{ 'Disallow: /*?*currency=' }}
+{{ 'Disallow: /*?*country=' }}
+{{ 'Sitemap: https://legendary-branding.com/sitemap.xml' }}
+{{ '' }}
+{{ 'User-agent: OAI-SearchBot' }}
+{{ 'Allow: /' }}
+{{ 'Disallow: /de/' }}
+{{ 'Disallow: /de' }}
+{{ 'Disallow: /fr/' }}
+{{ 'Disallow: /fr' }}
+{{ 'Disallow: /es/' }}
+{{ 'Disallow: /es' }}
+{{ 'Disallow: /*?*utm_source=' }}
+{{ 'Disallow: /*?*utm_medium=' }}
+{{ 'Disallow: /*?*utm_campaign=' }}
+{{ 'Disallow: /*?*currency=' }}
+{{ 'Disallow: /*?*country=' }}
+{{ 'Sitemap: https://legendary-branding.com/sitemap.xml' }}
+{{ '' }}
+{{ 'User-agent: ClaudeBot' }}
+{{ 'Allow: /' }}
+{{ 'Disallow: /de/' }}
+{{ 'Disallow: /de' }}
+{{ 'Disallow: /fr/' }}
+{{ 'Disallow: /fr' }}
+{{ 'Disallow: /es/' }}
+{{ 'Disallow: /es' }}
+{{ 'Disallow: /*?*utm_source=' }}
+{{ 'Disallow: /*?*utm_medium=' }}
+{{ 'Disallow: /*?*utm_campaign=' }}
+{{ 'Disallow: /*?*currency=' }}
+{{ 'Disallow: /*?*country=' }}
+{{ 'Sitemap: https://legendary-branding.com/sitemap.xml' }}
+{{ '' }}
+{{ 'User-agent: PerplexityBot' }}
+{{ 'Allow: /' }}
+{{ 'Disallow: /de/' }}
+{{ 'Disallow: /de' }}
+{{ 'Disallow: /fr/' }}
+{{ 'Disallow: /fr' }}
+{{ 'Disallow: /es/' }}
+{{ 'Disallow: /es' }}
+{{ 'Disallow: /*?*utm_source=' }}
+{{ 'Disallow: /*?*utm_medium=' }}
+{{ 'Disallow: /*?*utm_campaign=' }}
+{{ 'Disallow: /*?*currency=' }}
+{{ 'Disallow: /*?*country=' }}
+{{ 'Sitemap: https://legendary-branding.com/sitemap.xml' }}
+{{ '' }}
+{{ 'User-agent: Google-Extended' }}
+{{ 'Allow: /' }}
+{{ 'Disallow: /de/' }}
+{{ 'Disallow: /de' }}
+{{ 'Disallow: /fr/' }}
+{{ 'Disallow: /fr' }}
+{{ 'Disallow: /es/' }}
+{{ 'Disallow: /es' }}
+{{ 'Disallow: /*?*utm_source=' }}
+{{ 'Disallow: /*?*utm_medium=' }}
+{{ 'Disallow: /*?*utm_campaign=' }}
+{{ 'Disallow: /*?*currency=' }}
+{{ 'Disallow: /*?*country=' }}
+{{ 'Sitemap: https://legendary-branding.com/sitemap.xml' }}
+{{ '' }}
+{{ 'User-agent: meta-externalagent' }}
+{{ 'Allow: /' }}
+{{ 'Disallow: /de/' }}
+{{ 'Disallow: /de' }}
+{{ 'Disallow: /fr/' }}
+{{ 'Disallow: /fr' }}
+{{ 'Disallow: /es/' }}
+{{ 'Disallow: /es' }}
+{{ 'Disallow: /*?*utm_source=' }}
+{{ 'Disallow: /*?*utm_medium=' }}
+{{ 'Disallow: /*?*utm_campaign=' }}
+{{ 'Disallow: /*?*currency=' }}
+{{ 'Disallow: /*?*country=' }}
+{{ 'Sitemap: https://legendary-branding.com/sitemap.xml' }}
+{{ '' }}
+{{ 'User-agent: Amazonbot' }}
+{{ 'Allow: /' }}
+{{ 'Disallow: /de/' }}
+{{ 'Disallow: /de' }}
+{{ 'Disallow: /fr/' }}
+{{ 'Disallow: /fr' }}
+{{ 'Disallow: /es/' }}
+{{ 'Disallow: /es' }}
+{{ 'Disallow: /*?*utm_source=' }}
+{{ 'Disallow: /*?*utm_medium=' }}
+{{ 'Disallow: /*?*utm_campaign=' }}
+{{ 'Disallow: /*?*currency=' }}
+{{ 'Disallow: /*?*country=' }}
+{{ 'Sitemap: https://legendary-branding.com/sitemap.xml' }}
+{{ '' }}
+{{ 'User-agent: Googlebot-Image' }}
+{{ 'Allow: /cdn/shop/products/' }}
+{{ 'Disallow: /cdn/shop/files/' }}

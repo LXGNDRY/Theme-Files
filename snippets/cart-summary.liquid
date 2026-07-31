@@ -1,0 +1,380 @@
+{%- doc -%}
+  Renders the cart summary totals.
+
+  @param {string} [accelerated_checkout_buttons_layout] - { 'vertical' } Forced layout of the additional checkout buttons, instead of relying on platform's layout.
+  @param {string} [section_id] - The section ID for cart discount component.
+{%- enddoc -%}
+
+<div class="cart-totals">
+  {% # We need to keep this node in place to allow morphing to work properly # %}
+  <div class="cart-totals__original-container cart-primary-typography">
+    {%- if cart.cart_level_discount_applications.size > 0 -%}
+      <span class="cart-totals__item cart-totals__original">
+        <span class="cart-totals__original-label">{{ 'content.cart_subtotal' | t }}</span>
+        <span
+          class="cart-totals__original-value cart-secondary-typography"
+          data-testid="cart-subtotal-value"
+        >
+          {{- cart.items_subtotal_price | money -}}
+        </span>
+      </span>
+      <ul
+        class="cart-discounts"
+        role="list"
+        aria-label="{{ 'content.discounts' | t }}"
+      >
+        {%- for discount in cart.cart_level_discount_applications -%}
+          <li class="cart-discounts__item">
+            <span class="cart-discounts__label">
+              {{- 'icon-discount.svg' | inline_asset_content -}}
+              {{ discount.title | escape }}
+            </span>
+            <span class="cart-discounts__value cart-secondary-typography"
+              >-{{ discount.total_allocated_amount | money -}}
+            </span>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+
+  {% if settings.show_cart_note or settings.show_add_discount_code %}
+    <div class="cart-actions">
+      {% if settings.show_cart_note %}
+        <script
+          type="module"
+          src="{{ 'cart-note.js' | asset_url }}"
+        ></script>
+
+        <cart-note style="display: flex;">
+          {% capture cart_note_accordion_children %}
+            <details
+              class="details"
+              {% if settings.cart_note_open_by_default %}
+                open
+              {% endif %}
+            >
+              <summary class="cart-note__summary">
+                <span class="cart-note__label cart-primary-typography">
+                  {{ 'content.seller_note' | t }}
+                </span>
+
+                <span class="cart-totals__icon">
+                  {{- 'icon-plus.svg' | inline_asset_content -}}
+                </span>
+              </summary>
+
+              <div class="details-content cart-note__inner">
+                <label
+                  for="cart-note"
+                  class="visually-hidden"
+                >
+                  {{- 'content.seller_note' | t -}}
+                </label>
+                <textarea
+                  form="cart-form"
+                  on:input="/updateCartNote"
+                  id="cart-note"
+                  class="cart-note__instructions"
+                  name="note"
+                >{{ cart.note }}</textarea>
+              </div>
+            </details>
+          {% endcapture %}
+          {% render 'accordion-custom-component',
+            children: cart_note_accordion_children,
+            class: 'cart-note',
+            open_by_default_on_desktop: settings.cart_note_open_by_default,
+            open_by_default_on_mobile: settings.cart_note_open_by_default
+          %}
+        </cart-note>
+      {% endif %}
+      {% if settings.show_cart_note and settings.show_add_discount_code %}
+        <div class="cart-actions__divider"></div>
+      {% endif %}
+      {% if settings.show_add_discount_code %}
+        {% liquid
+          assign discount_codes = cart.cart_level_discount_applications | where: 'type', 'discount_code' | map: 'title'
+          for item in cart.items
+            for allocation in item.line_level_discount_allocations
+              if allocation.discount_application.type == 'discount_code'
+                assign discount_codes = item.line_level_discount_allocations | slice: forloop.index0 | map: 'discount_application' | map: 'title' | concat: discount_codes
+              endif
+            endfor
+          endfor
+
+          assign discount_codes = discount_codes | uniq
+
+          if discount_codes.size == 0
+            assign disclosure_expanded = false
+          else
+            assign disclosure_expanded = true
+          endif
+        %}
+
+        {% capture cart_discount_accordion_children %}
+          <details
+            class="details"
+            {% if disclosure_expanded %}
+              open
+            {% endif %}
+          >
+            <summary class="cart-discount__summary">
+              <span class="cart-discount__label cart-primary-typography">{{ 'content.discount' | t }}</span>
+
+              <span class="cart-totals__icon">
+                {{- 'icon-plus.svg' | inline_asset_content -}}
+              </span>
+            </summary>
+
+            <div class="details-content">
+              <div id="cart-discount-disclosure">
+                <cart-discount-component
+                  {% if section_id != blank %}
+                    data-section-id="{{ section_id }}"
+                  {% endif %}
+                >
+                  <div class="cart-discount__content">
+                    <form
+                      on:submit="/applyDiscount"
+                      onsubmit="return false;"
+                      class="cart-discount__form"
+                    >
+                      <label
+                        for="cart-discount"
+                        class="visually-hidden"
+                      >
+                        {{- 'accessibility.discount' | t -}}
+                      </label>
+                      <input
+                        id="cart-discount"
+                        class="cart-discount__input"
+                        type="text"
+                        name="discount"
+                        size="8"
+                        placeholder="{{ 'content.discount_code' | t }}"
+                        required
+                      >
+                      <button
+                        type="submit"
+                        class="button cart-discount__button"
+                      >
+                        {{ 'actions.apply' | t }}
+                      </button>
+                    </form>
+                  </div>
+                  <div
+                    class="cart-discount__error hidden"
+                    role="alert"
+                    ref="cartDiscountError"
+                  >
+                    <span class="svg-wrapper">
+                      {{- 'icon-error.svg' | inline_asset_content -}}
+                    </span>
+                    <small
+                      class="cart-discount__error-text cart-primary-typography hidden"
+                      ref="cartDiscountErrorDiscountCode"
+                    >
+                      {{ 'content.discount_code_error' | t: code: 'test' }}
+                    </small>
+                    <small
+                      class="cart-discount__error-text cart-primary-typography hidden"
+                      ref="cartDiscountErrorShipping"
+                    >
+                      {{ 'content.shipping_discount_error' | t }}
+                    </small>
+                  </div>
+                  <ul class="cart-discount__codes">
+                    {% for discount_code in discount_codes %}
+                      <li
+                        class="cart-discount__pill"
+                        data-discount-code="{{ discount_code }}"
+                        aria-label="{{ 'accessibility.discount_applied' | t: code: discount_code }}"
+                      >
+                        <p class="cart-discount__pill-code">
+                          {{ discount_code }}
+                        </p>
+                        <button
+                          type="button"
+                          on:click="/removeDiscount"
+                          class="cart-discount__pill-remove svg-wrapper svg-wrapper--smaller button-unstyled"
+                          aria-label="{{ 'actions.remove_discount' | t: code: discount_code }}"
+                        >
+                          {{- 'icon-filters-close.svg' | inline_asset_content -}}
+                        </button>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </cart-discount-component>
+              </div>
+            </div>
+          </details>
+        {% endcapture %}
+        {% render 'accordion-custom-component',
+          children: cart_discount_accordion_children,
+          class: 'cart-discount'
+        %}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {%- liquid
+    if settings.currency_code_enabled_cart_total
+      assign total_price = cart.total_price | money_with_currency
+    else
+      assign total_price = cart.total_price | money
+    endif
+  -%}
+
+  <div class="cart-totals__container{% if settings.show_installments %} cart-totals__container--has-installments{% endif %}">
+    <span
+      class="cart-totals__item cart-totals__total"
+      role="status"
+    >
+      <span class="cart-totals__total-label cart-primary-typography">{{ 'content.cart_estimated_total' | t }}</span>
+      <text-component
+        ref="cartTotal"
+        value="{{ total_price | strip_html }}"
+        class="cart-totals__total-value cart-secondary-typography"
+        data-testid="cart-total-value"
+        data-cart-subtotal
+      >
+        {{ total_price }}
+      </text-component>
+    </span>
+    {% if settings.show_installments %}
+      <span class="cart-totals__item cart-totals__installments">
+        {% form 'cart', cart %}
+          {{ form | payment_terms }}
+        {% endform %}
+      </span>
+    {% endif %}
+    <div class="cart-totals__item cart-totals__tax-note cart-primary-typography">
+      {% render 'tax-info', has_discounts_enabled: settings.show_add_discount_code %}
+    </div>
+  </div>
+</div>
+
+{%- comment -%} LB Trust Badges — visual trust signals above checkout {%- endcomment -%}
+{%- unless cart.empty? -%}
+  <div class="lb-cart-trust" aria-label="{{ 'accessibility.trust_signals' | t | default: 'Trust signals' }}">
+    <span class="lb-cart-trust__item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2L4 6v6c0 5.25 3.5 10.15 8 11.35C16.5 22.15 20 17.25 20 12V6l-8-4z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Secure checkout
+    </span>
+    <span class="lb-cart-trust__item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 3H8v4h8V3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Free US shipping over $100
+    </span>
+    <span class="lb-cart-trust__item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0z" stroke="currentColor" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      30-day returns
+    </span>
+  </div>
+{%- endunless -%}
+
+{%- comment -%} LB Razorpay — config injected by push script, not theme settings {%- endcomment -%}
+{%- if settings.razorpay_badge_enabled -%}
+  <link rel="preconnect" href="https://checkout.razorpay.com" crossorigin>
+  <link rel="preconnect" href="https://api.razorpay.com" crossorigin>
+  <script>
+    window.LB_RZP_CONFIG = {
+      gcpBase: '{{ settings.razorpay_gcp_base | escape }}',
+      rzpKey:  '{{ settings.razorpay_key_id | escape }}',
+      btnLabel: 'Pay with Razorpay / UPI'
+    };
+  </script>
+  <script src="{{ 'lb-razorpay.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+<div class="cart__ctas">
+  <button
+    type="submit"
+    id="checkout"
+    class="cart__checkout-button button"
+    name="checkout"
+    {% if cart == empty %}
+      disabled
+    {% endif %}
+    form="cart-form"
+  >
+    <span class="button-text cart__checkout-text">
+      {{ 'content.checkout' | t }}
+    </span>
+  </button>
+
+  {% if additional_checkout_buttons and settings.show_accelerated_checkout_buttons %}
+    <div
+      class="
+        additional-checkout-buttons
+        {% if accelerated_checkout_buttons_layout == 'vertical' %}additional-checkout-buttons--vertical{% endif %}
+      "
+    >
+      {{ content_for_additional_checkout_buttons }}
+    </div>
+  {% endif %}
+
+  {%- comment -%} LB Razorpay — India checkout option, below standard checkout {%- endcomment -%}
+  {%- if settings.razorpay_badge_enabled -%}
+    {%- unless cart.empty? -%}
+      <div class="lb-rzp-separator" aria-hidden="true">
+        <span>Paying from India?</span>
+      </div>
+      <div id="lb-razorpay-upi-wrapper" class="lb-razorpay-upi-wrapper">
+        <button
+          type="button"
+          id="lb-razorpay-upi-btn"
+          class="lb-razorpay-upi-btn"
+          data-cart-total="{{ cart.total_price }}"
+          data-cart-currency="{{ cart.currency.iso_code }}"
+          data-customer-email="{{ customer.email | default: '' }}"
+          data-customer-name="{{ customer.name | default: '' }}"
+          aria-label="Checkout with Razorpay — UPI, Cards, Net Banking"
+        >
+          <svg width="18" height="18" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M10 28L18 12h6l-4 8h6l-8 12-2-7-2 3H10z" fill="white"/>
+          </svg>
+          <span>Checkout with Razorpay</span>
+        </button>
+        <div class="lb-rzp-methods" aria-label="Accepted payment methods">
+          <span class="lb-rzp-method-badge">UPI</span>
+          <span class="lb-rzp-method-badge">Cards</span>
+          <span class="lb-rzp-method-badge">Net Banking</span>
+          <span class="lb-rzp-method-badge">EMI</span>
+          <span class="lb-rzp-method-badge">Wallets</span>
+        </div>
+        <p class="lb-razorpay-upi-badge">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2L4 6v6c0 5.25 3.5 10.15 8 11.35C16.5 22.15 20 17.25 20 12V6l-8-4z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Secured by Razorpay &nbsp;·&nbsp; 18% IGST included at checkout
+        </p>
+      </div>
+    {%- endunless -%}
+  {%- endif -%}
+</div>
+
+{%- comment -%} LB Cart Localization — country/currency selector (below checkout to avoid funnel friction) {%- endcomment -%}
+{%- if localization.available_countries.size > 1 -%}
+  <div class="lb-cart-localization" aria-label="{{ 'accessibility.country_region' | t }}">
+    <details class="lb-cart-localization__disclosure">
+      <summary class="lb-cart-localization__trigger cart-primary-typography">
+        <span class="lb-cart-localization__flag" aria-hidden="true">🌍</span>
+        <span class="lb-cart-localization__label">
+          {{ localization.country.name }}
+          <span class="lb-cart-localization__currency">({{ localization.country.currency.iso_code }} {{ localization.country.currency.symbol }})</span>
+        </span>
+        <span class="svg-wrapper icon-caret lb-cart-localization__caret">
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </span>
+      </summary>
+      <div class="lb-cart-localization__panel">
+        {%- render 'localization-form',
+          show_country: true,
+          show_language: false,
+          form_id: 'cart-localization',
+          localization_style: 'dropdown',
+          back: routes.cart_url
+        -%}
+      </div>
+    </details>
+  </div>
+{%- endif -%}

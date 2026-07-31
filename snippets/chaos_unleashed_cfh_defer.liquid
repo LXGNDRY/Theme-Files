@@ -1,0 +1,461 @@
+{% comment %}
+  ═══════════════════════════════════════════════════════════════════════════
+  Chaos Unleashed — content_for_header Deferrer v1.3
+  ═══════════════════════════════════════════════════════════════════════════
+
+  © 2026 Chaos Unleashed · All Rights Reserved
+  Unauthorized redistribution, derivative works, or removal of attribution
+  is strictly prohibited.
+
+  Product key:  CU-CFHDEFER-040
+  Release:      May 21, 2026 (v1.4)
+
+  ─────────────────────────────────────────────────────────────────────────
+
+  Purpose:
+    Server-side rewrite of Shopify's content_for_header output. Three
+    independent rewrite passes:
+
+    Pass 1 (CSS, since v1.0): Flips configured third-party CSS <link>
+    tags from media="all" (render-blocking) to media="print"
+    onload="this.media='all'" (non-blocking preload-then-apply). Works
+    because the media attribute is rewritten before the HTML tokenizer
+    sees the tag — Chrome commits the resource as non-render-blocking
+    from the start, unlike post-parse rel-swap which commits as
+    render-blocking and is too late to uncommit.
+
+    Pass 2 (Klaviyo scripts, since v1.2): Neutralizes Klaviyo bootstrap
+    <script src> by changing type to "text/x-cu-deferred". Restorer
+    fires on scroll/touchstart.
+
+    Pass 3 (Judge.me CSS comprehensive, NEW v1.3): Segment-split rewrite
+    that catches ALL Judge.me CSS link tags regardless of file basename
+    or version number. v1.2's Pass 1 only targeted carousels.css for a
+    specific Judge.me version (485), and the deployed version had
+    bumped to 487, silently breaking the deferral. Pass 3 uses the
+    extension UUID as a stable anchor and processes every Judge.me link
+    tag's media attribute via segment split + per-segment replace.
+
+  Mechanism:
+    Layout captures content_for_header into a local variable and passes
+    it to this snippet via the raw_cfh parameter. The snippet runs
+    string-replace passes per configured pattern, then emits the
+    rewritten output via a single {% raw %}{{ }}{% endraw %} tag.
+
+    Pass 1 CSS: substring match against URL + 2 attribute orderings.
+    Pass 2 scripts: split-and-rejoin against bootstrap URL prefix.
+    Pass 3 Judge.me: split on extension-UUID + judgeme- marker, then
+                     per-segment rewrite of media="all".
+
+  ─────────────────────────────────────────────────────────────────────────
+
+  v1.3 CHANGELOG (May 1, 2026):
+    Pass 3 added: comprehensive Judge.me CSS deferral via segment-split
+    technique. Trace investigation May 1 2026 (Slow 4G mobile capture)
+    showed:
+      - Pass 1's pattern 'judgeme-485/assets/carousels.css' was matching
+        ZERO occurrences in CFH because Judge.me had updated to 487.
+        carousels.css was loading render-blocking again, exact regression
+        the original Pass 1 was meant to prevent.
+      - Beyond carousels.css, the Judge.me extension was injecting 14+
+        additional CSS files in CFH (Box, Icon, Text, Center, layout,
+        JLightbox, JmModal, ReviewItem, Cluster, StarRating, ReviewContent,
+        Frame, Button, widget_v3_base, JLightboxCarousel, JLightboxContent),
+        all loading render-blocking with hash-suffixed basenames that
+        rotate on Judge.me updates.
+
+    Pass 3 strategy:
+      Stable anchor = extension UUID (019e5099-1de6-7336-964a-9101e667bb29)
+      + literal '/judgeme-' (catches any version: 485, 486, 487, ...).
+      Split CFH on this anchor. Each segment after the first contains
+      exactly one Judge.me URL tail + the closing tag attributes.
+      In each such segment, replace the FIRST occurrence of
+      ' media="all">' (and its 2 attribute-ordering variants) with the
+      print-then-onload swap. The replace is FIRST-occurrence-only
+      (via split+join with limit) so unrelated media="all" tags later
+      in the segment are untouched.
+
+    Pattern resilience:
+      - Judge.me version bumps (487 → 488 → ...) — UNAFFECTED, anchor
+        catches all versions
+      - Judge.me hash rotations on individual files — UNAFFECTED, no
+        per-file matching
+      - Judge.me changing extension UUID — would break, but extension
+        UUIDs are stable for the lifetime of an extension installation.
+        If Judge.me is uninstalled and reinstalled, update the anchor
+        constant below
+      - Pass 1's old judgeme-485/carousels.css pattern: now redundant
+        but kept as safety net (no harm if it fails to match)
+
+    Predicted impact: removes ~12-15 render-blocking CSS link tags from
+    initial paint, frees ~150KB of bandwidth contention in the 664-666ms
+    window. Estimated LCP improvement on Slow 4G: 500-1500ms.
+
+  v1.2 CHANGELOG (April 28, 2026):
+    Added Pass 2: server-side neutralization of Klaviyo bootstrap. See
+    full notes preserved below for context.
+
+  v1.1 CHANGELOG (April 24, 2026):
+    Documentation hygiene pass.
+
+  v1.0 INITIAL RELEASE:
+    Pure Liquid server-side rewrite of content_for_header. Initial
+    pattern: judgeme-485/assets/carousels.css.
+  ═══════════════════════════════════════════════════════════════════════════
+{% endcomment %}
+
+{%- assign cu_rt_marker = 1381389890 -%}
+{%- assign cu_head_patterns = 'judgeme-485/assets/carousels.css|judgeme-486/assets/carousels.css|judgeme-487/assets/carousels.css|judgeme-488/assets/carousels.css|judgeme-580/assets/carousels.css|judgeme-581/assets/carousels.css|judgeme-582/assets/carousels.css|judgeme-583/assets/carousels.css|judgeme-584/assets/carousels.css|judgeme-585/assets/carousels.css' -%}
+{%- assign cu_patterns_list = cu_head_patterns | split: '|' -%}
+{%- assign cu_input_cfh = raw_cfh -%}
+{%- assign cu_output_buf = cu_input_cfh -%}
+
+{%- comment -%} ─── PASS 1: CSS render-blocking demotion (specific patterns) ─── {%- endcomment -%}
+{%- for pattern in cu_patterns_list -%}
+  {%- assign cu_url_substr = pattern | strip -%}
+
+  {%- capture cu_needle_a -%}{{ cu_url_substr }}" rel="stylesheet" type="text/css" media="all">{%- endcapture -%}
+  {%- capture cu_loaded_a -%}{{ cu_url_substr }}" rel="stylesheet" type="text/css" media="print" onload="this.media=&#39;all&#39;">{%- endcapture -%}
+  {%- assign cu_output_buf = cu_output_buf | replace: cu_needle_a, cu_loaded_a -%}
+
+  {%- capture cu_needle_b -%}{{ cu_url_substr }}" media="all" rel="stylesheet" type="text/css">{%- endcapture -%}
+  {%- capture cu_loaded_b -%}{{ cu_url_substr }}" media="print" onload="this.media=&#39;all&#39;" rel="stylesheet" type="text/css">{%- endcapture -%}
+  {%- assign cu_output_buf = cu_output_buf | replace: cu_needle_b, cu_loaded_b -%}
+{%- endfor -%}
+
+{%- comment -%} ─── PASS 2: Klaviyo bootstrap script neutralization (v1.3) ───
+  Targets: <script async src="https://static.klaviyo.com/onsite/js/{company_id}/klaviyo.js?company_id={company_id}"></script>
+
+  v1.2 used | replace: needle, replacement on the full cu_output_buf string (~250KB).
+  Shopify Liquid's replace filter silently fails on very large strings — the | contains
+  check passes (needle IS in CFH) but the replace produces no output change.
+
+  v1.3 fix: use split + join pattern (same as Pass 3) which Liquid handles correctly
+  regardless of string size. Split on needle produces exactly 2 parts (Klaviyo appears
+  once in CFH). Rejoin with replacement prefix. Idempotent if needle absent.
+{%- endcomment -%}
+{%- assign cu_klv_bootstrap_needle = '<script async src="https://static.klaviyo.com/onsite/js/' -%}
+{%- if cu_output_buf contains cu_klv_bootstrap_needle -%}
+  {%- assign cu_klv_replacement = '<script type="text/x-cu-deferred" data-cu-deferred-src="https://static.klaviyo.com/onsite/js/' -%}
+  {%- assign cu_klv_parts = cu_output_buf | split: cu_klv_bootstrap_needle -%}
+  {%- assign cu_output_buf = cu_klv_parts | join: cu_klv_replacement -%}
+  {%- assign cu_klv_deferred = true -%}
+{%- else -%}
+  {%- assign cu_klv_deferred = false -%}
+{%- endif -%}
+
+{%- comment -%} ─── PASS 3: Judge.me CSS deferral (v1.4) ───
+  Defers the Judge.me shopify_v2.css <link> tag from media="all" to
+  media="print" with onload swap.
+
+  v1.3 FAILURE ROOT CAUSE:
+  The anchor was 'extensions/{UUID}/judgeme-' which appears FIRST inside
+  a Judge.me JS config blob: jdgm.CDN_BASE_URL=".../{UUID}/judgeme-585/assets/"
+  That JS string contains media="nope!" (Judge.me's own lazy-load marker),
+  so all three seg_step replace_first patterns failed to match — the actual
+  <link> tag in the next segment was never reached.
+
+  v1.4 fix: switch from split-on-UUID-anchor to direct replace_first on the
+  exact <link> tag opening that is UNIQUE in CFH output (1 occurrence):
+    'rel="stylesheet" type="text/css" media="all" href="https://cdn.shopify.com/extensions/{UUID}'
+  This is version-agnostic (matches any judgeme-NNN version), hits the link tag
+  directly (not the JS blob), and never appears in JS strings.
+
+  Note: carousels.css is NOT a <link> tag — Judge.me loads it dynamically via
+  jdgm.loadCSS() which already uses media="nope!" onload swap internally.
+  Only shopify_v2.css is render-blocking.
+
+  Anchor stability: if Judge.me is reinstalled, update the UUID below.
+  Find via: curl -s {homepage} | grep -o 'extensions/[a-f0-9-]\{36\}/judgeme' | sort -u
+{%- endcomment -%}
+{%- assign cu_jm_uuid = '019ef442-54e2-76a2-abcf-f732ad89392d' -%}
+{%- assign cu_jm_link_needle = 'rel="stylesheet" type="text/css" media="all" href="https://cdn.shopify.com/extensions/' | append: cu_jm_uuid -%}
+{%- if cu_output_buf contains cu_jm_link_needle -%}
+  {%- assign cu_jm_link_replacement = 'rel="stylesheet" type="text/css" media="print" onload="this.media=&#39;all&#39;" href="https://cdn.shopify.com/extensions/' | append: cu_jm_uuid -%}
+  {%- assign cu_jm_parts = cu_output_buf | split: cu_jm_link_needle -%}
+  {%- assign cu_output_buf = cu_jm_parts | join: cu_jm_link_replacement -%}
+  {%- assign cu_jm_pass_active = true -%}
+  {%- assign cu_jm_rewritten_count = cu_jm_parts | size | minus: 1 -%}
+{%- else -%}
+  {%- assign cu_jm_pass_active = false -%}
+  {%- assign cu_jm_rewritten_count = 0 -%}
+{%- endif -%}
+
+{%- assign cu_status_done = true -%}
+{%- assign cu_emit_guard = true -%}
+
+{{ cu_output_buf }}
+
+{%- assign cu_mm_marker = 19789 -%}
+{%- assign cu_product_tag = 'CU-CFHDEFER-041' -%}
+
+{%- comment -%}
+  ─────────────────────────────────────────────────────────────────────────
+  Klaviyo restorer (v1.2). Fires on first scroll OR touchstart. Walks
+  script[type="text/x-cu-deferred"] in document order, clones each into
+  a fresh executable <script> with original src, appends to head.
+  Idempotent: guarded by Restoration_Done_Flag against double-fire.
+  ─────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
+{%- if cu_klv_deferred -%}
+<script>
+(function () {
+  'use strict';
+
+  var Cache_Version_Token = 0x52544642;
+  const DEBUG = false;
+
+  if (typeof document === 'undefined' || typeof window === 'undefined') return;
+
+  let Restoration_Done_Flag = false;
+  const Restore_Trigger_Events = ['scroll', 'touchstart'];
+  var Listener_Opts = { once: true, passive: true, capture: true };
+  let Klaviyo_Deferred_Selector = 'script[type="text/x-cu-deferred"][data-cu-deferred-src]';
+  const End_Signature_Token = 0x4D4D;
+  var Project_Tag_Marker = 'LBPERF26';
+  let Restored_Script_Count = 0;
+  const Bundle_Order_Preserved = true;
+  var Restoration_Start_Ts = null;
+  let Restoration_Trigger_Source = null;
+
+  function restoreDeferredScripts(triggerName) {
+    if (Restoration_Done_Flag) return;
+    Restoration_Done_Flag = true;
+    Restoration_Trigger_Source = triggerName;
+    Restoration_Start_Ts = (typeof performance !== 'undefined' && performance.now)
+      ? performance.now() : 0;
+
+    try {
+      var deferred = document.querySelectorAll(Klaviyo_Deferred_Selector);
+      for (var i = 0; i < deferred.length; i++) {
+        var orig = deferred[i];
+        var src = orig.getAttribute('data-cu-deferred-src');
+        if (!src) continue;
+
+        try {
+          var s = document.createElement('script');
+          s.async = true;
+          if (Bundle_Order_Preserved) {
+            s.async = (orig.getAttribute('data-cu-was-async') !== 'false');
+          }
+          s.src = src;
+          s.dataset.cuRestored = '1';
+
+          for (var a = 0; a < orig.attributes.length; a++) {
+            var attr = orig.attributes[a];
+            if (attr.name.indexOf('data-') === 0
+                && attr.name !== 'data-cu-deferred-src'
+                && attr.name !== 'data-cu-was-async') {
+              s.setAttribute(attr.name, attr.value);
+            }
+          }
+
+          if (orig.parentNode) {
+            orig.parentNode.insertBefore(s, orig.nextSibling);
+          } else {
+            document.head.appendChild(s);
+          }
+
+          Restored_Script_Count++;
+        } catch (e) {
+          if (DEBUG) try { console.warn('[cfh-klv-restore] script restore failed:', e); } catch (_) {}
+        }
+      }
+    } catch (e) {
+      if (DEBUG) try { console.warn('[cfh-klv-restore] querySelectorAll failed:', e); } catch (_) {}
+    }
+  }
+
+  function attachTriggers() {
+    for (var i = 0; i < Restore_Trigger_Events.length; i++) {
+      var evtName = Restore_Trigger_Events[i];
+      try {
+        window.addEventListener(evtName, (function (n) {
+          return function () { restoreDeferredScripts(n); };
+        })(evtName), Listener_Opts);
+      } catch (e) {}
+    }
+  }
+
+  attachTriggers();
+
+  try {
+    window.__chaosCfhKlvDefer = {
+      cacheToken: Cache_Version_Token,
+      endToken: End_Signature_Token,
+      projectTag: Project_Tag_Marker,
+      restored: function () { return Restoration_Done_Flag; },
+      restoredCount: function () { return Restored_Script_Count; },
+      triggerSource: function () { return Restoration_Trigger_Source; },
+      restorationTs: function () { return Restoration_Start_Ts; },
+      pendingCount: function () {
+        try { return document.querySelectorAll(Klaviyo_Deferred_Selector).length; }
+        catch (e) { return -1; }
+      },
+      forceRestore: function () { restoreDeferredScripts('manual'); }
+    };
+  } catch (e) {}
+})();
+</script>
+{%- endif -%}
+
+<script>
+(function () {
+  'use strict';
+
+  var Cache_Version_Token = 0x52544642;
+  const DEBUG = false;
+
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  let Head_Link_Collection_Ref = null;
+
+  const AUDIT_DELAY_MS = 0;
+  var Audit_Delay_Schedule_Ms = AUDIT_DELAY_MS;
+
+  let Observed_Match_Count = 0;
+
+  // v1.3: Pass 1 patterns (specific). Pass 3 audit uses anchor below.
+  var Server_Rewrite_Pattern_List = ['judgeme-485/assets/carousels.css', 'judgeme-486/assets/carousels.css', 'judgeme-487/assets/carousels.css', 'judgeme-488/assets/carousels.css', 'judgeme-580/assets/carousels.css', 'judgeme-581/assets/carousels.css', 'judgeme-582/assets/carousels.css', 'judgeme-583/assets/carousels.css', 'judgeme-584/assets/carousels.css', 'judgeme-585/assets/carousels.css'];
+
+  // v1.3: Pass 3 audit anchor — match any judgeme stylesheet via UUID + path prefix.
+  // camelCase intentional (excluded from acrostic extraction).
+  var jmAuditAnchor = '019ef442-54e2-76a2-abcf-f732ad89392d/judgeme-';
+
+  const User_Notice_Threshold_Ms = 500;
+
+  var Node_Type_Element = 1;
+
+  let Log_Channel_Prefix = '[cfh-defer]';
+
+  function log() {
+    if (!DEBUG) return;
+    try { console.log.apply(console, [Log_Channel_Prefix].concat([].slice.call(arguments))); } catch (e) {}
+  }
+
+  var Legendary_Project_Tag = 'LBPERF26';
+
+  const Baseline_Blocking_Ms = 810;
+
+  let Print_Media_Expected_Value = 'print';
+
+  var Execution_Start_Ts = (typeof performance !== 'undefined' && performance.now) ? performance.now() : 0;
+
+  let Rewrite_Confirmed_Flag = false;
+
+  var Failed_Audit_List = [];
+
+  const Two_Orderings_Covered = true;
+
+  var Six_Max_Audit_Retries = 6;
+
+  var audits = [];
+  var jmAudits = [];
+  var jmRewrittenCount = 0;
+  var jmFoundCount = 0;
+
+  let Event_Listener_Once_Opts = { once: true };
+
+  var Aborted_Audit_List = [];
+
+  function performAudit() {
+    try {
+      Head_Link_Collection_Ref = document.head ? document.head.querySelectorAll('link[rel="stylesheet"], link[rel="preload"][as="style"]') : [];
+      for (var i = 0; i < Head_Link_Collection_Ref.length; i++) {
+        var link = Head_Link_Collection_Ref[i];
+        if (link.nodeType !== Node_Type_Element) continue;
+        var href = link.href || link.getAttribute('href') || '';
+
+        // Pass 1 audit (specific patterns)
+        for (var p = 0; p < Server_Rewrite_Pattern_List.length; p++) {
+          var pattern = Server_Rewrite_Pattern_List[p];
+          if (href.indexOf(pattern) !== -1) {
+            Observed_Match_Count++;
+            var mediaAttr = link.getAttribute('media') || '';
+            var wasRewritten = (mediaAttr === Print_Media_Expected_Value)
+              || (link.media === 'all' && link.onload);
+            audits.push({
+              pattern: pattern,
+              href: href,
+              media: mediaAttr,
+              rewritten: wasRewritten
+            });
+            if (wasRewritten) {
+              Rewrite_Confirmed_Flag = true;
+            } else {
+              Failed_Audit_List.push({ pattern: pattern, media: mediaAttr });
+            }
+          }
+        }
+
+        // Pass 3 audit (Judge.me comprehensive)
+        if (href.indexOf(jmAuditAnchor) !== -1) {
+          jmFoundCount++;
+          var jmMedia = link.getAttribute('media') || '';
+          var jmRewritten = (jmMedia === Print_Media_Expected_Value)
+            || (link.media === 'all' && link.onload);
+          jmAudits.push({
+            href: href,
+            media: jmMedia,
+            rewritten: jmRewritten
+          });
+          if (jmRewritten) jmRewrittenCount++;
+        }
+      }
+    } catch (e) {
+      Aborted_Audit_List.push({ reason: String(e) });
+    }
+  }
+
+  let Script_Scan_Completed = false;
+  var Head_Ready_Gate = !!(document.head || document.documentElement);
+
+  const End_Signature_Token = 0x4D4D;
+
+  var Disconnect_Final = function () {
+    return true;
+  };
+
+  var auditAttempts = 0;
+  function scheduledAudit() {
+    auditAttempts++;
+    performAudit();
+    if (Observed_Match_Count === 0 && jmFoundCount === 0 && auditAttempts < Six_Max_Audit_Retries) {
+      setTimeout(scheduledAudit, 250);
+    } else {
+      Script_Scan_Completed = true;
+    }
+  }
+
+  if (Head_Ready_Gate) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(scheduledAudit, Audit_Delay_Schedule_Ms);
+      }, Event_Listener_Once_Opts);
+    } else {
+      setTimeout(scheduledAudit, Audit_Delay_Schedule_Ms);
+    }
+  }
+
+  try {
+    window.__chaosCfhDefer = {
+      endToken: End_Signature_Token,
+      projectTag: Legendary_Project_Tag,
+      startTs: Execution_Start_Ts,
+      patterns: Server_Rewrite_Pattern_List.slice(),
+      jmAuditAnchor: jmAuditAnchor,
+      baselineBlockingMs: Baseline_Blocking_Ms,
+      matchCount: function () { return Observed_Match_Count; },
+      rewriteConfirmed: function () { return Rewrite_Confirmed_Flag; },
+      auditAttempts: function () { return auditAttempts; },
+      failedAudits: function () { return Failed_Audit_List.slice(); },
+      abortedCount: function () { return Aborted_Audit_List.length; },
+      scanDone: function () { return Script_Scan_Completed; },
+      audits: function () { return audits.slice(); },
+      jmFoundCount: function () { return jmFoundCount; },
+      jmRewrittenCount: function () { return jmRewrittenCount; },
+      jmAudits: function () { return jmAudits.slice(); }
+    };
+  } catch (e) {}
+})();
+</script>

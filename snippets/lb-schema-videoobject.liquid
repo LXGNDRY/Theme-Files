@@ -1,0 +1,46 @@
+{%- comment -%}
+  lb-schema-videoobject.liquid
+  Version:      1.0.0
+  Last updated: 2026-05-17
+  Purpose:      Outputs VideoObject JSON-LD for product pages that have
+                a video in the media gallery. Enables Google Video rich
+                results and YouTube/video carousel indexing.
+                Only outputs if the first product media item is a video
+                OR if a video metafield is present.
+  Usage:        Add to seo-schema.liquid on product template:
+                {%- render 'lb-schema-videoobject', product: product -%}
+                Also accepts optional external_video_url metafield:
+                product.metafields.custom.video_url
+  Dependencies: product.media, product.metafields.custom.video_url (optional)
+{%- endcomment -%}
+
+{%- liquid
+  assign has_video = false
+  assign video_media = nil
+  for media in product.media
+    if media.media_type == 'video' or media.media_type == 'external_video'
+      assign has_video = true
+      assign video_media = media
+      break
+    endif
+  endfor
+  assign external_video_url = product.metafields.custom.video_url.value
+-%}
+
+{%- if has_video or external_video_url != blank -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": {{ product.title | append: ' — Product Video' | json }},
+  "description": {{ product.description | strip_html | truncate: 300 | json }},
+  {%- if video_media != nil and video_media.preview_image != blank -%}
+  "thumbnailUrl": {{ video_media.preview_image | image_url: width: 1280 | prepend: 'https:' | json }},
+  {%- elsif product.featured_media.preview_image -%}
+  "thumbnailUrl": {{ product.featured_media.preview_image | image_url: width: 1280 | prepend: 'https:' | json }},
+  {%- endif -%}
+  "uploadDate": {{ product.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
+  "contentUrl": {% if external_video_url != blank %}{{ external_video_url | json }}{% elsif video_media != nil %}{{ request.origin | append: product.url | json }}{% endif %}
+}
+</script>
+{%- endif -%}

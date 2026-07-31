@@ -1,0 +1,76 @@
+{%- comment -%}
+  lb-internal-links.liquid
+  Version:      1.1.0
+  Last updated: 2026-07-24
+  Purpose:      Injects contextual internal links within product/page
+                content to improve SEO crawlability and site authority
+                distribution across the store
+  Usage:
+    product context:    render 'lb-internal-links', context: 'product', product: product
+    collection context: render 'lb-internal-links', context: 'collection', collection: collection
+    footer context:     render 'lb-internal-links', context: 'footer'
+  Dependencies: Shopify linklists, product/page content objects
+{%- endcomment -%}
+
+{%- liquid
+  assign context = context | default: 'product'
+-%}
+
+{%- if context == 'product' and product -%}
+
+  {%- if product.collections.size > 0 -%}
+    <nav class="lb-collection-nav" aria-label="{{ 'accessibility.product_categories' | t | default: 'Product categories' }}">
+      <ul class="lb-collection-nav__list">
+        {%- for coll in product.collections limit: 8 -%}
+          <li>
+            <a href="{{ coll.url }}" class="lb-collection-nav__pill">{{ coll.title }}</a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+  {%- endif -%}
+
+{%- elsif context == 'collection' and collection -%}
+
+  {%- assign sibling_count = 0 -%}
+  {%- for coll in collections limit: 10 -%}
+    {%- unless coll.handle == collection.handle -%}
+      {%- assign sibling_count = sibling_count | plus: 1 -%}
+    {%- endunless -%}
+  {%- endfor -%}
+
+  {%- if sibling_count > 0 -%}
+    <nav class="lb-collection-nav" aria-label="{{ 'accessibility.collections' | t | default: 'Collections' }}">
+      <ul class="lb-collection-nav__list">
+        <li>
+          <a href="{{ collection.url }}" class="lb-collection-nav__pill lb-collection-nav__pill--active" aria-current="page">{{ collection.title }}</a>
+        </li>
+        {%- for coll in collections limit: 9 -%}
+          {%- unless coll.handle == collection.handle -%}
+            <li>
+              <a href="{{ coll.url }}" class="lb-collection-nav__pill lb-collection-nav__pill--inactive">{{ coll.title }}</a>
+            </li>
+          {%- endunless -%}
+        {%- endfor -%}
+      </ul>
+    </nav>
+  {%- endif -%}
+
+{%- elsif context == 'footer' -%}
+
+  {%- assign footer_collection_count = 0 -%}
+  {%- for coll in collections limit: 12 -%}
+    {%- assign footer_collection_count = footer_collection_count | plus: 1 -%}
+  {%- endfor -%}
+
+  {%- if footer_collection_count > 0 -%}
+    <div class="lb-keyword-footer">
+      <ul class="lb-keyword-footer__list">
+        {%- for coll in collections limit: 12 -%}
+          <li><a href="{{ coll.url }}">{{ coll.title }}</a></li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+
+{%- endif -%}

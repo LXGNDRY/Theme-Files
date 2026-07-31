@@ -1,0 +1,79 @@
+/*
+ * lb-announcement-bar.css
+ * Legendary Branding Theme — dev branch
+ * Clean mono announcement bar: white bg, black text, JetBrains Mono.
+ * Strips any rich-text green/yellow color set in Shopify admin.
+ * Ported from ui-redesign-2026 commit 27734e2 (2026-05-19).
+ */
+
+aside.announcement-bar,
+.announcement-bar {
+  background-color: #0A0A0A !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  --padding-block-start: 9px !important;
+  --padding-block-end:   9px !important;
+}
+
+/* Kill any color-scheme background bleed */
+.announcement-bar .section-background { display: none !important; }
+
+/* Force all text to mono black — overrides rich-text inline color */
+.announcement-bar__text,
+.announcement-bar__text p,
+.announcement-bar__text span,
+.announcement-bar__text a,
+.announcement-bar p,
+.announcement-bar span {
+  color: #F0EDE8 !important;
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  -webkit-text-fill-color: #F0EDE8 !important;
+  white-space: normal !important;
+}
+
+/* Mobile: tighten tracking slightly */
+@media screen and (max-width: 749px) {
+  .announcement-bar__text,
+  .announcement-bar__text p,
+  .announcement-bar__text span,
+  .announcement-bar__text a,
+  .announcement-bar p,
+  .announcement-bar span {
+    font-size: 11px !important;
+    letter-spacing: 0.06em !important;
+  }
+}
+
+/* Slide background — transparent */
+.announcement-bar__slide,
+slideshow-slide.announcement-bar__slide {
+  background: transparent !important;
+}
+
+/* Arrows — match mono look */
+.announcement-bar .slideshow-arrow-button,
+.announcement-bar .slideshow-prev,
+.announcement-bar .slideshow-next {
+  color: #F0EDE8 !important;
+  opacity: 0.5;
+}
+.announcement-bar .slideshow-arrow-button:hover { opacity: 1; }
+
+/* Dark mode — already dark, no change needed */
+html[data-theme="dark"] aside.announcement-bar,
+html[data-theme="dark"] .announcement-bar {
+  background-color: #0A0A0A !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+html[data-theme="dark"] .announcement-bar__text,
+html[data-theme="dark"] .announcement-bar__text p,
+html[data-theme="dark"] .announcement-bar__text span,
+html[data-theme="dark"] .announcement-bar p,
+html[data-theme="dark"] .announcement-bar span {
+  color: #F0EDE8 !important;
+  -webkit-text-fill-color: #F0EDE8 !important;
+}

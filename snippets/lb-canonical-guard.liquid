@@ -1,0 +1,50 @@
+{%- comment -%}
+  lb-canonical-guard.liquid
+  Version:      1.1.0
+  Last updated: 2026-05-18
+  Purpose:      Strips any duplicate <link rel="canonical"> tags injected
+                by Shopify apps AFTER our authoritative one is written.
+                Runs client-side after DOMContentLoaded so any
+                synchronous-injected app tags are already in the DOM,
+                then keeps only the FIRST canonical link (ours).
+  Usage:        Rendered in snippets/seo-meta.liquid immediately after
+                <link rel="canonical">, so our canonical is index 0.
+  Dependencies: None
+  Cost:         <1KB inline, runs once, no network.
+{%- endcomment -%}
+<script>
+(function(){
+  function dedupeCanonical(){
+    try{
+      var links = document.querySelectorAll('link[rel="canonical"]');
+      if (links.length <= 1) return;
+      // Keep the first (ours, written by seo-meta.liquid), remove the rest.
+      for (var i = 1; i < links.length; i++) {
+        links[i].parentNode && links[i].parentNode.removeChild(links[i]);
+      }
+    } catch(e) {}
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', dedupeCanonical, {once:true});
+  } else {
+    dedupeCanonical();
+  }
+  // Watch for late-injecting apps (Klaviyo, review apps, etc.) for ~3s.
+  if (typeof MutationObserver === 'function') {
+    var obs = new MutationObserver(function(muts){
+      for (var i = 0; i < muts.length; i++) {
+        var added = muts[i].addedNodes;
+        for (var j = 0; j < added.length; j++) {
+          var n = added[j];
+          if (n.nodeType === 1 && n.tagName === 'LINK' && n.rel === 'canonical') {
+            dedupeCanonical();
+            return;
+          }
+        }
+      }
+    });
+    obs.observe(document.head, {childList:true, subtree:false});
+    setTimeout(function(){ obs.disconnect(); }, 3000);
+  }
+})();
+</script>

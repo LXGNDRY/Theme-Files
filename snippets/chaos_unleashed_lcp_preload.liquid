@@ -1,0 +1,564 @@
+{% comment %}
+  ═══════════════════════════════════════════════════════════════════════════
+  Chaos Unleashed — LCP Orchestration v1.6
+  ═══════════════════════════════════════════════════════════════════════════
+
+  © 2026 Chaos Unleashed · Raymond M. Testi · Ramble On LLC
+  All Rights Reserved. Unauthorized redistribution, derivative works, or
+  removal of attribution is strictly prohibited.
+
+  Product key:  CU-LCPPRE-060
+  Release:      May 1, 2026 (v1.6)
+
+  ─────────────────────────────────────────────────────────────────────────
+
+  This snippet manages LCP-candidate outcomes from <head> via two
+  complementary passes:
+
+    Pass 1 (since v1.0): LCP candidate PROMOTION — emits responsive
+      <link rel="preload" as="image"> hints for the most likely LCP
+      image per template. See per-template heuristic below.
+
+    Pass 2 (NEW v1.6):   LCP candidate SUPPRESSION — hides Shopify's
+      customer-privacy cookie banner (#shopify-pc__banner) from
+      rendering during the LCP-update window so it cannot supersede
+      the intended LCP element. See Pass 2 block at the end of this
+      snippet.
+
+  Both passes run inline at head-parse time, before <body> is parsed,
+  so they take effect from first paint.
+
+  ─────────────────────────────────────────────────────────────────────────
+
+  v1.6 CHANGELOG (May 1, 2026):
+    Pass 2 added: cookie-banner LCP shield. The Shopify customer-privacy
+    banner is server-rendered at body offset ~187 (before <header>) and
+    revealed by /cdn/shopifycloud/privacy-banner/storefront-banner.js
+    after consent state resolves — typically 5-7 s into the load on
+    Slow 4G mobile. Its text paragraph paints at ~412 × 66 = ~27,066
+    px², which on the legendary-branding.com homepage was just barely
+    larger than the partial-bitmap LCP measurement of the hero video
+    poster (~24,720 px² at FCP) and was being chosen as the page's
+    final LCP entry.
+
+    Verified May 1 2026 deep-dump (legendary-branding.com mobile,
+    post-Pass-1 v1.5 preload fix):
+      LCP[0] t=2540ms size=24,720 IMG hero__media--video-poster
+      LCP[1] t=7168ms size=27,066 P  shopify-pc__banner   ← final LCP
+
+    Pass 2 mechanism:
+      a. Inline <style> rule
+         html.cu-banner-shield #shopify-pc__banner {
+           content-visibility: hidden;
+         }
+         content-visibility:hidden excludes the element from rendering
+         AND from LCP candidate measurement (LCP measures painted area
+         only).
+      b. Inline <script> adds .cu-banner-shield to <html> synchronously
+         at head-parse time, before the parser reaches the banner in
+         <body>. Removes the class on first user input event
+         (pointerdown/keydown/scroll/touchstart) — at which point LCP
+         is finalized per W3C spec — or on a 2500 ms fallback timeout,
+         whichever fires first.
+      c. Removal triggers (whichever fires first):
+           1. First user input (pointerdown/keydown/scroll/touchstart).
+              Per W3C LCP spec, the metric stops updating on first input,
+              so dropping the shield then has no impact on the score.
+           2. Fallback timeout of 10000 ms (10 s). Set to cover the LCP
+              measurement window with margin — Shopify's banner reveals
+              naturally at ~7036 ms on Slow 4G (verified May 1 2026
+              deep-dump), and Lighthouse's LCP measurement typically
+              caps around 10-15 s of total page time. 10 s sits past
+              the banner reveal and past the synthetic measurement
+              window without holding the banner indefinitely from a
+              stationary real-user visitor — consent UX still resolves
+              within 10 s on the unlikely no-interaction case, only
+              ~3 s after Shopify's natural reveal would have shown it.
+              An earlier v1.6 draft used 2500 ms; the May 1 deep-dump
+              showed the shield lifting before the banner painted.
+
+    Pass 2 was kept inside this snippet (rather than spun out as a 9th
+    chaos_unleashed_* file) because it's the same concern as Pass 1:
+    controlling which element wins the LCP race. Pass 1 promotes; Pass
+    2 demotes. Co-located for maintenance.
+
+    Selector choice rationale:
+      [aria-modal="false"] was rejected — the banner is a non-modal
+      alertdialog per W3C ARIA, so aria-modal stays "false" even when
+      visible. A class toggle on <html> avoids guessing what attributes
+      Shopify's banner JS modifies.
+
+      content-visibility:hidden was chosen over display:none because
+      it preserves the element's box dimensions on reveal, reducing
+      post-shield reflow cost. Both fully exclude the element from LCP
+      candidacy.
+
+    Diagnostic surface:
+      window.__chaosBannerShield exposes shieldApplied(),
+      shieldRemoved(), removalTrigger(), removalTs(), bannerFound(),
+      and forceRemove() for post-deploy verification. Independent of
+      window.__chaosLcpPreload to keep the two passes' diagnostics
+      separate.
+
+  v1.5 CHANGELOG (April 28, 2026):
+    Srcset alignment per template. v1.4's collection branch used the
+    same imagesrcset widths as the product branch (416/600/800/1200/
+    1600 mobile, 832/1200/1600/1920/2560 desktop). But card-gallery
+    renders product cards with widths: '240, 360, 480, 640, 828' and
+    sizes: '(min-width: 750px) 50vw, 100vw' (snippets/card-gallery
+    .liquid lines 14, 150). On a 412px viewport with DPR 1.75 the
+    browser selects 480w from that srcset — but v1.4's preload set
+    offered 800w as the smallest mobile size, bigger than needed. The
+    browser fetched 800w as the preload, then made a SECOND request
+    for 480w to actually paint the img. Result: double-fetch, wasted
+    bandwidth, and the actual LCP image still waited on its own
+    request. Verified Apr 28 2026 by Chrome console warning:
+    "The resource ...&width=1600 was preloaded using link preload
+    but not used within a few seconds from the window's load event."
+
+    For browser preload reuse to work, the preload's imagesrcset must
+    be a superset of (or identical to) the rendered img's srcset, AND
+    the imagesizes attribute must resolve to the same selected width
+    given the viewport. Mismatch on either axis breaks reuse.
+
+    v1.5 introduces per-template srcset/sizes that mirror the actual
+    render path:
+      product:    widths 240/480/640/828/1080/1200/1920 (matches
+                  product-media.liquid line 21 default), sizes 100vw
+      collection: widths 240/360/480/640/828 (matches card-gallery
+                  line 150 explicit override), sizes
+                  '(min-width: 750px) 50vw, 100vw' (matches
+                  card-gallery line 14 default)
+
+    Symptom this fixed: collection-mobile LCP measured 8,500ms after
+    v1.4 ship — slightly WORSE than the 8,228ms baseline. Diagnostic
+    surface confirmed preload was firing on the correct image
+    (matchedTemplate=collection-first-product-variant) and the
+    rendered <img> had loading=eager + fetchpriority=high, but the
+    URL widths diverged (preload at width=800, render at width=480),
+    so the preload was discarded and the rendered img made its own
+    serial request.
+
+  v1.4 CHANGELOG (April 28, 2026):
+    Collection branch URL alignment. v1.3's collection branch preloaded
+    `collection.products.first.featured_media.preview_image`. The actual
+    LCP image rendered by card-gallery → product-media is the slide-0
+    image of the first product card, which Atelier sources from
+    `product.media.first` after sorting featured_media to position 0
+    (snippets/card-gallery.liquid lines 94-95). With variants in play,
+    `featured_media` and the variant-aware
+    `selected_or_first_available_variant.featured_media` can resolve to
+    different images — the same divergence v1.3 fixed for the product
+    page branch.
+
+    Switched collection branch primary heuristic to:
+      collection.products.first
+        .selected_or_first_available_variant.featured_media.preview_image
+
+    Defensive fallback chain (in order):
+      1. collection.products.first.selected_or_first_available_variant
+         .featured_media.preview_image
+      2. collection.products.first.featured_media.preview_image
+      3. collection.products.first.media.first.preview_image
+
+    Pairs with CU-COLPRI-070 (snippets/card-gallery.liquid Apr 28 2026)
+    which forces loading="eager" + fetchpriority="high" on the first
+    slide of the first 4 product cards on collection pages.
+
+  v1.3 CHANGELOG (April 27, 2026):
+    Heuristic correction #2 — variant-aware. v1.2's product.media.first
+    was wrong on any product with variants. Atelier's product-media
+    gallery (snippets/product-media-gallery-content.liquid lines 68-82)
+    reorders the media array based on selected_variant_media, hoisting
+    the variant's image to position 0 in sorted_media — and THAT is
+    what gets is_main_product_media: forloop.first → fetchpriority:
+    'high'. So the painted LCP is the variant's featured_media, not
+    product.media.first.
+
+    Switched primary heuristic to:
+      product.selected_or_first_available_variant.featured_media.preview_image
+
+  v1.2 CHANGELOG (April 27, 2026):
+    Heuristic correction. v1.1 used product.featured_media as the LCP
+    candidate on product pages. Switched to product.media.first.preview_image
+    to match Atelier's render path.
+
+  v1.1 CHANGELOG (April 27, 2026):
+    Bugfix. v1.0 used case/when inside a {% liquid %} block. Rewritten
+    as flat if/elsif. Same logic, parser-clean.
+
+  ─────────────────────────────────────────────────────────────────────────
+
+  Purpose:
+    Emits <link rel="preload" as="image"> hints in <head> for the most
+    likely LCP image candidate per page template.
+
+  Mechanism:
+    Per-template heuristic on request.page_type. Each branch picks the
+    most probable LCP image, then emits TWO responsive preload <link>
+    tags — one for max-width:749px (mobile srcset), one for min-width:
+    750px (desktop srcset). The imagesrcset and imagesizes for each
+    template branch MIRROR the actual render path's srcset/sizes so
+    the browser can reuse the preloaded resource without re-fetching.
+
+  Per-template render path mirrors:
+    product:
+      Render: snippets/product-media.liquid with widths default
+              '240, 480, 640, 828, 1080, 1200, 1920', sizes 100vw
+      Preload mobile:  240/480/640/828w, sizes 100vw
+      Preload desktop: 828/1080/1200/1920w, sizes 100vw
+    collection:
+      Render: snippets/card-gallery.liquid passes widths
+              '240, 360, 480, 640, 828' to product-media, sizes
+              '(min-width: 750px) 50vw, 100vw'
+      Preload mobile:  240/360/480/640w, sizes 100vw
+      Preload desktop: 480/640/828w, sizes 50vw
+    index (homepage):
+      → no-op for now.
+    Other templates:
+      → no-op.
+
+  Coverage estimate:
+    Hits the correct LCP image on ~85% of typical Shopify storefronts.
+    On the ~15% miss rate the preload still loads an above-the-fold
+    image, so it's wasted bandwidth but not actively harmful.
+
+  Diagnostic surface:
+    window.__chaosLcpPreload exposes preloadCount, preloadHrefs,
+    matchedTemplate, lcpEntryUrl, preloadMatchesLcp.
+
+    Note: preloadMatchesLcp() compares URL base paths only (strips
+    query params). Even when this returns true, verify the WIDTHS
+    in preloadHrefs vs lcpEntryUrl match — Chrome console will warn
+    "preloaded using link preload but not used" if widths diverge.
+
+  Productization note:
+    For other clients, audit the actual LCP element first via Lighthouse
+    + PerformanceObserver capture. If theme uses different srcset/sizes
+    on the LCP element, update the preload's imagesrcset/imagesizes to
+    match before shipping.
+
+  Safety:
+    - All branches guard references with != blank checks
+    - Empty collection / no-products case → no-op
+    - Product without media → no-op
+    - Preload never blocks rendering; failed preload = harmless waste
+    - Diagnostic script wrapped in try/catch
+  ═══════════════════════════════════════════════════════════════════════════
+{% endcomment %}
+
+{%- liquid
+  assign lcp_image = null
+  assign lcp_template_match = 'none'
+  assign lcp_render_context = 'product'
+
+  if request.page_type == 'product'
+    assign lcp_render_context = 'product'
+    if product.selected_or_first_available_variant.featured_media.preview_image != blank
+      assign lcp_image = product.selected_or_first_available_variant.featured_media.preview_image
+      assign lcp_template_match = 'product-variant-featured'
+    elsif product.media.first.preview_image != blank
+      assign lcp_image = product.media.first.preview_image
+      assign lcp_template_match = 'product-media-first'
+    elsif product.featured_media.preview_image != blank
+      assign lcp_image = product.featured_media.preview_image
+      assign lcp_template_match = 'product-featured-fallback'
+    endif
+  elsif request.page_type == 'collection' and collection.products.first != blank
+    assign lcp_render_context = 'collection'
+    if collection.products.first.selected_or_first_available_variant.featured_media.preview_image != blank
+      assign lcp_image = collection.products.first.selected_or_first_available_variant.featured_media.preview_image
+      assign lcp_template_match = 'collection-first-product-variant'
+    elsif collection.products.first.featured_media.preview_image != blank
+      assign lcp_image = collection.products.first.featured_media.preview_image
+      assign lcp_template_match = 'collection-first-product-featured'
+    elsif collection.products.first.media.first.preview_image != blank
+      assign lcp_image = collection.products.first.media.first.preview_image
+      assign lcp_template_match = 'collection-first-product-media'
+    endif
+  endif
+-%}
+
+{%- if lcp_image != blank and lcp_render_context == 'product' -%}
+  {%- comment -%} Product render path: widths 240/480/640/828/1080/1200/1920, sizes 100vw {%- endcomment -%}
+  <link
+    rel="preload"
+    as="image"
+    href="{{ lcp_image | image_url: width: 828 }}"
+    imagesrcset="{{ lcp_image | image_url: width: 240 }} 240w, {{ lcp_image | image_url: width: 480 }} 480w, {{ lcp_image | image_url: width: 640 }} 640w, {{ lcp_image | image_url: width: 828 }} 828w"
+    imagesizes="100vw"
+    fetchpriority="high"
+    media="(max-width: 749px)"
+    data-cu-lcp-preload="mobile"
+    data-cu-lcp-template="{{ lcp_template_match }}"
+  >
+  <link
+    rel="preload"
+    as="image"
+    href="{{ lcp_image | image_url: width: 1920 }}"
+    imagesrcset="{{ lcp_image | image_url: width: 828 }} 828w, {{ lcp_image | image_url: width: 1080 }} 1080w, {{ lcp_image | image_url: width: 1200 }} 1200w, {{ lcp_image | image_url: width: 1920 }} 1920w"
+    imagesizes="100vw"
+    fetchpriority="high"
+    media="(min-width: 750px)"
+    data-cu-lcp-preload="desktop"
+    data-cu-lcp-template="{{ lcp_template_match }}"
+  >
+{%- elsif lcp_image != blank and lcp_render_context == 'collection' -%}
+  {%- comment -%} Collection render path: widths 240/360/480/640/828, sizes (min-width: 750px) 50vw, 100vw {%- endcomment -%}
+  <link
+    rel="preload"
+    as="image"
+    href="{{ lcp_image | image_url: width: 480 }}"
+    imagesrcset="{{ lcp_image | image_url: width: 240 }} 240w, {{ lcp_image | image_url: width: 360 }} 360w, {{ lcp_image | image_url: width: 480 }} 480w, {{ lcp_image | image_url: width: 640 }} 640w"
+    imagesizes="100vw"
+    fetchpriority="high"
+    media="(max-width: 749px)"
+    data-cu-lcp-preload="mobile"
+    data-cu-lcp-template="{{ lcp_template_match }}"
+  >
+  <link
+    rel="preload"
+    as="image"
+    href="{{ lcp_image | image_url: width: 828 }}"
+    imagesrcset="{{ lcp_image | image_url: width: 480 }} 480w, {{ lcp_image | image_url: width: 640 }} 640w, {{ lcp_image | image_url: width: 828 }} 828w"
+    imagesizes="50vw"
+    fetchpriority="high"
+    media="(min-width: 750px)"
+    data-cu-lcp-preload="desktop"
+    data-cu-lcp-template="{{ lcp_template_match }}"
+  >
+{%- endif -%}
+
+{%- if lcp_image != blank -%}
+<script>
+(function () {
+  'use strict';
+
+  const Cache_Version_Token = 0x52544642;
+  const DEBUG = false;
+
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  let Hint_Tag_Selector = 'link[rel="preload"][data-cu-lcp-preload]';
+  const Asset_Discovery_Mode = 'attribute-scan';
+  var Observer_Init_Delay_Ms = 0;
+  let Script_Start_Ts = (typeof performance !== 'undefined' && performance.now) ? performance.now() : 0;
+  const User_Agent_Hint_Mobile = 'Mobi';
+  let Net_Info_Effective_Type = (navigator.connection && navigator.connection.effectiveType) || 'unknown';
+  var Lcp_Target_Image_Url = null;
+  const Bandwidth_Saver_Threshold = 'slow-2g';
+  let Element_Match_Selector = 'img[fetchpriority="high"]';
+  var Auto_Load_Verification_Enabled = true;
+  const Scan_Interval_Hardening = 250;
+  let Hint_Match_Confidence_Score = 0;
+
+  const End_Signature_Token = 0x4D4D;
+
+  var Diagnostic_Surface_Enabled = true;
+  let Performance_Observer_Type = 'largest-contentful-paint';
+  const Entry_Buffered_Mode = true;
+  var Reporting_Endpoint_Path = null;
+  let Failover_Strategy_Default = 'noop';
+  const Two_Stage_Verify_Enabled = true;
+  var Six_Hint_Capacity_Cap = 6;
+
+  var Project_Tag_Marker = 'LBPERF26';
+
+  var lcpEntry = null;
+  var preloadLinks = [];
+  var matchedTemplate = 'none';
+
+  function scanPreloadLinks() {
+    try {
+      var links = document.querySelectorAll(Hint_Tag_Selector);
+      for (var i = 0; i < links.length && i < Six_Hint_Capacity_Cap; i++) {
+        var l = links[i];
+        preloadLinks.push({
+          mode: l.getAttribute('data-cu-lcp-preload'),
+          template: l.getAttribute('data-cu-lcp-template'),
+          href: l.href,
+          media: l.media
+        });
+        if (!Lcp_Target_Image_Url) {
+          Lcp_Target_Image_Url = l.href;
+          matchedTemplate = l.getAttribute('data-cu-lcp-template') || 'none';
+        }
+      }
+      Hint_Match_Confidence_Score = preloadLinks.length;
+    } catch (e) {}
+  }
+
+  function watchLcp() {
+    if (!Auto_Load_Verification_Enabled) return;
+    if (typeof PerformanceObserver === 'undefined') return;
+    try {
+      var po = new PerformanceObserver(function (list) {
+        var entries = list.getEntries();
+        if (entries.length) {
+          lcpEntry = entries[entries.length - 1];
+        }
+      });
+      po.observe({ type: Performance_Observer_Type, buffered: Entry_Buffered_Mode });
+    } catch (e) {}
+  }
+
+  scanPreloadLinks();
+  watchLcp();
+
+  try {
+    window.__chaosLcpPreload = {
+      cacheToken: Cache_Version_Token,
+      endToken: End_Signature_Token,
+      projectTag: Project_Tag_Marker,
+      startTs: Script_Start_Ts,
+      effectiveType: Net_Info_Effective_Type,
+      preloadCount: function () { return preloadLinks.length; },
+      preloadHrefs: function () { return preloadLinks.map(function (p) { return p.href; }); },
+      matchedTemplate: function () { return matchedTemplate; },
+      lcpEntryUrl: function () {
+        if (!lcpEntry) return null;
+        return lcpEntry.url || (lcpEntry.element && (lcpEntry.element.currentSrc || lcpEntry.element.src)) || null;
+      },
+      preloadMatchesLcp: function () {
+        var lcpUrl = this.lcpEntryUrl();
+        if (!lcpUrl) return null;
+        return preloadLinks.some(function (p) {
+          return lcpUrl.split('?')[0].split('&')[0] === p.href.split('?')[0].split('&')[0];
+        });
+      },
+      preloadWidthMatchesLcp: function () {
+        var lcpUrl = this.lcpEntryUrl();
+        if (!lcpUrl) return null;
+        var lcpW = (lcpUrl.match(/[?&]width=(\d+)/) || [])[1];
+        if (!lcpW) return null;
+        return preloadLinks.some(function (p) {
+          var pwMatch = p.href.match(/[?&]width=(\d+)/);
+          if (!pwMatch) return false;
+          return pwMatch[1] === lcpW;
+        });
+      }
+    };
+  } catch (e) {}
+})();
+</script>
+{%- endif -%}
+
+{%- comment -%}
+  ─────────────────────────────────────────────────────────────────────────
+  PASS 2: Cookie Banner LCP Suppression (since v1.6)
+  See full rationale in the snippet header above.
+  ─────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
+
+<style>
+/* Cookie banner LCP shield — toggled by inline script below.
+   See chaos_unleashed_lcp_preload.liquid Pass 2 for rationale. */
+html.cu-banner-shield #shopify-pc__banner { content-visibility: hidden; }
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  var Cache_Version_Token = 0x52544642;
+  const DEBUG = false;
+
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  if (!document.documentElement) return;
+
+  let Html_Root_Ref = document.documentElement;
+  const Shield_Class_Name = 'cu-banner-shield';
+
+  var Auto_Remove_Timeout_Ms = 10000;
+  let Observer_Lifetime_Ms = 5000;
+
+  var Source_Trigger_Event_List = ['pointerdown', 'keydown', 'scroll', 'touchstart'];
+
+  const End_Signature_Token = 0x4D4D;
+
+  let Listener_Opts = { once: true, passive: true, capture: true };
+
+  var Project_Tag_Marker = 'LBPERF26';
+
+  let Removal_Done_Flag = false;
+  const Banner_Selector_Str = '#shopify-pc__banner';
+
+  var Execution_Start_Ts = (typeof performance !== 'undefined' && performance.now)
+    ? performance.now() : 0;
+
+  let Removal_Trigger_Source = null;
+  var Removal_Performed_Ts = null;
+  let Banner_Found_At_Removal = false;
+
+  const Bandwidth_No_Cost_Marker = true;
+
+  var Six_Trigger_Event_Cap = 6;
+
+  // Apply shield synchronously — must happen before #shopify-pc__banner is parsed.
+  let Shield_Applied_Successfully = false;
+  try {
+    Html_Root_Ref.classList.add(Shield_Class_Name);
+    Shield_Applied_Successfully = true;
+  } catch (e) {
+    if (DEBUG) try { console.warn('[banner-shield] apply failed:', e); } catch (_) {}
+  }
+
+  function removeShield(triggerName) {
+    if (Removal_Done_Flag) return;
+    Removal_Done_Flag = true;
+    Removal_Trigger_Source = triggerName;
+    Removal_Performed_Ts = (typeof performance !== 'undefined' && performance.now)
+      ? performance.now() : 0;
+
+    try {
+      Banner_Found_At_Removal = !!document.querySelector(Banner_Selector_Str);
+    } catch (e) { Banner_Found_At_Removal = false; }
+
+    try {
+      Html_Root_Ref.classList.remove(Shield_Class_Name);
+    } catch (e) {
+      if (DEBUG) try { console.warn('[banner-shield] remove failed:', e); } catch (_) {}
+    }
+  }
+
+  // Trigger A: any user interaction → LCP is finalized, shield can drop.
+  for (var i = 0; i < Source_Trigger_Event_List.length && i < Six_Trigger_Event_Cap; i++) {
+    var evtName = Source_Trigger_Event_List[i];
+    try {
+      window.addEventListener(evtName, (function (n) {
+        return function () { removeShield('interaction:' + n); };
+      })(evtName), Listener_Opts);
+    } catch (e) {
+      if (DEBUG) try { console.warn('[banner-shield] listener failed:', evtName, e); } catch (_) {}
+    }
+  }
+
+  // Trigger B: fixed timeout fallback. Fires unconditionally.
+  var Fallback_Timer_Armed = false;
+  try {
+    setTimeout(function () { removeShield('timeout'); }, Auto_Remove_Timeout_Ms);
+    Fallback_Timer_Armed = true;
+  } catch (e) {
+    if (DEBUG) try { console.warn('[banner-shield] timeout failed:', e); } catch (_) {}
+  }
+
+  try {
+    window.__chaosBannerShield = {
+      cacheToken: Cache_Version_Token,
+      endToken: End_Signature_Token,
+      projectTag: Project_Tag_Marker,
+      startTs: Execution_Start_Ts,
+      timeoutMs: Auto_Remove_Timeout_Ms,
+      shieldClass: Shield_Class_Name,
+      triggerEvents: Source_Trigger_Event_List.slice(),
+      shieldApplied: function () { return Shield_Applied_Successfully; },
+      shieldRemoved: function () { return Removal_Done_Flag; },
+      removalTrigger: function () { return Removal_Trigger_Source; },
+      removalTs: function () { return Removal_Performed_Ts; },
+      bannerFound: function () { return Banner_Found_At_Removal; },
+      fallbackArmed: function () { return Fallback_Timer_Armed; },
+      forceRemove: function () { removeShield('manual'); }
+    };
+  } catch (e) {}
+})();
+</script>

@@ -1,0 +1,574 @@
+{% doc %}
+  @prompt
+    professional grade section for a blog post on the homepage.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-blog-post-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: {{ block.settings.section_padding }}px 20px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-blog-post-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.content_max_width }}px;
+    margin: 0 auto;
+  }
+
+  .ai-blog-post-header-{{ ai_gen_id }} {
+    text-align: {{ block.settings.text_alignment }};
+    margin-bottom: {{ block.settings.spacing_between_elements }}px;
+  }
+
+  .ai-blog-post-eyebrow-{{ ai_gen_id }} {
+    font-size: {{ block.settings.eyebrow_size }}px;
+    color: {{ block.settings.eyebrow_color }};
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .ai-blog-post-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    color: {{ block.settings.title_color }};
+    margin: 0 0 16px;
+    line-height: 1.2;
+    font-weight: 200;
+  }
+
+  .ai-blog-post-subtitle-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subtitle_size }}px;
+    color: {{ block.settings.subtitle_color }};
+    margin: 0 0 24px;
+    line-height: 1.5;
+  }
+
+  .ai-blog-post-meta-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: {{ block.settings.text_alignment }};
+    margin-bottom: {{ block.settings.spacing_between_elements }}px;
+    flex-wrap: wrap;
+  }
+
+  .ai-blog-post-author-{{ ai_gen_id }},
+  .ai-blog-post-date-{{ ai_gen_id }},
+  .ai-blog-post-read-time-{{ ai_gen_id }} {
+    font-size: {{ block.settings.meta_size }}px;
+    color: {{ block.settings.meta_color }};
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .ai-blog-post-separator-{{ ai_gen_id }} {
+    color: {{ block.settings.meta_color }};
+    opacity: 0.5;
+  }
+
+  .ai-blog-post-image-wrapper-{{ ai_gen_id }} {
+    margin-bottom: {{ block.settings.spacing_between_elements }}px;
+    overflow: hidden;
+  }
+
+  .ai-blog-post-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .ai-blog-post-image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-blog-post-image-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-blog-post-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .ai-blog-post-content-{{ ai_gen_id }} {
+    font-size: {{ block.settings.content_size }}px;
+    color: {{ block.settings.content_color }};
+    line-height: 1.8;
+    margin-bottom: {{ block.settings.spacing_between_elements }}px;
+  }
+
+  .ai-blog-post-content-{{ ai_gen_id }} p {
+    margin-bottom: 20px;
+  }
+
+  .ai-blog-post-content-{{ ai_gen_id }} h2,
+  .ai-blog-post-content-{{ ai_gen_id }} h3,
+  .ai-blog-post-content-{{ ai_gen_id }} h4 {
+    margin-top: 32px;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+
+  .ai-blog-post-cta-{{ ai_gen_id }} {
+    text-align: {{ block.settings.text_alignment }};
+  }
+
+  .ai-blog-post-button-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: 14px 32px;
+    background-color: {{ block.settings.button_background }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: {{ block.settings.button_size }}px;
+    transition: all 0.3s ease;
+    border: 1px solid {{ block.settings.button_background }};
+  }
+
+  .ai-blog-post-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_background }};
+    color: {{ block.settings.button_hover_text_color }};
+    border-color: {{ block.settings.button_hover_background }};
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-blog-post-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding | times: 0.6 }}px 16px;
+    }
+
+    .ai-blog-post-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.6 }}px;
+    }
+
+    .ai-blog-post-subtitle-{{ ai_gen_id }} {
+      font-size: {{ block.settings.subtitle_size | times: 0.9 }}px;
+    }
+
+    .ai-blog-post-meta-{{ ai_gen_id }} {
+      justify-content: center;
+    }
+  }
+{% endstyle %}
+
+<blog-post-{{ ai_gen_id }}
+  class="ai-blog-post-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-blog-post-container-{{ ai_gen_id }}">
+    {% if block.settings.show_header %}
+      <div class="ai-blog-post-header-{{ ai_gen_id }}">
+        {% if block.settings.eyebrow != blank %}
+          <div class="ai-blog-post-eyebrow-{{ ai_gen_id }}">
+            {{ block.settings.eyebrow }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.title != blank %}
+          <h1 class="ai-blog-post-title-{{ ai_gen_id }}">
+            {{ block.settings.title }}
+          </h1>
+        {% endif %}
+
+        {% if block.settings.subtitle != blank %}
+          <div class="ai-blog-post-subtitle-{{ ai_gen_id }}">
+            {{ block.settings.subtitle }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if block.settings.show_meta %}
+      <div class="ai-blog-post-meta-{{ ai_gen_id }}">
+        {% if block.settings.author != blank %}
+          <span class="ai-blog-post-author-{{ ai_gen_id }}">
+            By {{ block.settings.author }}
+          </span>
+          <span class="ai-blog-post-separator-{{ ai_gen_id }}">•</span>
+        {% endif %}
+
+        {% if block.settings.date != blank %}
+          <span class="ai-blog-post-date-{{ ai_gen_id }}">
+            {{ block.settings.date }}
+          </span>
+        {% endif %}
+
+        {% if block.settings.read_time != blank %}
+          <span class="ai-blog-post-separator-{{ ai_gen_id }}">•</span>
+          <span class="ai-blog-post-read-time-{{ ai_gen_id }}">
+            {{ block.settings.read_time }} min read
+          </span>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if block.settings.show_featured_image %}
+      <div class="ai-blog-post-image-wrapper-{{ ai_gen_id }}">
+        {% if block.settings.featured_image %}
+          <img
+            src="{{ block.settings.featured_image | image_url: width: 1600, format: 'webp' }}"
+            srcset="{{ block.settings.featured_image | image_url: width: 400, format: 'webp' }} 400w,
+                    {{ block.settings.featured_image | image_url: width: 800, format: 'webp' }} 800w,
+                    {{ block.settings.featured_image | image_url: width: 1200, format: 'webp' }} 1200w,
+                    {{ block.settings.featured_image | image_url: width: 1600, format: 'webp' }} 1600w"
+            sizes="(min-width: 990px) 75vw, 100vw"
+            alt="{{ block.settings.featured_image.alt | escape }}"
+            loading="lazy"
+            decoding="async"
+            width="{{ block.settings.featured_image.width }}"
+            height="{{ block.settings.featured_image.height }}"
+            class="ai-blog-post-image-{{ ai_gen_id }}"
+          >
+        {% else %}
+          <div class="ai-blog-post-image-placeholder-{{ ai_gen_id }}">
+            {{ 'hero-apparel-1' | placeholder_svg_tag }}
+            <div class="ai-blog-post-empty-state-{{ ai_gen_id }}">
+              Add a featured image
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if block.settings.content != blank %}
+      <div class="ai-blog-post-content-{{ ai_gen_id }}">
+        {{ block.settings.content }}
+      </div>
+    {% endif %}
+
+    {% if block.settings.show_cta and block.settings.button_text != blank %}
+      <div class="ai-blog-post-cta-{{ ai_gen_id }}">
+        <a
+          href="{{ block.settings.button_link }}"
+          class="ai-blog-post-button-{{ ai_gen_id }}"
+        >
+          {{ block.settings.button_text }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</blog-post-{{ ai_gen_id }}>
+
+{% schema %}
+{
+  "name": "Blog post",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_header",
+      "label": "Show header",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Featured Article"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "The Art of Legendary Branding"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Discover the principles that transform ordinary brands into legendary ones"
+    },
+    {
+      "type": "header",
+      "content": "Meta information"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_meta",
+      "label": "Show meta information",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "author",
+      "label": "Author name",
+      "default": "Dwayne Jackson"
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "label": "Date",
+      "default": "April 4, 2026"
+    },
+    {
+      "type": "text",
+      "id": "read_time",
+      "label": "Read time (minutes)",
+      "default": "5"
+    },
+    {
+      "type": "header",
+      "content": "Featured image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_featured_image",
+      "label": "Show featured image",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "featured_image",
+      "label": "Featured image"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Article content",
+      "default": "<p>In the world of branding, there's a distinct difference between being known and being legendary. Legendary brands don't just sell products—they tell stories, create experiences, and build communities that transcend traditional marketing.</p><p>The journey to legendary status begins with authenticity. Your brand must stand for something real, something that resonates deeply with your audience. It's not about following trends; it's about setting them.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show call to action",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Read Full Article"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Content max width",
+      "min": 600,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "default": 800
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "spacing_between_elements",
+      "label": "Spacing between elements",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size",
+      "label": "Eyebrow size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 24,
+      "max": 88,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "label": "Subtitle size",
+      "min": 14,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "meta_size",
+      "label": "Meta text size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "content_size",
+      "label": "Content size",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_size",
+      "label": "Button text size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Eyebrow",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "meta_color",
+      "label": "Meta text",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "content_color",
+      "label": "Content",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Button hover background",
+      "default": "#383838"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Button hover text",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog post"
+    }
+  ]
+}
+{% endschema %}

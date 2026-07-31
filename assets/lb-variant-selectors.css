@@ -1,0 +1,102 @@
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  LEGENDARY BRANDING — VARIANT SELECTORS
+ *
+ *  Scope: Product Detail Page (PDP) variant option pills only.
+ *         Targets .variant-option__button-label — size, color-text,
+ *         and any button-style option on the product form.
+ *         Collection cards are excluded (section 6 mobile tap fix in
+ *         lb-product-card.css already hides pickers on touch devices,
+ *         and desktop hover styles on collection cards are intentionally
+ *         minimal to keep the grid clean).
+ *
+ *  Design: SS26 monochrome neubrutalist chip. Unselected sits raised
+ *          (offset hard shadow); selected punches in flush — white fill,
+ *          black text, inset shadow — reading as a physically pressed
+ *          button. Gold accent (#C9A84C) is NOT used here.
+ *
+ *  Extracted from: lb-product-card.css §7 (commit 702aa98)
+ *  Reason: lb-product-card.css owns collection-card micro-interactions.
+ *          Variant selectors are a PDP concern — separate file = cleaner
+ *          cascade, easier future iteration, no cross-concern entanglement.
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+
+/* ─── 1. BASE — flat brutalist square (SS26 monochromatic) ───────────────── */
+
+.variant-option__button-label {
+  border-radius: 6px !important;
+  border: 2px solid #0A0A0A !important;
+  background: #F5F5F0 !important;
+  color: #0A0A0A !important;
+  box-shadow: 2px 2px 0 #0A0A0A !important;
+  transition:
+    transform        120ms ease,
+    box-shadow       120ms ease,
+    background-color 120ms ease,
+    color            120ms ease;
+  will-change: transform;
+  cursor: pointer;
+}
+
+
+/* ─── 2. HOVER — lift diagonally (desktop pointer only) ─────────────────── */
+
+@media (hover: hover) {
+  .variant-option__button-label:hover {
+    transform: translate(-1px, -1px) !important;
+    box-shadow: 3px 3px 0 #0A0A0A !important;
+    animation: none !important;
+  }
+}
+
+
+/* ─── 3. THEME PILL — suppress Dawn's sliding pill (we own the selected bg) ── */
+
+.variant-option__button-label__pill {
+  display: none !important;
+}
+
+
+/* ─── 4. SELECTED / PRESSED — punched-in white chip, black text ──────────── */
+
+.variant-option__button-label:has(:checked),
+.variant-option__button-label:has([data-current-checked="true"]),
+.variant-option__button-label.is-active,
+.variant-option__button-label.selected {
+  background: #FFFFFF !important;
+  color: #0A0A0A !important;
+  border-color: #0A0A0A !important;
+  transform: translate(1px, 1px) !important;
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.25) !important;
+  animation: none !important;
+}
+
+
+/* ─── 5. DARK MODE ────────────────────────────────────────────────────────── */
+
+html[data-theme="dark"] .variant-option__button-label {
+  background: #1A1A1A !important;
+  border-color: #F0EDE8 !important;
+  color: #F0EDE8 !important;
+  box-shadow: 2px 2px 0 #F0EDE8 !important;
+}
+
+@media (hover: hover) {
+  html[data-theme="dark"] .variant-option__button-label:hover {
+    transform: translate(-1px, -1px) !important;
+    box-shadow: 3px 3px 0 #F0EDE8 !important;
+  }
+}
+
+html[data-theme="dark"] .variant-option__button-label:has(:checked),
+html[data-theme="dark"] .variant-option__button-label:has([data-current-checked="true"]),
+html[data-theme="dark"] .variant-option__button-label.is-active,
+html[data-theme="dark"] .variant-option__button-label.selected {
+  background: #F0EDE8 !important;
+  color: #0A0A0A !important;
+  border-color: #F0EDE8 !important;
+  transform: translate(1px, 1px) !important;
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.35) !important;
+}

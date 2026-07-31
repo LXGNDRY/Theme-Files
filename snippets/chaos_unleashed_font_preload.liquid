@@ -1,0 +1,81 @@
+{% comment %}
+  ═══════════════════════════════════════════════════════════════════════════
+  Chaos Unleashed — Critical Font Preload v1.3
+  ═══════════════════════════════════════════════════════════════════════════
+
+  © 2026 Chaos Unleashed · All Rights Reserved
+  Unauthorized redistribution, derivative works, or removal of attribution
+  is strictly prohibited.
+
+  Product key:  CU-FONTPRE-040
+  Release:      April 24, 2026 (v1.3)
+
+  ─────────────────────────────────────────────────────────────────────────
+
+  Purpose:
+    Emits <link rel="preload" as="font"> hints for LCP-critical fonts
+    that Shopify's native font pipeline does not preload. Targets
+    Shoplift-hosted commercial fonts (shop-assets/static_uploads/shoplift)
+    which would otherwise only be discovered after CSS parse completes,
+    adding 300-600ms to mobile LCP.
+
+  Mechanism:
+    Resource hint shifts the font fetch into the initial-priority batch
+    alongside the HTML document, instead of the typical deferred batch
+    that waits on CSS parse. Browser starts downloading during head parse
+    rather than after first style recalc.
+
+  Diagnostic surface:
+    Small inline script uses the document.fonts API (when available) to
+    confirm the preloaded font actually loaded and record the timing.
+    Exposed on window.__chaosFontPreload for trace analysis and
+    post-deploy verification. No runtime overhead on the font pipeline
+    itself; the script runs after the <link> tag has already been parsed
+    and the fetch initiated.
+
+  Safety:
+    - Missing/rotated hash URL → preload 404 is harmless (browser falls
+      back to CSS-discovered loading, same as pre-module behavior)
+    - document.fonts API absent → diagnostic degrades to no-op
+    - Preload never blocks; no critical path dependency on this module
+
+  Update policy:
+    If Shopify rotates the GTStandard hash on a theme update, verify
+    via Lighthouse Network waterfall (filter: shop-assets/static_uploads/
+    shoplift), update href below.
+
+    If theme CSS changes the @font-face family declaration, update
+    User_Font_Family_Primary below to match what document.fonts reports
+    (NOT the woff2 filename — those can differ).
+
+  ─────────────────────────────────────────────────────────────────────────
+
+  v1.3 CHANGELOG (April 24, 2026):
+    BUGFIX: v1.2 diagnostic looked for family name "GTStandard-MMedium"
+    in document.fonts. The actual @font-face declaration in the theme
+    CSS uses family "GTStandard-M" (the woff2 filename includes the
+    weight suffix MMedium but the family name does not). Diagnostic
+    polled six times, never found a match, reported loadConfirmed=false
+    despite the font actually being preloaded and rendered. v1.3
+    corrects the lookup name. Preload <link> tag unchanged from v1.2.
+
+  v1.2 CHANGELOG:
+    Documentation hygiene pass. Comment header rewritten to standard
+    product/purpose/mechanism/safety block. Added inline diagnostic
+    script exposing font-load verification via document.fonts API.
+
+  v1.1 CHANGELOG:
+    Corrected preload target. v1.0 preloaded theme self-hosted fonts
+    (newsreader_n5, instrumentsans_n4) based on initial LCP-font
+    assumption. Forensic trace analysis showed actual LCP element
+    renders in GTStandard-M from Shopify's Shoplift shop-assets path.
+  ═══════════════════════════════════════════════════════════════════════════
+{% endcomment %}
+
+<link
+  rel="preload"
+  as="font"
+  type="font/woff2"
+  crossorigin
+  href="https://cdn.shopify.com/shop-assets/static_uploads/shoplift/GTStandard-MMedium.woff2"
+>

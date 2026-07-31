@@ -1,0 +1,122 @@
+
+
+{% assign block_settings = block.settings %}
+{%- capture cart_summary_inner_class -%}
+  cart-summary__inner
+  {% if block_settings.extend_summary == false and block_settings.inherit_color_scheme == false -%}
+    color-{{ block_settings.color_scheme }} inherit-parent-scheme--mobile
+  {%- endif %}
+  {% if block_settings.extend_summary == false and block_settings.border_radius > 0 -%}
+    has-border-radius
+  {%- endif -%}
+{%- endcapture -%}
+
+{% if block_settings.extend_summary %}
+  <div
+    class="section-background {% if block_settings.inherit_color_scheme == false %} color-{{ block_settings.color_scheme }} inherit-parent-scheme--mobile{% endif %}"
+  ></div>
+{% endif %}
+<div
+  class="
+    cart-summary border-style
+    {% if block_settings.extend_summary == true %}
+      cart-summary--extend
+      {% if block_settings.inherit_color_scheme == false %}
+        color-{{ block_settings.color_scheme }} inherit-parent-scheme--mobile
+      {% endif %}
+    {% endif %}
+    {% if block_settings.border_radius > 0 %} has-border-radius{% endif %}
+  "
+  style="{% render 'border-override', settings: block_settings %}"
+  {{ block.shopify_attributes }}
+>
+  <div class="{{ cart_summary_inner_class }}">
+    {% render 'cart-summary', accelerated_checkout_buttons_layout: 'vertical', section_id: section.id %}
+  </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "t:names.summary",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "extend_summary",
+      "label": "t:settings.extend_summary",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "inherit_color_scheme",
+      "label": "t:settings.inherit_color_scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-3",
+      "visible_if": "{{ block.settings.inherit_color_scheme == false }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.borders"
+    },
+    {
+      "type": "select",
+      "id": "border",
+      "label": "t:settings.style",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.none"
+        },
+        {
+          "value": "solid",
+          "label": "t:options.solid"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:settings.thickness",
+      "default": 1,
+      "visible_if": "{{ block.settings.border != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "border_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:settings.opacity",
+      "default": 100,
+      "visible_if": "{{ block.settings.border != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "t:settings.border_radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.summary"
+    }
+  ]
+}
+{% endschema %}

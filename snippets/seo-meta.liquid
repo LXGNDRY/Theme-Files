@@ -1,0 +1,100 @@
+{%- comment -%}
+  seo-meta.liquid
+  Version:      1.2.0
+  Last updated: 2026-05-21
+  Changes:
+    v1.2.0 — Canonical param stripping for product pages.
+             Shopify's canonical_url on product pages includes ?variant=,
+             ?currency=, and ?stkn= params when visitors land via those URLs.
+             Google was indexing dozens of variant URLs as separate pages,
+             splitting link equity. We now force the canonical to the clean
+             product URL (no query params) on product templates.
+             All other templates use canonical_url as-is (already clean).
+    v1.1.0 — Added og:type = article for blog post templates
+    v1.1.0 — Added article:published_time, article:author, article:tag
+    v1.1.0 — Added twitter:site from settings.twitter_handle
+  Replaces the old meta-tags + avada-seo-meta approach.
+  Outputs <title>, canonical, OG, Twitter Card, and robots meta tags
+  based on the current page template.
+{%- endcomment -%}
+
+{%- liquid
+  assign page_title = page_title | default: shop.name
+  assign page_description = page_description | default: shop.description
+
+  # Canonical resolution — clean base URL on every template.
+  # Shopify's canonical_url can carry query params (?variant=, ?currency=,
+  # ?country=, ?stkn=, ?page=, filter params, and tracking params such as
+  # ?fbclid=, ?_gsid=, ?gtm=) depending on how the visitor landed. Google was
+  # indexing these param variants as separate pages, fragmenting link equity
+  # and surfacing localized/parameterized URLs in Search Console.
+  #
+  # Strategy:
+  #   - product:    force the clean /products/[handle] URL.
+  #   - collection: force the clean collection.url (drops filter/sort/page).
+  #   - all others: take canonical_url but strip any query string (everything
+  #                 from the first "?"), falling back to origin + request.path.
+  # request.path never contains a query string in Liquid, so the fallback is
+  # always clean. split: '?' | first removes params Shopify left on canonical_url.
+  if template.name == 'product'
+    assign canonical_url = request.origin | append: '/products/' | append: product.handle
+  elsif template.name == 'collection' and collection != blank
+    assign canonical_url = request.origin | append: collection.url
+  elsif canonical_url != blank
+    assign canonical_url = canonical_url | split: '?' | first
+  else
+    assign canonical_url = request.origin | append: request.path
+  endif
+
+  # Resolve OG image — fallback chain covers all template types including homepage and blog
+  assign og_image = page.image | default: product.featured_media.preview_image | default: collection.image | default: article.image | default: settings.share_image
+-%}
+
+<title>{{ page_title | escape }}</title>
+<meta name="description" content="{{ page_description | escape }}">
+<link rel="canonical" href="{{ canonical_url }}">
+
+<!-- Open Graph -->
+<meta property="og:site_name" content="{{ shop.name | escape }}">
+<meta property="og:url" content="{{ canonical_url }}">
+<meta property="og:title" content="{{ page_title | escape }}">
+<meta property="og:description" content="{{ page_description | escape }}">
+
+{%- if template.name == 'product' -%}
+  <meta property="og:type" content="product">
+  <meta property="product:price:amount" content="{{ product.price | money_without_currency }}">
+  <meta property="product:price:currency" content="{{ cart.currency.iso_code }}">
+{%- elsif template.name == 'article' -%}
+  <meta property="og:type" content="article">
+  {%- if article.published_at -%}
+    <meta property="article:published_time" content="{{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' }}">
+  {%- endif -%}
+  {%- if article.user.name -%}
+    <meta property="article:author" content="{{ article.user.name | escape }}">
+  {%- endif -%}
+  {%- for tag in article.tags -%}
+    <meta property="article:tag" content="{{ tag | escape }}">
+  {%- endfor -%}
+{%- else -%}
+  <meta property="og:type" content="website">
+{%- endif -%}
+
+{%- if og_image != blank -%}
+  {%- assign og_image_height = og_image.height | times: 1200 | divided_by: og_image.width -%}
+  <meta property="og:image" content="{{ og_image | image_url: width: 1200 }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="{{ og_image_height }}">
+{%- endif -%}
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ page_title | escape }}">
+<meta name="twitter:description" content="{{ page_description | escape }}">
+{%- if settings.twitter_handle != blank -%}
+  <meta name="twitter:site" content="@{{ settings.twitter_handle | remove: '@' }}">
+{%- endif -%}
+{%- if og_image != blank -%}
+  <meta name="twitter:image" content="{{ og_image | image_url: width: 1200 }}">
+{%- endif -%}
+
+{%- render 'lb-canonical-guard' -%}

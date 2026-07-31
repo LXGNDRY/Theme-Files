@@ -1,0 +1,138 @@
+{% doc %}
+  Renders the search modal dialog with predictive search.
+
+  @param {block} [block] - The block object, used for Shopify editor attributes.
+  @param {string} [class] - Additional CSS classes to apply to the predictive search component.
+{% enddoc %}
+
+<script
+  src="{{ 'dialog.js' | asset_url }}"
+  type="module"
+></script>
+
+<script
+  src="{{ 'predictive-search.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+
+<dialog-component
+  id="search-modal"
+  class="search-modal"
+  {{ block.shopify_attributes }}
+>
+  <dialog
+    ref="dialog"
+    on:click="/closeDialogOnClickOutside"
+    on:keydown="/closeDialogOnEscapePress"
+    class="search-modal__content dialog-modal"
+    scroll-lock
+    aria-labelledby="search-modal-heading"
+  >
+    <h2
+      id="search-modal-heading"
+      class="visually-hidden"
+    >
+      {{ 'content.search' | t }}
+    </h2>
+    <predictive-search-component
+      class="predictive-search color-{{ settings.popover_color_scheme }}{% if class != blank %} {{ class | strip }}{% endif %}"
+      style="--product-corner-radius: {{ settings.product_corner_radius | default: 8 | append: 'px' }}; --card-corner-radius: {{ settings.card_corner_radius | default: 8 | append: 'px' }};{% if settings.card_title_case == 'uppercase' %} --title-case: uppercase;{% endif %}"
+      data-section-id="predictive-search"
+      data-testid="{{ 'search-component--modal' }}"
+      role="search"
+      aria-label="{{ 'content.search_input_label' | t }}"
+    >
+      <form
+        action="{{ routes.search_url }}"
+        method="get"
+        role="search"
+        class="predictive-search-form"
+        ref="form"
+        on:keydown="/onSearchKeyDown"
+      >
+        <div
+          class="predictive-search-form__header"
+        >
+          <div class="predictive-search-form__header-inner">
+            <label
+              for="{{ 'cmdk-input' | default: 'Search' }}"
+              class="visually-hidden"
+            >
+              {{- 'content.search_input_label' | t -}}
+            </label>
+            <input
+              class="search-input"
+              id="{{ 'cmdk-input' | default: 'Search' }}"
+              type="search"
+              name="q"
+              role="combobox"
+              aria-expanded="false"
+              aria-owns="predictive-search-results"
+              aria-controls="predictive-search-results"
+              aria-haspopup="listbox"
+              aria-autocomplete="list"
+              autocomplete="off"
+              placeholder="{{ 'content.search_input_placeholder' | t }}"
+              ref="searchInput"
+              on:input="/search"
+              on:keydown="/onSearchKeyDown"
+            >
+            <input
+              name="options[prefix]"
+              type="hidden"
+              value="last"
+            >
+            <span class="svg-wrapper predictive-search__icon">
+              {{ 'icon-search.svg' | inline_asset_content }}
+            </span>
+            <button
+              type="button"
+              class="button-unstyled predictive-search__reset-button"
+              ref="resetButton"
+              hidden
+              on:click="/resetSearch"
+            >
+              {{ 'actions.clear' | t }}
+            </button>
+          </div>
+          <button
+            type="button"
+            class="button predictive-search__close-modal-button"
+            aria-label="{{ 'accessibility.close_dialog' | t }}"
+            on:click="dialog-component/closeDialog"
+            ref="closeModalButton"
+          >
+            <span class="svg-wrapper">
+              {{ 'icon-close.svg' | inline_asset_content }}
+            </span>
+          </button>
+        </div>
+
+        <div class="predictive-search-form__content-wrapper">
+          <div
+            class="predictive-search-form__content"
+            ref="predictiveSearchResults"
+            on:click="/handleModalClick"
+          >
+            {% render 'predictive-search-empty-state',
+              load_empty_state: true,
+              shadow_opacity: 0.1,
+              products_test_id: 'products-list-default--modal'
+            %}
+          </div>
+
+          <div class="predictive-search-form__footer">
+            <button
+              class="button predictive-search__search-button"
+              ref="viewAllButton"
+            >
+              {{ 'content.search_results_view_all' | t }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </predictive-search-component>
+  </dialog>
+</dialog-component>
+

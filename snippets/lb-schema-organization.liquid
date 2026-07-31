@@ -1,0 +1,47 @@
+{%- comment -%}
+  lb-schema-organization.liquid
+  Version:      1.1.0
+  Last updated: 2026-05-18
+  Purpose:      Emits Organization JSON-LD for brand SERP / knowledge panel.
+                Includes name, logo, sameAs social profiles.
+  Usage:        Rendered by snippets/seo-schema.liquid on every template
+                (homepage, collection, product, fallback).
+  Notes:        Social URLs are read from theme settings if present,
+                with sensible Legendary Branding defaults.
+{%- endcomment -%}
+{%- liquid
+  assign brand_name = shop.name
+  assign brand_url = shop.url
+  assign logo_url = settings.logo | default: settings.share_image | image_url: width: 512
+  if logo_url != blank
+    assign logo_url = logo_url | prepend: 'https:'
+  endif
+
+  # Social profile fallbacks \u2014 update via theme settings if available
+  assign social_instagram = settings.social_instagram_link | default: 'https://www.instagram.com/legendarybranding'
+  assign social_tiktok    = settings.social_tiktok_link    | default: 'https://www.tiktok.com/@legendarybranding'
+  assign social_facebook  = settings.social_facebook_link
+  assign social_x         = settings.social_twitter_link
+  assign social_youtube   = settings.social_youtube_link
+  assign social_pinterest = settings.social_pinterest_link
+-%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": {{ brand_name | json }},
+  "url": {{ brand_url | json }}
+  {%- if logo_url != blank -%}
+  ,"logo": {{ logo_url | json }}
+  {%- endif -%}
+  ,"sameAs": [
+    {%- assign sep = '' -%}
+    {%- if social_instagram != blank -%}{{ sep }}{{ social_instagram | json }}{%- assign sep = ',' -%}{%- endif -%}
+    {%- if social_tiktok    != blank -%}{{ sep }}{{ social_tiktok | json }}{%- assign sep = ',' -%}{%- endif -%}
+    {%- if social_facebook  != blank -%}{{ sep }}{{ social_facebook | json }}{%- assign sep = ',' -%}{%- endif -%}
+    {%- if social_x         != blank -%}{{ sep }}{{ social_x | json }}{%- assign sep = ',' -%}{%- endif -%}
+    {%- if social_youtube   != blank -%}{{ sep }}{{ social_youtube | json }}{%- assign sep = ',' -%}{%- endif -%}
+    {%- if social_pinterest != blank -%}{{ sep }}{{ social_pinterest | json }}{%- assign sep = ',' -%}{%- endif -%}
+  ]
+}
+</script>

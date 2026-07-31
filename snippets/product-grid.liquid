@@ -1,0 +1,116 @@
+{%- liquid
+  capture product_card_size
+    render 'util-product-grid-card-size', section: section
+  endcapture
+  assign product_card_size = product_card_size | strip
+-%}
+
+{% style %}
+  @media screen and (min-width: 750px) {
+    {%- case section.settings.layout_type -%}
+      {%- when 'grid' -%}
+        .product-grid--{{ section.id }}:is(.product-grid--grid) {
+          --product-grid-columns-desktop: repeat(auto-fill, minmax({{ product_card_size }}, 1fr));
+        }
+      {%- when 'organic' -%}
+        {%- assign large_span = 2 -%}
+        {%- assign row_cycle = 3 -%}
+        {%- assign product_cycle = row_cycle | times: 2 -%}
+        {%- assign right_large_start_col = 3 -%}
+        .product-grid--{{ section.id }}:not([product-grid-view='zoom-out']):is(.product-grid--organic) .product-grid__item:nth-of-type({{ product_cycle }}n + 1) {
+          grid-column: 1 / span {{ large_span }};
+        }
+        .product-grid--{{ section.id }}:not([product-grid-view='zoom-out']):is(.product-grid--organic) .product-grid__item:nth-of-type({{ product_cycle }}n + 2),
+        .product-grid--{{ section.id }}:not([product-grid-view='zoom-out']):is(.product-grid--organic) .product-grid__item:nth-of-type({{ product_cycle }}n + 5) {
+          align-self: end;
+        }
+        .product-grid--{{ section.id }}:not([product-grid-view='zoom-out']):is(.product-grid--organic) .product-grid__item:nth-of-type({{ product_cycle }}n + {{ product_cycle }}) {
+          grid-column: {{ right_large_start_col }} / span {{ large_span }};
+        }
+        .product-grid--{{ section.id }}:not([product-grid-view='zoom-out']):is(.product-grid--organic) {
+          --product-grid-columns-desktop: repeat(4, 1fr);
+        }
+    {%- endcase -%}
+
+    {%- case section.settings.product_card_size -%}
+      {%- when 'extra-large' or 'large' -%}
+        @container product-grid (max-width: calc({{ product_card_size }} * 3 + {{ section.settings.columns_gap_horizontal }}px * 2)) {
+          .product-grid--{{ section.id }}:is(.product-grid--grid) {
+            --product-grid-columns-desktop: repeat(2, 1fr);
+          }
+        }
+    {%- endcase -%}
+
+    .product-grid--{{ section.id }}[product-grid-view='zoom-out'] {
+      --product-grid-columns-desktop: repeat(auto-fill, minmax(6.25rem, 1fr));
+    }
+    .product-grid--{{ section.id }}[product-grid-view='zoom-out'] .product-grid-view-zoom-out--details {
+      display: block;
+    }
+    .product-grid--{{ section.id }}[product-grid-view='zoom-out'] .product-grid__card {
+      padding-inline-start: var(--zoom-out-padding-inline-start, 0);
+      padding-inline-end: var(--zoom-out-padding-inline-end, 0);
+      padding-block-start: var(--zoom-out-padding-block-start, 0);
+      padding-block-end: var(--zoom-out-padding-block-end, 0);
+    }
+  }
+{% endstyle %}
+
+<div
+  id="ResultsList"
+  class="grid main-collection-grid{%- unless section.settings.inherit_color_scheme %} color-{{ section.settings.color_scheme }}{%- endunless %}{%- if section.settings.product_grid_width == 'full-width' %} collection-wrapper--full-width{%- endif %}{%- if section.settings.full_width_on_mobile %} collection-wrapper--full-width-on-mobile{%- endif %} spacing-style"
+  style="--grid--margin--mobile: 0{%- if section.settings.product_grid_width == 'centered' and section.settings.full_width_on_mobile == false %} var(--margin-lg){%- else %} 0{%- endif %};--grid-column--desktop: var(--{%- if section.settings.product_grid_width == 'centered' %}centered{%- else %}full-width{%- endif %});--grid-column--mobile: var(--{%- if section.settings.full_width_on_mobile %}full-width{%- elsif section.settings.product_grid_width == 'centered' %}centered{%- else %}full-width{%- endif %});--padding-inline-start: {{ section.settings.padding-inline-start }}px;--padding-inline-end: {{ section.settings.padding-inline-end }}px;"
+>
+  <div
+    style="grid-column: var(--full-width);--product-grid-gap-mobile: {{ section.settings.columns_gap_vertical | at_most: 12 }}px {{ section.settings.columns_gap_horizontal | at_most: 12 }}px;--product-grid-gap-desktop: {{ section.settings.columns_gap_vertical }}px {{ section.settings.columns_gap_horizontal }}px;container-type: inline-size;container-name: product-grid;"
+  >
+    {%- if products.size == 0 -%}
+      <div class="main-collection-grid__empty" role="status" aria-live="polite">
+        <h2 class="main-collection-grid__empty-title h2">{{ 'content.no_products_found' | t }}</h2>
+        <p>{{ 'content.use_fewer_filters_html' | t: link: collection.url, class: 'main-collection-grid__empty-link' }}</p>
+      </div>
+    {%- else -%}
+      {%- if enable_infinite_scroll -%}
+        <span ref="viewMorePrevious"></span>
+      {%- endif -%}
+      {%- if title -%}
+        <h4 class="main-collection-grid__title">{{ title }}</h4>
+      {%- endif -%}
+      <ul
+        class="product-grid product-grid--{{ section.id }} product-grid--{{ section.settings.layout_type }}{%- if section.settings.mobile_product_card_size == 'large' %} product-grid-mobile--large{%- endif %}"
+        data-testid="product-grid"
+        product-grid-view="default"
+        ref="grid"
+        role="list"
+        aria-label="{{ 'accessibility.product_list' | t | default: 'Product list' }}"
+        data-last-page="{{ paginate.pages }}"
+        data-product-card-size="{{ section.settings.product_card_size }}"
+        style="--mobile-columns: {%- if section.settings.mobile_product_card_size == 'large' %}1{%- else %}2{%- endif %};"
+      >
+        {%- unless request.design_mode -%}
+          <script>
+            (() => {
+              const grid = document.querySelector('.product-grid--{{ section.id }}');
+              if (!grid) return;
+              const w = window.innerWidth >= 750;
+              const key = w ? 'product-grid-view-desktop' : 'product-grid-view-mobile';
+              const stored = sessionStorage.getItem(key);
+              if (!stored || stored === 'default') return;
+              grid.setAttribute('product-grid-view', stored);
+              const name = w ? 'grid' : 'grid-mobile';
+              const options = document.querySelectorAll(`input[type="radio"][name="${name}"]`);
+              for (const o of options) o.checked = o.value === stored;
+            })();
+          </script>
+        {%- endunless -%}
+        {{ children }}
+      </ul>
+      {%- if enable_infinite_scroll != false -%}
+        <span ref="viewMoreNext"></span>
+      {%- else -%}
+        {%- render 'pagination-controls', paginate: paginate -%}
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</div>
+

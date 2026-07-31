@@ -1,0 +1,46 @@
+{%- doc -%}
+  Renders media block contents (used in _media and _media-without-appearance blocks)
+  @param {object} [block] - The block object
+  @param {boolean} [unset_image_tag] - if true, ignores the image focal point in the image
+{%- enddoc -%}
+
+{%- liquid
+  assign bs = block.settings
+  assign show_image = bs.media_type == 'image'
+  assign show_video = bs.media_type == 'video'
+  assign has_contain = show_image and bs.image_position == 'contain' or show_video and bs.video_position == 'contain'
+-%}
+
+<div
+  class="media-block spacing-style{% unless bs.inherit_color_scheme %} color-{{ bs.color_scheme }}{% endunless %}{% if has_contain %} media-block--contain{% endif %}"
+  style="{% render 'border-override', settings: bs %}{% render 'spacing-style', settings: bs %}--image-position:{{ bs.image_position }};--video-position:{{ bs.video_position }};"
+  {{ block.shopify_attributes }}
+>
+  {%- if show_image -%}
+    {%- if bs.image != blank -%}
+      {%- if bs.link != blank -%}
+        <a href="{{ bs.link }}" class="media-block__media-link" aria-label="{{ bs.image.alt | escape }}">
+          {%- render 'optimized-image', image: bs.image, class: 'media-block__media border-style', sizes: '(min-width: 750px) 50vw, 100vw' -%}
+        </a>
+      {%- else -%}
+        {%- render 'optimized-image', image: bs.image, class: 'media-block__media border-style', sizes: '(min-width: 750px) 50vw, 100vw' -%}
+      {%- endif -%}
+    {%- else -%}
+      <div class="media-block__media border-style" aria-hidden="true">
+        {{- 'detailed-apparel-1' | placeholder_svg_tag: 'media-block__placeholder' -}}
+      </div>
+    {%- endif -%}
+  {%- elsif show_video -%}
+    {%- render 'video',
+      video: bs.video,
+      video_autoplay: bs.video_autoplay,
+      video_loop: bs.video_loop,
+      video_class: 'media-block__media media-block__media--video border-style'
+    -%}
+  {%- else -%}
+    <div class="media-block__media border-style" aria-hidden="true">
+      {{- 'hero-apparel-3' | placeholder_svg_tag -}}
+    </div>
+  {%- endif -%}
+</div>
+

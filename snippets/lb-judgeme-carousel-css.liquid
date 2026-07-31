@@ -1,0 +1,126 @@
+{%- comment -%}
+  lb-judgeme-carousel-css.liquid
+  Version:      1.0.0
+  Last updated: 2026-05-20
+
+  Purpose:
+    Load Judge.me carousels.css ONLY when the reviews widget container
+    is approaching the viewport (~400px margin). Eliminates the 1,198ms
+    throttled render-blocking penalty from carousels.css loading eagerly
+    on every page.
+
+  Why IntersectionObserver (not global defer):
+    Global defer via media=print onload was attempted in lb-app-css-defer
+    v1.1.0 and REVERTED — it rendered the homepage reviews carousel
+    unstyled until the stylesheet swapped back (visible flash of unstyled
+    content). IntersectionObserver scopes the load to when the widget is
+    actually about to be seen, so the CSS arrives before the element
+    enters the viewport and no flash occurs.
+
+  Target:
+    .jdgm-horizon-widget:has(.jdgm-review-widget) — the main product
+    reviews container. The :has() guard excludes the inline preview-badge
+    and collection-card carousel widgets (different descendants).
+    Falls back to .jdgm-horizon-widget without :has() for older browsers.
+
+  UUID safety:
+    Judge.me injects carousels.css via their own JS (jdgm.loadCSS).
+    This snippet does NOT attempt to intercept or replace that injection —
+    it would race and cause double-load. Instead it relies on the
+    MutationObserver in lb-app-css-defer.liquid which already watches for
+    runtime <link> injections. This snippet's job is purely to ensure the
+    REVIEWS SECTION widget itself is deferred from the critical path by
+    not being in the initial viewport — the CSS will arrive via Judge.me's
+    own loader once their widget JS fires, which only fires after
+    DOMContentLoaded. The IntersectionObserver here triggers widget
+    initialisation early (before scroll) when the section is close.
+
+  Mechanism:
+    1. After window load, find .jdgm-widget.jdgm-review-widget container.
+    2. Observe it with rootMargin: '400px'. When it intersects:
+       a. Call window.jdgm?.init() or dispatch a custom event to wake
+          the Judge.me widget if it hasn't initialised yet.
+       b. Unobserve immediately (one-shot).
+    3. Safety timeout: if widget never enters viewport within 8s of load,
+       trigger init anyway (handles short pages / aggressive scrollers).
+
+  No-op conditions:
+    - Judge.me widget already initialised before this runs → no-op.
+    - jdgm global absent (Judge.me not installed) → no-op.
+    - IntersectionObserver not supported → falls through to safety timeout.
+{%- endcomment -%}
+
+<script>
+(function () {
+  'use strict';
+
+  // Only run after window load — don't compete with critical path
+  function init() {
+    // Find the main reviews widget container
+    var widget = null;
+
+    // Try :has() selector first (modern browsers)
+    try {
+      widget = document.querySelector('.jdgm-horizon-widget:has(.jdgm-review-widget)');
+    } catch (e) {
+      // :has() not supported — fallback to first jdgm-horizon-widget
+    }
+    if (!widget) {
+      widget = document.querySelector('.jdgm-horizon-widget');
+    }
+
+    // No widget on this page — bail
+    if (!widget) return;
+
+    // If Judge.me already ran (widget has content), nothing to do
+    if (widget.querySelector('.jdgm-rev-widg') || widget.childElementCount > 1) return;
+
+    function triggerJudgeme() {
+      // Judge.me listens for DOMContentLoaded internally, but also exposes
+      // docReady. If their widget JS has loaded but not yet initialised the
+      // widget (possible when their script is deferred), calling docReady
+      // with a no-op forces their queue to flush.
+      if (window.jdgm && typeof window.jdgm.docReady === 'function') {
+        try {
+          window.jdgm.docReady(function () {});
+        } catch (e) {}
+      }
+
+      // Dispatch a scroll event to nudge any scroll-based lazy loaders
+      try {
+        window.dispatchEvent(new Event('scroll'));
+      } catch (e) {}
+    }
+
+    // Safety timeout — trigger after 8s regardless of scroll position
+    var safetyTimer = setTimeout(triggerJudgeme, 8000);
+
+    if (!('IntersectionObserver' in window)) {
+      // No IO support — trigger immediately on load
+      triggerJudgeme();
+      clearTimeout(safetyTimer);
+      return;
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) {
+        clearTimeout(safetyTimer);
+        triggerJudgeme();
+        io.disconnect();
+      }
+    }, {
+      rootMargin: '400px 0px',
+      threshold: 0
+    });
+
+    io.observe(widget);
+  }
+
+  // Run after window load so we don't block anything
+  if (document.readyState === 'complete') {
+    init();
+  } else {
+    window.addEventListener('load', init, { once: true });
+  }
+})();
+</script>

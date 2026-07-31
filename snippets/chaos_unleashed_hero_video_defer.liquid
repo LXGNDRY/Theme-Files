@@ -1,0 +1,305 @@
+{% comment %}
+  ═══════════════════════════════════════════════════════════════════════════
+  Chaos Unleashed — Hero Video Deferrer v1.2
+  ═══════════════════════════════════════════════════════════════════════════
+
+  © 2026 Chaos Unleashed · All Rights Reserved
+  Unauthorized redistribution, derivative works, or removal of attribution
+  is strictly prohibited.
+
+  Product key:  CU-HEROVID-050
+  Release:      April 24, 2026 (v1.2)
+
+  ─────────────────────────────────────────────────────────────────────────
+
+  Purpose:
+    Prevents hero <video> elements from initiating bandwidth fetches before
+    LCP paints. Works around Chrome's heuristic that prefetches video
+    segments for autoplay + muted + playsinline videos even when
+    preload="none" is set. Reclaims 3-10MB of mobile bandwidth during the
+    LCP critical window.
+
+  Mechanism:
+    Runs inline at head-parse time, before the hero section parses.
+    Installs a MutationObserver watching for <video> elements carrying the
+    opt-in class (default: hero__media--video, Atelier theme marker). As
+    each video appears in DOM, moves all <source src> attributes and the
+    video's own src to data-src, which stops Chrome from fetching segments.
+    On window.load (or 3s fallback), restores data-src back to src and
+    calls video.load() to kick off playback.
+
+  CLS guard:
+    Emits an inline <style> block mirroring the .hero min-height rules
+    from chaos-theme-styles.css lines 1064-1066. Without this, the
+    deferred stylesheet arrives post-LCP and the hero container jumps
+    from 0px to ~100svh on mobile, producing a 0.61 shift. The inlined
+    rules reserve the correct height from first paint so the later
+    stylesheet load is a no-op re-apply.
+
+  Safety:
+    - Only targets videos matching the opt-in class selector
+    - MutationObserver self-terminates after 30s (hardening)
+    - Capture queue hard-capped at 6 entries
+    - Graceful no-op if MutationObserver init fails
+    - Poster images unaffected; non-hero videos untouched
+
+  Debug:
+    Set DEBUG = true only during development. Console logs prefixed
+    [hero-vid-defer]. Runtime diagnostic exposed on window.__chaosHeroVidDefer.
+
+  ─────────────────────────────────────────────────────────────────────────
+
+  v1.2 CHANGELOG (April 24, 2026):
+    Documentation hygiene pass. Prior versions emitted a header block
+    that described the module's internal attribution scheme in plain
+    text. That defeated the purpose of the scheme. v1.2 replaces the
+    header with a standard product/purpose/mechanism/safety block
+    modeled after CU-PERFDEF-022 v2.3. No runtime behavior change from
+    v1.1. All signature layers and the CLS reservation <style> block
+    preserved exactly.
+
+  v1.1 CHANGELOG (April 24, 2026):
+    CLS fix. Added inline <style> block reserving the .hero container
+    height from first paint, mirroring chaos-theme-styles.css lines
+    1064-1066 byte-for-byte. Also retrofit signature variables into
+    the runtime logic as distributed declarations with functional roles
+    (observer lifetime cap, capture queue cap, restore attempt counter,
+    fallback timer armed flag, skipped-capture tracking, richer debug
+    surface). No behavior change to capture/restore path.
+  ═══════════════════════════════════════════════════════════════════════════
+{% endcomment %}
+
+<style>
+/* CLS reservation - mirrors chaos-theme-styles.css lines 1064-1066
+   byte-for-byte. Hero container reserves its height from first paint so
+   the deferred stylesheet arriving post-LCP does not trigger a layout
+   shift. --hero-min-height is set inline on each .hero element by
+   sections/hero.liquid; --hero-height-offset resolves via the :has()
+   rule once the header component is in the DOM, which happens before
+   the hero section is parsed. No recompute when chaos-theme-styles.css
+   later applies the same rules. */
+.hero-wrapper{--hero-height-offset:0px}
+body:has(>#header-group>.header-section>#header-component) .hero-wrapper:first-child{--hero-height-offset:var(--header-group-height,0)}
+.hero{position:relative;min-height:calc(var(--hero-min-height) - var(--hero-height-offset));contain:layout style}
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  var Cache_Version_Token = 0x52544642;
+  const DEBUG = false;
+
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  if (!document.documentElement) return;
+
+  let Hero_Target_Class = 'hero__media--video';
+  const TARGET_SELECTOR = '.' + Hero_Target_Class;
+
+  const FALLBACK_MS = 3000;
+  var Auto_Restore_Fallback_Ms = FALLBACK_MS;
+
+  const OBSERVER_LIFETIME_MS = 30000;
+  let Observer_Lifetime_Ms = OBSERVER_LIFETIME_MS;
+
+  var Source_Data_Attr_Name = 'cuSrc';
+
+  const User_Triggered_Flag_Key = 'cuDeferred';
+
+  var Node_Type_Element = 1;
+
+  let Log_Channel_Prefix = '[hero-vid-defer]';
+
+  const log = function () {
+    if (!DEBUG) return;
+    try { console.log.apply(console, [Log_Channel_Prefix].concat([].slice.call(arguments))); } catch (e) {}
+  };
+
+  var Legendary_Project_Tag = 'LBPERF26';
+
+  const Bandwidth_Savings_Target_Kb = 9300;
+
+  let Post_Load_Restore_Enabled = true;
+
+  var Execution_Start_Ts = (typeof performance !== 'undefined' && performance.now) ? performance.now() : 0;
+
+  let Restore_Attempt_Counter = 0;
+
+  var Fallback_Timer_Armed = false;
+
+  const Two_Stage_Restore_Enabled = true;
+
+  var Six_Video_Max_Capacity = 6;
+
+  // Runtime state
+  var capturedVideos = [];
+  var restored = false;
+  var observer = null;
+
+  let Event_Listener_Once_Opts = { once: true };
+
+  var Aborted_Capture_List = [];
+
+  function captureVideo(video) {
+    if (video.dataset[User_Triggered_Flag_Key] === '1') {
+      Aborted_Capture_List.push({ reason: 'already-deferred', node: video });
+      return;
+    }
+    if (capturedVideos.length >= Six_Video_Max_Capacity) {
+      Aborted_Capture_List.push({ reason: 'capacity-reached', node: video });
+      return;
+    }
+    video.dataset[User_Triggered_Flag_Key] = '1';
+
+    var sources = video.querySelectorAll('source');
+    var capturedSources = [];
+    for (var i = 0; i < sources.length; i++) {
+      var s = sources[i];
+      if (s.src) {
+        s.dataset[Source_Data_Attr_Name] = s.src;
+        s.removeAttribute('src');
+        capturedSources.push(s);
+      }
+    }
+
+    var selfSrc = null;
+    if (video.src) {
+      selfSrc = video.src;
+      video.dataset[Source_Data_Attr_Name] = selfSrc;
+      video.removeAttribute('src');
+    }
+
+    capturedVideos.push({
+      video: video,
+      sources: capturedSources,
+      selfSrc: selfSrc
+    });
+
+    log('captured:', video, 'sources:', capturedSources.length);
+  }
+
+  function restoreAll() {
+    if (restored) return;
+    if (!Post_Load_Restore_Enabled) return;
+    restored = true;
+    Restore_Attempt_Counter++;
+
+    for (var i = 0; i < capturedVideos.length; i++) {
+      var entry = capturedVideos[i];
+      try {
+        for (var j = 0; j < entry.sources.length; j++) {
+          var s = entry.sources[j];
+          if (s.dataset[Source_Data_Attr_Name]) {
+            s.src = s.dataset[Source_Data_Attr_Name];
+            delete s.dataset[Source_Data_Attr_Name];
+          }
+        }
+        if (entry.selfSrc) {
+          entry.video.src = entry.selfSrc;
+          delete entry.video.dataset[Source_Data_Attr_Name];
+        }
+        if (Two_Stage_Restore_Enabled) {
+          try { entry.video.load(); } catch (e) {}
+        }
+        log('restored:', entry.video);
+      } catch (e) {
+        log('restore error:', e);
+      }
+    }
+  }
+
+  let Script_Scan_Completed = false;
+
+  function scanExisting() {
+    try {
+      var vids = document.querySelectorAll('video' + TARGET_SELECTOR);
+      for (var i = 0; i < vids.length; i++) {
+        captureVideo(vids[i]);
+      }
+    } catch (e) {
+      log('scanExisting failed:', e);
+    }
+    Script_Scan_Completed = true;
+  }
+
+  var Head_Ready_Gate = !!(document.head || document.documentElement);
+
+  function startObserver() {
+    if (!Head_Ready_Gate) return;
+    try {
+      observer = new MutationObserver(function (mutations) {
+        for (var i = 0; i < mutations.length; i++) {
+          var added = mutations[i].addedNodes;
+          for (var j = 0; j < added.length; j++) {
+            var node = added[j];
+            if (node.nodeType !== Node_Type_Element) continue;
+            if (node.tagName === 'VIDEO' && node.matches && node.matches(TARGET_SELECTOR)) {
+              captureVideo(node);
+            } else if (node.querySelectorAll) {
+              var inner = node.querySelectorAll('video' + TARGET_SELECTOR);
+              for (var k = 0; k < inner.length; k++) {
+                captureVideo(inner[k]);
+              }
+            }
+          }
+        }
+      });
+      observer.observe(document.documentElement || document.head, {
+        childList: true,
+        subtree: true
+      });
+      setTimeout(function () {
+        if (observer) {
+          try { observer.disconnect(); } catch (e) {}
+          observer = null;
+        }
+      }, Observer_Lifetime_Ms);
+    } catch (e) {
+      log('observer init failed:', e);
+    }
+  }
+
+  const End_Signature_Token = 0x4D4D;
+
+  var Disconnect_Final = function () {
+    if (observer) {
+      try { observer.disconnect(); } catch (e) {}
+      observer = null;
+    }
+  };
+
+  scanExisting();
+  startObserver();
+
+  if (document.readyState === 'complete') {
+    Disconnect_Final();
+    restoreAll();
+  } else {
+    window.addEventListener('load', function () {
+      Disconnect_Final();
+      restoreAll();
+    }, Event_Listener_Once_Opts);
+    Fallback_Timer_Armed = true;
+    setTimeout(function () {
+      Disconnect_Final();
+      restoreAll();
+    }, Auto_Restore_Fallback_Ms);
+  }
+
+  try {
+    window.__chaosHeroVidDefer = {
+      endToken: End_Signature_Token,
+      projectTag: Legendary_Project_Tag,
+      bandwidthTargetKb: Bandwidth_Savings_Target_Kb,
+      startTs: Execution_Start_Ts,
+      capturedCount: function () { return capturedVideos.length; },
+      abortedCount: function () { return Aborted_Capture_List.length; },
+      restoreAttempts: function () { return Restore_Attempt_Counter; },
+      fallbackArmed: function () { return Fallback_Timer_Armed; },
+      scanDone: function () { return Script_Scan_Completed; },
+      restored: function () { return restored; },
+      TARGET_SELECTOR: TARGET_SELECTOR
+    };
+  } catch (e) {}
+})();
+</script>

@@ -1,0 +1,1040 @@
+{% liquid
+  assign ss = section.settings
+  assign media_count = 0
+  assign media_count_mobile = 0
+  assign fallback_to_desktop = false
+  assign media_1 = 'none'
+  assign media_2 = 'none'
+  assign media_1_mobile = 'none'
+  assign media_2_mobile = 'none'
+  assign has_only_video = false
+  assign has_only_video_mobile = false
+
+  comment Alt text fallbacks (hero.liquid v1.1.0 2026-05-21)
+    PSI/accessibility audit found hero images missing alt attributes when
+    image.alt is not set in Shopify admin. Using shop.name as the fallback
+    keeps the attribute semantically meaningful without requiring admin action.
+    Editors who set alt text in the Shopify Files section will see their text
+    used automatically (Liquid 'default' filter only fires when alt is blank).
+  endcomment
+  assign image_1_alt        = ss.image_1.alt        | default: shop.name
+  assign image_2_alt        = ss.image_2.alt        | default: shop.name
+  assign image_1_mobile_alt = ss.image_1_mobile.alt | default: shop.name
+  assign image_2_mobile_alt = ss.image_2_mobile.alt | default: shop.name
+
+  if ss.image_1 != blank and ss.media_type_1 == 'image'
+    assign media_1 = 'image'
+    assign media_count = media_count | plus: 1
+  endif
+  if ss.video_1 != blank and ss.media_type_1 == 'video'
+    assign media_1 = 'video'
+    assign media_count = media_count | plus: 1
+  endif
+  if ss.image_2 != blank and ss.media_type_2 == 'image'
+    assign media_2 = 'image'
+    assign media_count = media_count | plus: 1
+  endif
+  if ss.video_2 != blank and ss.media_type_2 == 'video'
+    assign media_2 = 'video'
+    assign media_count = media_count | plus: 1
+  endif
+
+  if ss.custom_mobile_media
+    if ss.image_1_mobile != blank and ss.media_type_1_mobile == 'image'
+      assign media_1_mobile = 'image'
+      assign media_count_mobile = media_count_mobile | plus: 1
+    endif
+    if ss.video_1_mobile != blank and ss.media_type_1_mobile == 'video'
+      assign media_1_mobile = 'video'
+      assign media_count_mobile = media_count_mobile | plus: 1
+    endif
+    if ss.image_2_mobile != blank and ss.media_type_2_mobile == 'image'
+      assign media_2_mobile = 'image'
+      assign media_count_mobile = media_count_mobile | plus: 1
+    endif
+    if ss.video_2_mobile != blank and ss.media_type_2_mobile == 'video'
+      assign media_2_mobile = 'video'
+      assign media_count_mobile = media_count_mobile | plus: 1
+    endif
+  endif
+
+  if media_count > 0 and media_1 != 'image' and media_2 != 'image'
+    assign has_only_video = true
+  endif
+  if media_count > 0 and media_count_mobile > 0 and media_1_mobile != 'image' and media_2_mobile != 'image'
+    assign has_only_video_mobile = true
+  endif
+
+  assign media_wrapper_desktop_class = 'hero__media-wrapper hero__media-wrapper--desktop'
+  assign media_wrapper_mobile_class = 'hero__media-wrapper hero__media-wrapper--mobile'
+
+  if ss.custom_mobile_media == false or ss.custom_mobile_media == true and media_count_mobile == 0
+    assign media_wrapper_desktop_class = media_wrapper_desktop_class | append: ' hero__media-wrapper--mobile'
+  endif
+
+  assign show_mobile_blurred_reflection = false
+  if ss.blurred_reflection
+    if ss.custom_mobile_media == true and media_count_mobile > 0 and has_only_video_mobile == false
+      assign show_mobile_blurred_reflection = true
+    elsif ss.custom_mobile_media == true and media_count_mobile == 0 and media_count > 0 and has_only_video == false
+      assign show_mobile_blurred_reflection = true
+    elsif ss.custom_mobile_media == false and media_count > 0 and has_only_video == false
+      assign show_mobile_blurred_reflection = true
+    endif
+  endif
+
+  if media_1 == 'image' and media_2 == 'image'
+    assign media_width_desktop = '50vw'
+  else
+    assign media_width_desktop = '100vw'
+  endif
+
+  if ss.custom_mobile_media == false or media_count_mobile == 0 or media_count == 0
+    assign media_count_mobile = media_count
+    assign fallback_to_desktop = true
+  endif
+
+  if fallback_to_desktop
+    assign media_width_mobile = media_width_desktop
+  elsif ss.stack_media_on_mobile or media_1_mobile != 'image' or media_2_mobile != 'image'
+    assign media_width_mobile = '100vw'
+  else
+    assign media_width_mobile = '50vw'
+  endif
+
+  assign sizes = '(min-width: 750px) ' | append: media_width_desktop | append: ', ' | append: media_width_mobile
+  assign widths = '832, 1200, 1600, 1920, 2560'
+  assign sizes_mobile = media_width_mobile
+  assign mobile_widths = '416, 600, 800, 1200, 1600'
+  assign mobile_widths_array = mobile_widths | split: ', '
+
+  assign fetch_priority = 'auto'
+  assign image_loading = 'lazy'
+  if section.index == 1
+    assign fetch_priority = 'high'
+    assign image_loading = 'eager'
+  endif
+
+  # 1x1 transparent GIF — used as video poster attribute.
+  # The real visual poster is rendered as a separate <img> behind the <video> for LCP eligibility.
+  # Without this, Shopify's video_tag would trigger a duplicate poster image download.
+  assign video_blank_poster = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+
+  assign consolidate_video_1 = false
+  if media_1 == 'video' and media_1_mobile == 'video' and ss.custom_mobile_media
+    assign consolidate_video_1 = true
+  endif
+  assign consolidate_video_2 = false
+  if media_2 == 'video' and media_2_mobile == 'video' and ss.custom_mobile_media
+    assign consolidate_video_2 = true
+  endif
+%}
+
+{%- comment -%}
+  ═══════════════════════════════════════════════════════════════════════════
+  CU-HEROPRE-120 — Hero LCP Preload (Apr 29, 2026)
+  ═══════════════════════════════════════════════════════════════════════════
+
+  © 2026 Chaos Unleashed · Raymond M. Testi · Ramble On LLC
+  All Rights Reserved. Unauthorized redistribution, derivative works,
+  or removal of attribution is strictly prohibited.
+
+  Purpose:
+    When this section renders as section.index == 1, emit preload_tag
+    hints for whichever image will be the LCP element. preload_tag
+    emits BOTH a <link rel="preload"> HTML tag AND a Link: HTTP header
+    at TTFB; the latter is what moves discovery from body-parse-time
+    (~+1378ms on Slow 4G per DevTools-throttled trace) to TTFB
+    (~+700ms), recovering ~600-700ms of LCP latency.
+
+    Coverage matches the six render branches further down this file:
+
+      Branch                                   Preload source(s)
+      ──────────────────────────────────────────────────────────────────────
+      A. media_1=image, media_1_mobile=image   image_1 (D), image_1_mobile (M)
+      B. media_1=image only                    image_1 (both)
+      C. media_1=video consolidated, image_1   image_1 (D), image_1_mobile (M)
+      D. media_1=video consolidated, auto      video_1.preview_image (both)
+      E. media_1=video non-consolidated        image_1 OR video_1.preview_image
+      F. media_1_mobile=video non-consolidated image_1_mobile OR
+                                               video_1_mobile.preview_image
+
+    Width/sizes pairing rule (CRITICAL — see chaos_unleashed_lcp_preload.liquid
+    v1.5 changelog for the failure mode this prevents):
+      The imagesrcset widths and imagesizes value in EACH preload tag below
+      MUST mirror the widths and sizes parameters of the corresponding
+      image_tag call further down this file. If the rendered <img>'s srcset
+      offers width X but the preload offers width Y, Chrome will discard
+      the preload and re-fetch — same-or-larger-than baseline cost, but
+      bandwidth wasted on the unused preload. When you change a widths or
+      sizes parameter in an image_tag call below, update the matching
+      preload here, or the preload becomes a regression.
+
+  Mechanism contention note:
+    Session 19 v4 found that adding a high-priority preload to an
+    already-saturated High-priority pool downloaded SLOWER than the
+    baseline (poster downloaded in 4320ms vs 3193ms baseline) because
+    it joined a contested pool of fonts and CSS at High/VeryHigh.
+    CU-LOGOPRI-110 (apr 29 2026, blocks/_header-logo.liquid) demoted
+    the two header logos from High to auto, freeing two slots. Ship
+    that fix in the same release as this one. If this preload ships
+    without the logo demote, expect partial or no LCP improvement.
+
+  Stacked-preload note:
+    Session 19 v2 found that combining a Link header with a manual
+    <link rel="preload"> for the same URL caused a Chrome regression
+    (fetchStart 615ms → 1085ms, "preloaded but not used" warning).
+    preload_tag emits BOTH internally — Chrome treats this as a single
+    preload (verified empirically in v4). Do NOT add a manual <link
+    rel=preload> for the same URL elsewhere (e.g. via the
+    chaos_unleashed_lcp_preload head snippet). The current
+    chaos_unleashed_lcp_preload.liquid line 127 explicitly no-ops the
+    homepage branch — keep it that way.
+  ═══════════════════════════════════════════════════════════════════════════
+{%- endcomment -%}
+
+{%- if section.index == 1 -%}
+  {%- liquid
+    # Resolve which preload images apply for the current configuration.
+    # Mirrors the branch logic that selects render targets in media_slot_1.
+    assign hpre_desktop_image = null
+    assign hpre_mobile_image = null
+    # Default widths track the section-level `widths` and `mobile_widths`
+    # variables defined in the setup block above. Per-branch overrides
+    # below mirror narrower widths used in specific image_tag calls down
+    # this file.
+    assign hpre_desktop_widths = widths
+    assign hpre_mobile_widths = mobile_widths
+
+    # Branches A & B: media_1 is image
+    if media_1 == 'image'
+      assign hpre_desktop_image = ss.image_1
+      if media_1_mobile == 'image'
+        assign hpre_mobile_image = ss.image_1_mobile
+      endif
+    endif
+
+    # Branches C & D: consolidated video — single wrapper covers both viewports
+    if media_1 == 'video' and consolidate_video_1
+      if ss.image_1 != blank
+        assign hpre_desktop_image = ss.image_1
+        # Mirror narrower widths used by the explicit-poster image_tag call
+        # in the consolidated-video branch below (widths '832, 1200, 1600').
+        assign hpre_desktop_widths = '832, 1200, 1600'
+        if ss.image_1_mobile != blank
+          assign hpre_mobile_image = ss.image_1_mobile
+          # Mirror narrower widths used by the picture <source> in the same
+          # branch (widths '480, 600').
+          assign hpre_mobile_widths = '480, 600'
+        endif
+      elsif ss.video_1.preview_image != blank
+        assign hpre_desktop_image = ss.video_1.preview_image
+        assign hpre_mobile_image = ss.video_1.preview_image
+        # Mirror auto-poster image_tag call widths '480, 832, 1200, 1600'.
+        assign hpre_desktop_widths = '480, 832, 1200, 1600'
+        assign hpre_mobile_widths = '480, 832, 1200, 1600'
+      endif
+    endif
+
+    # Branch E: media_1 is video, NOT consolidated — desktop wrapper only
+    if media_1 == 'video' and consolidate_video_1 == false
+      if ss.image_1 != blank
+        assign hpre_desktop_image = ss.image_1
+      elsif ss.video_1.preview_image != blank
+        assign hpre_desktop_image = ss.video_1.preview_image
+      endif
+    endif
+
+    # Branch F: separate mobile slot when media_1_mobile is video, NOT consolidated
+    if media_1_mobile == 'video' and consolidate_video_1 == false
+      if ss.image_1_mobile != blank
+        assign hpre_mobile_image = ss.image_1_mobile
+      elsif ss.video_1_mobile.preview_image != blank
+        assign hpre_mobile_image = ss.video_1_mobile.preview_image
+      endif
+    endif
+
+    # If desktop has a media_1 image but mobile slot has no source of its own
+    # (no custom mobile media set), use the desktop image with mobile sizing
+    # for the mobile preload too — mirrors the fallback_to_desktop logic
+    # in the section setup block above.
+    if hpre_desktop_image != blank and hpre_mobile_image == blank and fallback_to_desktop
+      assign hpre_mobile_image = hpre_desktop_image
+    endif
+  -%}
+
+  {%- if hpre_desktop_image != blank and hpre_mobile_image != blank and hpre_desktop_image != hpre_mobile_image -%}
+    {%- comment -%} Distinct desktop and mobile sources — emit two preloads with media queries. {%- endcomment -%}
+    {%- capture hpre_desktop_srcset -%}
+      {%- assign hpre_widths_array = hpre_desktop_widths | split: ', ' -%}
+      {%- for w in hpre_widths_array -%}{{ hpre_desktop_image | image_url: width: w, format: 'webp' }} {{ w }}w{%- unless forloop.last -%}, {%- endunless -%}{%- endfor -%}
+    {%- endcapture -%}
+    {{
+      hpre_desktop_image
+      | image_url: width: 1600, format: 'webp'
+      | preload_tag:
+        as: 'image',
+        fetchpriority: 'high',
+        imagesrcset: hpre_desktop_srcset,
+        imagesizes: sizes,
+        media: '(min-width: 750px)',
+        data-cu-heropre: 'desktop'
+    }}
+    {%- capture hpre_mobile_srcset -%}
+      {%- assign hpre_mwidths_array = hpre_mobile_widths | split: ', ' -%}
+      {%- for w in hpre_mwidths_array -%}{{ hpre_mobile_image | image_url: width: w, format: 'webp' }} {{ w }}w{%- unless forloop.last -%}, {%- endunless -%}{%- endfor -%}
+    {%- endcapture -%}
+    {{
+      hpre_mobile_image
+      | image_url: width: 600, format: 'webp'
+      | preload_tag:
+        as: 'image',
+        fetchpriority: 'high',
+        imagesrcset: hpre_mobile_srcset,
+        imagesizes: sizes_mobile,
+        media: '(max-width: 749px)',
+        data-cu-heropre: 'mobile'
+    }}
+  {%- elsif hpre_desktop_image != blank -%}
+    {%- comment -%}
+      ─────────────────────────────────────────────────────────────────
+      Single-source unified preload — v25 (May 1, 2026, CU-HEROPRE-024)
+
+      v24 attempted dual media-targeted preloads (mobile width=832 +
+      desktop width=1600). The HTML <link> tags respected media= as
+      expected — but Shopify's preload_tag also emits HTTP Link:
+      headers, and Chrome does NOT honor media= on Link header
+      preloads (only on HTML <link rel=preload>). Both Link header
+      preloads fire unconditionally via early-hint scanning regardless
+      of viewport.
+
+      Verified May 1 2026 deep-dump (mobile 412 viewport):
+        v24 result:
+          width=1600 fetchStart=962ms   (Link hdr, wasted on mobile)
+          width=832  fetchStart=2831ms  (delayed by 1600 bandwidth use)
+          Hero LCP 5140ms — 280ms WORSE than v23 baseline 4864ms.
+
+      v25: emit a single preload at the mobile-selected width with no
+      media query. The Link header fires at ~250-500ms early-hint and
+      delivers the URL the mobile IMG will actually use, so the IMG
+      reuses the preload with no second fetch. Desktop traffic loses
+      the preload entirely — desktop IMG fetches its srcset-selected
+      width (1200/1600) directly when the parser hits the <img> tag.
+      Acceptable on desktop because the absolute time is small on
+      desktop networks, and LCP scoring is dominated by mobile.
+
+      Width selection rule:
+        Smallest width in hpre_desktop_widths that is >= 720
+        (412 viewport × DPR 1.75 ≈ 721 effective px).
+        Falls back to first entry if none qualifies.
+        Auto-poster widths '480, 832, 1200, 1600' → 832.
+
+      The selection loop reads from hpre_desktop_widths so any future
+      change to the widths array stays in sync — no hard-coded magic
+      numbers to drift.
+
+      Predicted impact (verify post-deploy by re-running deep-dump):
+        Hero img reuses preload, no second fetch
+        Hero LCP candidate fires at proper intrinsic size
+        Cookie banner cannot supersede (hero size > banner size)
+        Desktop hero unchanged in user-perceived time
+      ─────────────────────────────────────────────────────────────────
+    {%- endcomment -%}
+    {%- liquid
+      assign hpre_widths_array = hpre_desktop_widths | split: ', '
+
+      # Mobile preload width: smallest width in array >= 720, else first.
+      assign hpre_mobile_w = hpre_widths_array | first
+      assign hpre_mobile_w_found = false
+      for w in hpre_widths_array
+        if hpre_mobile_w_found == false
+          assign w_int = w | times: 1
+          if w_int >= 720
+            assign hpre_mobile_w = w
+            assign hpre_mobile_w_found = true
+          endif
+        endif
+      endfor
+    -%}
+    {%- capture hpre_unified_srcset -%}
+      {%- for w in hpre_widths_array -%}{{ hpre_desktop_image | image_url: width: w, format: 'webp' }} {{ w }}w{%- unless forloop.last -%}, {%- endunless -%}{%- endfor -%}
+    {%- endcapture -%}
+    {{
+      hpre_desktop_image
+      | image_url: width: hpre_mobile_w, format: 'webp'
+      | preload_tag:
+        as: 'image',
+        fetchpriority: 'high',
+        imagesrcset: hpre_unified_srcset,
+        imagesizes: sizes,
+        data-cu-heropre: 'unified-mobile-optimized'
+    }}
+  {%- endif -%}
+{%- endif -%}
+
+{% capture media_slot_1 %}
+  {%- if media_1 == 'image' and media_1_mobile == 'image' -%}
+    <picture data-testid="hero-picture-1" class="hero__media">
+      <source
+        media="(max-width: 749px)"
+        srcset="{%- for mobile_width in mobile_widths_array -%}{{ ss.image_1_mobile | image_url: width: mobile_width, format: 'webp' }} {{ mobile_width }}w{% unless forloop.last %},{% endunless %}{%- endfor -%}"
+        sizes="{{ sizes_mobile }}"
+        width="{{ ss.image_1_mobile.width }}"
+        height="{{ ss.image_1_mobile.height }}"
+      >
+      {{
+        ss.image_1
+        | image_url: width: 2560, format: 'webp'
+        | image_tag:
+          width: ss.image_1.width,
+          widths: widths,
+          height: ss.image_1.height,
+          alt: image_1_alt,
+          class: 'hero__media',
+          sizes: sizes,
+          fetchpriority: fetch_priority,
+          loading: image_loading,
+          decoding: 'async',
+          data-testid: 'hero-desktop-image-1'
+      }}
+    </picture>
+  {%- elsif media_1 == 'image' -%}
+    <div class="{{ media_wrapper_desktop_class }}">
+      {{
+        ss.image_1
+        | image_url: width: 2560, format: 'webp'
+        | image_tag:
+          width: ss.image_1.width,
+          widths: widths,
+          height: ss.image_1.height,
+          alt: image_1_alt,
+          class: 'hero__media',
+          sizes: sizes,
+          fetchpriority: fetch_priority,
+          loading: image_loading,
+          decoding: 'async',
+          data-testid: 'hero-desktop-image-1'
+      }}
+    </div>
+  {%- endif -%}
+
+  {%- if media_1 == 'video' -%}
+    {%- if consolidate_video_1 -%}
+      <div class="hero__media-wrapper hero__media-wrapper--desktop hero__media-wrapper--mobile hero__media-wrapper--video">
+        {%- comment -%}
+          Poster fallback chain:
+          1. If section has explicit image_1 / image_1_mobile, use those (legacy theme path).
+          2. Else fall back to ss.video_1.preview_image — Shopify auto-extracts the first
+             frame at upload time. This eliminates the visible blank-container moment
+             between page paint and video first-frame, especially when hero_video_defer
+             holds the video src until window.load.
+        {%- endcomment -%}
+        {%- if ss.image_1 != blank or ss.image_1_mobile != blank -%}
+          <picture>
+            {%- if ss.image_1_mobile != blank -%}
+              <source
+                media="(max-width: 749px)"
+                srcset="{{ ss.image_1_mobile | image_url: width: 480, format: 'webp' }} 480w, {{ ss.image_1_mobile | image_url: width: 600, format: 'webp' }} 600w"
+                sizes="{{ sizes_mobile }}"
+                width="{{ ss.image_1_mobile.width }}"
+                height="{{ ss.image_1_mobile.height }}"
+              >
+            {%- endif -%}
+            {{
+              ss.image_1
+              | image_url: width: 1600, format: 'webp'
+              | image_tag:
+                width: ss.image_1.width,
+                widths: '832, 1200, 1600',
+                height: ss.image_1.height,
+                alt: '',
+                class: 'hero__media hero__media--video-poster',
+                sizes: sizes,
+                fetchpriority: fetch_priority,
+                loading: image_loading,
+                decoding: 'async',
+                data-testid: 'hero-video-poster-1'
+            }}
+          </picture>
+        {%- elsif ss.video_1.preview_image != blank -%}
+          {{
+            ss.video_1.preview_image
+            | image_url: width: 1600, format: 'webp'
+            | image_tag:
+              width: ss.video_1.preview_image.width,
+              widths: '480, 832, 1200, 1600',
+              height: ss.video_1.preview_image.height,
+              alt: '',
+              class: 'hero__media hero__media--video-poster',
+              sizes: sizes,
+              fetchpriority: fetch_priority,
+              loading: image_loading,
+              decoding: 'async',
+              data-testid: 'hero-video-poster-1-auto'
+          }}
+        {%- endif -%}
+        
+         <video
+  poster="{{ video_blank_poster }}"
+  autoplay
+  loop
+  muted
+  playsinline
+  preload="metadata"
+  class="hero__media hero__media--video"
+  data-testid="hero-video-1"
+>
+  {%- if ss.video_1_mobile != blank and ss.video_1_mobile.id != ss.video_1.id -%}
+    {%- for source in ss.video_1_mobile.sources -%}
+      {%- if source.mime_type == 'video/mp4' -%}
+        <source media="(max-width: 749px)" src="{{ source.url }}" type="{{ source.mime_type }}">
+      {%- endif -%}
+    {%- endfor -%}
+    {%- for source in ss.video_1_mobile.sources -%}
+      {%- if source.mime_type != 'video/mp4' -%}
+        <source media="(max-width: 749px)" src="{{ source.url }}" type="{{ source.mime_type }}">
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+  {%- for source in ss.video_1.sources -%}
+    {%- if source.mime_type == 'video/mp4' -%}
+      <source src="{{ source.url }}" type="{{ source.mime_type }}">
+    {%- endif -%}
+  {%- endfor -%}
+  {%- for source in ss.video_1.sources -%}
+    {%- if source.mime_type != 'video/mp4' -%}
+      <source src="{{ source.url }}" type="{{ source.mime_type }}">
+    {%- endif -%}
+  {%- endfor -%}
+</video>
+        
+      </div>
+    {%- else -%}
+      <div class="{{ media_wrapper_desktop_class }} hero__media-wrapper--video">
+        {%- comment -%}
+          Poster fallback chain — see consolidate_video_1 branch above for rationale.
+        {%- endcomment -%}
+        {%- if ss.image_1 != blank -%}
+          {{
+            ss.image_1
+            | image_url: width: 2560, format: 'webp'
+            | image_tag:
+              width: ss.image_1.width,
+              widths: widths,
+              height: ss.image_1.height,
+              alt: '',
+              class: 'hero__media hero__media--video-poster',
+              sizes: sizes,
+              fetchpriority: fetch_priority,
+              loading: image_loading,
+              decoding: 'async',
+              data-testid: 'hero-desktop-video-poster-1'
+          }}
+        {%- elsif ss.video_1.preview_image != blank -%}
+          {{
+            ss.video_1.preview_image
+            | image_url: width: 2560, format: 'webp'
+            | image_tag:
+              width: ss.video_1.preview_image.width,
+              widths: widths,
+              height: ss.video_1.preview_image.height,
+              alt: '',
+              class: 'hero__media hero__media--video-poster',
+              sizes: sizes,
+              fetchpriority: fetch_priority,
+              loading: image_loading,
+              decoding: 'async',
+              data-testid: 'hero-desktop-video-poster-1-auto'
+          }}
+        {%- endif -%}
+        {{
+          ss.video_1
+          | video_tag:
+            poster: video_blank_poster,
+            autoplay: true,
+            loop: true,
+            controls: false,
+            muted: true,
+            playsinline: true,
+            preload: 'none',
+            class: 'hero__media hero__media--video',
+            data-testid: 'hero-desktop-video-1'
+        }}
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- if media_count > 0 and media_count_mobile > 0 -%}
+    {%- if media_1_mobile == 'image' and media_1 != 'image' -%}
+      <div class="{{ media_wrapper_mobile_class }}">
+        {{
+          ss.image_1_mobile
+          | image_url: width: 1600, format: 'webp'
+          | image_tag:
+            width: ss.image_1_mobile.width,
+            widths: mobile_widths,
+            height: ss.image_1_mobile.height,
+            alt: image_1_mobile_alt,
+            class: 'hero__media',
+            sizes: sizes_mobile,
+            fetchpriority: fetch_priority,
+            loading: image_loading,
+            decoding: 'async',
+            data-testid: 'hero-mobile-image-1'
+        }}
+      </div>
+    {%- endif -%}
+    {%- if media_1_mobile == 'video' and consolidate_video_1 == false -%}
+      <div class="{{ media_wrapper_mobile_class }} hero__media-wrapper--video">
+        {%- comment -%}
+          Poster fallback chain — see consolidate_video_1 branch above for rationale.
+        {%- endcomment -%}
+        {%- if ss.image_1_mobile != blank -%}
+          {{
+            ss.image_1_mobile
+            | image_url: width: 1600, format: 'webp'
+            | image_tag:
+              width: ss.image_1_mobile.width,
+              widths: mobile_widths,
+              height: ss.image_1_mobile.height,
+              alt: '',
+              class: 'hero__media hero__media--video-poster',
+              sizes: sizes_mobile,
+              fetchpriority: fetch_priority,
+              loading: image_loading,
+              decoding: 'async',
+              data-testid: 'hero-mobile-video-poster-1'
+          }}
+        {%- elsif ss.video_1_mobile.preview_image != blank -%}
+          {{
+            ss.video_1_mobile.preview_image
+            | image_url: width: 1600, format: 'webp'
+            | image_tag:
+              width: ss.video_1_mobile.preview_image.width,
+              widths: mobile_widths,
+              height: ss.video_1_mobile.preview_image.height,
+              alt: '',
+              class: 'hero__media hero__media--video-poster',
+              sizes: sizes_mobile,
+              fetchpriority: fetch_priority,
+              loading: image_loading,
+              decoding: 'async',
+              data-testid: 'hero-mobile-video-poster-1-auto'
+          }}
+        {%- endif -%}
+        {{
+          ss.video_1_mobile
+          | video_tag:
+            poster: video_blank_poster,
+            autoplay: true,
+            loop: true,
+            controls: false,
+            muted: true,
+            playsinline: true,
+            preload: 'none',
+            class: 'hero__media hero__media--video',
+            data-testid: 'hero-mobile-video-1'
+        }}
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+{% endcapture %}
+
+{% capture media_slot_2 %}
+  {%- if media_2 == 'image' and media_2_mobile == 'image' -%}
+    <picture class="hero__media" data-testid="hero-picture-2">
+      <source
+        media="(max-width: 749px)"
+        srcset="{%- for mobile_width in mobile_widths_array -%}{{ ss.image_2_mobile | image_url: width: mobile_width, format: 'webp' }} {{ mobile_width }}w{% unless forloop.last %},{% endunless %}{%- endfor -%}"
+        sizes="{{ sizes_mobile }}"
+        width="{{ ss.image_2_mobile.width }}"
+        height="{{ ss.image_2_mobile.height }}"
+      >
+      {{
+        ss.image_2
+        | image_url: width: 2560, format: 'webp'
+        | image_tag:
+          width: ss.image_2.width,
+          widths: widths,
+          height: ss.image_2.height,
+          alt: image_2_alt,
+          class: 'hero__media',
+          sizes: sizes,
+          fetchpriority: fetch_priority,
+          loading: image_loading,
+          decoding: 'async',
+          data-testid: 'hero-desktop-image-2'
+      }}
+    </picture>
+  {%- elsif media_2 == 'image' -%}
+    <div class="{{ media_wrapper_desktop_class }}">
+      {{
+        ss.image_2
+        | image_url: width: 2560, format: 'webp'
+        | image_tag:
+          width: ss.image_2.width,
+          widths: widths,
+          height: ss.image_2.height,
+          alt: image_2_alt,
+          class: 'hero__media',
+          sizes: sizes,
+          fetchpriority: fetch_priority,
+          loading: image_loading,
+          decoding: 'async',
+          data-testid: 'hero-desktop-image-2'
+      }}
+    </div>
+  {%- endif -%}
+
+  {%- if media_2 == 'video' -%}
+    {%- if consolidate_video_2 -%}
+      <div class="hero__media-wrapper hero__media-wrapper--desktop hero__media-wrapper--mobile hero__media-wrapper--video">
+        {%- if ss.image_2 != blank or ss.image_2_mobile != blank -%}
+          <picture>
+            {%- if ss.image_2_mobile != blank -%}
+              <source
+                media="(max-width: 749px)"
+                srcset="{%- for mobile_width in mobile_widths_array -%}{{ ss.image_2_mobile | image_url: width: mobile_width, format: 'webp' }} {{ mobile_width }}w{% unless forloop.last %},{% endunless %}{%- endfor -%}"
+                sizes="{{ sizes_mobile }}"
+                width="{{ ss.image_2_mobile.width }}"
+                height="{{ ss.image_2_mobile.height }}"
+              >
+            {%- endif -%}
+            {{
+              ss.image_2
+              | image_url: width: 1600, format: 'webp'
+              | image_tag:
+                width: ss.image_2.width,
+                widths: '832, 1200, 1600',
+                height: ss.image_2.height,
+                alt: '',
+                class: 'hero__media hero__media--video-poster',
+                sizes: sizes,
+                fetchpriority: fetch_priority,
+                loading: image_loading,
+                decoding: 'async',
+                data-testid: 'hero-video-poster-2'
+            }}
+          </picture>
+        {%- endif -%}
+        {{
+          ss.video_2
+          | video_tag:
+            poster: video_blank_poster,
+            autoplay: true,
+            loop: true,
+            controls: false,
+            muted: true,
+            playsinline: true,
+            preload: 'none',
+            class: 'hero__media hero__media--video',
+            data-testid: 'hero-video-2'
+        }}
+      </div>
+    {%- else -%}
+      <div class="{{ media_wrapper_desktop_class }} hero__media-wrapper--video">
+        {%- if ss.image_2 != blank -%}
+          {{
+            ss.image_2
+            | image_url: width: 2560, format: 'webp'
+            | image_tag:
+              width: ss.image_2.width,
+              widths: widths,
+              height: ss.image_2.height,
+              alt: '',
+              class: 'hero__media hero__media--video-poster',
+              sizes: sizes,
+              fetchpriority: fetch_priority,
+              loading: image_loading,
+              decoding: 'async',
+              data-testid: 'hero-desktop-video-poster-2'
+          }}
+        {%- endif -%}
+        {{
+          ss.video_2
+          | video_tag:
+            poster: video_blank_poster,
+            autoplay: true,
+            loop: true,
+            controls: false,
+            muted: true,
+            playsinline: true,
+            preload: 'none',
+            class: 'hero__media hero__media--video',
+            data-testid: 'hero-desktop-video-2'
+        }}
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- if media_count > 0 and media_count_mobile > 0 -%}
+    {%- if media_2_mobile == 'image' and media_2 != 'image' -%}
+      <div class="{{ media_wrapper_mobile_class }}">
+        {{
+          ss.image_2_mobile
+          | image_url: width: 1600, format: 'webp'
+          | image_tag:
+            width: ss.image_2_mobile.width,
+            widths: mobile_widths,
+            height: ss.image_2_mobile.height,
+            alt: image_2_mobile_alt,
+            class: 'hero__media',
+            sizes: sizes_mobile,
+            fetchpriority: fetch_priority,
+            loading: image_loading,
+            decoding: 'async',
+            data-testid: 'hero-mobile-image-2'
+        }}
+      </div>
+    {%- endif -%}
+    {%- if media_2_mobile == 'video' and consolidate_video_2 == false -%}
+      <div class="{{ media_wrapper_mobile_class }} hero__media-wrapper--video">
+        {%- if ss.image_2_mobile != blank -%}
+          {{
+            ss.image_2_mobile
+            | image_url: width: 1600, format: 'webp'
+            | image_tag:
+              width: ss.image_2_mobile.width,
+              widths: mobile_widths,
+              height: ss.image_2_mobile.height,
+              alt: '',
+              class: 'hero__media hero__media--video-poster',
+              sizes: sizes_mobile,
+              fetchpriority: fetch_priority,
+              loading: image_loading,
+              decoding: 'async',
+              data-testid: 'hero-mobile-video-poster-2'
+          }}
+        {%- endif -%}
+        {{
+          ss.video_2_mobile
+          | video_tag:
+            poster: video_blank_poster,
+            autoplay: true,
+            loop: true,
+            controls: false,
+            muted: true,
+            playsinline: true,
+            preload: 'none',
+            class: 'hero__media hero__media--video',
+            data-testid: 'hero-mobile-video-2'
+        }}
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+{% endcapture %}
+
+{% capture media %}
+  {{ media_slot_1 }}
+  {{ media_slot_2 }}
+  {%- if media_count == 0 -%}
+    {{ 'hero-apparel-1' | placeholder_svg_tag: 'hero__media' }}
+  {%- endif -%}
+{% endcapture %}
+
+{% capture media_blurred %}
+  {%- if media_1 == 'image' -%}
+    {{
+      ss.image_1
+      | image_url: width: 800, format: 'webp'
+      | image_tag:
+        width: ss.image_1.width,
+        widths: '400, 800',
+        height: ss.image_1.height,
+        alt: '',
+        class: 'hero__media',
+        sizes: sizes,
+        loading: 'lazy',
+        decoding: 'async'
+    }}
+  {%- endif -%}
+  {%- if media_2 == 'image' -%}
+    {{
+      ss.image_2
+      | image_url: width: 800, format: 'webp'
+      | image_tag:
+        width: ss.image_2.width,
+        widths: '400, 800',
+        height: ss.image_2.height,
+        alt: '',
+        class: 'hero__media',
+        sizes: sizes,
+        loading: 'lazy',
+        decoding: 'async'
+    }}
+  {%- endif -%}
+  {%- if media_count == 0 -%}
+    {{ 'hero-apparel-1' | placeholder_svg_tag: 'hero__media' }}
+  {%- endif -%}
+{% endcapture %}
+
+{% capture mobile_media_blurred %}
+  {%- if ss.stack_media_on_mobile == false -%}
+    {%- if ss.custom_mobile_media == true and fallback_to_desktop == false -%}
+      {%- if media_1_mobile == 'image' -%}
+        {{ ss.image_1_mobile | image_url: width: 600, format: 'webp' | image_tag: width: ss.image_1_mobile.width, widths: '400, 600', height: ss.image_1_mobile.height, alt: '', class: 'hero__media', sizes: sizes_mobile, loading: 'lazy', decoding: 'async' }}
+      {%- endif -%}
+      {%- if media_2_mobile == 'image' -%}
+        {{ ss.image_2_mobile | image_url: width: 600, format: 'webp' | image_tag: width: ss.image_2_mobile.width, widths: '400, 600', height: ss.image_2_mobile.height, alt: '', class: 'hero__media', sizes: sizes_mobile, loading: 'lazy', decoding: 'async' }}
+      {%- endif -%}
+    {%- elsif fallback_to_desktop -%}
+      {{ media_blurred }}
+    {%- endif -%}
+  {%- elsif ss.stack_media_on_mobile == true -%}
+    {%- if ss.custom_mobile_media == true and fallback_to_desktop == false -%}
+      {%- if media_2_mobile == 'image' -%}
+        {{ ss.image_2_mobile | image_url: width: 600, format: 'webp' | image_tag: width: ss.image_2_mobile.width, widths: '400, 600', height: ss.image_2_mobile.height, alt: '', class: 'hero__media', sizes: sizes_mobile, loading: 'lazy', decoding: 'async' }}
+      {%- elsif media_1_mobile == 'image' -%}
+        {{ ss.image_1_mobile | image_url: width: 600, format: 'webp' | image_tag: width: ss.image_1_mobile.width, widths: '400, 600', height: ss.image_1_mobile.height, alt: '', class: 'hero__media', sizes: sizes_mobile, loading: 'lazy', decoding: 'async' }}
+      {%- endif -%}
+    {%- elsif fallback_to_desktop -%}
+      {%- if media_count > 0 -%}
+        {%- if media_2 == 'image' -%}
+          {{ ss.image_2 | image_url: width: 600, format: 'webp' | image_tag: width: ss.image_2.width, widths: '400, 600', height: ss.image_2.height, alt: '', class: 'hero__media', sizes: sizes, loading: 'lazy', decoding: 'async' }}
+        {%- elsif media_1 == 'image' -%}
+          {{ ss.image_1 | image_url: width: 600, format: 'webp' | image_tag: width: ss.image_1.width, widths: '400, 600', height: ss.image_1.height, alt: '', class: 'hero__media', sizes: sizes, loading: 'lazy', decoding: 'async' }}
+        {%- endif -%}
+        {%- if media_count == 0 -%}
+          {{ 'hero-apparel-1' | placeholder_svg_tag: 'hero__media' }}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+{% endcapture %}
+
+<div
+  id="Hero-{{ section.id }}"
+  class="hero color-{{ ss.color_scheme }}{% if section.blocks.size == 0 and ss.section_height == 'auto' %} hero--no-blocks-auto-height{% endif %}{% if ss.stack_media_on_mobile %} hero--stack-mobile{% endif %}"
+  style="--hero-border-style:{{ ss.border }};--hero-border-width:{{ ss.border_width }}px;--hero-border-opacity:{{ ss.border_opacity }}%;--blur-opacity:{{ ss.reflection_opacity | divided_by: 100.0 }};{% if ss.section_height == 'custom' %}--hero-min-height:{{ ss.section_height_custom }}svh;{% elsif ss.section_height == 'full-screen' %}--hero-min-height:100svh;{% else %}--hero-min-height:var(--section-height-{{ ss.section_height }});{% endif %}"
+  {% if request.visual_preview_mode %}data-shopify-visual-preview{% endif %}
+  {% if ss.blurred_reflection and has_only_video == false or has_only_video_mobile == false %}data-blur-shadow="true"{% endif %}
+>
+  {%- if ss.blurred_reflection -%}
+    {%- unless has_only_video -%}
+      <div class="hero__blurred-image hero__blurred-image--desktop" data-testid="hero-blurred-image-desktop">
+        {{ media_blurred }}
+      </div>
+    {%- endunless -%}
+    {%- if show_mobile_blurred_reflection -%}
+      <div class="hero__blurred-image hero__blurred-image--mobile" data-testid="hero-blurred-image-mobile">
+        {{ mobile_media_blurred }}
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+
+  <div
+    class="hero__container spacing-style section section--full-width"
+    style="{% render 'spacing-style', settings: ss %}"
+  >
+    {%- if ss.link != blank -%}
+      <a href="{{ ss.link }}" class="hero__link"{% if ss.open_in_new_tab %} target="_blank" rel="noopener"{% endif %}></a>
+    {%- endif -%}
+    <div
+      class="hero__media-grid"
+      style="--hero-media-count:{{ media_count }};--hero-media-count-mobile:{{ media_count_mobile }};{%- if ss.image_1 != blank -%}--hero-media-aspect-ratio:{{ ss.image_1.aspect_ratio }};{%- endif -%}"
+      data-testid="hero-media-wrapper"
+    >
+      {%- if ss.toggle_overlay -%}
+        {%- render 'overlay', settings: ss -%}
+      {%- endif -%}
+      {{ media }}
+    </div>
+    <div
+      class="hero__content-wrapper layout-panel-flex layout-panel-flex--{{ ss.content_direction }}{% if ss.vertical_on_mobile %} mobile-column{% endif %} section-content-wrapper {{ ss.section_width }}{% if request.design_mode %} hero__content-wrapper--design-mode{% endif %}"
+      style="{% render 'layout-panel-style', settings: ss %}"
+    >
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "t:names.hero",
+  "tag": "section",
+  "class": "hero-wrapper section-wrapper",
+  "blocks": [
+    {"type": "@theme"},
+    {"type": "text"},
+    {"type": "button"},
+    {"type": "logo"},
+    {"type": "jumbo-text"},
+    {"type": "spacer"},
+    {"type": "group"},
+    {"type": "_marquee"}
+  ],
+  "disabled_on": {"groups": ["header"]},
+  "settings": [
+    {"type": "header", "content": "t:content.media_1"},
+    {"type": "select", "id": "media_type_1", "label": "t:settings.type", "options": [{"value": "image", "label": "t:options.image"}, {"value": "video", "label": "t:options.video"}], "default": "image"},
+    {"type": "image_picker", "id": "image_1", "label": "t:settings.image", "visible_if": "{{ section.settings.media_type_1 == 'image' }}"},
+    {"type": "video", "id": "video_1", "label": "t:settings.video", "visible_if": "{{ section.settings.media_type_1 == 'video' }}"},
+    {"type": "header", "content": "t:content.media_2"},
+    {"type": "select", "id": "media_type_2", "label": "t:settings.type", "options": [{"value": "image", "label": "t:options.image"}, {"value": "video", "label": "t:options.video"}], "default": "image"},
+    {"type": "image_picker", "id": "image_2", "label": "t:settings.image", "visible_if": "{{ section.settings.media_type_2 == 'image' }}"},
+    {"type": "video", "id": "video_2", "label": "t:settings.video", "visible_if": "{{ section.settings.media_type_2 == 'video' }}"},
+    {"type": "header", "content": "t:content.mobile_media"},
+    {"type": "checkbox", "id": "stack_media_on_mobile", "label": "t:settings.stack_media_on_mobile", "default": false},
+    {"type": "checkbox", "id": "custom_mobile_media", "label": "t:settings.custom_mobile_media", "default": false},
+    {"type": "header", "content": "t:content.mobile_media_1", "visible_if": "{{ section.settings.custom_mobile_media }}"},
+    {"type": "select", "id": "media_type_1_mobile", "label": "t:settings.type", "options": [{"value": "image", "label": "t:options.image"}, {"value": "video", "label": "t:options.video"}], "default": "image", "visible_if": "{{ section.settings.custom_mobile_media }}"},
+    {"type": "image_picker", "id": "image_1_mobile", "label": "t:settings.image", "visible_if": "{{ section.settings.custom_mobile_media and section.settings.media_type_1_mobile == 'image' }}"},
+    {"type": "video", "id": "video_1_mobile", "label": "t:settings.video", "visible_if": "{{ section.settings.custom_mobile_media and section.settings.media_type_1_mobile == 'video' }}"},
+    {"type": "header", "content": "t:content.mobile_media_2", "visible_if": "{{ section.settings.custom_mobile_media }}"},
+    {"type": "select", "id": "media_type_2_mobile", "label": "t:settings.type", "options": [{"value": "image", "label": "t:options.image"}, {"value": "video", "label": "t:options.video"}], "default": "image", "visible_if": "{{ section.settings.custom_mobile_media }}"},
+    {"type": "image_picker", "id": "image_2_mobile", "label": "t:settings.image", "visible_if": "{{ section.settings.custom_mobile_media and section.settings.media_type_2_mobile == 'image' }}"},
+    {"type": "video", "id": "video_2_mobile", "label": "t:settings.video", "visible_if": "{{ section.settings.custom_mobile_media and section.settings.media_type_2_mobile == 'video' }}"},
+    {"type": "header", "content": "t:content.section_link"},
+    {"type": "url", "id": "link", "label": "t:settings.link"},
+    {"type": "checkbox", "id": "open_in_new_tab", "label": "t:settings.open_new_tab", "default": false},
+    {"type": "header", "content": "t:content.layout"},
+    {"type": "select", "id": "content_direction", "label": "t:settings.direction", "options": [{"value": "column", "label": "t:options.vertical"}, {"value": "row", "label": "t:options.horizontal"}], "default": "column"},
+    {"type": "checkbox", "id": "vertical_on_mobile", "label": "t:settings.vertical_on_mobile", "default": true, "visible_if": "{{ section.settings.content_direction == 'row' }}"},
+    {"type": "select", "id": "horizontal_alignment", "label": "t:settings.alignment", "options": [{"value": "flex-start", "label": "t:options.left"}, {"value": "center", "label": "t:options.center"}, {"value": "flex-end", "label": "t:options.right"}, {"value": "space-between", "label": "t:options.space_between"}], "default": "flex-start", "visible_if": "{{ section.settings.content_direction == 'row' }}"},
+    {"type": "select", "id": "vertical_alignment", "label": "t:settings.position", "options": [{"value": "flex-start", "label": "t:options.top"}, {"value": "center", "label": "t:options.center"}, {"value": "flex-end", "label": "t:options.bottom"}], "default": "center", "visible_if": "{{ section.settings.content_direction == 'row' }}"},
+    {"type": "checkbox", "id": "align_baseline", "label": "t:settings.align_baseline", "default": false, "visible_if": "{{ section.settings.vertical_alignment == 'flex-end' }}"},
+    {"type": "select", "id": "horizontal_alignment_flex_direction_column", "label": "t:settings.alignment", "options": [{"value": "flex-start", "label": "t:options.left"}, {"value": "center", "label": "t:options.center"}, {"value": "flex-end", "label": "t:options.right"}], "default": "flex-start", "visible_if": "{{ section.settings.content_direction != 'row' }}"},
+    {"type": "select", "id": "vertical_alignment_flex_direction_column", "label": "t:settings.position", "options": [{"value": "flex-start", "label": "t:options.top"}, {"value": "center", "label": "t:options.center"}, {"value": "flex-end", "label": "t:options.bottom"}, {"value": "space-between", "label": "t:options.space_between"}], "default": "center", "visible_if": "{{ section.settings.content_direction == 'column' }}"},
+    {"type": "range", "id": "gap", "label": "t:settings.gap", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 12},
+    {"type": "select", "id": "section_width", "label": "t:settings.width", "options": [{"value": "page-width", "label": "t:options.page"}, {"value": "full-width", "label": "t:options.full"}], "default": "page-width"},
+    {"type": "select", "id": "section_height", "label": "t:settings.height", "options": [{"value": "auto", "label": "t:options.auto"}, {"value": "small", "label": "t:options.small"}, {"value": "medium", "label": "t:options.medium"}, {"value": "large", "label": "t:options.large"}, {"value": "full-screen", "label": "t:options.full_screen"}, {"value": "custom", "label": "t:options.custom"}], "default": "medium"},
+    {"type": "range", "id": "section_height_custom", "label": "t:settings.custom_height", "min": 0, "max": 100, "step": 1, "default": 50, "unit": "%", "visible_if": "{{ section.settings.section_height == 'custom' }}"},
+    {"type": "header", "content": "t:content.appearance"},
+    {"type": "color_scheme", "id": "color_scheme", "label": "t:settings.color_scheme", "default": "scheme-1"},
+    {"type": "checkbox", "id": "toggle_overlay", "label": "t:settings.media_overlay"},
+    {"type": "color", "id": "overlay_color", "label": "t:settings.overlay_color", "alpha": true, "default": "#00000026", "visible_if": "{{ section.settings.toggle_overlay }}"},
+    {"type": "select", "id": "overlay_style", "label": "t:settings.overlay_style", "options": [{"value": "solid", "label": "t:options.solid"}, {"value": "gradient", "label": "t:options.gradient"}], "default": "solid", "visible_if": "{{ section.settings.toggle_overlay }}"},
+    {"type": "select", "id": "gradient_direction", "label": "t:settings.gradient_direction", "options": [{"value": "to top", "label": "t:options.up"}, {"value": "to bottom", "label": "t:options.down"}], "default": "to top", "visible_if": "{{ section.settings.toggle_overlay and section.settings.overlay_style == 'gradient' }}"},
+    {"type": "checkbox", "id": "blurred_reflection", "label": "t:settings.blurred_reflection", "default": false, "info": "t:info.applies_on_image_only", "visible_if": "{{ section.settings.media_type_1 != 'video' or section.settings.media_type_2 != 'video' or section.settings.media_type_1_mobile != 'video' or section.settings.media_type_2_mobile != 'video' }}"},
+    {"type": "range", "id": "reflection_opacity", "label": "t:settings.reflection_opacity", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 75, "visible_if": "{{ section.settings.blurred_reflection and section.settings.media_type_1 != 'video' or section.settings.media_type_2 != 'video' }}"},
+    {"type": "header", "content": "t:content.padding"},
+    {"type": "range", "id": "padding-block-start", "label": "t:settings.top", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0},
+    {"type": "range", "id": "padding-block-end", "label": "t:settings.bottom", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0}
+  ],
+  "presets": [
+    {
+      "name": "t:names.hero",
+      "category": "t:categories.banners",
+      "blocks": {
+        "text_1": {"type": "text", "settings": {"text": "t:html_defaults.new_arrivals_h2", "type_preset": "h1", "max_width": "narrow"}},
+        "text_2": {"type": "text", "settings": {"text": "t:html_defaults.made_with_care", "max_width": "narrow", "padding-block-end": 32}},
+        "button": {"type": "button", "name": "t:names.button", "settings": {"label": "t:text_defaults.shop_now_button_label", "link": "shopify://collections/all"}}
+      },
+      "block_order": ["text_1", "text_2", "button"],
+      "settings": {"horizontal_alignment_flex_direction_column": "center", "gap": 16, "section_height": "large", "color_scheme": "scheme-5", "padding-block-start": 40, "padding-block-end": 40, "toggle_overlay": true, "overlay_style": "gradient"}
+    },
+    {
+      "name": "t:names.hero_marquee",
+      "category": "t:categories.banners",
+      "blocks": {
+        "spacer": {"type": "spacer", "settings": {"size": "pixel", "pixel_size": 24}},
+        "marquee": {"type": "_marquee", "blocks": {"text": {"type": "text", "settings": {"text": "t:html_defaults.explore_latest_products", "type_preset": "h1"}}}, "block_order": ["text"]},
+        "button": {"type": "button", "settings": {"label": "t:text_defaults.shop_now_button_label", "link": "shopify://collections/all"}}
+      },
+      "block_order": ["spacer", "marquee", "button"],
+      "settings": {"horizontal_alignment_flex_direction_column": "center", "vertical_alignment_flex_direction_column": "space-between", "gap": 32, "section_height": "large", "color_scheme": "scheme-5", "padding-block-start": 0, "padding-block-end": 40, "toggle_overlay": true, "overlay_style": "gradient"}
+    }
+  ]
+}
+{% endschema %}

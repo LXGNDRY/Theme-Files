@@ -1,0 +1,102 @@
+{%- doc -%}
+  Renders the featured image for a menu item at maximum quality using a responsive srcset.
+
+  @param {object} link - The link to render
+  @param {string} [class] - The class to apply to the image
+  @param {string} [sizes] - The sizes to apply to the image
+
+  @example
+  {% render 'link-featured-image', link: link, class: 'menu-drawer__link-image', sizes: 'auto, 400px' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign image_sizes = sizes | default: 'auto'
+  assign srcset_widths = '200,400,600,800,1200,1600,2048'
+-%}
+
+{%- capture srcset_value -%}
+  {%- for w in srcset_widths | split: ',' -%}
+    {img_placeholder} | image_url: width: {{ w | strip }} }} {{ w | strip }}w{%- unless forloop.last %},{%- endunless %}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{% if link.type == 'collection_link' %}
+  {% if link.object.featured_image %}
+    {% assign img = link.object.featured_image %}
+    <img
+      src="{{ img | image_url: width: 800, format: 'webp' }}"
+      srcset="
+        {%- for w in srcset_widths | split: ',' -%}
+          {{ img | image_url: width: w, format: 'webp' }} {{ w | strip }}w{%- unless forloop.last %},{%- endunless %}
+        {%- endfor -%}
+      "
+      sizes="{{ image_sizes }}"
+      alt="{{ img.alt | escape }}"
+      width="{{ img.width }}"
+      height="{{ img.height }}"
+      loading="lazy"
+      decoding="async"
+      {%- if class != blank %} class="{{ class }}"{% endif %}
+    >
+  {% elsif link.object.products.size > 0 %}
+    {% assign product_object = link.object.products | where: 'featured_image' | first %}
+    {% if product_object.featured_image %}
+      {% assign img = product_object.featured_image %}
+      <img
+        src="{{ img | image_url: width: 800, format: 'webp' }}"
+        srcset="
+          {%- for w in srcset_widths | split: ',' -%}
+            {{ img | image_url: width: w, format: 'webp' }} {{ w | strip }}w{%- unless forloop.last %},{%- endunless %}
+          {%- endfor -%}
+        "
+        sizes="{{ image_sizes }}"
+        alt="{{ img.alt | escape }}"
+        width="{{ img.width }}"
+        height="{{ img.height }}"
+        loading="lazy"
+        decoding="async"
+        {%- if class != blank %} class="{{ class }}"{% endif %}
+      >
+    {% endif %}
+  {% endif %}
+{% elsif link.type == 'collections_link' %}
+  {% assign collection_object = collections | where: 'featured_image' | first %}
+  {% if collection_object.featured_image %}
+    {% assign img = collection_object.featured_image %}
+    <img
+      src="{{ img | image_url: width: 800, format: 'webp' }}"
+      srcset="
+        {%- for w in srcset_widths | split: ',' -%}
+          {{ img | image_url: width: w, format: 'webp' }} {{ w | strip }}w{%- unless forloop.last %},{%- endunless %}
+        {%- endfor -%}
+      "
+      sizes="{{ image_sizes }}"
+      alt="{{ img.alt | escape }}"
+      width="{{ img.width }}"
+      height="{{ img.height }}"
+      loading="lazy"
+      decoding="async"
+      {%- if class != blank %} class="{{ class }}"{% endif %}
+    >
+  {% endif %}
+{% elsif link.type == 'catalog_link' %}
+  {% assign product_object = collections.all.products | where: 'featured_image' | first %}
+  {% if product_object.featured_image %}
+    {% assign img = product_object.featured_image %}
+    <img
+      src="{{ img | image_url: width: 800, format: 'webp' }}"
+      srcset="
+        {%- for w in srcset_widths | split: ',' -%}
+          {{ img | image_url: width: w, format: 'webp' }} {{ w | strip }}w{%- unless forloop.last %},{%- endunless %}
+        {%- endfor -%}
+      "
+      sizes="{{ image_sizes }}"
+      alt="{{ img.alt | escape }}"
+      width="{{ img.width }}"
+      height="{{ img.height }}"
+      loading="lazy"
+      decoding="async"
+      {%- if class != blank %} class="{{ class }}"{% endif %}
+    >
+  {% endif %}
+{% endif %}

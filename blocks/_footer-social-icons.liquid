@@ -1,0 +1,21 @@
+
+
+<div
+  class="social-icons__wrapper"
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+
+
+{% schema %}
+{
+  "name": "t:names.social_media_links",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_social-link"
+    }
+  ]
+}
+{% endschema %}

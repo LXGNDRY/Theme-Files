@@ -1,0 +1,32 @@
+{%- doc -%}
+  Renders the search action button.
+
+  @param {string} [style] - The style of the search action.
+  @param {string} [class] - Additional classes for the search action.
+  @param {string} [display_style] - The display style ('icon' or 'text').
+
+  @example
+  {% render 'search', style: 'default', class: 'custom-class', display_style: 'icon' %}
+{%- enddoc -%}
+
+{% unless style == 'none' %}
+  <search-button
+    class="search-action{% if display_style == 'text' %} search-action--text{% endif %}{% if class != blank %} {{ class | strip }}{% endif %}"
+  >
+    <button
+      on:click="#search-modal/showDialog"
+      class="button-unstyled header-actions__action{% if display_style == 'text' %} header-actions__text-style{% endif %}"
+      aria-label="{{ 'content.search_input_label' | t }}"
+      aria-haspopup="dialog"
+    >
+      <span class="{% if display_style == 'icon' %}hidden{% else %}mobile:hidden{% endif %}">
+        {{ 'content.search' | t }}
+      </span>
+
+      <span class="svg-wrapper {% if display_style != 'icon' %}desktop:hidden{% endif %}">
+        {{ 'icon-search.svg' | inline_asset_content }}
+      </span>
+    </button>
+  </search-button>
+{% endunless %}
+

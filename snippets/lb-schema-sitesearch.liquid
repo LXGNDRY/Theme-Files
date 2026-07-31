@@ -1,0 +1,36 @@
+{%- comment -%}
+  lb-schema-sitesearch.liquid
+  Version:      1.0.1
+  Last updated: 2026-05-19
+  Purpose:      Outputs WebSite + SearchAction JSON-LD (SitelinksSearchBox).
+                Tells Google to render a search box directly inside your
+                brand knowledge panel in search results.
+                Zero maintenance after initial setup.
+  Usage:        Rendered by seo-schema.liquid on index (homepage) template only.
+                {%- render 'lb-schema-sitesearch' -%}
+  Dependencies: Shopify shop object, search route
+  Changes:
+    - v1.0.1: build urlTemplate via capture to avoid Liquid parser
+      mistaking {search_term_string} for a Liquid output tag
+{%- endcomment -%}
+
+{%- capture search_url_template -%}
+{{ request.origin }}/search?q={search_term_string}
+{%- endcapture -%}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": {{ shop.name | json }},
+  "url": {{ request.origin | json }},
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": {{ search_url_template | json }}
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>

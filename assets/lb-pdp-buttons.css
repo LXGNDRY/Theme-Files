@@ -1,0 +1,305 @@
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  LEGENDARY BRANDING — PDP BUTTONS
+ *  Branch: ui-redesign-2026
+ *
+ *  Scope: Product page Add-to-Cart + Dynamic Checkout buttons
+ *         Sticky details panel overflow fix
+ *
+ *  Rules:
+ *  - CSS only — zero Liquid/HTML changes
+ *  - All type="submit", name="add", href attributes untouched
+ *  - White bg / black text — gold accent only on hover
+ *  - Bebas Neue on ATC; body font on payment buttons (Shopify controls those)
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+/* ─── 1. STICKY PANEL OVERFLOW FIX ───────────────────────────────────────────
+   Root cause: sticky-content--desktop has no max-height, so when product
+   info (title + options + price + reviews + buttons) exceeds ~848px viewport
+   the ATC + dynamic checkout buttons fall below the fold and can't be tapped.
+
+   Fix: cap height to viewport minus header, scroll within the column.
+   Scrollbar hidden visually but scrollable via touch/drag.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@media screen and (min-width: 750px) {
+  .product-details.sticky-content--desktop {
+    max-height: calc(100dvh - var(--lb-header-h, 64px) - 24px);
+    overflow-y: auto;
+    overflow-x: clip;
+    /* Hide scrollbar visually — content still scrollable */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .product-details.sticky-content--desktop::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ─── 2. PRODUCT FORM BUTTONS CONTAINER ──────────────────────────────────────
+   The buy-buttons group that wraps both ATC + accelerated checkout.
+   Tighten spacing, ensure full-width stack, clean gap.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Shopify's product form buy-buttons wrapper */
+.product-form__buttons,
+.product-form .buy-buttons,
+product-form .buy-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* ─── 3. ADD TO CART BUTTON ───────────────────────────────────────────────────
+   Targets: add-to-cart-component > button.button
+   The snippet uses class="button {{ class }}" — we target both generic
+   .button inside add-to-cart-component and .product-form .button for
+   specificity, but never touch the button's HTML attributes.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Host element — full width block */
+add-to-cart-component {
+  display: block;
+  width: 100%;
+}
+
+/* The button itself — Bebas Neue, editorial, clean */
+.product-details add-to-cart-component button.button,
+.product-details add-to-cart-component .button,
+product-form add-to-cart-component button.button,
+product-form add-to-cart-component .button {
+  /* Layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+
+  /* Sizing */
+  min-height: 52px;
+  padding: 0 24px;
+
+  /* Typography — Bebas Neue */
+  font-family: 'Bebas Neue', 'Arial Black', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  line-height: 1;
+
+  /* Colors — black fill default */
+  background-color: #0A0A0A;
+  color: #F5F5F0;
+  border: 2px solid #0A0A0A;
+  border-radius: 6px;
+
+  /* Interaction */
+  cursor: pointer;
+  transition:
+    background-color 140ms cubic-bezier(0.25, 0.1, 0.25, 1),
+    border-color     140ms cubic-bezier(0.25, 0.1, 0.25, 1),
+    transform        140ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+@media (hover: hover) {
+  .product-details add-to-cart-component button.button:hover,
+  .product-details add-to-cart-component .button:hover,
+  product-form add-to-cart-component button.button:hover,
+  product-form add-to-cart-component .button:hover {
+    background-color: #1A1A1A;
+    border-color: #1A1A1A;
+    color: #F5F5F0;
+  }
+}
+
+.product-details add-to-cart-component button.button:active,
+product-form add-to-cart-component button.button:active {
+  transform: scale(0.97);
+}
+
+.product-details add-to-cart-component button.button:focus-visible,
+product-form add-to-cart-component button.button:focus-visible {
+  outline: 2px solid #0A0A0A;
+  outline-offset: 3px;
+}
+
+/* Sold out / unavailable state */
+.product-details add-to-cart-component button.button:disabled,
+product-form add-to-cart-component button.button:disabled {
+  background-color: #EDEDED;
+  border-color: #EDEDED;
+  color: #888888;
+  cursor: not-allowed;
+}
+
+/* ATC icon — keep visible, inherit color */
+.product-details add-to-cart-component .add-to-cart-icon,
+product-form add-to-cart-component .add-to-cart-icon {
+  color: inherit;
+  flex-shrink: 0;
+}
+.product-details add-to-cart-component .add-to-cart-icon svg,
+product-form add-to-cart-component .add-to-cart-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* Dark mode */
+html[data-theme="dark"] .product-details add-to-cart-component button.button,
+html[data-theme="dark"] product-form add-to-cart-component button.button {
+  background-color: #F2F2F2;
+  border-color: #F2F2F2;
+  color: #0A0A0A;
+}
+
+@media (hover: hover) {
+  html[data-theme="dark"] .product-details add-to-cart-component button.button:hover,
+  html[data-theme="dark"] product-form add-to-cart-component button.button:hover {
+    background-color: #EDEDE8;
+    border-color: #EDEDE8;
+    color: #0A0A0A;
+  }
+}
+
+html[data-theme="dark"] .product-details add-to-cart-component button.button:disabled,
+html[data-theme="dark"] product-form add-to-cart-component button.button:disabled {
+  background-color: #1A1A1A;
+  border-color: #1A1A1A;
+  color: #444444;
+}
+
+/* ─── 4. ACCELERATED CHECKOUT BLOCK ──────────────────────────────────────────
+   Wraps Shopify's {{ form_obj | payment_button }} output.
+   Shopify injects <shopify-accelerated-checkout> with its own styles —
+   we only touch the wrapper for spacing/layout. Do NOT override the
+   payment button colors (Shop Pay purple etc.) — Shopify mandates those.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.accelerated-checkout-block {
+  width: 100%;
+  display: block;
+}
+
+/* Shopify's outer wrapper for the dynamic checkout container */
+shopify-accelerated-checkout,
+shopify-accelerated-checkout-cart {
+  display: block;
+  width: 100%;
+}
+
+/* Inner button wrapper — ensure full width stack */
+.shopify-payment-button {
+  width: 100%;
+}
+
+.shopify-payment-button__button {
+  width: 100% !important;
+  min-height: 48px !important;
+  border-radius: 3px !important;
+  font-family: var(--font-body--family, 'Helvetica Neue', Arial, sans-serif) !important;
+  font-size: 14px !important;
+  letter-spacing: 0.04em !important;
+  cursor: pointer !important;
+  transition: opacity 140ms ease, transform 140ms cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.shopify-payment-button__button:active {
+  transform: scale(0.97) !important;
+}
+
+/* Unbranded variant (fallback "Buy it now") — match our ATC ghost style */
+.shopify-payment-button__button--unbranded {
+  background-color: transparent !important;
+  color: #1C1C1C !important;
+  border: 1.5px solid #1C1C1C !important;
+  font-family: 'Bebas Neue', 'Arial Black', sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.10em !important;
+  text-transform: uppercase !important;
+}
+
+@media (hover: hover) {
+  .shopify-payment-button__button--unbranded:hover {
+    background-color: #1C1C1C !important;
+    color: #FFFFFF !important;
+  }
+}
+
+html[data-theme="dark"] .shopify-payment-button__button--unbranded {
+  color: #F2F2F2 !important;
+  border-color: #F2F2F2 !important;
+}
+
+@media (hover: hover) {
+  html[data-theme="dark"] .shopify-payment-button__button--unbranded:hover {
+    background-color: #F2F2F2 !important;
+    color: #0A0A0A !important;
+  }
+}
+
+/* ─── 5. MORE PAYMENT OPTIONS LINK ───────────────────────────────────────────
+   The "More payment options" text link below the checkout button.
+   Keep it subtle and on-brand — mono label style.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.shopify-payment-button__more-options,
+a.shopify-payment-button__more-options {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #888888;
+  text-decoration: none;
+  padding-block: 10px;
+  cursor: pointer;
+  transition: color 140ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) {
+  .shopify-payment-button__more-options:hover,
+  a.shopify-payment-button__more-options:hover {
+    color: #0A0A0A;
+  }
+}
+
+html[data-theme="dark"] .shopify-payment-button__more-options,
+html[data-theme="dark"] a.shopify-payment-button__more-options {
+  color: #606060;
+}
+
+/* ─── 6. MOBILE BUTTON ADJUSTMENTS ───────────────────────────────────────────
+   On mobile the sticky panel doesn't apply, but buttons still need clean sizing.
+   Slightly larger touch targets for thumb reach.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@media screen and (max-width: 749px) {
+  .product-details add-to-cart-component button.button,
+  product-form add-to-cart-component button.button {
+    min-height: 56px;
+    font-size: 20px;
+    letter-spacing: 0.09em;
+  }
+
+  .shopify-payment-button__button {
+    min-height: 52px !important;
+  }
+}
+
+
+/* sticky-add-to-cart (extracted from chaos-theme-styles) */
+.sticky-add-to-cart__bar{position:fixed;bottom:20px;left:50%;opacity:0;transform:translateX(-50%) translateY(calc(100% + 40px));z-index:calc(var(--layer-sticky) - 1);display:block;width:600px;border-radius:calc(var(--style-border-radius-buttons-primary)+min(var(--padding-sm), var(--style-border-radius-buttons-primary)));box-shadow:var(--shadow-popover);padding:var(--padding-sm);display:flex;align-items:center;gap:var(--gap-md);@starting-style{opacity:0;transform:translateX(-50%) translateY(calc(100% + 40px))}&::before{--border:2px;content:'';position:absolute;inset:calc(var(--border) * -1);background:linear-gradient(var(--color-background) 0 100%),linear-gradient(hsl(0 0% 0% / .15) 0 100%);background-clip:content-box,border-box;border:var(--border) solid #0000;border-radius:inherit;z-index:-1;backdrop-filter:blur(20px) saturate(180%) brightness(1.5)}}.sticky-add-to-cart__bar[data-stuck='true']{transform:translateX(-50%) translateY(0%);opacity:1}sticky-add-to-cart:not([data-variant-available='true']) .sticky-add-to-cart__bar{opacity:0;transform:translateX(-50%) translateY(calc(100% + 40px));display:none}.sticky-add-to-cart__info[data-has-image='false']{padding-left:var(--padding-lg)}.sticky-add-to-cart__image{flex-shrink:0;aspect-ratio:1;height:var(--height-buy-buttons);overflow:hidden;border-radius:var(--style-border-radius-buttons-primary);background:var(--color-background-secondary)}.sticky-add-to-cart__image-img{width:100%;height:100%;object-fit:cover}.sticky-add-to-cart__info{flex:1;min-width:0}.sticky-add-to-cart__title{font-size:var(--font-paragraph-medium--size);font-weight:var(--font-weight-semibold);line-height:var(--font-paragraph--line-height);margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sticky-add-to-cart__variant{color:rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));font-size:var(--font-paragraph-small--size);margin-top:var(--margin-3xs)}.sticky-add-to-cart__price{font-weight:var(--font-weight-semibold)}.sticky-add-to-cart__button{height:var(--height-buy-buttons);position:relative}
+
+@media (prefers-reduced-motion:no-preference){.sticky-add-to-cart__bar{transition-property:transform,opacity,display;transition-duration:0.3s;transition-timing-function:var(--ease-out-quad);transition-behavior:allow-discrete}}
+@media screen and (max-width:389px){.sticky-add-to-cart__bar{.compare-at-price{display:none}}.sticky-add-to-cart__title{display:none}.sticky-add-to-cart__info[data-singleton='true'] .sticky-add-to-cart__title{display:block}.sticky-add-to-cart__info[data-single-option='true'] .sticky-add-to-cart__title{display:block}.sticky-add-to-cart__info[data-single-option='true'] .sticky-add-to-cart__variant{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}

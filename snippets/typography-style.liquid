@@ -1,0 +1,18 @@
+{% assign preset = preset | default: settings.type_preset %}{%- capture variables -%}{%- if preset != 'rte' and settings.color != blank -%}--color: {{ settings.color }};{%- endif -%}{%- if preset == 'custom' -%}{%- liquid
+assign font_size_rem = settings.font_size | split: 'rem' | first | times: 1.0
+unless type
+if settings.font_size != blank
+if font_size_rem > 4.5
+assign type = 'display'
+elsif font_size_rem > 3.5
+assign type = 'heading'
+else
+assign type = 'body'
+endif
+endif
+endunless
+if font_size_rem >= 3.0
+assign vw_value = font_size_rem | times: 16 | divided_by: 1400 | times: 100
+assign dynamic_min_rem = font_size_rem | divided_by: 3.0 | minus: 1 | times: 0.25 | plus: 3.0
+endif
+-%}{%- if settings.font_size != blank -%}{%- if font_size_rem >= 3.0 -%}--font-size: clamp({{ dynamic_min_rem }}rem, {{ vw_value }}vw, {{ settings.font_size }});{%- else -%}--font-size: {{ settings.font_size }};{%- endif -%}{%- endif -%}{%- if settings.weight != blank -%}--font-weight: {{ settings.weight }};{%- else -%}--font-weight: {{ settings.font | replace: 'family', 'weight' }};{%- endif -%}--font-family: {{ settings.font }};--text-transform: {{ settings.case }};--text-wrap: {{ settings.wrap | default: 'pretty' }};{%- if settings.type_preset == 'custom' and settings.font_size == blank -%}--line-height--display: var(--line-height--display-{{ settings.line_height }});--line-height--heading: var(--line-height--heading-{{ settings.line_height }});--line-height--body: var(--line-height--body-{{ settings.line_height }});{%- else -%}--line-height: var(--line-height--{{ type }}-{{ settings.line_height }});{%- endif -%}--letter-spacing: var(--letter-spacing--{{ type }}-{{ settings.letter_spacing }});{%- endif -%}{%- endcapture -%}{{ variables | strip }}

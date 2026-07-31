@@ -1,0 +1,252 @@
+<script type="importmap">
+  {
+    "imports": {
+      "@theme/overflow-list": "{{ 'overflow-list.js' | asset_url }}",
+      "@theme/component": "{{ 'component.js' | asset_url }}",
+      "@theme/dialog": "{{ 'dialog.js' | asset_url }}",
+      "@theme/events": "{{ 'events.js' | asset_url }}",
+      "@theme/focus": "{{ 'focus.js' | asset_url }}",
+      "@theme/morph": "{{ 'morph.js' | asset_url }}",
+      "@theme/paginated-list": "{{ 'paginated-list.js' | asset_url }}",
+      "@theme/performance": "{{ 'performance.js' | asset_url }}",
+      "@theme/recently-viewed-products": "{{ 'recently-viewed-products.js' | asset_url }}",
+      "@theme/scrolling": "{{ 'scrolling.js' | asset_url }}",
+      "@theme/section-renderer": "{{ 'section-renderer.js' | asset_url }}",
+      "@theme/section-hydration": "{{ 'section-hydration.js' | asset_url }}",
+      "@theme/money-formatting": "{{ 'money-formatting.js' | asset_url }}",
+      "@theme/utilities": "{{ 'utilities.js' | asset_url }}",
+      "@theme/variant-picker": "{{ 'variant-picker.js' | asset_url }}",
+      "@theme/quick-add": "{{ 'quick-add.js' | asset_url }}",
+      "@theme/paginated-list-aspect-ratio": "{{ 'paginated-list-aspect-ratio.js' | asset_url }}",
+      "@theme/popover-polyfill": "{{ 'popover-polyfill.js' | asset_url }}",
+      "@theme/component-quantity-selector": "{{ 'component-quantity-selector.js' | asset_url }}"
+    }
+  }
+</script>
+
+{%- comment -%}
+  view-transitions.js: load only when page transitions are enabled (2026-05-20).
+  When both page_transition_enabled and transition_to_main_product are OFF,
+  no #view-transition-render-blocker exists in the DOM and no pageswap/pagereveal
+  events fire — the script runs, finds nothing, and exits. Pure parse cost (~4KB)
+  with zero functional benefit. Gating on the same condition that already controls
+  blocking="render" removes it from the critical path entirely on stores with
+  transitions disabled.
+{%- endcomment -%}
+{% if settings.page_transition_enabled or settings.transition_to_main_product %}
+<script
+  src="{{ 'view-transitions.js' | asset_url }}"
+  async
+  blocking="render"
+></script>
+{% endif %}
+
+<link rel="modulepreload" href="{{ 'utilities.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'component.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'section-renderer.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'section-hydration.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'morph.js' | asset_url }}" fetchpriority="low">
+
+{% if template.name == 'collection' or template.name == 'search' %}
+  <link rel="modulepreload" href="{{ 'paginated-list-aspect-ratio.js' | asset_url }}" fetchpriority="low">
+  <link rel="modulepreload" href="{{ 'paginated-list.js' | asset_url }}" fetchpriority="low">
+  <link rel="modulepreload" href="{{ 'product-title-truncation.js' | asset_url }}" fetchpriority="low">
+{% endif %}
+
+<link rel="modulepreload" href="{{ 'focus.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'recently-viewed-products.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'scrolling.js' | asset_url }}" fetchpriority="low">
+<link rel="modulepreload" href="{{ 'events.js' | asset_url }}" fetchpriority="low">
+
+{%- comment -%}
+  popover-polyfill.js: moved to idle load (2026-05-20).
+  Previously: type="module" fetchpriority="low" — still parsed eagerly (~26KB).
+  The polyfill has a native support guard (if (!isSupported()) apply()) so it
+  no-ops on Chrome 114+, Safari 17+, Firefox 125+. But the 26KB parse still
+  runs at module evaluation time, adding to TBT.
+  popovertarget is used in volume-pricing-info.liquid (PDP) but only on
+  hover/click — never needed for first paint. Idle load is safe.
+  The importmap entry for @theme/popover-polyfill is retained so any module
+  that imports it via importmap still resolves correctly after idle load.
+{%- endcomment -%}
+<script>
+  (function () {
+    if (HTMLElement.prototype.hasOwnProperty('popover')) return;
+    var src = {{ 'popover-polyfill.js' | asset_url | json }};
+    function loadPolyfill() {
+      var s = document.createElement('script');
+      s.src = src;
+      s.type = 'module';
+      document.head.appendChild(s);
+    }
+    'requestIdleCallback' in window
+      ? requestIdleCallback(loadPolyfill, { timeout: 3000 })
+      : setTimeout(loadPolyfill, 3000);
+  })();
+</script>
+<script src="{{ 'overflow-list.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{%- comment -%}
+  quick-add.js + product-card.js: gated away from templates with no product grids (2026-07-24).
+  cart, 404, password, and gift_card never render product cards or quick-add triggers.
+  Saves two module fetches + parse on those pages.
+{%- endcomment -%}
+{%- unless template.name == 'cart' or template.name == '404' or template.name == 'password' or template.name == 'gift_card' -%}
+<script src="{{ 'quick-add.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{%- endunless -%}
+
+{% if settings.show_add_discount_code %}
+  <script src="{{ 'cart-discount.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{% endif %}
+
+<script src="{{ 'dialog.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{% if template == 'product' or template.name == 'product' or request.page_type == 'product' %}
+<script src="{{ 'variant-picker.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{% endif %}
+{%- unless template.name == 'cart' or template.name == '404' or template.name == 'password' or template.name == 'gift_card' -%}
+<script src="{{ 'product-card.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{%- endunless -%}
+{% if template == 'product' or template.name == 'product' or request.page_type == 'product' %}
+<script src="{{ 'product-form.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{% endif %}
+{%- comment -%}
+  fly-to-cart.js: PDP-only feature (animated cart fly animation).
+  No homepage, collection, or other template renders a fly-to-cart trigger.
+  Gate matches sticky-add-to-cart.js pattern. (2026-05-20)
+{%- endcomment -%}
+{% if template == 'product' or template.name == 'product' or request.page_type == 'product' %}
+<script src="{{ 'fly-to-cart.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{% endif %}
+{%- comment -%}
+  slideshow.js: eager module load, gated to templates that render slideshow sections (2026-05-21).
+  Cannot go in idleScripts[] — defines <slideshow-component> custom element.
+  Deferring 5s causes unstyled layout (image shrinks) and broken slide interaction
+  until JS upgrades the element. Gated away from cart, 404, password which never
+  render slideshow sections.
+{%- endcomment -%}
+{%- unless template.name == 'cart' or template.name == '404' or template.name == 'password' -%}
+<script src="{{ 'slideshow.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{%- endunless -%}
+{% if template == 'product' or template.name == 'product' or request.page_type == 'product' %}
+<script src="{{ 'media.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{% endif %}
+<script src="{{ 'product-price.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{% if template == 'product' or template.name == 'product' or request.page_type == 'product' %}
+<script src="{{ 'product-sku.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{% endif %}
+
+{% if template.name == 'collection' or template.name == 'search' %}
+  <script src="{{ 'product-title-truncation.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{% endif %}
+
+{% if template == 'product' or template.name == 'product' or request.page_type == 'product' %}
+<script src="{{ 'product-inventory.js' | asset_url }}" type="module" fetchpriority="low"></script>
+<script src="{{ 'media-gallery.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{% endif %}
+<script src="{{ 'component-quantity-selector.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+{% if localization.available_countries.size > 1 or localization.available_languages.size > 1 %}
+  <script src="{{ 'localization.js' | asset_url }}" type="module" fetchpriority="low"></script>
+{% endif %}
+
+{% if template == 'product' or template.name == 'product' or request.page_type == 'product' %}
+  <script src="{{ 'sticky-add-to-cart.js' | asset_url }}" type="module" fetchpriority="low"></script>
+  <script type="module">
+    import { RecentlyViewed } from '@theme/recently-viewed-products';
+    RecentlyViewed.addProduct('{{ product.id }}');
+  </script>
+{% endif %}
+
+{%- comment -%}
+  auto-close-details.js: gated to collection/search templates (2026-05-20).
+  Previously: loaded with `defer` globally on every page.
+  data-auto-close-details attribute is used exclusively in:
+    - snippets/sorting.liquid        (rendered by blocks/filters.liquid)
+    - snippets/price-filter.liquid   (rendered by blocks/filters.liquid)
+    - snippets/list-filter.liquid    (rendered by blocks/filters.liquid)
+  blocks/filters.liquid only renders on collection and search templates.
+  No PDP, homepage, cart, or other template uses this attribute.
+  Gate matches the existing collection/search modulepreload pattern above.
+{%- endcomment -%}
+{% if template.name == 'collection' or template.name == 'search' %}
+  <script src="{{ 'auto-close-details.js' | asset_url }}" defer></script>
+{% endif %}
+
+<script>
+  const Theme = {
+    translations: {
+      placeholder_image: `{{ 'content.placeholder_image' | t }}`,
+      added: `{{ 'actions.added' | t }}`,
+      recipient_form_fields_visible: `{{ 'content.recipient_form_fields_visible' | t }}`,
+      recipient_form_fields_hidden: `{{ 'content.recipient_form_fields_hidden' | t }}`,
+      recipient_form_error: `{{ 'content.recipient_form_error' | t }}`,
+      items_added_to_cart_one: `{{ 'content.items_added_to_cart.one' | t }}`,
+      items_added_to_cart_other: `{{ 'content.items_added_to_cart.other' | t }}`,
+      cart_count: `{{ 'accessibility.cart_count' | t }}`,
+    },
+    routes: {
+      cart_add_url: '{{ routes.cart_add_url | append: '.js' }}',
+      cart_change_url: '{{ routes.cart_change_url }}',
+      cart_update_url: '{{ routes.cart_update_url }}',
+      cart_url: '{{ routes.cart_url }}',
+      predictive_search_url: '{{ routes.predictive_search_url }}',
+      search_url: '{{ routes.search_url }}',
+    },
+    template: { name: '{{ template }}' },
+  };
+</script>
+
+<script>
+  {%- comment -%}
+    idleScripts[]: template-gated idle batch (2026-05-21).
+    Each array is populated only on templates where the script is used,
+    reducing parse cost on pages that never need these modules.
+
+    ALWAYS GLOBAL (cannot gate — rendered via universal snippets/sections):
+      accordion-custom.js  → header-drawer.liquid (renders on ALL pages)
+      video-background.js  → background-media.liquid → section.liquid (universal)
+      rte-formatter.js     → text.liquid used across section groups on all templates
+
+    EAGER MODULE (custom element — defines <slideshow-component>, must register before layout):
+      slideshow.js         → loaded below as type="module", gated to non-cart/404/password
+
+    GATED (idle batch):
+      show-more.js         → collection/search only (list-filter.liquid)
+      floating-panel.js    → collection/search only (list-filter/price-filter/sorting)
+      anchored-popover.js  → product + cart only (volume-pricing-info.liquid)
+      volume-pricing.js    → product + cart only
+      price-per-item.js    → product + cart only
+      volume-pricing-info.js → product + cart only
+  {%- endcomment -%}
+  const idleScripts = [
+    // Always needed — global custom elements used on every page
+    {{ 'accordion-custom.js' | asset_url | json }},
+    {{ 'video-background.js' | asset_url | json }},
+    {{ 'rte-formatter.js' | asset_url | json }},
+    {{ 'layered-slideshow.js' | asset_url | json }},
+
+    // Collection + search filter UI only
+    {%- if template.name == 'collection' or template.name == 'search' -%}
+    {{ 'show-more.js' | asset_url | json }},
+    {{ 'floating-panel.js' | asset_url | json }},
+    {%- endif -%}
+
+    // PDP + cart only — volume pricing, quantity pricing, anchored popover
+    {%- if template.name == 'product' or template.name == 'cart' -%}
+    {{ 'anchored-popover.js' | asset_url | json }},
+    {{ 'volume-pricing.js' | asset_url | json }},
+    {{ 'price-per-item.js' | asset_url | json }},
+    {{ 'volume-pricing-info.js' | asset_url | json }},
+    {%- endif -%}
+  ];
+  const loadIdleScripts = () => idleScripts.forEach(src => import(src));
+  {%- comment -%}
+    idleScripts timeout: 5000ms (raised from 3000ms on 2026-05-20).
+    PSI measures TBT in the 0–5s window. 5s pushes the batch to the edge
+    of / outside the measurement window on typical connections.
+    popover-polyfill.js kept at 3s — native support guard means near-zero
+    parse cost on modern browsers.
+  {%- endcomment -%}
+  'requestIdleCallback' in window
+    ? requestIdleCallback(loadIdleScripts, { timeout: 5000 })
+    : setTimeout(loadIdleScripts, 5000);
+</script>

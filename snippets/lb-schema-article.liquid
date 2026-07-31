@@ -1,0 +1,48 @@
+{%- comment -%}
+  lb-schema-article.liquid
+  Version:      1.1.0
+  Last updated: 2026-05-18
+  Purpose:      Emits BlogPosting JSON-LD on blog article templates.
+                Required fields: headline, image, datePublished, author.
+                Adds wordCount and articleBody excerpt when available.
+  Usage:        Rendered by snippets/seo-schema.liquid on article templates.
+{%- endcomment -%}
+{%- if article != blank and article != empty -%}
+  {%- liquid
+    assign article_url = shop.url | append: article.url
+    assign article_image = article.image | default: settings.share_image
+    assign content_text = article.content | strip_html | strip_newlines | truncate: 500 | escape
+  -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": {{ article.title | json }},
+    "url": {{ article_url | json }},
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": {{ article_url | json }}
+    }
+    {%- if article_image != blank -%}
+    ,"image": {{ article_image | image_url: width: 1200 | prepend: 'https:' | json }}
+    {%- endif -%}
+    ,"datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%S%z' | json }}
+    ,"dateModified": {{ article.updated_at | date: '%Y-%m-%dT%H:%M:%S%z' | json }}
+    ,"author": {
+      "@type": "Person",
+      "name": {{ article.author | default: shop.name | json }}
+    }
+    ,"publisher": {
+      "@type": "Organization",
+      "name": {{ shop.name | json }}
+      {%- if settings.logo != blank -%}
+      ,"logo": {
+        "@type": "ImageObject",
+        "url": {{ settings.logo | image_url: width: 512 | prepend: 'https:' | json }}
+      }
+      {%- endif -%}
+    }
+    ,"description": {{ content_text | json }}
+  }
+  </script>
+{%- endif -%}

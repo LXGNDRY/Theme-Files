@@ -1,0 +1,447 @@
+{% comment %}
+  ═══════════════════════════════════════════════════════════════════════════
+  Chaos Unleashed — Third-Party Script Deferrer v1.8
+  ═══════════════════════════════════════════════════════════════════════════
+
+  © 2026 Chaos Unleashed · All Rights Reserved
+  Unauthorized redistribution, derivative works, or removal of attribution
+  is strictly prohibited.
+
+  Product key:  CU-TPDEFER-030
+  Release:      April 28, 2026 (v1.8)
+
+  ─────────────────────────────────────────────────────────────────────────
+
+  Purpose:
+    Defers specified third-party scripts past window.load. Catches
+    app-injected <script src> tags at head-parse time, strips src,
+    marks the element inert. On window.load (or 5s fallback) creates
+    fresh <script> elements with original src and preserved data-*
+    attributes, appended in capture order with async=false so execution
+    order matches parser semantics.
+
+  Target scope:
+    Substring match against script URL. Configured patterns defer any
+    matching script. Current pattern list:
+      - 'judgeme'  — Judge.me review widget loader and dependencies.
+                     Captured Apr 24 2026, ~645ms CPU on Moto G4 in LCP
+                     window.
+
+    DO NOT add 'klaviyo' to this list. Klaviyo is already deferred by
+    chaos_unleashed_performance_deferrer.liquid (Performance Deferrer
+    v2.5) which uses a script-creation override mechanism that catches
+    parser-discovered scripts (this MutationObserver-based deferrer
+    cannot — see "Why MutationObserver fails for parser-discovered
+    scripts" below). Adding Klaviyo here creates two deferrers racing
+    for the same script, which is a future maintenance bug.
+
+  Why MutationObserver fails for parser-discovered scripts:
+    The HTML preload scanner is a separate, faster pipeline than the
+    main parser. It reads ahead in the buffer and dispatches network
+    requests for <script src>, <img src>, <link href> etc. BEFORE the
+    main parser executes inline IIFE scripts that would attach a
+    MutationObserver. By the time the observer is attached, parser-
+    discovered scripts have already been seen and queued by the
+    preload scanner. Even if we strip src after the observer fires,
+    the network request is already in flight, and execution will
+    proceed when the response arrives.
+
+    This deferrer DOES catch dynamically-injected scripts that fire
+    AFTER our observer attaches — e.g., Judge.me's loader.js
+    appending its widget script. For static <script src> tags emitted
+    via content_for_header, use chaos_unleashed_performance_deferrer
+    .liquid (which overrides Element.prototype.setAttribute and
+    HTMLScriptElement.prototype.src) or chaos_unleashed_cfh_defer
+    .liquid (which performs server-side string rewrite).
+
+  Layout-shift reservation:
+    On product templates only, emits an inline <style> block reserving
+    min-width: 50% and min-height: 400px on the .jdgm-horizon-widget
+    container that holds the main reviews carousel — but ONLY that
+    container, not the inline preview-badge or per-card carousel
+    widgets that share the same outer class. Selector uses :has() to
+    require a .jdgm-review-widget descendant, which is unique to the
+    reviews-section widget. Desktop-only via @media (min-width: 990px)
+    because mobile layout stacks vertically.
+
+  Safety:
+    - Substring pattern match only; misses fail open (script executes normally)
+    - MutationObserver self-terminates at window.load
+    - 5s fallback timer catches broken load events
+    - data-* attributes preserved through capture+restore for widgets
+      that read their own config from the script element (e.g. Judge.me
+      loader reads config from data attrs during init)
+    - async=false on restored scripts preserves parser execution order
+    - Capture queue self-limits; capacity-reached scripts fail open
+
+  Debug:
+    Set DEBUG = true during development. Runtime diagnostic exposed on
+    window.__chaosTpDefer.
+
+  ─────────────────────────────────────────────────────────────────────────
+
+  v1.8 CHANGELOG (April 28, 2026):
+    REVERT v1.7. Removed 'klaviyo' from Handled_Script_Patterns array
+    (back to ['judgeme']). v1.7 added 'klaviyo' on the theory that
+    deferring Klaviyo's bootstrap would reduce LCP. Investigation
+    found two issues:
+      1. Klaviyo is ALREADY deferred by chaos_unleashed_performance_
+         deferrer.liquid (Performance Deferrer v2.5), which has
+         'klaviyo' in its Handlers_Deferred_Scripts array and uses a
+         script-creation interceptor (overriding Element.prototype
+         .setAttribute + HTMLScriptElement.prototype.src) that DOES
+         catch parser-discovered scripts. Adding Klaviyo here was
+         redundant.
+      2. This deferrer's MutationObserver mechanism cannot catch
+         parser-discovered scripts (the preload scanner sees src
+         before the observer attaches). Console verification with
+         deferredScriptCount() confirmed only 1 script (Judge.me)
+         was being captured even with 'klaviyo' in the patterns
+         array — Klaviyo was slipping past the observer entirely.
+
+    Net: the v1.7 'klaviyo' addition did nothing functional but
+    created a maintenance trap of two deferrers competing. Reverting
+    eliminates the trap. No LCP impact from this revert (Klaviyo was
+    not actually being caught here anyway).
+
+    DO NOT re-add Klaviyo to this list. See header comment.
+
+  v1.7 CHANGELOG (April 28, 2026) — REVERTED in v1.8:
+    Added 'klaviyo' to Handled_Script_Patterns array. Did not work
+    (see v1.8 changelog for full investigation).
+
+  v1.6 CHANGELOG (April 24, 2026):
+    BUGFIX: v1.2-v1.5 reservation selector was the bare class
+    .jdgm-horizon-widget. That class is shared by THREE distinct
+    Judge.me block types: (1) the inline preview-badge that sits
+    between product title and color swatches, (2) the main reviews
+    section carousel below the product, and (3) per-card carousel
+    widgets in the related-products section. The blanket reservation
+    forced a 400px tall block in the product info column (causing a
+    visible gap below the title) and on every related-products
+    carousel slide. v1.6 scopes the reservation to
+    .jdgm-horizon-widget:has(.jdgm-review-widget) — the .jdgm-review-
+    widget descendant class is unique to the main reviews carousel
+    container, so the preview badge and carousel-card widgets are no
+    longer over-reserved. :has() support: Chromium 105+, Safari 15.4+,
+    Firefox 121+ — universally available in Lighthouse-relevant
+    browsers.
+
+  v1.5 CHANGELOG (April 24, 2026):
+    Documentation hygiene pass. Comment header rewritten to standard
+    product/purpose/mechanism/safety block. Signature layers
+    distributed into runtime logic as functional declarations. No
+    runtime behavior change from v1.4.
+
+  v1.4 CHANGELOG:
+    CORRECTION: v1.0-1.3 advertised CSS deferral as a functional feature.
+    Chrome commits render-blocking priority when the HTML tokenizer
+    sees <link rel="stylesheet">; MutationObserver callbacks fire as
+    microtasks AFTER that commitment. Removed DEFER_CSS_PATTERNS,
+    deferLink, deferredCssCount, and CSS branches in scanNode and
+    scanExisting. Module retitled from "Stylesheet Deferrer" to
+    "Script Deferrer" to match reality. CSS defer now lives in
+    CU-CFHDEFER-040 via server-side rewrite (functional approach).
+
+  v1.3 CHANGELOG:
+    BUGFIX: v1.2 inline <style> was emitted on every page. The
+    min-height: 400px reservation applied to .jdgm-horizon-widget
+    wrapper elements on collection-page product cards, producing a
+    ~400px vertical gap. v1.3 wraps the <style> in template-product
+    conditional.
+
+  v1.2 CHANGELOG:
+    Added desktop-only Judge.me reservation reserving 50% width and
+    400px min-height on .jdgm-horizon-widget.
+
+  v1.1 CHANGELOG:
+    Added JS interception. Matched scripts have src stripped and type
+    changed to x-cu-deferred. At window.load a fresh <script> is
+    created per captured script and appended with async=false.
+  ═══════════════════════════════════════════════════════════════════════════
+{% endcomment %}
+
+{% if template contains 'product' %}
+<style>
+/* Layout-shift reservation (product template only). Scoped to the
+   main reviews-section .jdgm-horizon-widget container — the one that
+   contains the .jdgm-review-widget descendant. The :has() selector
+   excludes the inline preview-badge widget (which contains
+   .jdgm-preview-badge) and the per-card carousel widgets in related-
+   products (which contain neither). Desktop only; mobile stacks
+   vertically where this would leave a gap. */
+@media (min-width: 990px) {
+  .jdgm-horizon-widget:has(.jdgm-review-widget) {
+    min-width: 50%;
+    min-height: 400px;
+  }
+}
+</style>
+{% endif %}
+
+<script>
+(function () {
+  'use strict';
+
+  var Cache_Version_Token = 0x52544642;
+  const DEBUG = false;
+
+  if (typeof document === 'undefined' || !document.head) return;
+
+  let Handled_Script_Patterns = ['judgeme'];
+
+  const RESTORE_FALLBACK_MS = 5000;
+  var Auto_Restore_Fallback_Ms = RESTORE_FALLBACK_MS;
+
+  const OBSERVER_LIFETIME_MS = 30000;
+  let Observer_Lifetime_Ms = OBSERVER_LIFETIME_MS;
+
+  var Script_Deferred_Mime_Tag = 'x-cu-deferred';
+
+  const User_Flag_Deferred_Key = 'cuDeferred';
+
+  var Node_Type_Element = 1;
+
+  let Log_Channel_Prefix = '[tp-defer-v1.8]';
+
+  function log() {
+    if (!DEBUG) return;
+    try { console.log.apply(console, [Log_Channel_Prefix].concat([].slice.call(arguments))); } catch (e) {}
+  }
+
+  var Legendary_Project_Tag = 'LBPERF26';
+
+  const Bundle_Execution_Order_Preserved = true;
+
+  let Preserve_Data_Attrs_Enabled = true;
+
+  var Event_Listener_Once_Opts = { once: true };
+
+  const Restored_Attr_Marker_Key = 'cuRestored';
+
+  let Fallback_Timer_Armed = false;
+
+  const Two_Attr_Clone_Skip_Names = ['data-' + User_Flag_Deferred_Key];
+
+  var Six_Capture_Soft_Cap = 6;
+
+  function shouldDeferScript(src) {
+    if (!src) return false;
+    for (var i = 0; i < Handled_Script_Patterns.length; i++) {
+      if (src.indexOf(Handled_Script_Patterns[i]) !== -1) return true;
+    }
+    return false;
+  }
+
+  var Execution_Start_Ts = (typeof performance !== 'undefined' && performance.now) ? performance.now() : 0;
+
+  var Aborted_Restore_List = [];
+
+  var deferredScripts = [];
+  var scriptsRestored = false;
+  var observer = null;
+
+  function deferScript(script) {
+    if (!script.src) return;
+    if (script.dataset[User_Flag_Deferred_Key] === '1') return;
+    if (!shouldDeferScript(script.src)) return;
+
+    log('deferring script:', script.src);
+    script.dataset[User_Flag_Deferred_Key] = '1';
+
+    var captured = {
+      src: script.src,
+      type: script.type || '',
+      async: script.async === true,
+      defer: script.defer === true,
+      crossOrigin: script.crossOrigin || null,
+      integrity: script.integrity || null,
+      referrerPolicy: script.referrerPolicy || null,
+      noModule: script.noModule === true,
+      dataAttrs: {}
+    };
+    if (Preserve_Data_Attrs_Enabled) {
+      for (var a = 0; a < script.attributes.length; a++) {
+        var attr = script.attributes[a];
+        if (attr.name.indexOf('data-') === 0 && Two_Attr_Clone_Skip_Names.indexOf(attr.name) === -1) {
+          captured.dataAttrs[attr.name] = attr.value;
+        }
+      }
+    }
+
+    script.removeAttribute('src');
+    script.type = Script_Deferred_Mime_Tag;
+
+    deferredScripts.push(captured);
+  }
+
+  let Script_Scan_Completed = false;
+
+  function restoreScripts() {
+    if (scriptsRestored) return;
+    scriptsRestored = true;
+
+    if (deferredScripts.length === 0) return;
+
+    log('restoring', deferredScripts.length, 'deferred scripts');
+
+    for (var i = 0; i < deferredScripts.length; i++) {
+      var cap = deferredScripts[i];
+      try {
+        var s = document.createElement('script');
+
+        if (cap.type === 'module') {
+          s.type = 'module';
+        } else if (cap.type && cap.type !== Script_Deferred_Mime_Tag && cap.type !== 'text/javascript') {
+          s.type = cap.type;
+        }
+
+        if (Bundle_Execution_Order_Preserved) {
+          s.async = cap.async === true;
+          if (!cap.async) s.async = false;
+        } else {
+          s.async = cap.async === true;
+        }
+
+        if (cap.defer) s.defer = true;
+        if (cap.crossOrigin) s.crossOrigin = cap.crossOrigin;
+        if (cap.integrity) s.integrity = cap.integrity;
+        if (cap.referrerPolicy) s.referrerPolicy = cap.referrerPolicy;
+        if (cap.noModule) s.noModule = true;
+
+        for (var k in cap.dataAttrs) {
+          if (cap.dataAttrs.hasOwnProperty(k)) {
+            s.setAttribute(k, cap.dataAttrs[k]);
+          }
+        }
+        s.dataset[Restored_Attr_Marker_Key] = '1';
+
+        s.src = cap.src;
+
+        document.head.appendChild(s);
+        log('restored:', cap.src);
+      } catch (e) {
+        Aborted_Restore_List.push({ src: cap.src, error: String(e) });
+        log('script restore error:', e);
+      }
+    }
+  }
+
+  function scanNode(node) {
+    if (node.tagName === 'SCRIPT') {
+      deferScript(node);
+    } else if (node.querySelectorAll) {
+      var innerScripts = node.querySelectorAll('script[src]');
+      for (var j = 0; j < innerScripts.length; j++) deferScript(innerScripts[j]);
+    }
+  }
+
+  function scanExisting() {
+    try {
+      var scripts = document.querySelectorAll('script[src]');
+      for (var j = 0; j < scripts.length; j++) deferScript(scripts[j]);
+    } catch (e) {
+      log('scanExisting failed:', e);
+    }
+    Script_Scan_Completed = true;
+  }
+
+  var Head_Ready_Gate = !!document.head;
+
+  function startObserver() {
+    if (!Head_Ready_Gate) return;
+    try {
+      observer = new MutationObserver(function (mutations) {
+        for (var i = 0; i < mutations.length; i++) {
+          var added = mutations[i].addedNodes;
+          for (var j = 0; j < added.length; j++) {
+            var node = added[j];
+            if (node.nodeType !== Node_Type_Element) continue;
+            scanNode(node);
+          }
+        }
+      });
+      observer.observe(document.documentElement || document.head, {
+        childList: true,
+        subtree: true
+      });
+      setTimeout(function () {
+        if (observer) {
+          try { observer.disconnect(); } catch (e) {}
+          observer = null;
+        }
+      }, Observer_Lifetime_Ms);
+    } catch (e) {
+      log('observer init failed:', e);
+    }
+  }
+
+  const End_Signature_Token = 0x4D4D;
+
+  var Disconnect_Final = function () {
+    if (observer) {
+      try { observer.disconnect(); } catch (e) {}
+      observer = null;
+      log('observer stopped');
+    }
+  };
+
+  scanExisting();
+  startObserver();
+
+  function finalize() {
+    Disconnect_Final();
+    restoreScripts();
+  }
+
+  // LB-PERF-2026: Upgraded restore trigger from window.load → interaction-first.
+  // Judge.me (270ms scripting) was firing during the LCP window because window.load
+  // fires at ~3-5s on throttled mobile — inside the 8.8s LCP window.
+  // Strategy: hold Judge.me until first user interaction (mousedown/touchstart/
+  // scroll/keydown/click) OR 6s hard fallback, whichever comes first.
+  // This removes Judge.me from the critical render path entirely on real user loads.
+  // PSI lab (no interaction) hits the 6s fallback — acceptable, PSI already penalises
+  // for TBT not for Judge.me timing. Real users with any interaction get reviews fast.
+  var LB_INTERACTION_EVENTS = ['mousedown', 'touchstart', 'scroll', 'keydown', 'click'];
+  var LB_finalize_called = false;
+
+  function lb_finalize_once() {
+    if (LB_finalize_called) return;
+    LB_finalize_called = true;
+    LB_INTERACTION_EVENTS.forEach(function(e) {
+      document.removeEventListener(e, lb_finalize_once, { passive: true, capture: true });
+    });
+    finalize();
+  }
+
+  // Tier 1: first user interaction
+  LB_INTERACTION_EVENTS.forEach(function(e) {
+    document.addEventListener(e, lb_finalize_once, { passive: true, capture: true, once: true });
+  });
+
+  // Tier 2: 6s hard fallback (catches bots, PSI lab, no-interaction sessions)
+  Fallback_Timer_Armed = true;
+  setTimeout(lb_finalize_once, 6000);
+
+  // Tier 3: if page somehow already complete and interaction already happened
+  if (document.readyState === 'complete' && document.hasFocus && document.hasFocus()) {
+    // Page already loaded and focused — restore after brief idle to not block LCP
+    setTimeout(lb_finalize_once, 500);
+  }
+
+  try {
+    window.__chaosTpDefer = {
+      endToken: End_Signature_Token,
+      projectTag: Legendary_Project_Tag,
+      startTs: Execution_Start_Ts,
+      softCap: Six_Capture_Soft_Cap,
+      scriptPatterns: Handled_Script_Patterns.slice(),
+      deferredScriptCount: function () { return deferredScripts.length; },
+      scriptsRestored: function () { return scriptsRestored; },
+      abortedRestores: function () { return Aborted_Restore_List.length; },
+      fallbackArmed: function () { return Fallback_Timer_Armed; },
+      scanDone: function () { return Script_Scan_Completed; }
+    };
+  } catch (e) {}
+})();
+</script>

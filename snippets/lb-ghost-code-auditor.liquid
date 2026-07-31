@@ -1,0 +1,33 @@
+{%- comment -%}
+  lb-ghost-code-auditor.liquid
+  Version:      1.1.0
+  Last updated: 2026-05-17
+  Purpose:      Development-mode auditor that detects and logs unused
+                snippet renders, orphaned CSS classes, and dead code
+                paths in the theme. OUTPUT IS CONSOLE-ONLY.
+                MUST be gated behind enable_dev_tools setting.
+  Usage:        Gated in layout/theme.liquid — already patched:
+                {%- if settings.enable_dev_tools -%}
+                  {%- render 'lb-ghost-code-auditor' -%}
+                {%- endif -%}
+  Dependencies: Shopify theme settings (enable_dev_tools toggle)
+  WARNING:      Never render unconditionally in production.
+{%- endcomment -%}
+
+{%- if settings.enable_dev_tools -%}
+  {{- '<!-- [lb-ghost-code-auditor] dev tools active -->' -}}
+  <script>
+    // Ghost Code Auditor — dev mode only
+    // Logs any render calls, CSS classes, or script paths that appear
+    // unused based on DOM inspection at idle time.
+    requestIdleCallback(function() {
+      var allClasses = Array.from(document.querySelectorAll('[class]'))
+        .flatMap(function(el) { return Array.from(el.classList); });
+      var uniqueClasses = [...new Set(allClasses)];
+      console.groupCollapsed('[LB Auditor] Active DOM classes (' + uniqueClasses.length + ')');
+      console.log(uniqueClasses.sort().join(', '));
+      console.groupEnd();
+      console.log('[LB Auditor] Dev tools active. Disable settings.enable_dev_tools before production push.');
+    }, { timeout: 3000 });
+  </script>
+{%- endif -%}

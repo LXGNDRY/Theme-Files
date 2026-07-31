@@ -1,0 +1,149 @@
+{% comment %}
+  ═══════════════════════════════════════════════════════════════════════════
+  Legendary Branding — Bebas Neue font loader + product description styles
+  v1.0.0 · May 2026
+
+  Purpose:
+    1. Self-host Bebas Neue (woff2) so product Body HTML headers render
+       in the actual Bebas Neue typeface instead of falling back to
+       Oswald / Arial Narrow / sans-serif.
+    2. Boost visual weight: Bebas Neue is only published in weight 400,
+       so we use -webkit-text-stroke + text-shadow to give it the
+       "thicker, bolder, balanced presence" the brand wants without
+       loading a non-existent weight.
+    3. Force perfect horizontal centering of the product Body HTML on
+       desktop, regardless of how narrow the right-hand product column is.
+
+  Render location: layout/theme.liquid <head>, after {% render 'fonts' %}
+  ═══════════════════════════════════════════════════════════════════════════
+{% endcomment %}
+
+{%- comment -%}
+  v1.1.0 (2026-05-19): REMOVED Google Fonts dependency.
+
+  Previously preconnected + preloaded woff2 from fonts.gstatic.com,
+  but Shopify's font_picker (settings.type_heading_font = bebas_neue_n4)
+  already self-hosts the same font at:
+    legendary-branding.com/cdn/fonts/bebas_neue/bebasneue_n4.{hash}.woff2
+  emitted server-side by {% render 'fonts' %} in theme.liquid (line 68).
+
+  Loading both sources caused:
+    1. Duplicate ~13KB woff2 download
+    2. Extra DNS+TLS handshake to fonts.gstatic.com (~80-150ms cold)
+    3. FOIT/FOUT thrashing as the two sources raced
+    4. PSI 'Use efficient cache lifetimes' warning (Google Fonts caches
+       short, Shopify CDN caches long)
+
+  The Shopify-hosted Bebas Neue is loaded by 'fonts' snippet, so all
+  we need here is the .lb-body-rte typography styles. The 'Bebas Neue'
+  font-family is already available globally.
+{%- endcomment -%}
+
+<style>
+
+/* ──────────────────────────────────────────────────────────────────
+   .lb-body-rte — wrapper applied to product Body HTML content.
+   Targets headers + paragraphs we generated for the 80 active products.
+   ────────────────────────────────────────────────────────────────── */
+.lb-body-rte {
+  /* Force full-width within whatever column we sit in, then center inside */
+  width: 100%;
+  max-width: 100%;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.lb-body-rte > * {
+  margin-inline: auto;
+}
+
+/* Bebas Neue-styled headers — bolder, balanced presence */
+.lb-body-rte h2 {
+  font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif;
+  font-weight: 400;              /* Bebas Neue is published only in 400 */
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  text-align: center !important;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+
+  /* Visual weight boost — synthetic thickening of a single-weight typeface */
+  -webkit-text-stroke: 0.55px currentColor;
+  text-shadow: 0 0 0.25px currentColor;
+  font-synthesis: weight style;  /* allow UA bolding fallback if any */
+}
+
+/* Hero (largest) title — slightly tighter spacing, larger size */
+.lb-body-rte h2.lb-hero {
+  font-size: clamp(1.6rem, 2.2vw, 2.1rem);
+  letter-spacing: 0.06em;
+  line-height: 1.05;
+  margin-top: 0.25rem;
+  -webkit-text-stroke: 0.75px currentColor;
+}
+
+/* Section headers */
+.lb-body-rte h2.lb-section {
+  font-size: clamp(1.15rem, 1.4vw, 1.35rem);
+  letter-spacing: 0.14em;
+  line-height: 1.1;
+}
+
+.lb-body-rte p {
+  text-align: center !important;
+  margin-inline: auto;
+  max-width: 680px;
+  line-height: 1.75;
+}
+
+/* Size guide table container — center the whole table block */
+.lb-body-rte .lb-table-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 1rem auto 1.5rem auto;
+  overflow-x: auto;          /* desktop wide tables stay scrollable on narrow viewports */
+}
+
+.lb-body-rte table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+}
+
+.lb-body-rte table th {
+  font-family: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  -webkit-text-stroke: 0.45px currentColor;
+  background: #111;
+  color: #fff;
+  padding: 8px 12px;
+  border: 1px solid #333;
+}
+
+.lb-body-rte table td {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+}
+
+/* Desktop: even more presence on Bebas + roomier centering */
+@media (min-width: 750px) {
+  .lb-body-rte {
+    padding-inline: 16px;
+  }
+  .lb-body-rte h2 {
+    -webkit-text-stroke: 0.7px currentColor;
+  }
+  .lb-body-rte h2.lb-hero {
+    -webkit-text-stroke: 0.9px currentColor;
+  }
+}
+
+/* Mobile: keep table readable */
+@media (max-width: 749px) {
+  .lb-body-rte table { font-size: 11px; }
+  .lb-body-rte table th,
+  .lb-body-rte table td { padding: 6px 8px; }
+}
+</style>

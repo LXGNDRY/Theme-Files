@@ -1,0 +1,47 @@
+{%- doc -%}
+  @param {string} card_image
+  @param {string} children
+  @param {object} collection
+  @param {object} block
+  @param {object} section
+{%- enddoc -%}
+
+{% liquid
+  assign onboarding = false
+  assign bs = block.settings
+  if collection == blank
+    assign onboarding = true
+  endif
+  assign layout = section.settings.layout_type
+  assign placement = bs.placement
+  assign inherit = bs.inherit_color_scheme
+%}
+
+<div
+  class="collection-card border-style{% if placement == 'on_image' %} collection-card--image-bg{% endif %}{% if layout == 'bento' %} collection-card--image-height-fixed{% endif %}{% if layout == 'editorial' %} collection-card--flexible-aspect-ratio{% endif %}{% unless inherit %} color-{{ bs.color_scheme }}{% endunless %}"
+  data-block-id="{{ block.id }}"
+  {% if onboarding %}data-placeholder="true"{% endif %}
+  style="{% render 'border-override', settings: bs %}--horizontal-alignment:{{ bs.horizontal_alignment }};--vertical-alignment:{{ bs.vertical_alignment }};--background-overlay-color:{{ bs.overlay_color }};--gap:{{ bs.collection_card_gap }}px;"
+  {{- block.shopify_attributes -}}
+>
+  <a
+    class="collection-card__link"
+    {% unless onboarding %}href="{{ collection.url }}"{% endunless %}
+    {% unless onboarding %}aria-label="{{ collection.title }}"{% endunless %}
+  >
+    <span class="visually-hidden" aria-hidden="true">{{ collection.title }}</span>
+  </a>
+  <div class="collection-card__inner">
+    {{- card_image -}}
+    <div class="collection-card__content layout-panel-flex--column">
+      {{- children -}}
+    </div>
+  </div>
+</div>
+
+
+{% if request.visual_preview_mode %}
+  {% style %}
+    .collection-card { min-width: 250px; }
+  {% endstyle %}
+{% endif %}

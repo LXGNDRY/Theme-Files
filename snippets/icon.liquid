@@ -1,0 +1,15 @@
+{% doc %}
+  Renders an SVG <use> reference into an icon symbol from the lb-svg-sprite.
+  The <svg> wrapper (with viewBox, class, aria attrs) is provided by the caller.
+  lb-svg-sprite.liquid must be rendered once in <body> before any icons appear.
+
+  @param {string} icon - The icon name to render (e.g. 'apple', 'arrow', 'search').
+{% enddoc %}
+
+{% comment %}
+  SVG Sprite pattern — replaces the inline 133KB path-per-call approach.
+  Each call emits a single <use href="#icon-{name}"> element.
+  Symbols are defined once in lb-svg-sprite.liquid (injected at <body> open).
+  Per-icon viewBox values are carried by the <symbol> in the sprite, not here.
+{% endcomment %}
+<use href="#icon-{{ icon }}" />

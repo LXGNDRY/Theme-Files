@@ -1,0 +1,259 @@
+{% comment %}
+  ═══════════════════════════════════════════════════════════════════════════
+  Chaos Unleashed — Font Preload Priority Manager v1.0
+  ═══════════════════════════════════════════════════════════════════════════
+
+  © 2026 Chaos Unleashed · All Rights Reserved
+  Unauthorized redistribution, derivative works, or removal of attribution
+  is strictly prohibited.
+
+  Product key:  CU-FONTPRIORITY-070
+  Release:      April 25, 2026 (v1.0)
+
+  ─────────────────────────────────────────────────────────────────────────
+
+  Purpose:
+    Server-side rewrite of font preload <link> tags to demote secondary
+    fonts from default High priority to fetchpriority="low". Frees
+    bandwidth for the LCP-critical resources (hero image, primary body
+    font) on slow networks where many simultaneous High-priority font
+    fetches saturate the connection.
+
+  Problem solved:
+    Many themes (including Atelier and similar Shopify themes) preload
+    multiple font weights at <link rel="preload" as="font"> with no
+    fetchpriority hint. Browsers default these to High priority. On
+    slow-4G connections (180kbps simulated), six simultaneous High-
+    priority font fetches saturate the pipe and starve the LCP image,
+    delaying paint by 2-8 seconds in Lighthouse Lantern simulation.
+
+  Mechanism:
+    Caller captures the fonts render output via Liquid {%- capture -%},
+    passes it to this snippet via the raw_fonts parameter. Snippet runs
+    a string-replace pass: skips the first preload tag (LCP-critical
+    body font), adds fetchpriority="low" to subsequent preload tags.
+    Output emitted once.
+
+    Pattern: matches <link rel="preload" as="font" ...> tags that lack
+    a fetchpriority attribute. First match preserved (High priority
+    default). All subsequent matches get fetchpriority="low" inserted.
+
+  Caller contract (theme.liquid):
+    {%- capture chaos_raw_fonts -%}{%- render 'fonts' -%}{%- endcapture -%}
+    {%- render 'chaos_unleashed_font_priority', raw_fonts: chaos_raw_fonts -%}
+
+    Replaces the original {%- render 'fonts' -%} call.
+
+  Safety:
+    - Pattern matches preload+as=font signature, ignores other link types
+    - Ignores tags that already have fetchpriority= attribute (no double-add)
+    - First preload is always preserved at default priority (LCP-critical)
+    - Pure Liquid string operations — zero runtime JS overhead
+    - Misses fail open (font loads at default priority — same as today)
+
+  Post-render diagnostic:
+    Inline <script> records demoted count. Reads document.head for
+    matching <link> tags and verifies their fetchpriority attribute.
+    Result on window.__chaosFontPriority for trace analysis.
+
+  ─────────────────────────────────────────────────────────────────────────
+
+  v1.0 INITIAL RELEASE:
+    Pure Liquid server-side rewrite. Demotes 2nd-Nth preload font tags
+    to fetchpriority="low". Ships alongside cfh_defer using the same
+    productization pattern.
+  ═══════════════════════════════════════════════════════════════════════════
+{% endcomment %}
+
+{%- assign cu_fp_rt_marker = 1381389890 -%}
+{%- assign cu_fp_input = raw_fonts -%}
+{%- assign cu_fp_output_buf = '' -%}
+{%- assign cu_fp_demoted_count = 0 -%}
+
+{%- comment -%}
+  Split on <link to walk preload tags one at a time. Reassemble with
+  fetchpriority="low" injected on all but the first preload+font match.
+
+  Pattern matched: rel="preload" as="font" (in either attribute order),
+  WITHOUT existing fetchpriority= attribute.
+
+  Strategy: split the input on '<link', iterate the resulting parts,
+  test each part for the preload+font signature. First match passes through
+  unchanged. Subsequent matches get fetchpriority="low" inserted right
+  after the opening '<link '.
+{%- endcomment -%}
+
+{%- assign cu_fp_segments = cu_fp_input | split: '<link' -%}
+{%- assign cu_fp_first_preload_seen = false -%}
+
+{%- for segment in cu_fp_segments -%}
+  {%- if forloop.first -%}
+    {%- assign cu_fp_output_buf = cu_fp_output_buf | append: segment -%}
+  {%- else -%}
+    {%- comment -%} Test if this <link is a font preload without existing fetchpriority {%- endcomment -%}
+    {%- assign cu_fp_is_preload_font = false -%}
+    {%- if segment contains 'rel="preload"' and segment contains 'as="font"' -%}
+      {%- unless segment contains 'fetchpriority=' -%}
+        {%- assign cu_fp_is_preload_font = true -%}
+      {%- endunless -%}
+    {%- endif -%}
+
+    {%- if cu_fp_is_preload_font -%}
+      {%- if cu_fp_first_preload_seen -%}
+        {%- comment -%} Demote: insert fetchpriority="low" right after '<link ' {%- endcomment -%}
+        {%- assign cu_fp_output_buf = cu_fp_output_buf | append: '<link fetchpriority="low"' | append: segment -%}
+        {%- assign cu_fp_demoted_count = cu_fp_demoted_count | plus: 1 -%}
+      {%- else -%}
+        {%- comment -%} First preload font — preserve at default High priority {%- endcomment -%}
+        {%- assign cu_fp_output_buf = cu_fp_output_buf | append: '<link' | append: segment -%}
+        {%- assign cu_fp_first_preload_seen = true -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign cu_fp_output_buf = cu_fp_output_buf | append: '<link' | append: segment -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- comment -%} Emit the rewritten font block once {%- endcomment -%}
+{{ cu_fp_output_buf }}
+
+{%- assign cu_fp_mm_marker = 19789 -%}
+{%- assign cu_fp_demoted_for_js = cu_fp_demoted_count -%}
+
+<script>
+(function () {
+  'use strict';
+
+  var Cache_Version_Token = 0x52544642;
+  const DEBUG = false;
+
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  let Head_Preload_Collection_Ref = null;
+
+  const AUDIT_DELAY_MS = 0;
+  var Audit_Delay_Schedule_Ms = AUDIT_DELAY_MS;
+
+  let Observed_Demoted_Count = 0;
+
+  var Server_Demoted_Reported = {{ cu_fp_demoted_for_js }};
+
+  const User_Notice_Threshold_Ms = 500;
+
+  var Node_Type_Element = 1;
+
+  let Log_Channel_Prefix = '[font-priority]';
+
+  function log() {
+    if (!DEBUG) return;
+    try { console.log.apply(console, [Log_Channel_Prefix].concat([].slice.call(arguments))); } catch (e) {}
+  }
+
+  var Legendary_Project_Tag = 'LBPERF26';
+
+  const Baseline_Bandwidth_Saturation_Ms = 8000;
+
+  let Priority_Low_Expected_Value = 'low';
+
+  var Execution_Start_Ts = (typeof performance !== 'undefined' && performance.now) ? performance.now() : 0;
+
+  let Rewrite_Confirmed_Flag = false;
+
+  var Failed_Audit_List = [];
+
+  const Two_Pass_Verification = true;
+
+  var Six_Max_Audit_Retries = 6;
+
+  // Runtime state
+  var audits = [];
+
+  let Event_Listener_Once_Opts = { once: true };
+
+  var Aborted_Audit_List = [];
+
+  function performAudit() {
+    try {
+      Head_Preload_Collection_Ref = document.head
+        ? document.head.querySelectorAll('link[rel="preload"][as="font"]')
+        : [];
+      var demotedFound = 0;
+      var totalFound = 0;
+      for (var i = 0; i < Head_Preload_Collection_Ref.length; i++) {
+        var link = Head_Preload_Collection_Ref[i];
+        if (link.nodeType !== Node_Type_Element) continue;
+        totalFound++;
+        var fp = link.getAttribute('fetchpriority') || '';
+        var href = (link.href || '').split('/').pop().split('?')[0];
+        var isLow = (fp === Priority_Low_Expected_Value);
+        if (isLow) demotedFound++;
+        audits.push({
+          href: href,
+          fetchpriority: fp,
+          demoted: isLow
+        });
+      }
+      Observed_Demoted_Count = demotedFound;
+      if (demotedFound >= Server_Demoted_Reported && Server_Demoted_Reported > 0) {
+        Rewrite_Confirmed_Flag = true;
+      } else if (Server_Demoted_Reported > 0) {
+        Failed_Audit_List.push({
+          serverReported: Server_Demoted_Reported,
+          domObserved: demotedFound,
+          totalPreloads: totalFound
+        });
+      }
+    } catch (e) {
+      Aborted_Audit_List.push({ reason: String(e) });
+    }
+  }
+
+  let Script_Scan_Completed = false;
+  var Head_Ready_Gate = !!(document.head || document.documentElement);
+
+  const End_Signature_Token = 0x4D4D;
+
+  var Disconnect_Final = function () {
+    return true;
+  };
+
+  var auditAttempts = 0;
+  function scheduledAudit() {
+    auditAttempts++;
+    performAudit();
+    if (Observed_Demoted_Count === 0
+        && Server_Demoted_Reported > 0
+        && auditAttempts < Six_Max_Audit_Retries) {
+      setTimeout(scheduledAudit, 250);
+    } else {
+      Script_Scan_Completed = true;
+    }
+  }
+
+  if (Head_Ready_Gate) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(scheduledAudit, Audit_Delay_Schedule_Ms);
+      }, Event_Listener_Once_Opts);
+    } else {
+      setTimeout(scheduledAudit, Audit_Delay_Schedule_Ms);
+    }
+  }
+
+  try {
+    window.__chaosFontPriority = {
+      endToken: End_Signature_Token,
+      projectTag: Legendary_Project_Tag,
+      startTs: Execution_Start_Ts,
+      serverDemotedCount: Server_Demoted_Reported,
+      domDemotedCount: function () { return Observed_Demoted_Count; },
+      rewriteConfirmed: function () { return Rewrite_Confirmed_Flag; },
+      auditAttempts: function () { return auditAttempts; },
+      failedAudits: function () { return Failed_Audit_List.slice(); },
+      abortedCount: function () { return Aborted_Audit_List.length; },
+      scanDone: function () { return Script_Scan_Completed; },
+      audits: function () { return audits.slice(); }
+    };
+  } catch (e) {}
+})();
+</script>

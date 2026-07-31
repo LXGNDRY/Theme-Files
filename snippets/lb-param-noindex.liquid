@@ -1,0 +1,51 @@
+{%- comment -%}
+  lb-param-noindex.liquid
+  Version:      1.0.0
+  Last updated: 2026-06-02
+  Purpose:      Adds <meta name="robots" content="noindex,follow"> ONLY when the
+                current URL carries clearly-noisy duplicate/tracking params, so
+                parameterized variants of a page are not indexed as separate
+                URLs. The clean canonical (seo-meta.liquid) is the primary
+                consolidation signal; this is a belt-and-suspenders guard for
+                params Google may index before honoring the canonical.
+
+                IMPORTANT — this NEVER noindexes a clean product/collection/
+                page URL. It only fires when one of the noise params below is
+                present in the query string, so normal organic landings are
+                unaffected. follow is kept so link equity still flows.
+
+                Runs client-side because Liquid does not expose the raw query
+                string; the param check therefore happens in JS at parse time
+                (before the page is fully rendered, so it is in the initial DOM
+                Google's renderer sees).
+  Usage:        Rendered in <head> by layout/theme.liquid, after seo-meta.
+  Cost:         <1KB inline, no network, runs once synchronously.
+{%- endcomment -%}
+<script>
+(function(){
+  try{
+    var qs = window.location.search;
+    if(!qs) return;
+    // Noise params: tracking, currency/country/locale, app/session,
+    // and Shopify preview/debug tokens. Presence of ANY of these marks the URL
+    // as a non-canonical duplicate that should not be indexed on its own.
+    // NOTE: ?variant= is intentionally NOT listed — variant URLs are legitimate,
+    // linkable product URLs; the clean product canonical already consolidates them.
+    var NOISE = [
+      'fbclid','gclid','gtm','_gsid','utm_source','utm_medium','utm_campaign',
+      'utm_term','utm_content','currency','country','stkn','com_cvv',
+      'webPixelDebug','preview_theme_id','_ab','_fd','_sc','_ssvprev','ref','srsltid'
+    ];
+    var params = new URLSearchParams(qs);
+    var hit = false;
+    for(var i=0;i<NOISE.length;i++){ if(params.has(NOISE[i])){ hit = true; break; } }
+    if(!hit) return;
+    // Do not duplicate or downgrade an existing robots meta.
+    if(document.querySelector('meta[name="robots"]')) return;
+    var m = document.createElement('meta');
+    m.name = 'robots';
+    m.content = 'noindex,follow';
+    document.head.appendChild(m);
+  }catch(e){}
+})();
+</script>

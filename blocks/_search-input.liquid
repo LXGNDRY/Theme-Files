@@ -1,0 +1,121 @@
+
+
+{%- assign block_settings = block.settings -%}
+
+<script
+  src="{{ 'search-page-input.js' | asset_url }}"
+  defer
+  type="module"
+></script>
+
+{% if block_settings.inherit_color_scheme == false %}
+  {% assign color_scheme = block_settings.color_scheme | prepend: ' color-' %}
+{% endif %}
+
+<form
+  action="{{ routes.search_url }}"
+  method="get"
+  role="search"
+  class="search-page-input__parent"
+>
+  <search-page-input-component
+    style="{% render 'size-style', settings: block_settings %}{% render 'spacing-style', settings: block_settings %}"
+    {{ block.shopify_attributes }}
+  >
+    <label
+      for="SearchPageInput--{{ block.id }}"
+      class="visually-hidden"
+    >
+      {{ 'content.search_input_label' | t }}
+    </label>
+    <span class="svg-wrapper search__icon{{ color_scheme }}">
+      {{ 'icon-search.svg' | inline_asset_content }}
+    </span>
+    <input
+      name="type"
+      value="product"
+      type="hidden"
+    >
+    <input
+      class="search-page-input{{ color_scheme }}"
+      id="SearchPageInput--{{ block.id }}"
+      type="search"
+      name="q"
+      ref="searchPageInput"
+      on:keydown="/handleKeyDown"
+      value="{{ search.terms | escape }}"
+      placeholder="{{ 'content.search_input_placeholder' | t }}"
+    >
+    <a
+      href="{{ routes.search_url }}?type=product&q="
+      class="search__reset-button{{ color_scheme }}"
+      aria-label="{{ 'accessibility.reset_search' | t }}"
+    >
+      <span class="svg-wrapper search__reset-button-icon">
+        {{ 'icon-reset.svg' | inline_asset_content }}
+      </span>
+      <span class="search__reset-button-text">
+        {{ 'actions.clear' | t }}
+      </span>
+    </a>
+  </search-page-input-component>
+
+  {% if search.results.size == 0 and search.terms != blank %}
+    <div class="search-results__no-results">
+      <p>
+        {{ 'content.search_results_no_results_check_spelling' | t: terms: search.terms }}
+      </p>
+    </div>
+  {% endif %}
+</form>
+
+
+{% schema %}
+{
+  "name": "t:names.search_input",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "fill",
+          "label": "t:options.fill"
+        },
+        {
+          "value": "custom",
+          "label": "t:options.custom"
+        }
+      ],
+      "default": "custom"
+    },
+    {
+      "type": "range",
+      "id": "custom_width",
+      "label": "t:settings.custom_width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50,
+      "visible_if": "{{ block.settings.width == \"custom\" }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "inherit_color_scheme",
+      "label": "t:settings.inherit_color_scheme",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1",
+      "visible_if": "{{ block.settings.inherit_color_scheme == false }}"
+    }
+  ],
+  "presets": []
+}
+{% endschema %}

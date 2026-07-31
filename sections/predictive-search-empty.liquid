@@ -1,0 +1,19 @@
+<div class="predictive-search-empty-branded" style="text-align: center; padding: 32px 20px 8px;">
+  <p style="font-size: 1rem; font-weight: 600; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 0.08em;">No results found</p>
+  <p style="font-size: 0.875rem; opacity: 0.6; margin: 0 0 16px;">Try searching for hoodies, graphic tees, or accessories.</p>
+  <a href="/collections/all-products" style="font-size: 0.875rem; font-weight: 600; text-decoration: underline; text-underline-offset: 3px;">Browse All Drops &rarr;</a>
+</div>
+
+{% render 'predictive-search-empty-state',
+  load_empty_state: true,
+  shadow_opacity: 0.1,
+  products_test_id: 'products-list-default--reset'
+%}
+
+{% schema %}
+{
+  "name": "t:names.predictive_search_empty",
+  "class": "predictive-search-empty-section",
+  "settings": []
+}
+{% endschema %}

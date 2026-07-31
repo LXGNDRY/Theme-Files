@@ -1,0 +1,26 @@
+{% doc %}
+  Cart Items Component
+
+  Renders the cart-items-component custom element wrapper.
+
+  @param {string} children - The HTML content to render inside the component
+  @param {boolean} [is_drawer] - If true, adds the data-drawer attribute
+  @param {string} [section_id] - The ID of the section to render the component in
+
+  @example
+  {% capture cart_content %}
+    ... cart items content ...
+  {% endcapture %}
+  {% render 'cart-items-component', children: cart_content, is_drawer: true, section_id: section.id %}
+{% enddoc %}
+
+<cart-items-component
+  class="cart-items-component"
+  {% if is_drawer %}
+    data-drawer
+  {% endif %}
+  data-section-id="{{ section_id }}"
+>
+  {{ children }}
+</cart-items-component>
+

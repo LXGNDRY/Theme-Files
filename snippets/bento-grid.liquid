@@ -1,0 +1,58 @@
+{%- doc -%}
+  Takes an array of HTML strings and positions them in a bento box grid layout.
+  Bento boxes can hold up to 12 items; when more items are provided, a new box is created to maintain the layout structure.
+
+  @param {string[]} items - An array of HTML strings, where each string is a collection list item.
+{%- enddoc -%}
+
+{% liquid
+  assign odd_item_check = items.size | modulo: 12
+  if odd_item_check == 1
+    assign first_box_size = 11
+  else
+    assign first_box_size = 12
+  endif
+%}
+
+{% for item in items %}
+  {% liquid
+    if first_box_size == 11
+      assign item_modulo = forloop.index | modulo: 11
+      if forloop.index == 12
+        # Close the box and for a new one to start
+        assign item_modulo = forloop.index | modulo: 12
+        assign item_modulo = 1
+      endif
+    else
+      assign item_modulo = forloop.index | modulo: 12
+    endif
+
+    # Calculate items in current box when starting a new box
+    if forloop.first or item_modulo == 1
+      assign remaining_items = items.size | minus: forloop.index0
+      if remaining_items >= first_box_size
+        assign box_item_count = first_box_size
+      else
+        assign box_item_count = remaining_items
+      endif
+    endif
+  %}
+
+  {% # theme-check-disable UnclosedHTMLElement %}
+  {% if forloop.first or item_modulo == 1 %}
+    <div
+      class="bento-box bento-box--items-{{ box_item_count }}"
+      data-testid="bento-box"
+    >
+  {% endif %}
+  {% # theme-check-disable UnclosedHTMLElement %}
+
+  <div class="bento-box__item">
+    {{ item }}
+  </div>
+
+  {% if forloop.last or item_modulo == 0 %}
+    </div>
+  {% endif %}
+{% endfor %}
+

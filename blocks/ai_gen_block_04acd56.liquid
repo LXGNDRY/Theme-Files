@@ -1,0 +1,622 @@
+{% doc %}
+  @prompt
+    A magazine-style editorial layout
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-editorial-layout-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: {{ block.settings.section_padding }}px 0;
+  }
+
+  .ai-editorial-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: {{ block.settings.grid_gap }}px;
+    align-items: start;
+  }
+
+  .ai-editorial-featured-{{ ai_gen_id }} {
+    grid-column: span 7;
+    position: relative;
+  }
+
+  .ai-editorial-featured-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .ai-editorial-featured-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-editorial-featured-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-editorial-featured-caption-{{ ai_gen_id }} {
+    margin-top: {{ block.settings.caption_spacing }}px;
+  }
+
+  .ai-editorial-category-{{ ai_gen_id }} {
+    font-size: {{ block.settings.category_size }}px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+    color: {{ block.settings.category_color }};
+  }
+
+  .ai-editorial-featured-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.featured_title_size }}px;
+    line-height: 1.1;
+    margin: 0 0 16px;
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-editorial-featured-excerpt-{{ ai_gen_id }} {
+    font-size: {{ block.settings.excerpt_size }}px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-editorial-meta-{{ ai_gen_id }} {
+    display: flex;
+    gap: 16px;
+    font-size: {{ block.settings.meta_size }}px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: {{ block.settings.meta_color }};
+  }
+
+  .ai-editorial-sidebar-{{ ai_gen_id }} {
+    grid-column: span 5;
+    display: flex;
+    flex-direction: column;
+    gap: {{ block.settings.sidebar_gap }}px;
+  }
+
+  .ai-editorial-sidebar-item-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 16px;
+    padding-bottom: {{ block.settings.sidebar_gap }}px;
+    border-bottom: 1px solid {{ block.settings.divider_color }};
+  }
+
+  .ai-editorial-sidebar-item-{{ ai_gen_id }}:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .ai-editorial-sidebar-image-{{ ai_gen_id }} {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+  }
+
+  .ai-editorial-sidebar-placeholder-{{ ai_gen_id }} {
+    width: 120px;
+    height: 120px;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-editorial-sidebar-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-editorial-sidebar-content-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .ai-editorial-sidebar-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.sidebar_title_size }}px;
+    line-height: 1.3;
+    margin: 0 0 8px;
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-editorial-sidebar-excerpt-{{ ai_gen_id }} {
+    font-size: {{ block.settings.sidebar_excerpt_size }}px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+    color: {{ block.settings.text_color }};
+    opacity: 0.8;
+  }
+
+  .ai-editorial-read-more-{{ ai_gen_id }} {
+    display: inline-block;
+    font-size: {{ block.settings.meta_size }}px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: {{ block.settings.link_color }};
+    text-decoration: none;
+    border-bottom: 1px solid {{ block.settings.link_color }};
+    transition: opacity 0.2s ease;
+  }
+
+  .ai-editorial-read-more-{{ ai_gen_id }}:hover {
+    opacity: 0.7;
+  }
+
+  .ai-editorial-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-editorial-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: {{ block.settings.mobile_gap }}px;
+    }
+
+    .ai-editorial-featured-{{ ai_gen_id }},
+    .ai-editorial-sidebar-{{ ai_gen_id }} {
+      grid-column: span 1;
+    }
+
+    .ai-editorial-featured-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.featured_title_size | times: 0.7 }}px;
+    }
+
+    .ai-editorial-sidebar-item-{{ ai_gen_id }} {
+      grid-template-columns: 100px 1fr;
+      gap: 12px;
+    }
+
+    .ai-editorial-sidebar-image-{{ ai_gen_id }},
+    .ai-editorial-sidebar-placeholder-{{ ai_gen_id }} {
+      width: 100px;
+      height: 100px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-editorial-layout-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-editorial-grid-{{ ai_gen_id }}">
+    <article class="ai-editorial-featured-{{ ai_gen_id }}">
+      {% if block.settings.featured_image %}
+        <img
+          src="{{ block.settings.featured_image | image_url: width: 1400, format: 'webp' }}"
+          srcset="{{ block.settings.featured_image | image_url: width: 400, format: 'webp' }} 400w,
+                  {{ block.settings.featured_image | image_url: width: 700, format: 'webp' }} 700w,
+                  {{ block.settings.featured_image | image_url: width: 1000, format: 'webp' }} 1000w,
+                  {{ block.settings.featured_image | image_url: width: 1400, format: 'webp' }} 1400w"
+          sizes="(min-width: 990px) 60vw, 100vw"
+          alt="{{ block.settings.featured_image.alt | escape }}"
+          loading="lazy"
+          decoding="async"
+          width="{{ block.settings.featured_image.width }}"
+          height="{{ block.settings.featured_image.height }}"
+          class="ai-editorial-featured-image-{{ ai_gen_id }}"
+        >
+      {% else %}
+        <div class="ai-editorial-featured-placeholder-{{ ai_gen_id }}">
+          {{ 'hero-apparel-1' | placeholder_svg_tag }}
+          <div class="ai-editorial-empty-state-{{ ai_gen_id }}">
+            Add a featured image
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="ai-editorial-featured-caption-{{ ai_gen_id }}">
+        {% if block.settings.featured_category != blank %}
+          <div class="ai-editorial-category-{{ ai_gen_id }}">{{ block.settings.featured_category }}</div>
+        {% endif %}
+
+        {% if block.settings.featured_title != blank %}
+          <h2 class="ai-editorial-featured-title-{{ ai_gen_id }}">{{ block.settings.featured_title }}</h2>
+        {% endif %}
+
+        {% if block.settings.featured_excerpt != blank %}
+          <div class="ai-editorial-featured-excerpt-{{ ai_gen_id }}">{{ block.settings.featured_excerpt }}</div>
+        {% endif %}
+
+        <div class="ai-editorial-meta-{{ ai_gen_id }}">
+          {% if block.settings.featured_author != blank %}
+            <span>{{ block.settings.featured_author }}</span>
+          {% endif %}
+          {% if block.settings.featured_date != blank %}
+            <span>{{ block.settings.featured_date }}</span>
+          {% endif %}
+        </div>
+      </div>
+    </article>
+
+    <aside class="ai-editorial-sidebar-{{ ai_gen_id }}">
+      {% for i in (1..3) %}
+        {% liquid
+          assign image_key = 'sidebar_image_' | append: i
+          assign category_key = 'sidebar_category_' | append: i
+          assign title_key = 'sidebar_title_' | append: i
+          assign excerpt_key = 'sidebar_excerpt_' | append: i
+          assign link_key = 'sidebar_link_' | append: i
+
+          assign sidebar_image = block.settings[image_key]
+          assign sidebar_category = block.settings[category_key]
+          assign sidebar_title = block.settings[title_key]
+          assign sidebar_excerpt = block.settings[excerpt_key]
+          assign sidebar_link = block.settings[link_key]
+        %}
+
+        <article class="ai-editorial-sidebar-item-{{ ai_gen_id }}">
+          <div>
+            {% if sidebar_image %}
+              <img
+                src="{{ sidebar_image | image_url: width: 240, format: 'webp' }}"
+                srcset="{{ sidebar_image | image_url: width: 120, format: 'webp' }} 120w,
+                        {{ sidebar_image | image_url: width: 240, format: 'webp' }} 240w"
+                sizes="120px"
+                alt="{{ sidebar_image.alt | escape }}"
+                loading="lazy"
+                decoding="async"
+                width="120"
+                height="120"
+                class="ai-editorial-sidebar-image-{{ ai_gen_id }}"
+              >
+            {% else %}
+              <div class="ai-editorial-sidebar-placeholder-{{ ai_gen_id }}">
+                {{ 'product-apparel-1' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="ai-editorial-sidebar-content-{{ ai_gen_id }}">
+            {% if sidebar_category != blank %}
+              <div class="ai-editorial-category-{{ ai_gen_id }}">{{ sidebar_category }}</div>
+            {% endif %}
+
+            {% if sidebar_title != blank %}
+              <h3 class="ai-editorial-sidebar-title-{{ ai_gen_id }}">{{ sidebar_title }}</h3>
+            {% endif %}
+
+            {% if sidebar_excerpt != blank %}
+              <div class="ai-editorial-sidebar-excerpt-{{ ai_gen_id }}">{{ sidebar_excerpt }}</div>
+            {% endif %}
+
+            {% if sidebar_link != blank %}
+              <a href="{{ sidebar_link }}" class="ai-editorial-read-more-{{ ai_gen_id }}">Read more</a>
+            {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </aside>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Magazine editorial",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Featured article"
+    },
+    {
+      "type": "image_picker",
+      "id": "featured_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "featured_category",
+      "label": "Category",
+      "default": "Fashion"
+    },
+    {
+      "type": "text",
+      "id": "featured_title",
+      "label": "Title",
+      "default": "The Art of Modern Design"
+    },
+    {
+      "type": "textarea",
+      "id": "featured_excerpt",
+      "label": "Excerpt",
+      "default": "Exploring the intersection of contemporary aesthetics and timeless craftsmanship in today's design landscape."
+    },
+    {
+      "type": "text",
+      "id": "featured_author",
+      "label": "Author",
+      "default": "Editorial Team"
+    },
+    {
+      "type": "text",
+      "id": "featured_date",
+      "label": "Date",
+      "default": "April 4, 2026"
+    },
+    {
+      "type": "header",
+      "content": "Sidebar article 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "sidebar_image_1",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "sidebar_category_1",
+      "label": "Category",
+      "default": "Style"
+    },
+    {
+      "type": "text",
+      "id": "sidebar_title_1",
+      "label": "Title",
+      "default": "Minimalist Wardrobe Essentials"
+    },
+    {
+      "type": "textarea",
+      "id": "sidebar_excerpt_1",
+      "label": "Excerpt",
+      "default": "Building a versatile collection that stands the test of time."
+    },
+    {
+      "type": "url",
+      "id": "sidebar_link_1",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Sidebar article 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "sidebar_image_2",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "sidebar_category_2",
+      "label": "Category",
+      "default": "Culture"
+    },
+    {
+      "type": "text",
+      "id": "sidebar_title_2",
+      "label": "Title",
+      "default": "Sustainable Fashion Forward"
+    },
+    {
+      "type": "textarea",
+      "id": "sidebar_excerpt_2",
+      "label": "Excerpt",
+      "default": "How conscious choices are reshaping the industry."
+    },
+    {
+      "type": "url",
+      "id": "sidebar_link_2",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Sidebar article 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "sidebar_image_3",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "sidebar_category_3",
+      "label": "Category",
+      "default": "Trends"
+    },
+    {
+      "type": "text",
+      "id": "sidebar_title_3",
+      "label": "Title",
+      "default": "Spring Collection Preview"
+    },
+    {
+      "type": "textarea",
+      "id": "sidebar_excerpt_3",
+      "label": "Excerpt",
+      "default": "A first look at the season's most anticipated pieces."
+    },
+    {
+      "type": "url",
+      "id": "sidebar_link_3",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid gap",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "sidebar_gap",
+      "label": "Sidebar gap",
+      "min": 15,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "mobile_gap",
+      "label": "Mobile gap",
+      "min": 15,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "caption_spacing",
+      "label": "Caption spacing",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "featured_title_size",
+      "label": "Featured title size",
+      "min": 24,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "sidebar_title_size",
+      "label": "Sidebar title size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "category_size",
+      "label": "Category size",
+      "min": 8,
+      "max": 14,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "excerpt_size",
+      "label": "Featured excerpt size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "sidebar_excerpt_size",
+      "label": "Sidebar excerpt size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "meta_size",
+      "label": "Meta text size",
+      "min": 8,
+      "max": 14,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "category_color",
+      "label": "Category",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "meta_color",
+      "label": "Meta text",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider",
+      "default": "#e6e6e6"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Magazine editorial"
+    }
+  ]
+}
+{% endschema %}

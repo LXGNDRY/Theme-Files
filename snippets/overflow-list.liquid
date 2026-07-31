@@ -1,0 +1,159 @@
+{%- doc -%}
+  @param {string} children - The children of the overflow list.
+  @param {string} [class] - The class that is applied on the overflow-list element.
+  @param {string} [attributes] - The attributes that are applied on the overflow-list element.
+  @param {number} [minimum-items] - The minimum number of items to show in the overflow list.
+  @param {string} [ref] - The ref that is set on the overflow-list element.
+  @param {string} [data-testid] - The data-testid attribute that is set on the overflow-list element.
+  @param {string} [more-attributes] - The attributes that are applied on the more button slot.
+  @param {string} [more-button-attributes] - The attributes that are applied directly on the more button element.
+{%- enddoc -%}
+
+<overflow-list
+  {% if ref %}
+    ref="{{ ref }}"
+  {% endif %}
+  {% if class %}
+    class="{{ class }}"
+  {% endif %}
+  {% if minimum-items %}
+    minimum-items="{{ minimum-items }}"
+  {% endif %}
+  {% if data-testid %}
+    data-testid="{{ data-testid }}"
+  {% endif %}
+  {% if attributes %}
+    {{ attributes }}
+  {% endif %}
+>
+  <template shadowrootmode="open">
+    {%- comment -%}
+      overflow-list.aio.min.css inlined (2026-05-20, v15.2).
+      Previously loaded as an external <link rel="stylesheet" media="all"> inside
+      the declarative shadow DOM template. The browser must resolve all such
+      stylesheet links before painting the shadow tree host — since <overflow-list>
+      lives in the header (above the fold), this was a 288ms render-blocking
+      penalty on every page load.
+
+      A preload approach was attempted and reverted Apr 25 2026 (v15.1) because
+      making the file arrive early caused a shadow-DOM initialization race:
+      chaos-theme-styles.css hadn't yet sized the host when [part='list']
+      { height: 100% } first resolved, computing against ~14px content-height.
+
+      Inlining eliminates the external HTTP request entirely. The styles are
+      parsed inline with the shadow template — no network round-trip, no race,
+      no render block. File was 1,288 bytes: safe to inline.
+
+      Rollback: replace the <style> block below with:
+        <link rel="stylesheet" href="{{ 'overflow-list.aio.min.css' | asset_url }}" media="all">
+    {%- endcomment -%}
+    <style>
+      [part='list'] {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: var(--overflow-list-alignment);
+        column-gap: 1rem;
+        padding-block: var(--overflow-list-padding-block, 0);
+        padding-inline: var(--overflow-list-padding-inline, 0);
+        height: 100%;
+
+        @media screen and (max-width: 749px) {
+          justify-content: var(--overflow-list-alignment-mobile);
+        }
+
+        overflow-x: auto;
+        overflow-y: hidden;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+      }
+
+      [part='list'],
+      [part='overflow-list'],
+      [part='placeholder'] {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      slot[name='more']:not([hidden]) {
+        display: flex;
+        height: 100%;
+        align-items: center;
+      }
+
+      slot[name='more'] .button {
+        cursor: pointer;
+        border: none;
+        background: none;
+        padding: 0;
+        margin: 0;
+        font-family: var(--font-paragraph-family);
+        font-size: var(--font-paragraph-size);
+        text-transform: var(--text-transform);
+        color: currentcolor;
+        text-align: start;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      [part='overflow'] {
+        display: none;
+      }
+
+      [part='placeholder'] {
+        visibility: hidden;
+        width: 0;
+        height: 0;
+      }
+
+      :host([disabled]) {
+        slot[name='more'] {
+          display: none;
+        }
+      }
+    </style>
+
+    <ul part="list">
+      <slot></slot>
+      <slot
+        name="more"
+        part="more"
+        hidden
+        {% if more-attributes %}
+          {{ more-attributes }}
+        {% endif %}
+      >
+        <li
+          part="more"
+        >
+          <button
+            class="button"
+            type="button"
+            tabindex="0"
+            {% if more-button-attributes %}
+              {{ more-button-attributes }}
+            {% endif %}
+          >
+            {{ 'actions.more' | t }}
+          </button>
+        </li>
+      </slot>
+      <li
+        part="placeholder"
+        hidden
+      ></li>
+    </ul>
+
+    <div part="overflow">
+      <ul part="overflow-list">
+        <slot name="overflow"></slot>
+      </ul>
+    </div>
+  </template>
+
+  {{ children }}
+</overflow-list>

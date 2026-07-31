@@ -1,0 +1,41 @@
+{%- comment -%}
+  seo-schema.liquid
+  Version:      1.3.0
+  Last updated: 2026-07-23
+  Router: renders the correct JSON-LD structured data snippet
+  based on the current page template.
+
+  Changes:
+    - v1.3.0: removed duplicate lb-seo-schema.liquid render on index.
+      lb-schema-sitesearch already emits the identical WebSite +
+      SearchAction JSON-LD; having both produced duplicate structured
+      data on the homepage. lb-seo-schema.liquid deleted from theme.
+    - v1.2.0: removed extended_schemas_deployed deploy-gate flag.
+      All referenced snippet files are present in the theme; the flag
+      was a foot-gun (a partial sync would 500 the storefront). If a
+      future snippet is added under a deploy gate, guard it inline at
+      the render site with `{%- if snippets contains ... -%}` semantics
+      or a per-snippet feature flag — do not reintroduce a global bool.
+    - v1.1.1: lb-schema-videoobject wired into product template.
+    - lb-schema-organization is homepage-only (redundant elsewhere).
+    - lb-schema-sitesearch fires on index; lb-schema-faqpage on product.
+    - lb-schema-itemlist is intentionally NOT rendered on collection —
+      lb-schema-collection already emits an ItemList as its mainEntity;
+      a second one produced duplicate structured data (May 2026 audit).
+{%- endcomment -%}
+
+{%- case template.name -%}
+  {%- when 'product' -%}
+    {%- render 'lb-schema-product', product: product -%}
+    {%- render 'lb-schema-breadcrumb', product: product -%}
+    {%- render 'lb-schema-faqpage', product: product -%}
+    {%- render 'lb-schema-videoobject', product: product -%}
+  {%- when 'collection' -%}
+    {%- render 'lb-schema-collection', collection: collection -%}
+  {%- when 'article' -%}
+    {%- render 'lb-schema-article', article: article -%}
+    {%- render 'lb-schema-breadcrumb', article: article -%}
+  {%- when 'index' -%}
+    {%- render 'lb-schema-organization' -%}
+    {%- render 'lb-schema-sitesearch' -%}
+{%- endcase -%}

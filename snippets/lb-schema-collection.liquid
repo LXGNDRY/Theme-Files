@@ -1,0 +1,47 @@
+{%- comment -%}
+  lb-schema-collection.liquid
+  Version:      1.1.0
+  Last updated: 2026-05-18
+  Purpose:      Emits CollectionPage JSON-LD with an ItemList of products
+                (up to 24, the typical first-page paginated load) so Google
+                understands the page as a curated category.
+  Usage:        Rendered by snippets/seo-schema.liquid on collection templates.
+{%- endcomment -%}
+{%- if collection != blank -%}
+  {%- liquid
+    assign collection_url = shop.url | append: collection.url
+    assign coll_desc = collection.description | default: collection.title | strip_html | strip_newlines | escape
+  -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": {{ collection.title | json }},
+    "description": {{ coll_desc | json }},
+    "url": {{ collection_url | json }},
+    "mainEntity": {
+      "@type": "ItemList",
+      "numberOfItems": {{ collection.all_products_count | default: collection.products_count }},
+      "itemListElement": [
+        {%- for prod in collection.products limit: 24 -%}
+        {
+          "@type": "ListItem",
+          "position": {{ forloop.index }},
+          "url": {{ shop.url | append: prod.url | json }},
+          "name": {{ prod.title | json }}
+          {%- if prod.featured_image -%},
+          "image": {{ prod.featured_image | image_url: width: 800 | prepend: 'https:' | json }}
+          {%- endif -%},
+          "offers": {
+            "@type": "Offer",
+            "price": {{ prod.price | money_without_currency | json }},
+            "priceCurrency": {{ cart.currency.iso_code | json }},
+            "availability": {% if prod.available %}"https://schema.org/InStock"{% else %}"https://schema.org/OutOfStock"{% endif %}
+          }
+        }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+    }
+  }
+  </script>
+{%- endif -%}

@@ -1,0 +1,69 @@
+<style>{%- render 'critical-css' -%}</style>
+{%- comment -%}
+  overflow-list.aio.min.css preload REMOVED (Apr 25 2026, v15.1).
+  The preload was causing a Web Component initialization race: it made
+  overflow-list.aio.min.css arrive at the browser FAST, often before
+  chaos-theme-styles.css had applied host element heights. The shadow-DOM
+  rule [part='list'] { height: 100% } would then resolve against an
+  unsized host (computing to content-height ~14px), and the layout cached
+  that broken value. Without the preload, the shadow-DOM stylesheet loads
+  at its natural moment when the declarative shadow DOM <link> is parsed,
+  giving chaos-theme-styles.css time to size the host first.
+  Symptom this fixed: menu items intermittently top-aligned in header
+  (visible on hard refresh, sometimes resolved on subsequent loads).
+{%- endcomment -%}
+<!-- base.aio.min.css DEFERRED via media=print onload swap (Apr 27 2026, v23).
+     v22 history: Lever A's media=print pattern was deferring base.aio
+     ALONGSIDE chaos-theme-styles.css, both applying at ~2.7s and causing
+     the CLS shift. v22 reverted base.aio to render-blocking to eliminate
+     the deferred-apply shift cause.
+     v23 change: chaos-theme-styles.css remains render-blocking. base.aio
+     is now deferred IN ISOLATION. critical-css.liquid (v23 additions block
+     at end of file) was extended to inline 35+ layout-critical rules from
+     base.aio's first ~700 lines: input/textarea/select sizing, p/h-tags
+     overflow-wrap and margin reset, .content-for-layout grow, all
+     .page-width-* variants, all .section--height-* variants, .visually-
+     hidden, .flex / .text-* / .justify-* utilities, .background-image-
+     container layout, .svg-wrapper variants, h5/h6 typography, and
+     .container-background-image. This closes the gap that caused v22's
+     CLS regression: when base.aio defers, the browser already has those
+     rules from critical-css.liquid, so deferred arrival is a no-op
+     re-apply rather than a layout-recompute.
+     Animation, hover, focus-visible, view-transition, and below-the-fold
+     rules from base.aio are NOT inlined and arrive late — none of those
+     affect first-paint layout, so deferred arrival is safe for them too.
+     Net win: ~95KB removed from render-blocking critical path. Expected
+     mobile LCP improvement ~1-2s on Slow 4G.
+     Rollback: change line 19 below back to plain
+       <link rel="stylesheet" href="{{ 'base.aio.min.css' | asset_url }}">
+     and remove the v23 additions block from critical-css.liquid (last 43
+     lines, marked with === v23 base.aio gap closure === comment). -->
+<link rel="stylesheet" href="{{ 'base.aio.min.css' | asset_url }}" media="print" onload="this.media='all';this.onload=null">
+<noscript><link rel="stylesheet" href="{{ 'base.aio.min.css' | asset_url }}"></noscript>
+{%- comment -%}
+  chaos-theme-styles.css link MOVED to theme.liquid after color-schemes.liquid
+  render call (Apr 25 2026, v15). Original Lever A position (here, before
+  color-schemes inline <style>) reversed cascade order vs pre-Lever-A:
+  inline color-schemes' .color-scheme-X { background-color: var(--color-background) }
+  rule was winning all tied-specificity battles against 191 chaos-theme-styles.css
+  rules setting transparent backgrounds and color-scheme-aware text colors.
+  Symptoms included: account button white-on-white, header__row solid background
+  instead of transparent, menu submenus not transparent. Moving the <link> to
+  AFTER color-schemes restores correct source order and resolves all conflicts.
+{%- endcomment -%}
+
+<!-- lb-product-card.css DEFERRED — mobile tap fix + variant pills only. -->
+<link rel="stylesheet" href="{{ 'lb-product-card.css' | asset_url }}" media="print" onload="this.media='all';this.onload=null">
+<noscript><link rel="stylesheet" href="{{ 'lb-product-card.css' | asset_url }}"></noscript>
+<!-- lb-announcement-bar.css DEFERRED (May 19 2026).
+     Mono announcement bar — white bg, #1C1C1C JetBrains Mono text.
+     Strips rich-text green/yellow color from Shopify admin. Safe to defer:
+     announcement bar is never the LCP element. -->
+<link rel="stylesheet" href="{{ 'lb-announcement-bar.css' | asset_url }}" media="print" onload="this.media='all';this.onload=null">
+<noscript><link rel="stylesheet" href="{{ 'lb-announcement-bar.css' | asset_url }}"></noscript>
+<!-- lb-social-follow.css DEFERRED — Instagram + TikTok follow buttons in footer. -->
+<link rel="stylesheet" href="{{ 'lb-social-follow.css' | asset_url }}" media="print" onload="this.media='all';this.onload=null">
+<noscript><link rel="stylesheet" href="{{ 'lb-social-follow.css' | asset_url }}"></noscript>
+<!-- lb-ui-system.css DEFERRED — size guide swipeable scroll, collection spacing, font smoothing. -->
+<link rel="stylesheet" href="{{ 'lb-ui-system.css' | asset_url }}" media="print" onload="this.media='all';this.onload=null">
+<noscript><link rel="stylesheet" href="{{ 'lb-ui-system.css' | asset_url }}"></noscript>

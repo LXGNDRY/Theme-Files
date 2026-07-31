@@ -1,0 +1,63 @@
+{%- doc -%}
+  Accordion Custom Component
+
+  Renders the accordion-custom custom element wrapper with co-located styles.
+
+  @param {string} children - The content to render inside the component (typically a <details> element)
+  @param {string} [class] - Additional CSS classes
+  @param {boolean} [open] - Whether the accordion is open (marker attribute)
+  @param {boolean} [open_by_default_on_desktop] - Whether accordion opens by default on desktop
+  @param {boolean} [open_by_default_on_mobile] - Whether accordion opens by default on mobile
+  @param {boolean} [disable_on_desktop] - Disables accordion behavior on desktop
+  @param {boolean} [disable_on_mobile] - Disables accordion behavior on mobile
+  @param {boolean} [disable_animation_on_desktop] - Disables animation on desktop (for horizontal filters)
+  @param {boolean} [close_with_escape] - Enables closing with escape key
+  @param {string} [data_filter_param_name] - Filter param name for facet identification
+
+  @example
+  {% capture accordion_content %}
+    <details class="details">
+      <summary>Click to expand</summary>
+      <div class="details-content">Content here</div>
+    </details>
+  {% endcapture %}
+  {% render 'accordion-custom-component',
+    children: accordion_content,
+    open_by_default_on_desktop: true
+  %}
+{%- enddoc -%}
+
+<accordion-custom
+  {% if class %}
+    class="{{ class }}"
+  {% endif %}
+  {% if open %}
+    open
+  {% endif %}
+  {% if open_by_default_on_desktop %}
+    open-by-default-on-desktop
+  {% endif %}
+  {% if open_by_default_on_mobile %}
+    open-by-default-on-mobile
+  {% endif %}
+  {% if disable_on_desktop %}
+    data-disable-on-desktop="true"
+  {% endif %}
+  {% if disable_on_mobile %}
+    data-disable-on-mobile="true"
+  {% endif %}
+  {% if disable_animation_on_desktop %}
+    data-disable-animation-on-desktop="true"
+  {% endif %}
+  {% if close_with_escape %}
+    data-close-with-escape="true"
+  {% endif %}
+  {% if data_filter_param_name %}
+    data-filter-param-name="{{ data_filter_param_name }}"
+  {% endif %}
+>
+  {{ children }}
+</accordion-custom>
+
+
+
