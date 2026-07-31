@@ -17,9 +17,11 @@
         "video_XYc78p": {
           "type": "video",
           "name": "t:names.video",
+          "disabled": true,
           "settings": {
             "source": "uploaded",
             "video": "shopify://files/videos/hf_20260505_154356_c220951d-9e0a-431f-b565-bfd43700fc9c.mp4",
+            "video_url": "",
             "video_autoplay": true,
             "video_loop": true,
             "alt": "",
@@ -40,7 +42,6 @@
         "logo_M99jWJ": {
           "type": "logo",
           "name": "t:names.logo",
-          "disabled": true,
           "settings": {
             "inverse": false,
             "font": "heading",
