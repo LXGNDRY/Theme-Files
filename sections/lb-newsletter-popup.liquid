@@ -1,0 +1,365 @@
+{%- if section.settings.enabled -%}
+<div
+  id="lb-nl-popup"
+  class="lb-nl-popup"
+  aria-hidden="true"
+  aria-modal="true"
+  role="dialog"
+  aria-labelledby="lb-nl-popup-title"
+  data-delay="{{ section.settings.delay | times: 1000 }}"
+  data-cookie-days="{{ section.settings.cookie_days }}"
+>
+  <div class="lb-nl-popup__overlay" tabindex="-1" aria-hidden="true"></div>
+  <div class="lb-nl-popup__panel" tabindex="-1">
+    <button class="lb-nl-popup__close" aria-label="{{ 'accessibility.close' | t | default: 'Close' }}">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M2 2L14 14M14 2L2 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    {%- if section.settings.image != blank -%}
+      <div class="lb-nl-popup__media">
+        <img
+          src="{{ section.settings.image | image_url: width: 600 }}"
+          alt=""
+          loading="lazy"
+          width="300"
+          height="400"
+          class="lb-nl-popup__img"
+        >
+      </div>
+    {%- endif -%}
+
+    <div class="lb-nl-popup__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="lb-nl-popup__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      <h2 class="lb-nl-popup__heading lb-display-lg" id="lb-nl-popup-title">{{ section.settings.heading | default: 'JOIN THE MOVEMENT' }}</h2>
+      {%- if section.settings.body != blank -%}
+        <p class="lb-nl-popup__body">{{ section.settings.body }}</p>
+      {%- endif -%}
+      {%- if section.settings.discount_teaser != blank -%}
+        <p class="lb-nl-popup__offer">{{ section.settings.discount_teaser }}</p>
+      {%- endif -%}
+
+      {%- form 'customer', class: 'lb-nl-popup__form' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="lb-nl-popup__field-row">
+          <label class="lb-nl-popup__sr-label" for="lb-nl-popup-email">{{ 'general.email' | t | default: 'Email' }}</label>
+          <input
+            type="email"
+            name="contact[email]"
+            id="lb-nl-popup-email"
+            class="lb-nl-popup__input"
+            placeholder="{{ section.settings.input_placeholder | default: 'YOUR@EMAIL.COM' }}"
+            required
+            autocomplete="email"
+          >
+          <button type="submit" class="lb-nl-popup__submit lb-btn">
+            {{ section.settings.button_label | default: 'SUBSCRIBE' }}
+          </button>
+        </div>
+        {%- if form.errors -%}
+          <p class="lb-nl-popup__error">{{ form.errors.translated_fields['email'] | first }}</p>
+        {%- endif -%}
+        {%- if form.posted_successfully? -%}
+          <p class="lb-nl-popup__success">{{ section.settings.success_message | default: 'You\'re in. Welcome to the movement.' }}</p>
+        {%- endif -%}
+      {%- endform -%}
+
+      <p class="lb-nl-popup__disclaimer">{{ section.settings.disclaimer | default: 'No spam. Unsubscribe anytime.' }}</p>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'lb-newsletter-popup.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+{% stylesheet %}
+.lb-nl-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 280ms ease;
+}
+
+.lb-nl-popup[aria-hidden="false"] {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.lb-nl-popup__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+}
+
+.lb-nl-popup__panel {
+  position: relative;
+  z-index: 1;
+  background: #0A0A0A;
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 8px;
+  max-width: 760px;
+  width: 100%;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.8);
+  transform: scale(0.95);
+  transition: transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.lb-nl-popup[aria-hidden="false"] .lb-nl-popup__panel {
+  transform: scale(1);
+}
+
+.lb-nl-popup__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255,255,255,0.06);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F2F2F2;
+  z-index: 2;
+  transition: background 160ms ease;
+}
+
+.lb-nl-popup__close:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+.lb-nl-popup__media {
+  flex-shrink: 0;
+  width: 260px;
+  overflow: hidden;
+}
+
+.lb-nl-popup__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.lb-nl-popup__content {
+  flex: 1;
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.lb-nl-popup__eyebrow {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #C9A84C;
+  margin: 0 0 12px;
+}
+
+.lb-nl-popup__heading {
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  line-height: 0.92;
+  color: #F5F5F0;
+}
+
+.lb-nl-popup__body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(245,245,240,0.65);
+  margin: 0 0 16px;
+}
+
+.lb-nl-popup__offer {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #C9A84C;
+  margin: 0 0 24px;
+  padding: 10px 14px;
+  border: 1px dashed rgba(201,168,76,0.4);
+  border-radius: 4px;
+}
+
+.lb-nl-popup__field-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.lb-nl-popup__sr-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.lb-nl-popup__input {
+  flex: 1;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: #F2F2F2;
+  outline: none;
+  transition: border-color 160ms ease;
+}
+
+.lb-nl-popup__input::placeholder {
+  color: rgba(255,255,255,0.3);
+}
+
+.lb-nl-popup__input:focus {
+  border-color: #C9A84C;
+}
+
+.lb-nl-popup__submit {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.lb-nl-popup__error {
+  font-size: 12px;
+  color: #e06060;
+  margin: 0 0 8px;
+}
+
+.lb-nl-popup__success {
+  font-size: 13px;
+  color: #C9A84C;
+  margin: 0 0 8px;
+}
+
+.lb-nl-popup__disclaimer {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(245,245,240,0.3);
+  margin: 0;
+}
+
+@media (max-width: 599px) {
+  .lb-nl-popup__media { display: none; }
+  .lb-nl-popup__content { padding: 36px 24px; }
+  .lb-nl-popup__field-row { flex-direction: column; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Newsletter Popup",
+  "tag": "section",
+  "class": "lb-nl-popup-section",
+  "limit": 1,
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Enable popup",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "delay",
+      "label": "Delay before popup (seconds)",
+      "min": 2,
+      "max": 30,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "cookie_days",
+      "label": "Days before re-showing after dismiss",
+      "min": 1,
+      "max": 90,
+      "step": 1,
+      "default": 30
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Side image (optional)"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "Early Access"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "JOIN THE MOVEMENT"
+    },
+    {
+      "type": "text",
+      "id": "body",
+      "label": "Body text",
+      "default": "Be first to know about drops, restocks, and exclusive offers."
+    },
+    {
+      "type": "text",
+      "id": "discount_teaser",
+      "label": "Offer / discount teaser (optional)",
+      "default": "10% OFF YOUR FIRST ORDER"
+    },
+    {
+      "type": "text",
+      "id": "input_placeholder",
+      "label": "Email input placeholder",
+      "default": "YOUR@EMAIL.COM"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "SUBSCRIBE"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "You're in. Welcome to the movement."
+    },
+    {
+      "type": "text",
+      "id": "disclaimer",
+      "label": "Disclaimer text",
+      "default": "No spam. Unsubscribe anytime."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter Popup"
+    }
+  ]
+}
+{% endschema %}
