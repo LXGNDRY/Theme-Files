@@ -110,6 +110,10 @@
    Checkout Button
    -------------------------------------------------------------------------- */
 
+.cart__checkout-button {
+  border-radius: 8px !important;
+}
+
 .cart__checkout-text {
   font-size: 17px;
   font-weight: 700;
