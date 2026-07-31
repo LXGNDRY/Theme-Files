@@ -188,10 +188,9 @@ add-to-cart-component.is-added button {
    touch-action: manipulation disables double-tap-to-zoom which
    eliminates the 300ms delay and the ghost click entirely.
 
-   Variant pickers (swatches, size/color buttons) are kept visible and
-   interactive on mobile — tapping them selects a variant without
-   navigating. Only quick-add overlays and the ATC button are hidden
-   since those overlap the card link hit area.
+   Feedback: white flash via ::after pseudo-element on :active —
+   immediate, visible, feels native. Replaces the opacity dip which
+   was too slow and too subtle on bright product images.
 ───────────────────────────────────────── */
 
 @media (hover: none) {
@@ -209,14 +208,14 @@ add-to-cart-component.is-added button {
     touch-action: manipulation;
   }
 
-  /* Hide quick-add overlays and ATC — these overlap the link hit area */
+  /* Hide quick-add and ATC — these can't work as tap targets on mobile cards */
   .product-card .quick-add,
   .product-card [class*="quick-add"],
   .product-card add-to-cart-component {
     display: none !important;
   }
 
-  /* Kill pointer-events on card children — link wins via absolute cover */
+  /* Kill pointer-events on all card children — link covers the image area */
   .product-card * {
     pointer-events: none !important;
   }
@@ -224,9 +223,7 @@ add-to-cart-component.is-added button {
     pointer-events: auto !important;
   }
 
-  /* Variant pickers: restore visibility and make them tappable.
-     position: relative + z-index ensures they sit above the link overlay
-     so taps on a swatch/button select the variant instead of navigating. */
+  /* Variant pickers: restore visibility and make tappable */
   .product-card swatches-variant-picker-component,
   .product-card variant-picker-component,
   .product-card [class*="variant-picker"],
@@ -244,7 +241,7 @@ add-to-cart-component.is-added button {
     pointer-events: auto !important;
   }
 
-  /* All children inside variant pickers must also be tappable */
+  /* All descendants of variant pickers must also be tappable */
   .product-card swatches-variant-picker-component *,
   .product-card variant-picker-component *,
   .product-card [class*="variant-picker"] *,
@@ -274,7 +271,7 @@ add-to-cart-component.is-added button {
     border-radius: inherit;
     pointer-events: none;
     transition: background 180ms ease-out;
-    z-index: 10;
+    z-index: 1;
   }
 
   /* Flash in instantly on touchstart (JS adds .lb-tapped) */
