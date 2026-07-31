@@ -273,7 +273,7 @@
 
   {%- comment -%}── 15. VIEW TRANSITIONS (guarded) ───────────────────────────
     <link rel="expect" href="#MainContent"> explicitly gates rendering
-    until #MainContent is parsed. Only inject when transitions are enabled
+    until #MainContent is parsed. Only inject when transitions are active
     in theme settings — do not leave it in unconditionally.
   {%- endcomment -%}
   {%- if settings.transition_to_main_product or settings.page_transition_enabled -%}

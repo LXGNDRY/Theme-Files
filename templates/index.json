@@ -39,21 +39,37 @@
           },
           "blocks": {}
         },
+        "button_WDQJKU": {
+          "type": "button",
+          "name": "t:names.button",
+          "disabled": true,
+          "settings": {
+            "label": "Shop Heavyweight Essentials",
+            "link": "shopify://collections/all-products",
+            "open_in_new_tab": false,
+            "style_class": "button",
+            "width": "fit-content",
+            "custom_width": 100,
+            "width_mobile": "fit-content",
+            "custom_width_mobile": 100
+          },
+          "blocks": {}
+        },
         "text_YQmLbG": {
           "type": "text",
           "name": "t:names.heading",
           "settings": {
-            "text": "<p><em>235GSM+ tees | </em>380–460GSM hoodies | <em>DTG prints</em></p>",
+            "text": "<p><em><strong>235GSM+ tees | 380–460GSM hoodies | DTG prints</strong></em></p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "center",
             "type_preset": "custom",
             "font": "var(--font-heading--family)",
-            "font_size": "1.25rem",
+            "font_size": "2rem",
             "line_height": "tight",
             "letter_spacing": "normal",
             "case": "none",
-            "wrap": "balance",
+            "wrap": "pretty",
             "color": "var(--color-foreground)",
             "background": true,
             "background_color": "#101214",
@@ -91,21 +107,6 @@
           },
           "blocks": {}
         },
-        "button_WDQJKU": {
-          "type": "button",
-          "name": "t:names.button",
-          "settings": {
-            "label": "Shop Heavyweight Essentials",
-            "link": "shopify://collections/all-products",
-            "open_in_new_tab": false,
-            "style_class": "button",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
-          },
-          "blocks": {}
-        },
         "text_hzq6cM": {
           "type": "text",
           "disabled": true,
@@ -135,21 +136,23 @@
       },
       "block_order": [
         "text_YEVGA3",
+        "button_WDQJKU",
         "text_YQmLbG",
         "text_69C6UJ",
-        "button_WDQJKU",
         "text_hzq6cM"
       ],
       "name": "t:names.hero",
       "settings": {
-        "media_type_1": "image",
-        "image_1": "shopify://shop_images/11209515617993528113.jpg",
+        "media_type_1": "video",
+        "image_1": "shopify://shop_images/10820841816299112437.jpg",
+        "video_1": "shopify://files/videos/copy_DC633BB7-DEF5-4F96-957D-A0C79D4E1476.mov",
         "media_type_2": "image",
         "stack_media_on_mobile": false,
         "custom_mobile_media": true,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
+        "media_type_1_mobile": "video",
+        "media_type_2_mobile": "video",
         "image_2_mobile": "shopify://shop_images/15257398211958028241.jpg",
+        "video_2_mobile": "shopify://files/videos/copy_5178434F-51EC-4297-ABB5-394A11F638EB.mov",
         "link": "shopify://collections/all-products",
         "open_in_new_tab": false,
         "content_direction": "column",
@@ -159,10 +162,10 @@
         "align_baseline": false,
         "horizontal_alignment_flex_direction_column": "center",
         "vertical_alignment_flex_direction_column": "flex-end",
-        "gap": 27,
+        "gap": 8,
         "section_width": "full-width",
         "section_height": "custom",
-        "section_height_custom": 83,
+        "section_height_custom": 98,
         "color_scheme": "scheme-5",
         "toggle_overlay": false,
         "overlay_color": "#00000075",
@@ -170,8 +173,8 @@
         "gradient_direction": "to top",
         "blurred_reflection": false,
         "reflection_opacity": 75,
-        "padding-block-start": 25,
-        "padding-block-end": 40
+        "padding-block-start": 0,
+        "padding-block-end": 0
       }
     },
     "product_list_6dxjyz": {
@@ -698,7 +701,7 @@
             "width": "fit-content",
             "max_width": "narrow",
             "alignment": "left",
-            "type_preset": "h2",
+            "type_preset": "h1",
             "font": "var(--font-body--family)",
             "font_size": "1rem",
             "line_height": "normal",

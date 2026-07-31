@@ -264,7 +264,7 @@
                 "accordion_row_NdBezV": {
                   "type": "_accordion-row",
                   "settings": {
-                    "heading": "Product Description",
+                    "heading": "Product Description & Size Guide",
                     "open_by_default": false,
                     "icon": "chat_bubble",
                     "width": 20
@@ -530,22 +530,13 @@
     "section_kaLgdt": {
       "type": "section",
       "blocks": {
-        "judge_me_reviews_review_widget_TAPHnP": {
-          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "review_data": "real_data",
-            "max_width": 1000,
-            "show_shop_reviews": false,
-            "empty_state": "empty_widget"
-          }
-        },
         "video_krRV9a": {
           "type": "video",
           "name": "t:names.video",
           "disabled": true,
           "settings": {
             "source": "uploaded",
-            "video": "shopify://files/videos/hf_20260507_023805_cd950576-c455-4ae6-8b42-14c14d2cbe22.mp4",
+            "video": "shopify://files/videos/copy_D06E8003-C07D-4346-9279-356AF7ED5349.mov",
             "video_url": "",
             "video_autoplay": true,
             "video_loop": true,
@@ -563,6 +554,15 @@
             "padding-inline-end": 0
           },
           "blocks": {}
+        },
+        "judge_me_reviews_review_widget_TAPHnP": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "real_data",
+            "max_width": 1000,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
         },
         "group_zpcDbK": {
           "type": "group",
@@ -607,8 +607,8 @@
         }
       },
       "block_order": [
-        "judge_me_reviews_review_widget_TAPHnP",
         "video_krRV9a",
+        "judge_me_reviews_review_widget_TAPHnP",
         "group_zpcDbK"
       ],
       "name": "t:names.video_section",
