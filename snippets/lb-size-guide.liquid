@@ -9,6 +9,18 @@
 {%- liquid
   assign sg_custom = product.metafields.custom.size_guide.value
   assign sg_unit = 'in'
+
+  # Extract size guide table(s) from product description if no metafield override
+  assign sg_from_description = false
+  assign sg_desc_html = ''
+  if sg_custom == blank and product.body_html contains '<table'
+    assign sg_from_description = true
+    assign _split = product.body_html | split: '<table'
+    for _part in _split offset: 1
+      assign _table = '<table' | append: _part | split: '</table>' | first | append: '</table>'
+      assign sg_desc_html = sg_desc_html | append: _table
+    endfor
+  endif
 -%}
 
 <div class="lb-size-guide">
@@ -22,6 +34,10 @@
 
       {%- if sg_custom != blank -%}
         {{- sg_custom -}}
+      {%- elsif sg_from_description -%}
+        <div class="lb-size-guide__from-description">
+          {{- sg_desc_html -}}
+        </div>
       {%- else -%}
         {%- comment -%} CSS-only tabs using hidden radio inputs {%- endcomment -%}
         <div class="lb-size-guide__tabs">
@@ -199,6 +215,50 @@ details[open] .lb-size-guide__trigger {
   font-size: 10px;
   letter-spacing: 0.08em;
   font-weight: 600;
+}
+
+/* Style tables extracted from product description */
+.lb-size-guide__from-description table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.lb-size-guide__from-description th {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground-rgb, 0,0,0), 0.5);
+  padding: 4px 8px;
+  text-align: left;
+  border-bottom: 1px solid rgba(var(--color-foreground-rgb, 0,0,0), 0.08);
+  white-space: nowrap;
+}
+
+.lb-size-guide__from-description td {
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(var(--color-foreground-rgb, 0,0,0), 0.05);
+  color: rgb(var(--color-foreground, 0 0 0));
+}
+
+.lb-size-guide__from-description td:first-child {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+/* Hide any non-table content (headings, paragraphs) from description in this context */
+.lb-size-guide__from-description p,
+.lb-size-guide__from-description h1,
+.lb-size-guide__from-description h2,
+.lb-size-guide__from-description h3,
+.lb-size-guide__from-description h4,
+.lb-size-guide__from-description ul,
+.lb-size-guide__from-description ol {
+  display: none;
 }
 
 .lb-size-guide__note {

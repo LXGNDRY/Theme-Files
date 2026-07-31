@@ -69,7 +69,9 @@ add-to-cart-component {
 .product-details add-to-cart-component button.button,
 .product-details add-to-cart-component .button,
 product-form add-to-cart-component button.button,
-product-form add-to-cart-component .button {
+product-form add-to-cart-component .button,
+.featured-product-section add-to-cart-component button.button,
+.featured-product-section add-to-cart-component .button {
   /* Layout */
   display: flex;
   align-items: center;
@@ -109,7 +111,9 @@ product-form add-to-cart-component .button {
   .product-details add-to-cart-component button.button:hover,
   .product-details add-to-cart-component .button:hover,
   product-form add-to-cart-component button.button:hover,
-  product-form add-to-cart-component .button:hover {
+  product-form add-to-cart-component .button:hover,
+  .featured-product-section add-to-cart-component button.button:hover,
+  .featured-product-section add-to-cart-component .button:hover {
     background-color: #1A1A1A;
     border-color: #1A1A1A;
     color: #F5F5F0;
@@ -117,19 +121,22 @@ product-form add-to-cart-component .button {
 }
 
 .product-details add-to-cart-component button.button:active,
-product-form add-to-cart-component button.button:active {
+product-form add-to-cart-component button.button:active,
+.featured-product-section add-to-cart-component button.button:active {
   transform: scale(0.97);
 }
 
 .product-details add-to-cart-component button.button:focus-visible,
-product-form add-to-cart-component button.button:focus-visible {
+product-form add-to-cart-component button.button:focus-visible,
+.featured-product-section add-to-cart-component button.button:focus-visible {
   outline: 2px solid #0A0A0A;
   outline-offset: 3px;
 }
 
 /* Sold out / unavailable state */
 .product-details add-to-cart-component button.button:disabled,
-product-form add-to-cart-component button.button:disabled {
+product-form add-to-cart-component button.button:disabled,
+.featured-product-section add-to-cart-component button.button:disabled {
   background-color: #EDEDED;
   border-color: #EDEDED;
   color: #888888;
@@ -138,12 +145,14 @@ product-form add-to-cart-component button.button:disabled {
 
 /* ATC icon — keep visible, inherit color */
 .product-details add-to-cart-component .add-to-cart-icon,
-product-form add-to-cart-component .add-to-cart-icon {
+product-form add-to-cart-component .add-to-cart-icon,
+.featured-product-section add-to-cart-component .add-to-cart-icon {
   color: inherit;
   flex-shrink: 0;
 }
 .product-details add-to-cart-component .add-to-cart-icon svg,
-product-form add-to-cart-component .add-to-cart-icon svg {
+product-form add-to-cart-component .add-to-cart-icon svg,
+.featured-product-section add-to-cart-component .add-to-cart-icon svg {
   width: 18px;
   height: 18px;
   stroke: currentColor;
@@ -152,7 +161,8 @@ product-form add-to-cart-component .add-to-cart-icon svg {
 
 /* Dark mode */
 html[data-theme="dark"] .product-details add-to-cart-component button.button,
-html[data-theme="dark"] product-form add-to-cart-component button.button {
+html[data-theme="dark"] product-form add-to-cart-component button.button,
+html[data-theme="dark"] .featured-product-section add-to-cart-component button.button {
   background-color: #F2F2F2;
   border-color: #F2F2F2;
   color: #0A0A0A;
@@ -160,7 +170,8 @@ html[data-theme="dark"] product-form add-to-cart-component button.button {
 
 @media (hover: hover) {
   html[data-theme="dark"] .product-details add-to-cart-component button.button:hover,
-  html[data-theme="dark"] product-form add-to-cart-component button.button:hover {
+  html[data-theme="dark"] product-form add-to-cart-component button.button:hover,
+  html[data-theme="dark"] .featured-product-section add-to-cart-component button.button:hover {
     background-color: #EDEDE8;
     border-color: #EDEDE8;
     color: #0A0A0A;
@@ -168,7 +179,8 @@ html[data-theme="dark"] product-form add-to-cart-component button.button {
 }
 
 html[data-theme="dark"] .product-details add-to-cart-component button.button:disabled,
-html[data-theme="dark"] product-form add-to-cart-component button.button:disabled {
+html[data-theme="dark"] product-form add-to-cart-component button.button:disabled,
+html[data-theme="dark"] .featured-product-section add-to-cart-component button.button:disabled {
   background-color: #1A1A1A;
   border-color: #1A1A1A;
   color: #444444;
@@ -286,7 +298,8 @@ html[data-theme="dark"] a.shopify-payment-button__more-options {
 
 @media screen and (max-width: 749px) {
   .product-details add-to-cart-component button.button,
-  product-form add-to-cart-component button.button {
+  product-form add-to-cart-component button.button,
+  .featured-product-section add-to-cart-component button.button {
     min-height: 56px;
     font-size: 20px;
     letter-spacing: 0.09em;
@@ -302,4 +315,24 @@ html[data-theme="dark"] a.shopify-payment-button__more-options {
 .sticky-add-to-cart__bar{position:fixed;bottom:20px;left:50%;opacity:0;transform:translateX(-50%) translateY(calc(100% + 40px));z-index:calc(var(--layer-sticky) - 1);display:block;width:600px;border-radius:calc(var(--style-border-radius-buttons-primary)+min(var(--padding-sm), var(--style-border-radius-buttons-primary)));box-shadow:var(--shadow-popover);padding:var(--padding-sm);display:flex;align-items:center;gap:var(--gap-md);@starting-style{opacity:0;transform:translateX(-50%) translateY(calc(100% + 40px))}&::before{--border:2px;content:'';position:absolute;inset:calc(var(--border) * -1);background:linear-gradient(var(--color-background) 0 100%),linear-gradient(hsl(0 0% 0% / .15) 0 100%);background-clip:content-box,border-box;border:var(--border) solid #0000;border-radius:inherit;z-index:-1;backdrop-filter:blur(20px) saturate(180%) brightness(1.5)}}.sticky-add-to-cart__bar[data-stuck='true']{transform:translateX(-50%) translateY(0%);opacity:1}sticky-add-to-cart:not([data-variant-available='true']) .sticky-add-to-cart__bar{opacity:0;transform:translateX(-50%) translateY(calc(100% + 40px));display:none}.sticky-add-to-cart__info[data-has-image='false']{padding-left:var(--padding-lg)}.sticky-add-to-cart__image{flex-shrink:0;aspect-ratio:1;height:var(--height-buy-buttons);overflow:hidden;border-radius:var(--style-border-radius-buttons-primary);background:var(--color-background-secondary)}.sticky-add-to-cart__image-img{width:100%;height:100%;object-fit:cover}.sticky-add-to-cart__info{flex:1;min-width:0}.sticky-add-to-cart__title{font-size:var(--font-paragraph-medium--size);font-weight:var(--font-weight-semibold);line-height:var(--font-paragraph--line-height);margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sticky-add-to-cart__variant{color:rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));font-size:var(--font-paragraph-small--size);margin-top:var(--margin-3xs)}.sticky-add-to-cart__price{font-weight:var(--font-weight-semibold)}.sticky-add-to-cart__button{height:var(--height-buy-buttons);position:relative}
 
 @media (prefers-reduced-motion:no-preference){.sticky-add-to-cart__bar{transition-property:transform,opacity,display;transition-duration:0.3s;transition-timing-function:var(--ease-out-quad);transition-behavior:allow-discrete}}
+
+/* Mobile override — must come after the width:600px declaration above so it wins */
+@media screen and (max-width: 749px) {
+  .sticky-add-to-cart__bar {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: none;
+    border-radius: 0;
+    /* translateX(-50%) no longer needed since left:0 + width:100% */
+    transform: translateY(calc(100% + 40px));
+  }
+  .sticky-add-to-cart__bar[data-stuck='true'] {
+    transform: translateY(0%);
+  }
+  sticky-add-to-cart:not([data-variant-available='true']) .sticky-add-to-cart__bar {
+    transform: translateY(calc(100% + 40px));
+  }
+}
+
 @media screen and (max-width:389px){.sticky-add-to-cart__bar{.compare-at-price{display:none}}.sticky-add-to-cart__title{display:none}.sticky-add-to-cart__info[data-singleton='true'] .sticky-add-to-cart__title{display:block}.sticky-add-to-cart__info[data-single-option='true'] .sticky-add-to-cart__title{display:block}.sticky-add-to-cart__info[data-single-option='true'] .sticky-add-to-cart__variant{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
