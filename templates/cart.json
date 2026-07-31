@@ -18,7 +18,7 @@
           "settings": {
             "title": "<em><strong>Bag:</strong></em>",
             "show_count": true,
-            "type_preset": "h4",
+            "type_preset": "h2",
             "alignment": "left",
             "padding-block-start": 25,
             "padding-block-end": 35,
