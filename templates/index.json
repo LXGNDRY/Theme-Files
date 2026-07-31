@@ -537,6 +537,7 @@
                 "image_terRXD": {
                   "type": "image",
                   "name": "t:names.image",
+                  "disabled": true,
                   "settings": {
                     "image": "shopify://shop_images/Hat_s_-_Logo_White_1200x301_1.png",
                     "link": "",
@@ -560,6 +561,7 @@
                 "image_G6g7YB": {
                   "type": "image",
                   "name": "t:names.image",
+                  "disabled": true,
                   "settings": {
                     "image": "shopify://shop_images/Hat_s_-_Logo_White_1200x301_26e34206-d511-4c76-b931-ffdc325d268d.png",
                     "link": "",
@@ -590,7 +592,7 @@
                     "width": "fit-content",
                     "custom_width": 100,
                     "width_mobile": "custom",
-                    "custom_width_mobile": 60,
+                    "custom_width_mobile": 100,
                     "height": "fit",
                     "border": "none",
                     "border_width": 1,
@@ -2417,6 +2419,7 @@
                 "image_TNxHHq": {
                   "type": "image",
                   "name": "t:names.image",
+                  "disabled": true,
                   "settings": {
                     "image": "shopify://shop_images/Hat_s_-_Logo_White_1200x301_1.png",
                     "link": "",
@@ -2440,6 +2443,7 @@
                 "image_VaWDE3": {
                   "type": "image",
                   "name": "t:names.image",
+                  "disabled": true,
                   "settings": {
                     "image": "shopify://shop_images/Hat_s_-_Logo_White_1200x301_26e34206-d511-4c76-b931-ffdc325d268d.png",
                     "link": "",
@@ -2470,7 +2474,7 @@
                     "width": "fit-content",
                     "custom_width": 100,
                     "width_mobile": "custom",
-                    "custom_width_mobile": 60,
+                    "custom_width_mobile": 100,
                     "height": "fit",
                     "border": "none",
                     "border_width": 1,
