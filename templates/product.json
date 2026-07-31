@@ -1059,7 +1059,7 @@
           "type": "text",
           "name": "t:names.header",
           "settings": {
-            "text": "<h3><span style=\"text-decoration:underline\"><em><strong>Recommended</strong></em></span></h3>",
+            "text": "<h3><a href=\"/collections/all-products\" title=\"NEW DROPS\"><span style=\"text-decoration:underline\"><em><strong>Recommended</strong></em></span></a></h3>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
