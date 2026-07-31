@@ -542,10 +542,9 @@
         "video_krRV9a": {
           "type": "video",
           "name": "t:names.video",
-          "disabled": true,
           "settings": {
             "source": "uploaded",
-            "video": "shopify://files/videos/hf_20260507_023805_cd950576-c455-4ae6-8b42-14c14d2cbe22.mp4",
+            "video": "shopify://files/videos/copy_D06E8003-C07D-4346-9279-356AF7ED5349.mov",
             "video_url": "",
             "video_autoplay": true,
             "video_loop": true,
