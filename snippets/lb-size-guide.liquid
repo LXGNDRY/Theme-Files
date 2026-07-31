@@ -24,7 +24,7 @@
 -%}
 
 <div class="lb-size-guide">
-  <details class="lb-size-guide__details">
+  <details class="lb-size-guide__details" id="lb-sg-details-{{ product.id }}">
     <summary class="lb-size-guide__trigger" aria-label="Open size guide">
       <svg class="lb-size-guide__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10H3M16 6l5 4-5 4"/></svg>
       SIZE GUIDE
@@ -102,6 +102,16 @@
     </div>
   </details>
 </div>
+
+<script>
+(function(){
+  var d = document.getElementById('lb-sg-details-{{ product.id }}');
+  if (!d) return;
+  d.addEventListener('toggle', function(){
+    d.querySelector('.lb-size-guide__trigger').setAttribute('aria-label', d.open ? 'Close size guide' : 'Open size guide');
+  });
+})();
+</script>
 
 {% style %}
 .lb-size-guide {

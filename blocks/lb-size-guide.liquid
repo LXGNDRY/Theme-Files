@@ -1,0 +1,24 @@
+{%- liquid
+  assign product_resource = closest.product
+  if request.visual_preview_mode and product_resource == blank
+    assign product_resource = collections.all.products.first
+  endif
+-%}
+
+{% unless product_resource == blank %}
+  {%- render 'lb-size-guide', product: product_resource -%}
+{% endunless %}
+
+{% schema %}
+{
+  "name": "Size Guide",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Size Guide",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

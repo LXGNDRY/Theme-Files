@@ -1,0 +1,27 @@
+{%- liquid
+  assign product_resource = closest.product
+  if request.visual_preview_mode and product_resource == blank
+    assign product_resource = collections.all.products.first
+  endif
+-%}
+
+{% unless product_resource == blank %}
+  {%- render 'lb-low-stock',
+    product: product_resource,
+    variant: product_resource.selected_or_first_available_variant
+  -%}
+{% endunless %}
+
+{% schema %}
+{
+  "name": "Low Stock Badge",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Low Stock Badge",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

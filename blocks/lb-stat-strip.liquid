@@ -1,0 +1,138 @@
+{% style %}
+.lb-pdp-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  padding: 14px 0;
+  border-top: 1px solid rgba(var(--color-foreground-rgb, 0,0,0), 0.08);
+  border-bottom: 1px solid rgba(var(--color-foreground-rgb, 0,0,0), 0.08);
+}
+
+.lb-pdp-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lb-pdp-stat__num {
+  font-family: 'Bebas Neue', 'Arial Black', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: rgb(var(--color-foreground-heading, var(--color-foreground, 0 0 0)));
+}
+
+.lb-pdp-stat__label {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground-rgb, 0,0,0), 0.5);
+}
+{% endstyle %}
+
+<div class="lb-pdp-stats" {{ block.shopify_attributes }}>
+  {%- if block.settings.stat_1_number != blank or block.settings.stat_1_label != blank -%}
+    <div class="lb-pdp-stat">
+      <span class="lb-pdp-stat__num">{{ block.settings.stat_1_number }}</span>
+      <span class="lb-pdp-stat__label">{{ block.settings.stat_1_label }}</span>
+    </div>
+  {%- endif -%}
+  {%- if block.settings.stat_2_number != blank or block.settings.stat_2_label != blank -%}
+    <div class="lb-pdp-stat">
+      <span class="lb-pdp-stat__num">{{ block.settings.stat_2_number }}</span>
+      <span class="lb-pdp-stat__label">{{ block.settings.stat_2_label }}</span>
+    </div>
+  {%- endif -%}
+  {%- if block.settings.stat_3_number != blank or block.settings.stat_3_label != blank -%}
+    <div class="lb-pdp-stat">
+      <span class="lb-pdp-stat__num">{{ block.settings.stat_3_number }}</span>
+      <span class="lb-pdp-stat__label">{{ block.settings.stat_3_label }}</span>
+    </div>
+  {%- endif -%}
+  {%- if block.settings.stat_4_number != blank or block.settings.stat_4_label != blank -%}
+    <div class="lb-pdp-stat">
+      <span class="lb-pdp-stat__num">{{ block.settings.stat_4_number }}</span>
+      <span class="lb-pdp-stat__label">{{ block.settings.stat_4_label }}</span>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Stat Strip",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Stat 1"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_number",
+      "label": "Value",
+      "default": "460GSM"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_label",
+      "label": "Label",
+      "default": "FABRIC WEIGHT"
+    },
+    {
+      "type": "header",
+      "content": "Stat 2"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_number",
+      "label": "Value",
+      "default": "100% Cotton"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_label",
+      "label": "Label",
+      "default": "RING-SPUN"
+    },
+    {
+      "type": "header",
+      "content": "Stat 3"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_number",
+      "label": "Value",
+      "default": "30 Days"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_label",
+      "label": "Label",
+      "default": "FREE RETURNS"
+    },
+    {
+      "type": "header",
+      "content": "Stat 4"
+    },
+    {
+      "type": "text",
+      "id": "stat_4_number",
+      "label": "Value",
+      "default": "Free"
+    },
+    {
+      "type": "text",
+      "id": "stat_4_label",
+      "label": "Label",
+      "default": "WORLDWIDE SHIPPING"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Stat Strip"
+    }
+  ]
+}
+{% endschema %}

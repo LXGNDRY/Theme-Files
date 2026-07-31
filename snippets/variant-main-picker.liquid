@@ -223,7 +223,9 @@
     </form>
   </variant-picker>
 
-  {%- render 'lb-size-guide', product: product_resource -%}
-  {%- render 'lb-low-stock', product: product_resource, variant: product_resource.selected_or_first_available_variant -%}
+  {%- unless hide_lb_utils -%}
+    {%- render 'lb-size-guide', product: product_resource -%}
+    {%- render 'lb-low-stock', product: product_resource, variant: product_resource.selected_or_first_available_variant -%}
+  {%- endunless -%}
 {% endunless %}
 
