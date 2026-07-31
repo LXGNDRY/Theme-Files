@@ -71,6 +71,10 @@
 
 @media (max-width: 749px) {
   :root { --lb-header-h: 56px; }
+  .page-width-wide,
+  .page-width-normal,
+  .page-width-narrow,
+  .page-width-content { --page-margin: 20px; }
 }
 
 /* ─── 2. LIGHT / DARK TOKEN LAYER ─────────────────────────────────────────── */
