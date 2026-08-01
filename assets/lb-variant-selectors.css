@@ -48,9 +48,10 @@
 
 
 /* ─── 3. SELECTED / PRESSED — filled black, shadow collapses ─────────────── */
+/* Only trust the radio :checked state — avoids double-selection when
+   data-current-checked and :checked diverge on the same picker. */
 
 .variant-option__button-label:has(:checked),
-.variant-option__button-label:has([data-current-checked="true"]),
 .variant-option__button-label.is-active,
 .variant-option__button-label.selected {
   background: #0A0A0A !important;
@@ -79,7 +80,6 @@ html[data-theme="dark"] .variant-option__button-label {
 }
 
 html[data-theme="dark"] .variant-option__button-label:has(:checked),
-html[data-theme="dark"] .variant-option__button-label:has([data-current-checked="true"]),
 html[data-theme="dark"] .variant-option__button-label.is-active,
 html[data-theme="dark"] .variant-option__button-label.selected {
   background: #F0EDE8 !important;
