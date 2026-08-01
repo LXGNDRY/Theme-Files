@@ -771,7 +771,7 @@
             "width": "fit-content",
             "max_width": "narrow",
             "alignment": "left",
-            "type_preset": "h6",
+            "type_preset": "h1",
             "font": "var(--font-accent--family)",
             "font_size": "11.5rem",
             "line_height": "tight",
