@@ -147,6 +147,20 @@
               },
               "blocks": {}
             },
+            "variant_picker_R3rGDr": {
+              "type": "variant-picker",
+              "settings": {
+                "variant_style": "buttons",
+                "show_swatches": true,
+                "hide_lb_utils": true,
+                "alignment": "center",
+                "padding-block-start": 12,
+                "padding-block-end": 24,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
             "image_WpKDGh": {
               "type": "image",
               "name": "t:names.image",
@@ -167,34 +181,6 @@
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "variant_picker_R3rGDr": {
-              "type": "variant-picker",
-              "settings": {
-                "variant_style": "buttons",
-                "show_swatches": true,
-                "hide_lb_utils": true,
-                "alignment": "center",
-                "padding-block-start": 12,
-                "padding-block-end": 24,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "lb_stat_strip_pdp": {
-              "type": "lb-stat-strip",
-              "settings": {
-                "stat_1_number": "Premium",
-                "stat_1_label": "QUALITY FABRICS",
-                "stat_2_number": "Satisfaction",
-                "stat_2_label": "GUARANTEED",
-                "stat_3_number": "30 Days",
-                "stat_3_label": "FREE RETURNS",
-                "stat_4_number": "Free",
-                "stat_4_label": "WORLDWIDE SHIPPING"
               },
               "blocks": {}
             },
@@ -264,6 +250,20 @@
                 "padding-block-end": 8,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "lb_stat_strip_pdp": {
+              "type": "lb-stat-strip",
+              "settings": {
+                "stat_1_number": "Premium",
+                "stat_1_label": "QUALITY FABRICS",
+                "stat_2_number": "Satisfaction",
+                "stat_2_label": "GUARANTEED",
+                "stat_3_number": "30 Days",
+                "stat_3_label": "FREE RETURNS",
+                "stat_4_number": "Free",
+                "stat_4_label": "WORLDWIDE SHIPPING"
               },
               "blocks": {}
             },
@@ -529,13 +529,13 @@
             "price_a7krng",
             "text_9WaLn7",
             "text_enejcM",
-            "image_WpKDGh",
             "variant_picker_R3rGDr",
-            "lb_stat_strip_pdp",
+            "image_WpKDGh",
             "lb_size_guide_pdp",
             "lb_low_stock_pdp",
             "buy_buttons_eYQEYi",
             "image_wUdQUh",
+            "lb_stat_strip_pdp",
             "accordion_NKWPiW",
             "text_DpkCnt",
             "image_L97JKV",
