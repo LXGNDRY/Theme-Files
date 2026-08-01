@@ -187,10 +187,10 @@
             "lb_stat_strip_pdp": {
               "type": "lb-stat-strip",
               "settings": {
-                "stat_1_number": "460GSM",
-                "stat_1_label": "FABRIC WEIGHT",
-                "stat_2_number": "100% Cotton",
-                "stat_2_label": "RING-SPUN",
+                "stat_1_number": "Premium",
+                "stat_1_label": "QUALITY FABRICS",
+                "stat_2_number": "Satisfaction",
+                "stat_2_label": "GUARANTEED",
                 "stat_3_number": "30 Days",
                 "stat_3_label": "FREE RETURNS",
                 "stat_4_number": "Free",
