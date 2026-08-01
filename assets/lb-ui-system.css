@@ -15,7 +15,7 @@
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
-/* ─── 1. BRAND TOKENS ─────────────────────────────────────────────────────── */
+/* ─── 1. BRAND TOKENS ─────────────────────────────────────────────────────────────── */
 :root {
   /* Marque Gold */
   --lb-gold:         #C9A84C;
@@ -71,13 +71,9 @@
 
 @media (max-width: 749px) {
   :root { --lb-header-h: 56px; }
-  .page-width-wide,
-  .page-width-normal,
-  .page-width-narrow,
-  .page-width-content { --page-margin: 24px; }
 }
 
-/* ─── 2. LIGHT / DARK TOKEN LAYER ─────────────────────────────────────────── */
+/* ─── 2. LIGHT / DARK TOKEN LAYER ────────────────────────────────────────────── */
 /*
  * Default = LIGHT (white bg, black text, gold accent)
  * Dark    = html[data-theme="dark"]
@@ -126,7 +122,7 @@ html.lb-theme-switching * {
     border-color     var(--lb-dur-base) var(--lb-ease) !important;
 }
 
-/* ─── 3. TYPOGRAPHY HELPERS ───────────────────────────────────────────────── */
+/* ─── 3. TYPOGRAPHY HELPERS ───────────────────────────────────────────────────────── */
 
 /* Bebas Neue display sizes */
 .lb-display-xl { font-family: var(--lb-font-display); font-size: clamp(68px, 9.5vw, 136px); font-weight: 400; text-transform: uppercase; letter-spacing: 0.03em; line-height: 0.95; }
@@ -149,7 +145,7 @@ html.lb-theme-switching * {
 .lb-muted { color: var(--lb-fg-muted); }
 .lb-white { color: var(--lb-white); }
 
-/* ─── 4. BUTTON SYSTEM ────────────────────────────────────────────────────── */
+/* ─── 4. BUTTON SYSTEM ──────────────────────────────────────────────────────────────── */
 
 .lb-btn {
   display: inline-flex;
@@ -226,7 +222,7 @@ html.lb-theme-switching * {
 .lb-btn--sm   { font-size: 13px; padding: 9px 20px; }
 .lb-btn--lg   { font-size: 20px; padding: 16px 44px; }
 
-/* ─── 5. SCROLL REVEAL MOTION ─────────────────────────────────────────────── */
+/* ─── 5. SCROLL REVEAL MOTION ───────────────────────────────────────────────────────── */
 
 [data-lb-reveal] {
   opacity: 0;
@@ -258,7 +254,7 @@ html.lb-theme-switching * {
   [data-lb-stagger] > * { opacity:1; transform:none; transition:none; }
 }
 
-/* ─── 6. LAYOUT UTILITIES ─────────────────────────────────────────────────── */
+/* ─── 6. LAYOUT UTILITIES ────────────────────────────────────────────────────────────── */
 
 .lb-section      { padding-block: var(--lb-sp-3xl); }
 .lb-section--md  { padding-block: var(--lb-sp-2xl); }
@@ -277,7 +273,7 @@ html.lb-theme-switching * {
   .lb-wrap        { padding-inline: var(--lb-sp-md); }
 }
 
-/* ─── 7. GOLD ACCENT LINES ────────────────────────────────────────────────── */
+/* ─── 7. GOLD ACCENT LINES ────────────────────────────────────────────────────────────── */
 
 .lb-rule { height:1px; background:var(--lb-border-gold); border:none; margin:0; }
 .lb-rule--solid { background:var(--lb-accent); height:1.5px; }
@@ -298,7 +294,7 @@ html.lb-theme-switching * {
   flex-shrink: 0;
 }
 
-/* ─── 8. DARK / LIGHT THEME TOGGLE BUTTON ─────────────────────────────────── */
+/* ─── 8. DARK / LIGHT THEME TOGGLE BUTTON ──────────────────────────────────────────── */
 
 .lb-theme-btn {
   display: flex;
@@ -326,7 +322,7 @@ html.lb-theme-switching * {
 html[data-theme="dark"] .lb-icon-moon { display: none; }
 html[data-theme="dark"] .lb-icon-sun  { display: block; }
 
-/* ─── 9. HEADER NAV LINK UNDERLINE ────────────────────────────────────────── */
+/* ─── 9. HEADER NAV LINK UNDERLINE ────────────────────────────────────────────────── */
 
 /* Nav link gold underline slide-in */
 .header__link,
@@ -350,7 +346,7 @@ html[data-theme="dark"] .lb-icon-sun  { display: block; }
   width: 100%;
 }
 
-/* ─── 10. HERO OVERRIDES ──────────────────────────────────────────────────── */
+/* ─── 10. HERO OVERRIDES ─────────────────────────────────────────────────────────────── */
 
 /* Cinematic gradient over full-bleed video/image */
 .lb-hero-overlay {
@@ -487,7 +483,7 @@ html[data-theme="dark"] .lb-icon-sun  { display: block; }
    animation is applied to this element — the hint is unnecessary and harmful for LCP. */
 .hero__media-grid { will-change: auto; }
 
-/* ─── 12. BRAND TICKER ────────────────────────────────────────────────────── */
+/* ─── 12. BRAND TICKER ─────────────────────────────────────────────────────────────── */
 
 .lb-ticker {
   background: var(--lb-bg-raised);
@@ -520,7 +516,7 @@ html[data-theme="dark"] .lb-icon-sun  { display: block; }
 
 .lb-ticker:hover .lb-ticker__track { animation-play-state: paused; }
 
-/* ─── 13. STAT STRIP ──────────────────────────────────────────────────────── */
+/* ─── 13. STAT STRIP ───────────────────────────────────────────────────────────────── */
 
 .lb-stats {
   display: grid;
@@ -557,7 +553,7 @@ html[data-theme="dark"] .lb-icon-sun  { display: block; }
   .lb-stat:last-child { border-bottom:none; }
 }
 
-/* ─── 14. PRODUCT CARD — NEW LAYER ───────────────────────────────────────── */
+/* ─── 14. PRODUCT CARD — NEW LAYER ─────────────────────────────────────────────────── */
 /* Extends lb-product-card.css (Phase 2 kept). Adds gold quick-add bar + border. */
 
 .product-card {
@@ -632,7 +628,7 @@ html[data-theme="dark"] .lb-icon-sun  { display: block; }
 .lb-card-price--sale { color: var(--lb-accent); }
 .lb-card-price--was  { text-decoration: line-through; color: var(--lb-fg-muted); font-size: 11px; font-weight: 400; margin-left: 4px; }
 
-/* ─── 15. NEWSLETTER BLOCK ────────────────────────────────────────────────── */
+/* ─── 15. NEWSLETTER BLOCK ───────────────────────────────────────────────────────────── */
 
 .lb-newsletter {
   background: var(--lb-bg-raised);
@@ -680,7 +676,7 @@ html[data-theme="dark"] .lb-icon-sun  { display: block; }
   .lb-newsletter__form   { flex-direction: column; }
 }
 
-/* ─── 16. FOOTER ──────────────────────────────────────────────────────────── */
+/* ─── 16. FOOTER ────────────────────────────────────────────────────────────────── */
 
 /* Footer always stays dark regardless of light/dark toggle — brand decision */
 .lb-footer,
@@ -757,7 +753,7 @@ html[data-theme="dark"] .lb-icon-sun  { display: block; }
 .lb-social-icon:hover { color: #F0EDE8; }
 .lb-social-icon svg   { width:15px; height:15px; fill:currentColor; }
 
-/* ─── 17. COLLECTION LAYOUT FIXES ────────────────────────────────────────── */
+/* ─── 17. COLLECTION LAYOUT FIXES ───────────────────────────────────────────────────── */
 /* Announcement bar styles live in lb-announcement-bar.css — not here.       */
 
 /* Collapse dead vertical space between collection heading and filter bar.
@@ -776,7 +772,7 @@ html[data-theme="dark"] [class*="facet"] {
   border-bottom: 1px solid rgba(200,200,200,0.08) !important;
 }
 
-/* ─── 18. HERO VIDEO — Poster visibility + shimmer skeleton ──────────────── */
+/* ─── 18. HERO VIDEO — Poster visibility + shimmer skeleton ──────────────────────── */
 
 /* Ensure the poster img is always visible as a fallback */
 .hero__media--video-poster {
@@ -832,7 +828,7 @@ html[data-theme="dark"] .hero__media:not([data-video-loaded]) .hero__media--vide
 }
 
 
-/* ─── 19. PRODUCT VIDEO — deferred-media fill + crossfade ────────────────── */
+/* ─── 19. PRODUCT VIDEO — deferred-media fill + crossfade ─────────────────────── */
 
 
 .product-media deferred-media {
@@ -965,7 +961,7 @@ html[data-theme="dark"] .product-media deferred-media .video-interaction-hint {
 }
 
 
-/* ─── 20. FONT SMOOTHING ──────────────────────────────────────────────────── */
+/* ─── 20. FONT SMOOTHING ─────────────────────────────────────────────────────────────── */
 
 html {
   -webkit-font-smoothing: antialiased;
@@ -974,7 +970,7 @@ html {
 
 
 
-/* ─── 21. SIZE CHART — swipeable horizontal scroll inside accordion ──────── */
+/* ─── 21. SIZE CHART — swipeable horizontal scroll inside accordion ──────────── */
 .details-content .text-block div:has(> table) {
   overflow-x: auto !important;
   overflow-y: visible !important;
@@ -1059,4 +1055,15 @@ html {
   .details-content .text-block div:has(> table) > table td {
     padding: 6px 10px !important;
   }
+}
+
+
+/* ─── 22. PICKUP AVAILABILITY — hide site-wide ───────────────────────────────── */
+/* Setting show_pickup_availability=false in the template is the canonical
+   control, but as a belt-and-suspenders guard this CSS also hides the
+   element entirely so it never renders regardless of template state. */
+pickup-availability,
+[class*="pickup-availability"],
+[data-pickup-availability] {
+  display: none !important;
 }
