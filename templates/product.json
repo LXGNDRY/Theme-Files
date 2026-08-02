@@ -184,6 +184,32 @@
               },
               "blocks": {}
             },
+            "text_DpkCnt": {
+              "type": "text",
+              "name": "t:names.text",
+              "settings": {
+                "text": "<p>Merch is <strong>unisex</strong> & <strong>true to size</strong> unless noted otherwise. We work with trusted brands like <strong>Champion®</strong>, <strong>Adidas®</strong>, <strong>Lane Seven®</strong>, and more to deliver heavyweight quality you can rely on.</p>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "center",
+                "type_preset": "custom",
+                "font": "var(--font-accent--family)",
+                "font_size": "1.25rem",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "balance",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 8,
+                "padding-block-end": 8,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
             "lb_size_guide_pdp": {
               "type": "lb-size-guide",
               "settings": {},
@@ -450,32 +476,6 @@
                 "accordion_row_XdEepH"
               ]
             },
-            "text_DpkCnt": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>Merch is <strong>unisex</strong> & <strong>true to size</strong> unless noted otherwise. We work with trusted brands like <strong>Champion®</strong>, <strong>Adidas®</strong>, <strong>Lane Seven®</strong>, and more to deliver heavyweight quality you can rely on.</p>",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "center",
-                "type_preset": "custom",
-                "font": "var(--font-accent--family)",
-                "font_size": "1.25rem",
-                "line_height": "tight",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "balance",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 8,
-                "padding-block-end": 8,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
             "image_L97JKV": {
               "type": "image",
               "name": "t:names.image",
@@ -531,13 +531,13 @@
             "text_enejcM",
             "variant_picker_R3rGDr",
             "image_WpKDGh",
+            "text_DpkCnt",
             "lb_size_guide_pdp",
             "lb_low_stock_pdp",
             "buy_buttons_eYQEYi",
             "image_wUdQUh",
             "lb_stat_strip_pdp",
             "accordion_NKWPiW",
-            "text_DpkCnt",
             "image_L97JKV",
             "image_6AGLCV"
           ]
