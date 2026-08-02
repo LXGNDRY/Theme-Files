@@ -188,7 +188,7 @@
               "type": "text",
               "name": "t:names.text",
               "settings": {
-                "text": "<p>Merch is <strong>unisex</strong> & <strong>true to size</strong> unless noted otherwise. We work with trusted brands like <strong>Champion®</strong>, <strong>Adidas®</strong>, <strong>Lane Seven®</strong>, and more to deliver heavyweight quality you can rely on.</p>",
+                "text": "<p>Merch is <strong>unisex</strong> & <strong>true to size </strong>unless otherwise noted. So, feel free to order your normal size. We work closely with our vendors to ensure quality and premium fit. </p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
