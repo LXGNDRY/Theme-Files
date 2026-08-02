@@ -1109,10 +1109,10 @@
       "type": "lb-brand-story",
       "settings": {
         "image_side": "left",
-        "eyebrow": "Our Story",
+        "eyebrow": "",
         "heading": "QUALITY OVER QUANTITY",
         "body": "<p>We build for the ones who know the difference. <strong>460GSM</strong> hoodies. <strong>235GSM+</strong> tees. Every garment <strong>DTG printed </strong>and built to outlast.</p><p><strong>Legendary Branding</strong> isn’t a brand — it’s a <strong>standard</strong>.</p>",
-        "button_label": "OUR PROCESS",
+        "button_label": "",
         "button_url": "/pages/about",
         "color_scheme": "scheme-2"
       }
