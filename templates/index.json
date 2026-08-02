@@ -177,6 +177,19 @@
         "padding-block-end": 0
       }
     },
+    "lb_brand_story_iXnVV9": {
+      "type": "lb-brand-story",
+      "name": "Brand Story",
+      "settings": {
+        "image_side": "left",
+        "eyebrow": "",
+        "heading": "august deals",
+        "body": "<h4></h4><h4><strong>20% off SITEWIDE (1 item)</strong></h4><h4><strong>BUY1 GET1 50% OFF (SHIRTS-HOODIES-SWEATS)</strong></h4><h4><strong>25% OFF OUTERWEAR</strong></h4><h4><strong>FREE SHIPPING &lt;$100</strong></h4>",
+        "button_label": "",
+        "button_url": "",
+        "color_scheme": "scheme-5"
+      }
+    },
     "product_list_6dxjyz": {
       "type": "product-list",
       "blocks": {
@@ -818,7 +831,7 @@
         "section_height_custom": 50,
         "color_scheme": "scheme-5",
         "toggle_overlay": false,
-        "overlay_color": "#DADADA",
+        "overlay_color": "#dadada",
         "overlay_style": "solid",
         "gradient_direction": "to top",
         "blurred_reflection": false,
@@ -2970,6 +2983,7 @@
   },
   "order": [
     "hero_MVUtj6",
+    "lb_brand_story_iXnVV9",
     "product_list_6dxjyz",
     "featured_product_information_MTtDiq",
     "178539945673bb8be3",
