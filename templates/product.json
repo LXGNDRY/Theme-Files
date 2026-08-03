@@ -77,7 +77,7 @@
               "settings": {
                 "show_sale_price_first": true,
                 "show_installments": false,
-                "show_tax_info": true,
+                "show_tax_info": false,
                 "type_preset": "custom",
                 "width": "100%",
                 "alignment": "left",
