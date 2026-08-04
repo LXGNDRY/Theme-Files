@@ -72,6 +72,29 @@
               "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
               "settings": {}
             },
+            "image_WpKDGh": {
+              "type": "image",
+              "name": "t:names.image",
+              "settings": {
+                "image": "shopify://shop_images/Hat_s_-_Artboard_3_1.png",
+                "link": "",
+                "image_ratio": "adapt",
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
             "price_a7krng": {
               "type": "price",
               "settings": {
@@ -156,29 +179,6 @@
                 "alignment": "center",
                 "padding-block-start": 12,
                 "padding-block-end": 24,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "image_WpKDGh": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/Hat_s_-_Artboard_3_1.png",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
@@ -526,11 +526,11 @@
           },
           "block_order": [
             "judge_me_reviews_preview_badge_3VhJnX",
+            "image_WpKDGh",
             "price_a7krng",
             "text_9WaLn7",
             "text_enejcM",
             "variant_picker_R3rGDr",
-            "image_WpKDGh",
             "text_DpkCnt",
             "lb_size_guide_pdp",
             "lb_low_stock_pdp",
