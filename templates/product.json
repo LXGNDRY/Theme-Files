@@ -727,7 +727,7 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<h2><span style=\"text-decoration:underline\"><em><strong>What is Legendary Branding?</strong></em></span></h2>",
+                "text": "<h2><span style=\"text-decoration:underline\"><em><strong>Legendary Branding?</strong></em></span></h2>",
                 "width": "100%",
                 "max_width": "none",
                 "alignment": "center",
@@ -1011,7 +1011,7 @@
             "text_XzTpDK": {
               "type": "text",
               "settings": {
-                "text": "<p><strong>Quality</strong> you can feel from the moment you put it on. We source premium, <strong>high-GSM fabrics</strong> to ensure every piece delivers a flawless, <strong>oversized fit </strong>that holds its shape. </p><p>Built from <strong>heavy-duty cotton</strong> and rich blends, our gear offers maximum comfort that stands up to the daily grind.</p>",
+                "text": "<p><strong>Quality</strong> you can feel from the moment you open it up. We source premium, <strong>high-GSM fabrics</strong> to ensure every piece delivers a flawless, <strong>oversized fit </strong>that holds its shape. </p><p>Built from <strong>heavy-duty cotton</strong> and rich blends, our gear offers maximum comfort that stands up to the daily grind.</p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
