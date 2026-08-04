@@ -82,8 +82,15 @@ class HeaderDrawer extends Component {
         this.refs.menuDrawer.classList.add('menu-drawer--has-submenu-opened');
       }
 
-      // Wait for the drawer animation to complete before trapping focus
+      // Some WebKit versions leave animated drawer content unpainted until an
+      // external repaint is triggered (e.g. a screenshot). Forcing a layout
+      // read/write here nudges the compositor to flush immediately.
       const drawer = details.querySelector('.menu-drawer, .menu-drawer__submenu');
+      if (drawer) {
+        void drawer.offsetHeight;
+      }
+
+      // Wait for the drawer animation to complete before trapping focus
       onAnimationEnd(drawer || details, () => trapFocus(details), { subtree: false });
     });
   }
