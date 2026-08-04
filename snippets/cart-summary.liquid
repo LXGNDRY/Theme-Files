@@ -250,7 +250,7 @@
       </span>
     {% endif %}
     <div class="cart-totals__item cart-totals__tax-note cart-primary-typography">
-      {% render 'tax-info', has_discounts_enabled: settings.show_add_discount_code %}
+      <small>Taxes and duties calculated at checkout. Discounts applied at checkout.</small>
     </div>
   </div>
 </div>
@@ -264,7 +264,7 @@
     </span>
     <span class="lb-cart-trust__item">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 3H8v4h8V3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      Free US shipping over $100
+      Free shipping
     </span>
     <span class="lb-cart-trust__item">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0z" stroke="currentColor" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -345,7 +345,7 @@
         </div>
         <p class="lb-razorpay-upi-badge">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2L4 6v6c0 5.25 3.5 10.15 8 11.35C16.5 22.15 20 17.25 20 12V6l-8-4z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Secured by Razorpay &nbsp;·&nbsp; 18% IGST included at checkout
+          Secured by Razorpay &nbsp;&middot;&nbsp; 18% IGST included at checkout
         </p>
       </div>
     {%- endunless -%}
