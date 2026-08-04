@@ -360,8 +360,7 @@
       },
       "general": {
         "cart": "Bag",
-        "back_to_cart": "Return to bag",
-        "pay_now_button_label": "Complete Purchase"
+        "back_to_cart": "Return to bag"
       },
       "order_payment_collection": {
         "pay_now": "Submit Payment"
