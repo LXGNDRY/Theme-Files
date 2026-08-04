@@ -46,7 +46,7 @@
           "type": "_cart-summary",
           "static": true,
           "settings": {
-            "extend_summary": true,
+            "extend_summary": false,
             "inherit_color_scheme": true,
             "color_scheme": "scheme-1",
             "border": "none",
