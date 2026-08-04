@@ -37,6 +37,13 @@
   endif
 %}
 
+<script>
+  document.addEventListener('toggle', function(e) {
+    if (e.target.classList.contains('menu-drawer-container')) {
+      e.target.classList.toggle('menu-open', e.target.open);
+    }
+  }, true);
+</script>
 <script
   src="{{ 'header-drawer.js' | asset_url }}"
   type="module"
@@ -509,11 +516,8 @@
                         -%}
 
                         {% if featured_collections.size > 0 or featured_products_collection.products_count > 0 %}
-                          <div
-                            class="menu-drawer__featured-content menu-drawer__featured-content--childlist"
-                            style="--menu-drawer-animation-index: {{ linklist.links.size | plus: 1 }};"
-                          >
-                            <ul class="menu-drawer__featured-content-list list-unstyled">
+                          <div class="menu-drawer__featured-content menu-drawer__featured-content--childlist">
+                            <ul class="menu-drawer__featured-content-list list-unstyled" style="--menu-drawer-animation-index: {{ linklist.links.size | plus: 1 }};">
                               {% if featured_collections.size > 0 %}
                                 {%- for collection in featured_collections limit: max_featured_items -%}
                                   <li class="menu-drawer__featured-content-list-item menu-drawer__featured-content-list-item--collection">
@@ -716,11 +720,8 @@
         endif
       -%}
       {% if top_level_featured_collections.size > 0 or top_level_featured_products_collection.products_count > 0 %}
-        <div
-          class="menu-drawer__featured-content"
-          style="--menu-drawer-animation-index: {{ linklist.links.size | plus: 1 }};"
-        >
-          <ul class="menu-drawer__featured-content-list menu-drawer__animated-element list-unstyled">
+        <div class="menu-drawer__featured-content">
+          <ul class="menu-drawer__featured-content-list menu-drawer__animated-element list-unstyled" style="--menu-drawer-animation-index: {{ linklist.links.size | plus: 1 }};">
             {% if top_level_featured_collections.size > 0 %}
               {%- for collection in top_level_featured_collections limit: max_featured_items -%}
                 <li class="menu-drawer__featured-content-list-item menu-drawer__featured-content-list-item--collection">
