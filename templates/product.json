@@ -123,7 +123,6 @@
             "text_enejcM": {
               "type": "text",
               "name": "t:names.text",
-              "disabled": true,
               "settings": {
                 "text": "<p>Free Shipping </p><p>Easy Returns</p><p>Premium-grade fabrics </p>",
                 "width": "100%",
@@ -526,14 +525,14 @@
           },
           "block_order": [
             "judge_me_reviews_preview_badge_3VhJnX",
-            "price_a7krng",
             "text_9WaLn7",
+            "price_a7krng",
             "text_enejcM",
             "image_WpKDGh",
             "variant_picker_R3rGDr",
-            "lb_stat_strip_pdp",
             "lb_size_guide_pdp",
             "lb_low_stock_pdp",
+            "lb_stat_strip_pdp",
             "buy_buttons_eYQEYi",
             "image_wUdQUh",
             "accordion_NKWPiW",
