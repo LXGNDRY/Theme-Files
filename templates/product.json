@@ -820,7 +820,7 @@
         "vertical_alignment_flex_direction_column": "center",
         "gap": 32,
         "section_width": "full-width",
-        "section_height": "",
+        "section_height": "large",
         "section_height_custom": 50,
         "color_scheme": "scheme-2",
         "background_media": "none",
@@ -905,7 +905,7 @@
             "text_q3xPLA": {
               "type": "text",
               "settings": {
-                "text": "<p><strong>Legendary Branding</strong> looks to grow beyond a single label,we have a larger creative vision. </p><p>Built to serve as a <strong>parent company</strong>, the brand is focused on expanding into smaller brands and original sub-entities, creating a broader<strong> legacy rooted in style</strong>, <strong>culture</strong>, and <strong>long-term impact</strong>.</p>",
+                "text": "<p><strong>Legendary Branding</strong> looks to grow beyond a single label; we have a larger creative vision. </p><p>Built to serve as a <strong>parent company</strong>, the brand is focused on expanding into smaller brands and original sub-entities, creating a broader<strong> legacy rooted in style</strong>, <strong>culture</strong>, and <strong>long-term impact</strong>.</p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
