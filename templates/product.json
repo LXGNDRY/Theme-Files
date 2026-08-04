@@ -791,7 +791,7 @@
             "video_loop": true,
             "alt": "",
             "custom_width": 70,
-            "custom_width_mobile": 70,
+            "custom_width_mobile": 65,
             "aspect_ratio": "auto",
             "border": "none",
             "border_width": 1,
