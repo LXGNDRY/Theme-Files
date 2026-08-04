@@ -127,14 +127,14 @@
           "desc-font-size": 12
         }
       },
-      "9670189827046205946": {
-        "type": "shopify://apps/hextom-translate-and-currency/blocks/app-block/b927a799-be04-4b97-9efb-5c8f0290a68e",
-        "disabled": false,
-        "settings": {}
-      },
       "8419966592507824873": {
         "type": "shopify://apps/seolab-seo-optimizer/blocks/app_embed/faf700f6-3b71-45c3-86d4-83ea9f7d9216",
-        "disabled": false,
+        "disabled": true,
+        "settings": {}
+      },
+      "9670189827046205946": {
+        "type": "shopify://apps/hextom-translate-and-currency/blocks/app-block/b927a799-be04-4b97-9efb-5c8f0290a68e",
+        "disabled": true,
         "settings": {}
       }
     },
