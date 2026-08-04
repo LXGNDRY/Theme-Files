@@ -913,7 +913,7 @@
           "type": "_featured-product-information-carousel",
           "static": true,
           "settings": {
-            "aspect_ratio": "adapt",
+            "aspect_ratio": "1",
             "constrain_to_viewport": true,
             "media_fit": "contain",
             "media_radius": 8,
@@ -1210,7 +1210,7 @@
       },
       "name": "t:names.featured_product_information",
       "settings": {
-        "product": "the-legendary-heavyweight-oversized-t-shirt",
+        "product": "dawg-pit-bull-oversized-t-shirt",
         "content_width": "content-full-width",
         "desktop_media_position": "left",
         "equal_columns": true,
