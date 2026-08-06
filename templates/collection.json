@@ -7,10 +7,6 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-/*
-  Theme: edits-here-2 / perf-optimized
-  Synced from: github.com/LXGNDRY/Theme-Files (edits-here-2 branch)
-*/
 {
   "sections": {
     "section": {
@@ -215,7 +211,7 @@
           "type": "_product-card",
           "static": true,
           "settings": {
-            "product_card_gap": 8,
+            "product_card_gap": 4,
             "inherit_color_scheme": true,
             "color_scheme": "",
             "border": "none",
