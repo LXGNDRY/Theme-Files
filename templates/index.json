@@ -1673,7 +1673,7 @@
       "name": "t:names.products_carousel",
       "settings": {
         "collection": "shirts-tops",
-        "layout_type": "carousel",
+        "layout_type": "grid",
         "carousel_on_mobile": false,
         "max_products": 4,
         "columns": 4,
@@ -1872,7 +1872,7 @@
       "name": "t:names.products_carousel",
       "settings": {
         "collection": "hoodies-jackets",
-        "layout_type": "carousel",
+        "layout_type": "grid",
         "carousel_on_mobile": false,
         "max_products": 4,
         "columns": 4,
