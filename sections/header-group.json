@@ -20,9 +20,9 @@
             "text": "<strong>20% Off First Order — FREE WORLDWIDE SHIPPING</strong>",
             "link": "",
             "font": "var(--font-body--family)",
-            "font_size": "1.125rem",
+            "font_size": "1rem",
             "weight": "",
-            "letter_spacing": "normal",
+            "letter_spacing": "tight",
             "case": "none"
           },
           "blocks": {}
@@ -62,7 +62,7 @@
             "color_scheme": "scheme-2",
             "type_font_primary_size": "1.125rem",
             "menu_font_style": "inverse_large",
-            "type_font_primary_link": "accent",
+            "type_font_primary_link": "body",
             "type_case_primary_link": "uppercase",
             "menu_style": "text",
             "featured_products_aspect_ratio": "4 / 5",
