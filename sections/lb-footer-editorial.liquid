@@ -24,6 +24,11 @@
     overflow: hidden;
   }
 
+  /* Hide default Atelier footer when editorial footer is present */
+  body:has(.lb-footer-editorial) #shopify-section-footer-group {
+    display: none !important;
+  }
+
   .lb-footer-editorial__inner {
     max-width: var(--page-width);
     margin: 0 auto;

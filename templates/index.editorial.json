@@ -1,22 +1,16 @@
 <!--
   index.editorial.json
   LEGENDARY BRANDING — Complete Redesign
-  Alternate home page: editorial brutalism style.
-  Uses the new editorial sections to showcase the Fuel-inspired redesign.
-  Apply via the theme editor (Home page > template: Editorial).
-
-  Section order matches the legendary-redesign-preview:
-    1. Hero (dark) — lb-hero-editorial
-    2. Marquee — lb-marquee
-    3. Product Grid (light) — lb-product-grid-editorial
-    4. Lookbook (dark) — lb-lookbook
-    5. Featured PDP (light) — lb-featured-pdp
-    6. Brand Story (light) — lb-brand-story
-    7. Footer (dark) — lb-footer-editorial
+  Full editorial homepage: hero marquee product-grid lookbook featured-pdp brand-story footer
+  Applied automatically to the homepage (default index.json is identical).
+  Can also be assigned via Theme Editor → Home page → Template: editorial.
 -->
 {
   "sections": {
-    "header": {
+    "header_group": {
+      "type": "header-group"
+    },
+    "editorial_header": {
       "type": "lb-header-editorial",
       "settings": {
         "show_search": true,
@@ -35,6 +29,7 @@
         "live_label": "LIVE NOW",
         "index_label": "DROP 07 · 2026",
         "meta_label": "12 PIECES",
+        "meta_bottom_right": "NO RESTOCKS",
         "color_scheme": "scheme-5"
       }
     },
@@ -140,7 +135,7 @@
         "color_scheme": "scheme-1"
       }
     },
-    "footer_editorial": {
+    "editorial_footer": {
       "type": "lb-footer-editorial",
       "settings": {
         "cta_label": "JOIN THE LIST",
@@ -202,16 +197,21 @@
         "social_tt",
         "social_yt"
       ]
+    },
+    "footer_group": {
+      "type": "footer-group"
     }
   },
   "order": [
-    "header",
+    "header_group",
+    "editorial_header",
     "hero",
     "marquee",
     "product_grid",
     "lookbook",
     "featured_pdp",
     "brand_story",
-    "footer_editorial"
+    "editorial_footer",
+    "footer_group"
   ]
 }

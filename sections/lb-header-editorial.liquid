@@ -30,6 +30,15 @@
     transition: all 0.3s var(--lb-ease-out, cubic-bezier(0.16,1,0.3,1));
   }
 
+  /* Hide the default Atelier header when editorial header is present */
+  body:has(.lb-header-editorial) #header-group {
+    display: none !important;
+  }
+
+  body:has(.lb-header-editorial) {
+    --header-group-height: 0px !important;
+  }
+
   .lb-header-editorial.is-scrolled {
     background: rgba(0,0,0,0.85);
     backdrop-filter: blur(16px);

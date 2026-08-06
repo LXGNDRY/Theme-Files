@@ -9,7 +9,10 @@
  */
 {
   "sections": {
-    "header": {
+    "header_group": {
+      "type": "header-group"
+    },
+    "editorial_header": {
       "type": "lb-header-editorial",
       "settings": {
         "show_search": true,
@@ -28,6 +31,7 @@
         "live_label": "LIVE NOW",
         "index_label": "DROP 07 · 2026",
         "meta_label": "12 PIECES",
+        "meta_bottom_right": "NO RESTOCKS",
         "color_scheme": "scheme-5"
       }
     },
@@ -133,7 +137,7 @@
         "color_scheme": "scheme-1"
       }
     },
-    "footer_editorial": {
+    "editorial_footer": {
       "type": "lb-footer-editorial",
       "settings": {
         "cta_label": "JOIN THE LIST",
@@ -195,16 +199,21 @@
         "social_tt",
         "social_yt"
       ]
+    },
+    "footer_group": {
+      "type": "footer-group"
     }
   },
   "order": [
-    "header",
+    "header_group",
+    "editorial_header",
     "hero",
     "marquee",
     "product_grid",
     "lookbook",
     "featured_pdp",
     "brand_story",
-    "footer_editorial"
+    "editorial_footer",
+    "footer_group"
   ]
 }
