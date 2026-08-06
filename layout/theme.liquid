@@ -69,7 +69,9 @@
   {%- endcomment -%}
   {%- render 'seo-preconnect' -%}
   {%- render 'lb-hero-lcp-preload' -%}
+  {%- comment -%} Temporarily disabled — investigating collection 404
   {%- render 'lb-collection-lcp-preload' -%}
+  {%- endcomment -%}
 
   {%- comment -%}── 4 + 5. CHAOS UNLEASHED ────────────────────────────────────
     Must render BEFORE content_for_header is emitted so Chaos can
