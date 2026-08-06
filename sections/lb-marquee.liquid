@@ -1,0 +1,183 @@
+{% comment %}
+  lb-marquee.liquid
+  LEGENDARY BRANDING — Complete Redesign
+  Editorial scrolling ticker (marquee) — Fuel signature pattern.
+  A horizontal scrolling text strip between sections for drop info,
+  restock alerts, shipping timelines, or brand messaging.
+  Features:
+    - Infinite scroll animation (CSS, no JS)
+    - Configurable speed and direction
+    - Duplicated content for seamless loop
+    - Blueprint markers / label decorations
+    - Works with any text separated by separator
+{% endcomment %}
+
+{%- liquid
+  assign text = section.settings.text | default: 'LIMITED / NO RESTOCKS / 235GSM / DTG PRINTED'
+  assign separator = section.settings.separator | default: '✦'
+  assign speed = section.settings.speed | default: 'medium'
+  assign reverse = section.settings.reverse | default: false
+  assign items = text | split: '/'
+-%}
+
+{%- style -%}
+  .lb-marquee {
+    position: relative;
+    overflow: hidden;
+    padding: var(--lb-space-sm) 0;
+    border-top: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    border-color: rgba(255,255,255,0.1);
+    white-space: nowrap;
+  }
+
+  .color-scheme-1 .lb-marquee,
+  .color-scheme-3 .lb-marquee {
+    border-color: rgba(0,0,0,0.1);
+  }
+
+  .lb-marquee__track {
+    display: inline-flex;
+    align-items: center;
+    gap: 2rem;
+    padding-right: 2rem;
+    will-change: transform;
+    animation: lb-marquee-scroll var(--lb-marquee-duration, 30s) linear infinite;
+  }
+
+  .lb-marquee--reverse .lb-marquee__track {
+    animation-direction: reverse;
+  }
+
+  .lb-marquee--speed-slow { --lb-marquee-duration: 45s; }
+  .lb-marquee--speed-medium { --lb-marquee-duration: 30s; }
+  .lb-marquee--speed-fast { --lb-marquee-duration: 18s; }
+
+  .lb-marquee__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 2rem;
+    font-size: var(--lb-display-3);
+    line-height: 0.9;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    opacity: 0.9;
+  }
+
+  .lb-marquee__separator {
+    font-size: var(--lb-label);
+    opacity: 0.4;
+    letter-spacing: 0.2em;
+  }
+
+  @keyframes lb-marquee-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* Pause on hover */
+  .lb-marquee:hover .lb-marquee__track {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lb-marquee__track {
+      animation: none;
+      flex-wrap: wrap;
+      white-space: normal;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .lb-marquee__item {
+      font-size: var(--lb-heading-2);
+    }
+  }
+{%- endstyle -%}
+
+<section class="lb-marquee lb-marquee--speed-{{ speed }}{% if reverse %} lb-marquee--reverse{% endif %} color-{{ section.settings.color_scheme }}" {{ section.shopify_attributes }}>
+  <div class="lb-marquee__track" aria-hidden="true">
+    {%- comment -%} Render items twice for seamless loop {%- endcomment -%}
+    {%- for i in (1..2) -%}
+      {%- for item in items -%}
+        {%- assign trimmed = item | strip -%}
+        {%- if trimmed != blank -%}
+          <span class="lb-marquee__item">
+            {{ trimmed }}
+            <span class="lb-marquee__separator">{{ separator }}</span>
+          </span>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Marquee Ticker (Editorial)",
+  "tag": "section",
+  "class": "lb-marquee",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "LIMITED / NO RESTOCKS / 235GSM / DTG PRINTED",
+      "info": "Separate items with '/'"
+    },
+    {
+      "type": "text",
+      "id": "separator",
+      "label": "Separator symbol",
+      "default": "✦",
+      "info": "Symbol shown between items"
+    },
+    {
+      "type": "select",
+      "id": "speed",
+      "label": "Scroll speed",
+      "options": [
+        { "value": "slow", "label": "Slow" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "fast", "label": "Fast" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "checkbox",
+      "id": "reverse",
+      "label": "Reverse direction",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Color scheme"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Light (White)" },
+        { "value": "scheme-2", "label": "Light Alt" },
+        { "value": "scheme-4", "label": "Dark Grey" },
+        { "value": "scheme-5", "label": "True Black" }
+      ],
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee Ticker",
+      "category": "Editorial",
+      "settings": {
+        "text": "LIMITED / NO RESTOCKS / 235GSM / DTG PRINTED",
+        "separator": "✦",
+        "speed": "medium",
+        "color_scheme": "scheme-1"
+      }
+    }
+  ]
+}
+{% endschema %}

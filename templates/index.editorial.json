@@ -1,0 +1,70 @@
+<!--
+  index.editorial.json
+  LEGENDARY BRANDING — Complete Redesign
+  Alternate home page: editorial brutalism style.
+  Uses the new editorial sections to showcase the Fuel-inspired redesign.
+  Apply via the theme editor (Home page > template: Editorial).
+-->
+{
+  "sections": {
+    "header_group": {
+      "type": "header-group"
+    },
+    "hero": {
+      "type": "lb-hero-editorial",
+      "settings": {
+        "heading": "DROP\n07",
+        "heading_size": "medium",
+        "subheading": "Essentials reimagined. 235GSM heavyweight tees. 380-460GSM hoodies. Every garment DTG printed and built to outlast.",
+        "cta_label": "Shop the drop",
+        "cta_url": "/collections/essentials",
+        "drop_status": "live",
+        "live_label": "LIVE NOW",
+        "index_label": "DROP 07",
+        "meta_label": "12 PIECES",
+        "color_scheme": "scheme-5"
+      }
+    },
+    "marquee": {
+      "type": "lb-marquee",
+      "settings": {
+        "text": "LIMITED / 235GSM / 380-460GSM / DTG PRINTED / NO RESTOCKS / FREE SHIPPING OVER $100",
+        "speed": "slow",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "featured_collection": {
+      "type": "product-list",
+      "settings": {
+        "heading": "LATEST DROP",
+        "products_to_show": 8,
+        "show_view_all": true
+      }
+    },
+    "brand_story": {
+      "type": "lb-brand-story",
+      "settings": {
+        "eyebrow": "Our Story",
+        "heading": "QUALITY OVER QUANTITY",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "editorial_cta": {
+      "type": "lb-footer-editorial",
+      "settings": {
+        "email_heading": "DROP UPDATES",
+        "email_subtext": "First access to drops. No restocks. No noise.",
+        "giant_word": "LEGENDARY",
+        "color_scheme": "scheme-5"
+      }
+    }
+  },
+  "order": [
+    "header_group",
+    "hero",
+    "marquee",
+    "featured_collection",
+    "brand_story",
+    "editorial_cta"
+  ]
+}
