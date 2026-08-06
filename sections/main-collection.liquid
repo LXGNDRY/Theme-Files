@@ -22,32 +22,6 @@
   }
 {% endjavascript %}
 
-{% comment %} Collection LCP optimization: set fetchpriority=high on the first product image
-  to ensure the LCP candidate loads as early as possible. Browsers normally
-  deprioritize lazy-loaded images, but the first product on a collection page
-  is often the LCP element. Runs inline so it executes before image parsing.
-{% endcomment %}
-<script>
-(function(){
-  function setFirstProductPriority(){
-    var grid = document.querySelector('.product-grid .resource-card__image, .product-grid img');
-    if(grid){
-      grid.setAttribute('fetchpriority','high');
-      grid.setAttribute('loading','eager');
-      return true;
-    }
-    return false;
-  }
-  if(!setFirstProductPriority()){
-    var mo = new MutationObserver(function(){
-      if(setFirstProductPriority()) mo.disconnect();
-    });
-    mo.observe(document.documentElement,{childList:true,subtree:true});
-    setTimeout(function(){ mo.disconnect(); }, 3000);
-  }
-})();
-</script>
-
 {% comment %} We always render this full-width, as the child blocks have width: page/full settings {% endcomment %}
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <results-list
@@ -93,7 +67,7 @@
               {%- if promo.settings.position == item_index -%}
                 <li class="product-grid__item lb-promo-tile" style="{% if promo.settings.bg_color != blank %}background: {{ promo.settings.bg_color }};{% endif %}" {{ promo.shopify_attributes }}>
                   {%- if promo.settings.image != blank -%}
-                    <img src="{{ promo.settings.image | image_url: width: 600 , format: 'webp'}}" alt="{{ promo.settings.headline | escape }}" loading="lazy" class="lb-promo-tile__bg-img">
+                    <img src="{{ promo.settings.image | image_url: width: 600, format: 'webp' }}" alt="{{ promo.settings.headline | escape }}" loading="lazy" class="lb-promo-tile__bg-img">
                   {%- endif -%}
                   <div class="lb-promo-tile__content">
                     {%- if promo.settings.headline != blank -%}
