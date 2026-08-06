@@ -35,14 +35,14 @@
       {%- if block.settings.media_type_1 == 'image' -%}
         {{
           block.settings.image_1
-          | image_url: width: 3840
+          | image_url: width: 3840, format: 'webp'
           | image_tag: height: height, sizes: sizes, widths: widths, class: 'layered-slideshow__image', loading: loading
         }}
       {%- else -%}
         {%- if block.settings.video_1.preview_image -%}
           {{
             block.settings.video_1.preview_image
-            | image_url: width: 3840
+            | image_url: width: 3840, format: 'webp'
             | image_tag:
               height: height,
               sizes: sizes,

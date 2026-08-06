@@ -20,7 +20,7 @@
     %}
   {% endcapture %}
 
-  {{ image | image_url: width: 1024 | image_tag: sizes: image_sizes }}
+  {{ image | image_url: width: 1024 , format: 'webp'| image_tag: sizes: image_sizes }}
 {%- enddoc -%}
 
 {% liquid

@@ -52,9 +52,13 @@
   <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
   <link rel="preconnect" href="https://s.pinimg.com" crossorigin>
   <link rel="preconnect" href="https://sc-static.net" crossorigin>
+  <link rel="preconnect" href="https://checkout.shopify.com" crossorigin>
+  <link rel="preconnect" href="https://static.klaviyo.com" crossorigin>
   <link rel="dns-prefetch" href="//connect.facebook.net">
   <link rel="dns-prefetch" href="//s.pinimg.com">
   <link rel="dns-prefetch" href="//sc-static.net">
+  <link rel="dns-prefetch" href="//checkout.shopify.com">
+  <link rel="dns-prefetch" href="//static.klaviyo.com">
 
   {%- comment -%}── 3. LCP PRELOAD ────────────────────────────────────────────
     seo-preconnect runs here to warm the CDN before the preload resolves.
@@ -185,7 +189,7 @@
 
   {%- comment -%}── 8. META / SEO / FAVICON ──────────────────────────────────{%- endcomment -%}
   {%- if settings.favicon != blank -%}
-    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, format: 'webp', height: 32 }}">
   {%- endif -%}
   {%- render 'seo-meta' -%}
   {%- render 'lb-param-noindex' -%}
@@ -326,12 +330,6 @@
   </noscript>
   {%- endunless -%}
 
-  {%- comment -%}── SVG SPRITE ────────────────────────────────────────────────
-    Injected once, hidden. All icon.liquid calls reference these symbols via
-    <use href="#icon-{name}">, eliminating per-call 133KB snippet parsing.
-  {%- endcomment -%}
-  {%- render 'lb-svg-sprite' -%}
-
   {%- comment -%}── SKIP LINK ────────────────────────────────────────────────{%- endcomment -%}
   {%- render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' -%}
 
@@ -449,6 +447,14 @@
     elements it can observe on first run.
   {%- endcomment -%}
   {%- render 'lb-idle-defer' -%}
+
+  {%- comment -%}── SVG SPRITE (deferred to end of body) ──────────────────────
+    Moved from top of body to end. SVG symbols are resolved during layout
+    (after full DOM parse), so they work regardless of position in the
+    document. Placing them here removes ~60KB of SVG parse cost from the
+    critical rendering path, letting the browser reach LCP content sooner.
+  {%- endcomment -%}
+  {%- render 'lb-svg-sprite' -%}
 
   {%- render 'lb-ga4-events' -%}
 </body>

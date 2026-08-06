@@ -13,9 +13,9 @@
   endif
 
   if settings.transition_to_main_product
-    assign featured_media_url = product.selected_or_first_available_variant.featured_image | image_url: width: 500
+    assign featured_media_url = product.selected_or_first_available_variant.featured_image | image_url: width: 500, format: 'webp'
     if featured_media_url == blank
-      assign featured_media_url = product.featured_media.preview_image | image_url: width: 500
+      assign featured_media_url = product.featured_media.preview_image | image_url: width: 500, format: 'webp'
     endif
   endif
 

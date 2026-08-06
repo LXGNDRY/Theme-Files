@@ -67,7 +67,7 @@
               {%- if promo.settings.position == item_index -%}
                 <li class="product-grid__item lb-promo-tile" style="{% if promo.settings.bg_color != blank %}background: {{ promo.settings.bg_color }};{% endif %}" {{ promo.shopify_attributes }}>
                   {%- if promo.settings.image != blank -%}
-                    <img src="{{ promo.settings.image | image_url: width: 600 }}" alt="{{ promo.settings.headline | escape }}" loading="lazy" class="lb-promo-tile__bg-img">
+                    <img src="{{ promo.settings.image | image_url: width: 600 , format: 'webp'}}" alt="{{ promo.settings.headline | escape }}" loading="lazy" class="lb-promo-tile__bg-img">
                   {%- endif -%}
                   <div class="lb-promo-tile__content">
                     {%- if promo.settings.headline != blank -%}
