@@ -8,6 +8,27 @@
     "theme_support_url": "https://support.shopify.com/"
   },
   {
+    "name": "Drop & Editorial",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "LEGENDARY BRANDING — complete-redesign. Drop-culture settings: countdown timer shown in the header nav, and editorial defaults."
+      },
+      {
+        "type": "text",
+        "id": "drop_countdown_datetime",
+        "label": "Next drop countdown (datetime)",
+        "info": "ISO datetime the header countdown counts down to, e.g. 2026-09-01T12:00:00-05:00. Leave blank to hide the pill."
+      },
+      {
+        "type": "text",
+        "id": "drop_countdown_label",
+        "label": "Countdown label",
+        "default": "NEXT DROP IN"
+      }
+    ]
+  },
+  {
     "name": "t:names.logo_and_favicon",
     "settings": [
       {

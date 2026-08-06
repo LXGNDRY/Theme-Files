@@ -1,0 +1,496 @@
+{% comment %}
+  lb-product-info-editorial.liquid
+  LEGENDARY BRANDING — Complete Redesign
+  Editorial product page as a "technical data sheet".
+  Fuel-inspired: product rendered like a product dossier / spec sheet.
+  Features:
+    - Editorial typography (SKU, drop number, category as tiny labels)
+    - Media gallery with thumbnail strip
+    - Technical data sheet blocks (fabric, fit, care, specs)
+    - Price + compare at
+    - Size selector + add to cart
+    - Accordion details
+    - Blueprint markers
+  Designed to be the 'main' section in product.editorial.json.
+{% endcomment %}
+
+{%- liquid
+  assign product = product
+  assign selected_variant = product.selected_or_first_available_variant | default: product.variants.first
+  assign media = product.media
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+
+{%- style -%}
+  .lb-pdp-editorial {
+    padding: var(--lb-space-lg) var(--lb-space-md) var(--lb-section-padding);
+    max-width: var(--page-width);
+    margin: 0 auto;
+  }
+
+  .lb-pdp-editorial__grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--lb-space-xl);
+    align-items: start;
+  }
+
+  /* ---- Media gallery ---- */
+  .lb-pdp-editorial__media {
+    position: relative;
+  }
+
+  .lb-pdp-editorial__main-image {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: rgba(128,128,128,0.05);
+  }
+
+  .lb-pdp-editorial__main-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .lb-pdp-editorial__thumbs {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .lb-pdp-editorial__thumb {
+    position: relative;
+    width: 72px;
+    height: 90px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid transparent;
+    opacity: 0.6;
+    transition: opacity var(--lb-duration-fast) var(--lb-ease-out),
+                border-color var(--lb-duration-fast) var(--lb-ease-out);
+  }
+
+  .lb-pdp-editorial__thumb.is-active {
+    opacity: 1;
+    border-color: currentColor;
+  }
+
+  .lb-pdp-editorial__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ---- Info: technical data sheet ---- */
+  .lb-pdp-editorial__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--lb-space-md);
+  }
+
+  .lb-pdp-editorial__meta-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  .lb-pdp-editorial__title {
+    font-size: var(--lb-display-3);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .lb-pdp-editorial__price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .lb-pdp-editorial__price {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .lb-pdp-editorial__compare {
+    font-size: 1rem;
+    font-weight: 400;
+    text-decoration: line-through;
+    opacity: 0.4;
+  }
+
+  /* ---- Technical data sheet ---- */
+  .lb-pdp-editorial__sheet {
+    border-top: 1px solid currentColor;
+    border-color: rgba(255,255,255,0.1);
+  }
+
+  .color-scheme-1 .lb-pdp-editorial__sheet,
+  .color-scheme-3 .lb-pdp-editorial__sheet {
+    border-color: rgba(0,0,0,0.1);
+  }
+
+  .lb-pdp-editorial__sheet-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--lb-space-md);
+    padding: 0.75rem 0;
+    border-bottom: 1px solid currentColor;
+    border-color: rgba(255,255,255,0.08);
+  }
+
+  .color-scheme-1 .lb-pdp-editorial__sheet-row,
+  .color-scheme-3 .lb-pdp-editorial__sheet-row {
+    border-color: rgba(0,0,0,0.08);
+  }
+
+  .lb-pdp-editorial__sheet-label {
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
+
+  .lb-pdp-editorial__sheet-value {
+    font-size: 0.875rem;
+    text-align: right;
+    opacity: 0.85;
+  }
+
+  /* ---- Variant / size selector ---- */
+  .lb-pdp-editorial__options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .lb-pdp-editorial__option-label {
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  .lb-pdp-editorial__option-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .lb-pdp-editorial__option {
+    padding: 0.625rem 1.25rem;
+    border: 1px solid currentColor;
+    border-color: rgba(255,255,255,0.2);
+    background: transparent;
+    color: inherit;
+    font-size: 0.8125rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all var(--lb-duration-fast) var(--lb-ease-out);
+  }
+
+  .color-scheme-1 .lb-pdp-editorial__option,
+  .color-scheme-3 .lb-pdp-editorial__option {
+    border-color: rgba(0,0,0,0.2);
+  }
+
+  .lb-pdp-editorial__option:hover {
+    border-color: currentColor;
+  }
+
+  .lb-pdp-editorial__option.is-selected {
+    background: currentColor;
+    color: var(--color-background);
+    border-color: currentColor;
+  }
+
+  .lb-pdp-editorial__option[data-unavailable] {
+    opacity: 0.3;
+    text-decoration: line-through;
+    pointer-events: none;
+  }
+
+  /* ---- Add to cart ---- */
+  .lb-pdp-editorial__atc {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: var(--lb-space-sm);
+  }
+
+  .lb-pdp-editorial__atc-btn {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    background: currentColor;
+    color: var(--color-background);
+    border: 1px solid currentColor;
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity var(--lb-duration-fast) var(--lb-ease-out);
+  }
+
+  .lb-pdp-editorial__atc-btn:hover {
+    opacity: 0.85;
+  }
+
+  .lb-pdp-editorial__atc-btn[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* ---- Description ---- */
+  .lb-pdp-editorial__description {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    opacity: 0.8;
+  }
+
+  .lb-pdp-editorial__description p {
+    margin: 0 0 0.75rem;
+  }
+
+  /* Blueprint crosshair */
+  .lb-pdp-editorial__media::before {
+    content: '';
+    position: absolute;
+    top: -0.5rem;
+    left: -0.5rem;
+    width: 18px;
+    height: 18px;
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Mobile */
+  @media screen and (max-width: 749px) {
+    .lb-pdp-editorial {
+      padding: var(--lb-space-md);
+    }
+
+    .lb-pdp-editorial__grid {
+      grid-template-columns: 1fr;
+      gap: var(--lb-space-lg);
+    }
+
+    .lb-pdp-editorial__thumb {
+      width: 56px;
+      height: 70px;
+    }
+  }
+{%- endstyle -%}
+
+<section class="lb-pdp-editorial color-{{ section.settings.color_scheme }}" {{ section.shopify_attributes }}>
+  <div class="lb-pdp-editorial__grid">
+    <!-- Media gallery -->
+    <div class="lb-pdp-editorial__media">
+      <div class="lb-pdp-editorial__main-image">
+        {%- if product.featured_media != blank -%}
+          {{
+            product.featured_media
+            | image_url: width: 1200, format: 'webp'
+            | image_tag:
+              loading: 'eager',
+              fetchpriority: 'high',
+              sizes: '(max-width: 749px) 100vw, 55vw',
+              widths: '600, 800, 1200',
+              alt: product.featured_media.alt | default: product.title | escape
+          }}
+        {%- endif -%}
+      </div>
+
+      {%- if media.size > 1 -%}
+        <div class="lb-pdp-editorial__thumbs" role="list" aria-label="Product media">
+          {%- for m in media limit: 6 -%}
+            <button
+              type="button"
+              class="lb-pdp-editorial__thumb m-{{ forloop.index }}{% if forloop.first %} is-active{% endif %}"
+              data-media-id="{{ m.id }}"
+              onclick="document.querySelector('.lb-pdp-editorial__main-image img').src = '{{ m | image_url: width: 1200, format: 'webp' }}'; document.querySelectorAll('.lb-pdp-editorial__thumb').forEach(t=>t.classList.remove('is-active')); this.classList.add('is-active');"
+              role="listitem"
+              aria-label="View media {{ forloop.index }}"
+            >
+              <img
+                src="{{ m | image_url: width: 200, format: 'webp' }}"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                width="72"
+                height="90">
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <!-- Info: technical data sheet -->
+    <div class="lb-pdp-editorial__info">
+      <div class="lb-pdp-editorial__meta-top">
+        <span>{{ section.settings.category_label | default: 'LEGENDARY BRANDING' }}</span>
+        {%- if product.selected_or_first_available_variant.sku != blank -%}
+          <span>SKU {{ product.selected_or_first_available_variant.sku }}</span>
+        {%- endif -%}
+      </div>
+
+      <h1 class="lb-pdp-editorial__title">{{ product.title }}</h1>
+
+      <div class="lb-pdp-editorial__price-row">
+        <span class="lb-pdp-editorial__price">{{ selected_variant.price | money }}</span>
+        {%- if selected_variant.compare_at_price > selected_variant.price -%}
+          <span class="lb-pdp-editorial__compare">{{ selected_variant.compare_at_price | money }}</span>
+        {%- endif -%}
+      </div>
+
+      <!-- Variant options -->
+      {%- unless product.has_only_default_variant -%}
+        {%- for option in product.options_with_values -%}
+          <div class="lb-pdp-editorial__options">
+            <div class="lb-pdp-editorial__option-label">{{ option.name }}</div>
+            <div class="lb-pdp-editorial__option-group" data-option-name="{{ option.name }}">
+              {%- for value in option.values -%}
+                <button
+                  type="button"
+                  class="lb-pdp-editorial__option{% if option.selected_value == value %} is-selected{% endif %}"
+                  data-value="{{ value | escape }}"
+                  onclick="this.closest('[data-option-name]').querySelectorAll('.lb-pdp-editorial__option').forEach(o=>o.classList.remove('is-selected')); this.classList.add('is-selected');"
+                >{{ value }}</button>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endunless -%}
+
+      <!-- Add to cart -->
+      <div class="lb-pdp-editorial__atc">
+        <button
+          type="button"
+          class="lb-pdp-editorial__atc-btn"
+          data-add-to-cart
+          {% unless product.available %}disabled{% endunless %}
+        >
+          {%- if product.available -%}
+            {{ section.settings.add_to_cart_label | default: 'ADD TO CART' }}
+          {%- else -%}
+            SOLD OUT
+          {%- endif -%}
+        </button>
+      </div>
+
+      <!-- Technical data sheet -->
+      <div class="lb-pdp-editorial__sheet">
+        {%- if product.vendor != blank -%}
+          <div class="lb-pdp-editorial__sheet-row">
+            <span class="lb-pdp-editorial__sheet-label">Brand</span>
+            <span class="lb-pdp-editorial__sheet-value">{{ product.vendor }}</span>
+          </div>
+        {%- endif -%}
+        {%- if selected_variant.sku != blank -%}
+          <div class="lb-pdp-editorial__sheet-row">
+            <span class="lb-pdp-editorial__sheet-label">SKU</span>
+            <span class="lb-pdp-editorial__sheet-value">{{ selected_variant.sku }}</span>
+          </div>
+        {%- endif -%}
+        {%- if section.settings.drop_number != blank -%}
+          <div class="lb-pdp-editorial__sheet-row">
+            <span class="lb-pdp-editorial__sheet-label">Drop</span>
+            <span class="lb-pdp-editorial__sheet-value">{{ section.settings.drop_number }}</span>
+          </div>
+        {%- endif -%}
+        {%- if product.type != blank -%}
+          <div class="lb-pdp-editorial__sheet-row">
+            <span class="lb-pdp-editorial__sheet-label">Type</span>
+            <span class="lb-pdp-editorial__sheet-value">{{ product.type }}</span>
+          </div>
+        {%- endif -%}
+        {%- if product.tags.size > 0 -%}
+          <div class="lb-pdp-editorial__sheet-row">
+            <span class="lb-pdp-editorial__sheet-label">Tags</span>
+            <span class="lb-pdp-editorial__sheet-value">{{ product.tags | join: ' / ' }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- Description -->
+      {%- if product.description != blank -%}
+        <div class="lb-pdp-editorial__description">
+          {{ product.description | truncate: 400 }}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product Info (Editorial)",
+  "tag": "section",
+  "class": "lb-pdp-editorial",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Labels"
+    },
+    {
+      "type": "text",
+      "id": "category_label",
+      "label": "Category label (top)",
+      "default": "LEGENDARY BRANDING"
+    },
+    {
+      "type": "text",
+      "id": "drop_number",
+      "label": "Drop number (data sheet)",
+      "default": "DROP 07"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_label",
+      "label": "Add to cart label",
+      "default": "ADD TO CART"
+    },
+    {
+      "type": "header",
+      "content": "Color scheme"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Light (White)" },
+        { "value": "scheme-2", "label": "Light Alt" },
+        { "value": "scheme-4", "label": "Dark Grey" },
+        { "value": "scheme-5", "label": "True Black" }
+      ],
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Info (Editorial)",
+      "category": "Product",
+      "settings": {
+        "category_label": "LEGENDARY BRANDING",
+        "drop_number": "DROP 07",
+        "add_to_cart_label": "ADD TO CART",
+        "color_scheme": "scheme-1"
+      }
+    }
+  ]
+}
+{% endschema %}
