@@ -1,0 +1,277 @@
+{% comment %}
+  lb-product-grid-editorial.liquid
+  LEGENDARY BRANDING — Complete Redesign
+  Editorial product grid that renders lb-card-editorial cards.
+  Features:
+    - Blueprint grid markers
+    - Index numbering (Piece 01/12)
+    - Cross-sell / promo tile support
+    - Optional collection description
+    - Works on collection, search, and via dynamic sources
+  Designed to be used as the 'main' section in an editorial collection template.
+{% endcomment %}
+
+{%- liquid
+  assign products_per_page = section.settings.products_per_page | default: 12
+  assign columns_desktop = section.settings.columns_desktop | default: 3
+  assign columns_mobile = section.settings.columns_mobile | default: 2
+  assign show_index = section.settings.show_index | default: true
+  assign show_price = section.settings.show_price | default: true
+  assign show_promo_tiles = section.settings.show_promo_tiles | default: true
+  assign grid_gap = section.settings.grid_gap | default: 1.5
+-%}
+
+{%- style -%}
+  .lb-product-grid-editorial {
+    padding: var(--lb-space-lg) var(--lb-space-md) var(--lb-section-padding);
+    max-width: var(--page-width);
+    margin: 0 auto;
+  }
+
+  .lb-product-grid-editorial__grid {
+    display: grid;
+    grid-template-columns: repeat({{ columns_mobile }}, 1fr);
+    gap: {{ grid_gap }}rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lb-product-grid-editorial__item {
+    position: relative;
+  }
+
+  /* Blueprint crosshair on each grid cell */
+  .lb-product-grid-editorial__item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 14px;
+    height: 14px;
+    border-right: 1px solid currentColor;
+    border-top: 1px solid currentColor;
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  @media screen and (min-width: 750px) {
+    .lb-product-grid-editorial__grid {
+      grid-template-columns: repeat({{ columns_desktop }}, 1fr);
+    }
+  }
+
+  /* Empty state */
+  .lb-product-grid-editorial__empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--lb-space-xl) 0;
+    opacity: 0.6;
+  }
+
+  /* Load more */
+  .lb-product-grid-editorial__more {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--lb-space-lg);
+  }
+
+  .lb-product-grid-editorial__more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 2rem;
+    border: 1px solid currentColor;
+    background: transparent;
+    color: inherit;
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--lb-duration-base) var(--lb-ease-out);
+  }
+
+  .lb-product-grid-editorial__more-btn:hover {
+    background: currentColor;
+    color: var(--color-background);
+  }
+
+  /* Page header for standalone template */
+  .lb-product-grid-editorial__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--lb-space-lg);
+  }
+
+  .lb-product-grid-editorial__header-title {
+    font-size: var(--lb-display-3);
+    line-height: 0.9;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .lb-product-grid-editorial {
+      padding: var(--lb-space-md);
+    }
+    .lb-product-grid-editorial__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--lb-space-sm);
+    }
+  }
+{%- endstyle -%}
+
+<section class="lb-product-grid-editorial color-{{ section.settings.color_scheme }}">
+  {%- if section.settings.heading != blank -%}
+    <div class="lb-product-grid-editorial__header">
+      <h2 class="lb-product-grid-editorial__header-title">{{ section.settings.heading }}</h2>
+      {%- if section.settings.heading_meta != blank -%}
+        <span class="lb-label" style="opacity: 0.5;">{{ section.settings.heading_meta }}</span>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- paginate collection.products by products_per_page -%}
+    {%- if collection.products.size > 0 -%}
+      <ul class="lb-product-grid-editorial__grid" role="list">
+        {%- for product in collection.products -%}
+          <li class="lb-product-grid-editorial__item">
+            {% render 'lb-card-editorial',
+              product: product,
+              index: forloop.index,
+              total: collection.products.size,
+              show_index: show_index,
+              show_price: show_price
+            %}
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if paginate.pages > 1 -%}
+        <div class="lb-product-grid-editorial__more">
+          {%- if paginate.next -%}
+            <a href="{{ paginate.next.url }}" class="lb-product-grid-editorial__more-btn">
+              Load more <span aria-hidden="true">→</span>
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <div class="lb-product-grid-editorial__empty">
+        <p>No products found.</p>
+      </div>
+    {%- endif -%}
+  {%- endpaginate -%}
+</section>
+
+{% schema %}
+{
+  "name": "Product Grid (Editorial)",
+  "tag": "section",
+  "class": "lb-product-grid-editorial",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading (optional)"
+    },
+    {
+      "type": "text",
+      "id": "heading_meta",
+      "label": "Heading meta (optional)",
+      "info": "e.g. '12 PIECES'"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns (desktop)",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Columns (mobile)",
+      "min": 1,
+      "max": 2,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid gap (rem)",
+      "min": 0.5,
+      "max": 3,
+      "step": 0.5,
+      "default": 1.5
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 4,
+      "max": 48,
+      "step": 4,
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Card options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_index",
+      "label": "Show index numbers",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show price",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Color scheme"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Light (White)" },
+        { "value": "scheme-2", "label": "Light Alt" },
+        { "value": "scheme-4", "label": "Dark Grey" },
+        { "value": "scheme-5", "label": "True Black" }
+      ],
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Grid (Editorial)",
+      "category": "Collection",
+      "settings": {
+        "columns_desktop": 3,
+        "columns_mobile": 2,
+        "products_per_page": 12,
+        "show_index": true,
+        "show_price": true,
+        "color_scheme": "scheme-1"
+      }
+    }
+  ]
+}
+{% endschema %}

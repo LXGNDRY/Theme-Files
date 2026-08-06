@@ -1,0 +1,456 @@
+{% comment %}
+  lb-footer-editorial.liquid
+  LEGENDARY BRANDING — Complete Redesign
+  Editorial footer with massive email CTA (Fuel signature pattern).
+  Features:
+    - Giant "DROP UPDATES" email capture headline
+    - Email signup form (Klaviyo-compatible)
+    - Index-numbered link columns
+    - Blueprint markers
+    - Massive copyright footer
+{% endcomment %}
+
+{%- liquid
+  assign email_heading = section.settings.email_heading | default: 'DROP UPDATES'
+  assign email_sub = section.settings.email_subtext | default: 'First access to drops. No restocks. No noise.'
+  assign form_action = section.settings.form_action_klaviyo | default: ''
+  assign newsletter_block = true
+-%}
+
+{%- style -%}
+  .lb-footer-editorial {
+    position: relative;
+    padding: var(--lb-section-padding) var(--lb-space-md);
+    overflow: hidden;
+  }
+
+  .lb-footer-editorial__inner {
+    max-width: var(--page-width);
+    margin: 0 auto;
+  }
+
+  /* ---- Massive email CTA ---- */
+  .lb-footer-editorial__cta {
+    border-top: 1px solid currentColor;
+    border-top-color: rgba(255,255,255,0.1);
+    padding-top: var(--lb-space-xl);
+    margin-bottom: var(--lb-space-2xl);
+    position: relative;
+  }
+
+  .color-scheme-1 .lb-footer-editorial__cta,
+  .color-scheme-3 .lb-footer-editorial__cta {
+    border-top-color: rgba(0,0,0,0.1);
+  }
+
+  .lb-footer-editorial__cta-label {
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: var(--lb-space-md);
+  }
+
+  .lb-footer-editorial__cta-heading {
+    font-size: var(--lb-display-2);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0 0 var(--lb-space-lg);
+    max-width: 20ch;
+  }
+
+  .lb-footer-editorial__cta-sub {
+    font-size: clamp(0.875rem, 1.2vw, 1rem);
+    opacity: 0.7;
+    max-width: 40ch;
+    margin-bottom: var(--lb-space-lg);
+  }
+
+  .lb-footer-editorial__form {
+    display: flex;
+    gap: 0;
+    max-width: 560px;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 0.5rem;
+  }
+
+  .lb-footer-editorial__form-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: inherit;
+    padding: 0.75rem 0;
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .lb-footer-editorial__form-input::placeholder {
+    color: inherit;
+    opacity: 0.3;
+  }
+
+  .lb-footer-editorial__form-input:focus {
+    outline: none;
+  }
+
+  .lb-footer-editorial__form-btn {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.75rem 0 0.75rem 1.5rem;
+    transition: opacity var(--lb-duration-fast) var(--lb-ease-out);
+  }
+
+  .lb-footer-editorial__form-btn:hover {
+    opacity: 0.6;
+  }
+
+  .lb-footer-editorial__form-btn .lb-arrow {
+    display: inline-block;
+    transition: transform var(--lb-duration-base) var(--lb-ease-out);
+  }
+
+  .lb-footer-editorial__form-btn:hover .lb-arrow {
+    transform: translateX(4px);
+  }
+
+  .lb-footer-editorial__form-note {
+    font-size: 0.75rem;
+    opacity: 0.4;
+    margin-top: 0.75rem;
+  }
+
+  .lb-footer-editorial__form-success,
+  .lb-footer-editorial__form-error {
+    display: none;
+    margin-top: var(--lb-space-sm);
+    font-size: 0.875rem;
+  }
+
+  .lb-footer-editorial__form-success { color: #3cb371; }
+  .lb-footer-editorial__form-error { color: #e74c3c; }
+
+  /* ---- Link columns ---- */
+  .lb-footer-editorial__nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--lb-space-lg);
+    margin-bottom: var(--lb-space-xl);
+  }
+
+  .lb-footer-editorial__col-title {
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: var(--lb-space-md);
+  }
+
+  .lb-footer-editorial__col-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .lb-footer-editorial__col-link {
+    color: inherit;
+    text-decoration: none;
+    font-size: clamp(0.875rem, 1.1vw, 1rem);
+    opacity: 0.8;
+    transition: opacity var(--lb-duration-fast) var(--lb-ease-out),
+                padding-left var(--lb-duration-base) var(--lb-ease-out);
+    display: inline-block;
+  }
+
+  .lb-footer-editorial__col-link:hover {
+    opacity: 1;
+    padding-left: 4px;
+  }
+
+  /* ---- Bottom bar ---- */
+  .lb-footer-editorial__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--lb-space-lg);
+    border-top: 1px solid currentColor;
+    border-top-color: rgba(255,255,255,0.1);
+    padding-top: var(--lb-space-md);
+  }
+
+  .color-scheme-1 .lb-footer-editorial__bottom,
+  .color-scheme-3 .lb-footer-editorial__bottom {
+    border-top-color: rgba(0,0,0,0.1);
+  }
+
+  .lb-footer-editorial__copyright {
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  .lb-footer-editorial__giant {
+    font-size: clamp(2rem, 8vw, 6rem);
+    line-height: 0.9;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    opacity: 0.15;
+    margin: 0;
+    text-align: right;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .lb-footer-editorial__socials {
+    display: flex;
+    gap: var(--lb-space-md);
+  }
+
+  .lb-footer-editorial__social {
+    color: inherit;
+    opacity: 0.6;
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: opacity var(--lb-duration-fast) var(--lb-ease-out);
+  }
+
+  .lb-footer-editorial__social:hover {
+    opacity: 1;
+  }
+
+  /* Mobile */
+  @media screen and (max-width: 749px) {
+    .lb-footer-editorial {
+      padding: var(--lb-space-lg) var(--lb-space-md);
+    }
+
+    .lb-footer-editorial__cta {
+      margin-bottom: var(--lb-space-xl);
+    }
+
+    .lb-footer-editorial__nav {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--lb-space-lg);
+      margin-bottom: var(--lb-space-xl);
+    }
+
+    .lb-footer-editorial__bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--lb-space-md);
+    }
+
+    .lb-footer-editorial__giant {
+      text-align: left;
+      font-size: clamp(1.5rem, 6vw, 3rem);
+    }
+
+    .lb-footer-editorial__form {
+      flex-direction: column;
+      gap: 0.5rem;
+      border-bottom: none;
+    }
+
+    .lb-footer-editorial__form-input {
+      border-bottom: 1px solid currentColor;
+      padding-bottom: 0.75rem;
+      font-size: 1.25rem;
+    }
+
+    .lb-footer-editorial__form-btn {
+      padding: 0.75rem 0;
+      text-align: left;
+    }
+  }
+{%- endstyle -%}
+
+<footer
+  class="lb-footer-editorial color-{{ section.settings.color_scheme }}"
+  style="color: var(--color-foreground); background: var(--color-background);"
+  {{ section.shopify_attributes }}
+>
+  <div class="lb-footer-editorial__inner">
+    <!-- Massive email CTA -->
+    <div class="lb-footer-editorial__cta lb-blueprint-grid">
+      <div class="lb-footer-editorial__cta-label">{{ section.settings.cta_label | default: 'Join the list' }}</div>
+      <h2 class="lb-footer-editorial__cta-heading">{{ email_heading }}</h2>
+      <p class="lb-footer-editorial__cta-sub">{{ email_sub }}</p>
+
+      <form
+        class="lb-footer-editorial__form"
+        {% if form_action != blank %}action="{{ form_action }}"{% endif %}
+        method="post"
+        accept-charset="UTF-8"
+      >
+        <input
+          type="email"
+          name="contact[email]"
+          class="lb-footer-editorial__form-input"
+          placeholder="your@email.com"
+          required
+          aria-label="Email address"
+        >
+        <button type="submit" class="lb-footer-editorial__form-btn">
+          JOIN <span class="lb-arrow">→</span>
+        </button>
+      </form>
+      <p class="lb-footer-editorial__form-note">{{ section.settings.form_note | default: 'No noise. Drop alerts only.' }}</p>
+    </div>
+
+    <!-- Link columns -->
+    <nav class="lb-footer-editorial__nav" aria-label="Footer">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'link_column' -%}
+          <div class="lb-footer-editorial__col" {{ block.shopify_attributes }}>
+            <div class="lb-footer-editorial__col-title">{{ block.settings.title }}</div>
+            <ul class="lb-footer-editorial__col-list">
+              {%- assign linklist = linklists[block.settings.menu] -%}
+              {%- if linklist != blank -%}
+                {%- for link in linklist.links -%}
+                  <li>
+                    <a class="lb-footer-editorial__col-link" href="{{ link.url }}">{{ link.title }}</a>
+                  </li>
+                {%- endfor -%}
+              {%- endif -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </nav>
+
+    <!-- Bottom bar -->
+    <div class="lb-footer-editorial__bottom">
+      <div class="lb-footer-editorial__copyright">
+        © {{ 'now' | date: '%Y' }} {{ shop.name }} / All rights reserved
+      </div>
+
+      <div class="lb-footer-editorial__socials">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'social' -%}
+            <a class="lb-footer-editorial__social" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <!-- Giant ghost word -->
+    <p class="lb-footer-editorial__giant">{{ section.settings.giant_word | default: 'LEGENDARY' }}</p>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer (Editorial)",
+  "tag": "footer",
+  "class": "lb-footer-editorial",
+  "blocks": [
+    {
+      "type": "link_column",
+      "name": "Link column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Column title",
+          "default": "Shop"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    },
+    {
+      "type": "social",
+      "name": "Social link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Instagram"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Email CTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Top label",
+      "default": "Join the list"
+    },
+    {
+      "type": "text",
+      "id": "email_heading",
+      "label": "Heading",
+      "default": "DROP UPDATES"
+    },
+    {
+      "type": "text",
+      "id": "email_subtext",
+      "label": "Subtext",
+      "default": "First access to drops. No restocks. No noise."
+    },
+    {
+      "type": "text",
+      "id": "form_action_klaviyo",
+      "label": "Klaviyo form action URL (optional)",
+      "info": "Paste your Klaviyo form action URL to route submissions to Klaviyo"
+    },
+    {
+      "type": "text",
+      "id": "form_note",
+      "label": "Form note",
+      "default": "No noise. Drop alerts only."
+    },
+    {
+      "type": "text",
+      "id": "giant_word",
+      "label": "Giant ghost word",
+      "default": "LEGENDARY"
+    },
+    {
+      "type": "header",
+      "content": "Color scheme"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Light (White)" },
+        { "value": "scheme-2", "label": "Light Alt" },
+        { "value": "scheme-4", "label": "Dark Grey" },
+        { "value": "scheme-5", "label": "True Black" }
+      ],
+      "default": "scheme-5"
+    }
+  ]
+}
+{% endschema %}

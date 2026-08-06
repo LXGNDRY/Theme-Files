@@ -1,0 +1,520 @@
+{% comment %}
+  lb-drop-header.liquid
+  LEGENDARY BRANDING — Complete Redesign
+  Editorial drop header for collection pages.
+  Replaces the standard collection banner with a Fuel-inspired editorial header:
+    - Massive collection title (display size)
+    - Drop index number + metadata (DROP 07 / 12 PIECES)
+    - Blueprint grid frame + corner crosshairs
+    - Status pill (LIVE / DROPPING SOON / SOLD OUT)
+    - Collection description (optional)
+    - Color scheme control
+{% endcomment %}
+
+{%- liquid
+  assign title = section.settings.title | default: collection.title
+  assign index_label = section.settings.index_label | default: 'DROP 07'
+  assign piece_count = collection.products_count | default: 0
+  assign status = section.settings.drop_status | default: 'none'
+  assign show_description = section.settings.show_description | default: false
+  assign align = section.settings.alignment | default: 'left'
+  assign size = section.settings.size | default: 'medium'
+-%}
+
+{%- style -%}
+  .lb-drop-header {
+    position: relative;
+    padding: var(--lb-section-padding) var(--lb-space-md);
+    padding-bottom: var(--lb-space-lg);
+    overflow: hidden;
+  }
+
+  .lb-drop-header__frame {
+    position: absolute;
+    inset: var(--lb-space-md);
+    border: 1px solid currentColor;
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Corner crosshairs */
+  .lb-drop-header::before,
+  .lb-drop-header::after,
+  .lb-drop-header__corner--bl,
+  .lb-drop-header__corner--br {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 1px solid currentColor;
+    opacity: 0.2;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .lb-drop-header::before {
+    top: calc(var(--lb-space-md) + 12px);
+    left: calc(var(--lb-space-md) + 12px);
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .lb-drop-header::after {
+    top: calc(var(--lb-space-md) + 12px);
+    right: calc(var(--lb-space-md) + 12px);
+    border-left: none;
+    border-bottom: none;
+  }
+
+  .lb-drop-header__corner--bl {
+    bottom: calc(var(--lb-space-md) + 12px);
+    left: calc(var(--lb-space-md) + 12px);
+    border-right: none;
+    border-top: none;
+  }
+
+  .lb-drop-header__corner--br {
+    bottom: calc(var(--lb-space-md) + 12px);
+    right: calc(var(--lb-space-md) + 12px);
+    border-left: none;
+    border-top: none;
+  }
+
+  .lb-drop-header__content {
+    position: relative;
+    z-index: 2;
+    max-width: var(--page-width);
+    margin: 0 auto;
+  }
+
+  /* Top meta row */
+  .lb-drop-header__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--lb-space-lg);
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .lb-drop-header__index {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .lb-drop-header__index::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.4;
+  }
+
+  /* Title */
+  .lb-drop-header__title {
+    font-size: var(--lb-display-2);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0 0 var(--lb-space-md);
+    max-width: 18ch;
+  }
+
+  .lb-drop-header--size-small .lb-drop-header__title {
+    font-size: var(--lb-heading-1);
+  }
+
+  .lb-drop-header--size-large .lb-drop-header__title {
+    font-size: var(--lb-display-1);
+    line-height: 0.78;
+  }
+
+  .lb-drop-header--align-center {
+    text-align: center;
+  }
+
+  .lb-drop-header--align-center .lb-drop-header__meta {
+    justify-content: center;
+  }
+
+  .lb-drop-header--align-center .lb-drop-header__title {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .lb-drop-header--align-center .lb-drop-header__index::before {
+    display: none;
+  }
+
+  .lb-drop-header--align-right {
+    text-align: right;
+  }
+
+  .lb-drop-header--align-right .lb-drop-header__meta {
+    flex-direction: row-reverse;
+  }
+
+  .lb-drop-header--align-right .lb-drop-header__title {
+    margin-left: auto;
+  }
+
+  /* Bottom info row */
+  .lb-drop-header__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--lb-space-lg);
+    margin-top: var(--lb-space-md);
+  }
+
+  .lb-drop-header__description {
+    max-width: 45ch;
+    font-size: clamp(0.875rem, 1.2vw, 1rem);
+    line-height: 1.6;
+    opacity: 0.75;
+  }
+
+  .lb-drop-header__stats {
+    display: flex;
+    gap: var(--lb-space-lg);
+    text-align: right;
+  }
+
+  .lb-drop-header--align-center .lb-drop-header__bottom {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .lb-drop-header--align-center .lb-drop-header__stats {
+    text-align: center;
+  }
+
+  .lb-drop-header__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .lb-drop-header__stat-value {
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  .lb-drop-header__stat-label {
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  /* Drop status pill */
+  .lb-drop-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.875rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+
+  .lb-drop-status__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .lb-drop-status--live .lb-drop-status__dot {
+    animation: lb-blink 1.5s ease-in-out infinite;
+  }
+
+  .lb-drop-status--countdown .lb-drop-status__dot {
+    animation: lb-pulse 2s ease-in-out infinite;
+  }
+
+  .lb-drop-status--sold-out {
+    opacity: 0.5;
+  }
+
+  @keyframes lb-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  @keyframes lb-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.6; }
+  }
+
+  /* Mobile */
+  @media screen and (max-width: 749px) {
+    .lb-drop-header {
+      padding: var(--lb-space-md);
+      padding-bottom: var(--lb-space-md);
+    }
+
+    .lb-drop-header__frame {
+      inset: var(--lb-space-sm);
+    }
+
+    .lb-drop-header::before {
+      top: calc(var(--lb-space-sm) + 10px);
+      left: calc(var(--lb-space-sm) + 10px);
+    }
+    .lb-drop-header::after {
+      top: calc(var(--lb-space-sm) + 10px);
+      right: calc(var(--lb-space-sm) + 10px);
+    }
+    .lb-drop-header__corner--bl {
+      bottom: calc(var(--lb-space-sm) + 10px);
+      left: calc(var(--lb-space-sm) + 10px);
+    }
+    .lb-drop-header__corner--br {
+      bottom: calc(var(--lb-space-sm) + 10px);
+      right: calc(var(--lb-space-sm) + 10px);
+    }
+
+    .lb-drop-header__meta {
+      flex-direction: column;
+      gap: var(--lb-space-sm);
+      align-items: flex-start;
+      margin-bottom: var(--lb-space-md);
+    }
+
+    .lb-drop-header__bottom {
+      flex-direction: column;
+      gap: var(--lb-space-md);
+      align-items: flex-start;
+    }
+
+    .lb-drop-header__stats {
+      text-align: left;
+      gap: var(--lb-space-md);
+    }
+
+    .lb-drop-header--align-center .lb-drop-header__meta,
+    .lb-drop-header--align-center .lb-drop-header__bottom,
+    .lb-drop-header--align-center .lb-drop-header__stats {
+      align-items: center;
+      text-align: center;
+    }
+
+    .lb-drop-header--align-right .lb-drop-header__meta,
+    .lb-drop-header--align-right .lb-drop-header__bottom,
+    .lb-drop-header--align-right .lb-drop-header__stats {
+      align-items: flex-end;
+      text-align: right;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lb-drop-status__dot {
+      animation: none;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  class="lb-drop-header lb-drop-header--align-{{ align }} lb-drop-header--size-{{ size }} color-{{ section.settings.color_scheme }}"
+  style="color: var(--color-foreground); background: var(--color-background);"
+  {{ section.shopify_attributes }}
+>
+  <div class="lb-drop-header__frame" aria-hidden="true"></div>
+  <div class="lb-drop-header__corner--bl" aria-hidden="true"></div>
+  <div class="lb-drop-header__corner--br" aria-hidden="true"></div>
+
+  <div class="lb-drop-header__content">
+    <!-- Top meta row -->
+    <div class="lb-drop-header__meta">
+      <div class="lb-drop-header__index">
+        <span>{{ index_label }}</span>
+      </div>
+      {% if status != 'none' %}
+        <div class="lb-drop-status lb-drop-status--{{ status }}">
+          <span class="lb-drop-status__dot"></span>
+          {% case status %}
+            {% when 'live' %}
+              <span>{{ section.settings.live_label | default: 'LIVE NOW' }}</span>
+            {% when 'countdown' %}
+              <span>{{ section.settings.countdown_label | default: 'DROP SOON' }}</span>
+            {% when 'sold-out' %}
+              <span>{{ section.settings.sold_out_label | default: 'SOLD OUT' }}</span>
+            {% when 'restock' %}
+              <span>{{ section.settings.restock_label | default: 'RESTOCKING' }}</span>
+          {% endcase %}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Title -->
+    <h1 class="lb-drop-header__title">{{ title }}</h1>
+
+    <!-- Bottom: description + stats -->
+    <div class="lb-drop-header__bottom">
+      {% if show_description and collection.description != blank %}
+        <div class="lb-drop-header__description">
+          {{ collection.description | strip_html | truncate: 180 }}
+        </div>
+      {% else %}
+        <div></div>
+      {% endif %}
+
+      <div class="lb-drop-header__stats">
+        <div class="lb-drop-header__stat">
+          <span class="lb-drop-header__stat-value">{{ piece_count }}</span>
+          <span class="lb-drop-header__stat-label">Pieces</span>
+        </div>
+        {% if collection.all_tags.size > 0 %}
+          <div class="lb-drop-header__stat">
+            <span class="lb-drop-header__stat-value">{{ collection.all_tags.size }}</span>
+            <span class="lb-drop-header__stat-label">Styles</span>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Drop Header (Editorial)",
+  "tag": "section",
+  "class": "lb-drop-header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "ESSENTIALS\nDROP 07",
+      "info": "Use \\n for line breaks"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Title size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Massive" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "text",
+      "id": "index_label",
+      "label": "Index label (top left)",
+      "default": "DROP 07"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show collection description",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Drop status"
+    },
+    {
+      "type": "select",
+      "id": "drop_status",
+      "label": "Status pill",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "live", "label": "Live now" },
+        { "value": "countdown", "label": "Dropping soon" },
+        { "value": "sold-out", "label": "Sold out" },
+        { "value": "restock", "label": "Restocking" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "live_label",
+      "label": "Live label",
+      "default": "LIVE NOW"
+    },
+    {
+      "type": "text",
+      "id": "countdown_label",
+      "label": "Countdown label",
+      "default": "DROP SOON"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_label",
+      "label": "Sold out label",
+      "default": "SOLD OUT"
+    },
+    {
+      "type": "text",
+      "id": "restock_label",
+      "label": "Restock label",
+      "default": "RESTOCKING"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Color scheme"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Light (White)" },
+        { "value": "scheme-2", "label": "Light Alt" },
+        { "value": "scheme-4", "label": "Dark Grey" },
+        { "value": "scheme-5", "label": "True Black" }
+      ],
+      "default": "scheme-5"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Drop Header",
+      "category": "Collection",
+      "settings": {
+        "title": "ESSENTIALS\nDROP 07",
+        "size": "medium",
+        "index_label": "DROP 07",
+        "drop_status": "live",
+        "alignment": "left",
+        "color_scheme": "scheme-5"
+      }
+    }
+  ]
+}
+{% endschema %}

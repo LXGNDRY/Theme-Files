@@ -1,0 +1,29 @@
+<!--
+  collection.editorial-drop.json
+  LEGENDARY BRANDING — Complete Redesign
+  Alternate collection template: editorial drop style.
+  Uses lb-drop-header (editorial drop header) + lb-product-grid-editorial (editorial cards).
+  Apply to specific collections via the theme editor.
+-->
+{
+  "sections": {
+    "header_group": {
+      "type": "header-group"
+    },
+    "drop_header": {
+      "type": "lb-drop-header"
+    },
+    "products": {
+      "type": "lb-product-grid-editorial"
+    },
+    "footer_group": {
+      "type": "footer-group"
+    }
+  },
+  "order": [
+    "header_group",
+    "drop_header",
+    "products",
+    "footer_group"
+  ]
+}

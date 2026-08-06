@@ -1,0 +1,288 @@
+{%- comment -%}
+  lb-design-system.liquid
+  LEGENDARY BRANDING — Complete Redesign
+  Purpose: Global design system utilities — index numbering, blueprint grid markers,
+  type scale tokens, spacing rhythm, and shared editorial patterns.
+  Inspired by Fuel (Westhill Studio) brutalism-lite / Swiss editorial aesthetic,
+  adapted for streetwear drop culture.
+
+  Usage: Rendered once in theme.liquid head. All components inherit these tokens.
+{%- endcomment -%}
+
+<style>
+  /* =========================================================
+     DESIGN SYSTEM TOKENS
+     ========================================================= */
+
+  :root {
+    /* ---- Type scale (editorial extreme contrast) ---- */
+    --lb-display-1: clamp(5rem, 18vw, 18rem);
+    --lb-display-2: clamp(3.5rem, 12vw, 10rem);
+    --lb-display-3: clamp(2.5rem, 8vw, 6rem);
+    --lb-heading-1: clamp(2rem, 5vw, 3.5rem);
+    --lb-heading-2: clamp(1.5rem, 3vw, 2.25rem);
+    --lb-label: 0.625rem;       /* 10px — wide-tracked all-caps */
+    --lb-label-spacing: 0.18em;
+    --lb-data: 0.8125rem;        /* 13px — tech/data text */
+
+    /* ---- Spacing rhythm (generous, editorial) ---- */
+    --lb-space-xs: 0.5rem;
+    --lb-space-sm: 1rem;
+    --lb-space-md: 2rem;
+    --lb-space-lg: 4rem;
+    --lb-space-xl: 8rem;
+    --lb-space-2xl: 12rem;
+    --lb-section-padding: clamp(4rem, 10vw, 10rem);
+
+    /* ---- Blueprint grid ---- */
+    --lb-grid-marker-size: 12px;
+    --lb-grid-marker-color: currentColor;
+    --lb-grid-marker-opacity: 0.15;
+    --lb-grid-gutter: var(--gap, 1rem);
+
+    /* ---- Index numbering ---- */
+    --lb-index-font-size: 0.6875rem;  /* 11px */
+    --lb-index-weight: 400;
+    --lb-index-tracking: 0.05em;
+
+    /* ---- Animation ---- */
+    --lb-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --lb-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --lb-duration-fast: 150ms;
+    --lb-duration-base: 300ms;
+    --lb-duration-slow: 600ms;
+  }
+
+  /* =========================================================
+     INDEX / ARCHIVE NUMBERING
+     The "01 / Section Name" metadata header pattern from Fuel.
+     Applied to any section with class `lb-indexed-section`.
+     ========================================================= */
+
+  .lb-indexed-section {
+    position: relative;
+  }
+
+  .lb-section-index {
+    display: flex;
+    align-items: center;
+    gap: var(--lb-space-sm);
+    font-size: var(--lb-index-font-size);
+    font-weight: var(--lb-index-weight);
+    letter-spacing: var(--lb-index-tracking);
+    text-transform: uppercase;
+    margin-bottom: var(--lb-space-md);
+    opacity: 0.7;
+  }
+
+  .lb-section-index::before,
+  .lb-section-index::after {
+    content: '';
+    display: block;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.3;
+  }
+
+  .lb-section-index::before {
+    width: 24px;
+  }
+
+  .lb-section-index::after {
+    flex: 1;
+  }
+
+  .lb-index-number {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+
+  .lb-index-separator {
+    opacity: 0.4;
+  }
+
+  /* Product card index (Piece 03 / 12) */
+  .lb-card-index {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 0.75rem;
+  }
+
+  /* =========================================================
+     BLUEPRINT GRID MARKERS (+ crosshairs at corners)
+     Applied to any container with class `lb-blueprint-grid`.
+     ========================================================= */
+
+  .lb-blueprint-grid {
+    position: relative;
+  }
+
+  /* Corner crosshair markers */
+  .lb-blueprint-grid::before,
+  .lb-blueprint-grid::after {
+    content: '';
+    position: absolute;
+    width: var(--lb-grid-marker-size);
+    height: var(--lb-grid-marker-size);
+    border: 1px solid currentColor;
+    opacity: var(--lb-grid-marker-opacity);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .lb-blueprint-grid::before {
+    top: calc(var(--lb-space-sm) * -1);
+    left: calc(var(--lb-space-sm) * -1);
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .lb-blueprint-grid::after {
+    bottom: calc(var(--lb-space-sm) * -1);
+    right: calc(var(--lb-space-sm) * -1);
+    border-left: none;
+    border-top: none;
+  }
+
+  /* Grid cell crosshairs (for product cards) */
+  .lb-card-crosshair {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: var(--lb-grid-marker-size);
+    height: var(--lb-grid-marker-size);
+    border-right: 1px solid currentColor;
+    border-top: 1px solid currentColor;
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* =========================================================
+     EDITORIAL TYPE UTILITIES
+     ========================================================= */
+
+  .lb-display-1 {
+    font-size: var(--lb-display-1);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .lb-display-2 {
+    font-size: var(--lb-display-2);
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .lb-label {
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .lb-data {
+    font-size: var(--lb-data);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+
+  .lb-mono {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+  }
+
+  /* =========================================================
+     DROP STATUS PILL
+     Floating status indicator — countdown, low stock, etc.
+     ========================================================= */
+
+  .lb-drop-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+
+  .lb-drop-pill__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: lb-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes lb-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* =========================================================
+     SECTION METADATA FOOTER
+     "© 2026 / LEGENDARY / DROP 07" style row at section bottom
+     ========================================================= */
+
+  .lb-section-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-top: var(--lb-space-lg);
+    padding-top: var(--lb-space-sm);
+    border-top: 1px solid currentColor;
+    border-top-color: rgba(255,255,255,0.1);
+  }
+
+  /* Dark scheme adapt */
+  .color-scheme-1 .lb-section-meta,
+  .color-scheme-3 .lb-section-meta {
+    border-top-color: rgba(0,0,0,0.1);
+  }
+
+  .color-scheme-4 .lb-section-meta,
+  .color-scheme-5 .lb-section-meta {
+    border-top-color: rgba(255,255,255,0.1);
+  }
+
+  /* =========================================================
+     SCROLL-TRIGGERED REVEAL (base class)
+     ========================================================= */
+
+  .lb-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity var(--lb-duration-slow) var(--lb-ease-out),
+                transform var(--lb-duration-slow) var(--lb-ease-out);
+  }
+
+  .lb-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Stagger variants */
+  .lb-reveal--delay-1 { transition-delay: 50ms; }
+  .lb-reveal--delay-2 { transition-delay: 100ms; }
+  .lb-reveal--delay-3 { transition-delay: 150ms; }
+  .lb-reveal--delay-4 { transition-delay: 200ms; }
+</style>

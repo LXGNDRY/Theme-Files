@@ -71,6 +71,13 @@
   {%- render 'lb-hero-lcp-preload' -%}
   {%- render 'lb-collection-lcp-preload' -%}
 
+  {%- comment -%}── 3b. DESIGN SYSTEM (complete-redesign) ────────────────────
+    LEGENDARY BRANDING — editorial brutalism redesign.
+    Tokens, index numbering, blueprint grid markers, type utilities,
+    and shared component patterns. Loaded early so all sections inherit.
+  {%- endcomment -%}
+  {%- render 'lb-design-system' -%}
+
   {%- comment -%}── 4 + 5. CHAOS UNLEASHED ────────────────────────────────────
     Must render BEFORE content_for_header is emitted so Chaos can
     intercept and defer app CSS/JS injected by Shopify into CFH.
