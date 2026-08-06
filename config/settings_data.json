@@ -77,7 +77,7 @@
     "popover_border": "none",
     "popover_drop_shadow": false,
     "currency_code_enabled_product_pages": true,
-    "currency_code_enabled_product_cards": true,
+    "currency_code_enabled_product_cards": false,
     "quick_add_color_scheme": "scheme-2",
     "show_second_image_on_hover": true,
     "product_card_carousel": true,
