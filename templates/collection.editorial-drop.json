@@ -7,23 +7,15 @@
 -->
 {
   "sections": {
-    "header_group": {
-      "type": "header-group"
-    },
     "drop_header": {
       "type": "lb-drop-header"
     },
     "products": {
       "type": "lb-product-grid-editorial"
-    },
-    "footer_group": {
-      "type": "footer-group"
     }
   },
   "order": [
-    "header_group",
     "drop_header",
-    "products",
-    "footer_group"
+    "products"
   ]
 }

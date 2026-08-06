@@ -6,9 +6,6 @@
 -->
 {
   "sections": {
-    "header_group": {
-      "type": "header-group"
-    },
     "main": {
       "type": "lb-product-info-editorial"
     },
@@ -18,15 +15,10 @@
         "heading": "MORE FROM THE DROP",
         "products_to_show": 4
       }
-    },
-    "footer_group": {
-      "type": "footer-group"
     }
   },
   "order": [
-    "header_group",
     "main",
-    "related",
-    "footer_group"
+    "related"
   ]
 }

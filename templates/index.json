@@ -9,9 +9,6 @@
  */
 {
   "sections": {
-    "header_group": {
-      "type": "header-group"
-    },
     "editorial_header": {
       "type": "lb-header-editorial",
       "settings": {
@@ -199,13 +196,9 @@
         "social_tt",
         "social_yt"
       ]
-    },
-    "footer_group": {
-      "type": "footer-group"
     }
   },
   "order": [
-    "header_group",
     "editorial_header",
     "hero",
     "marquee",
@@ -213,7 +206,6 @@
     "lookbook",
     "featured_pdp",
     "brand_story",
-    "editorial_footer",
-    "footer_group"
+    "editorial_footer"
   ]
 }
