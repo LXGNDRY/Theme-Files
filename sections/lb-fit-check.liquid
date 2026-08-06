@@ -14,8 +14,8 @@
 
     <div class="lb-fit-check__canvas">
       <img
-        src="{{ section.settings.image | image_url: width: 1400 }}"
-        srcset="{{ section.settings.image | image_url: width: 750 }} 750w, {{ section.settings.image | image_url: width: 1100 }} 1100w, {{ section.settings.image | image_url: width: 1400 }} 1400w"
+        src="{{ section.settings.image | image_url: width: 1400 , format: 'webp'}}"
+        srcset="{{ section.settings.image | image_url: width: 750 , format: 'webp'}} 750w, {{ section.settings.image | image_url: width: 1100 , format: 'webp'}} 1100w, {{ section.settings.image | image_url: width: 1400 , format: 'webp'}} 1400w"
         sizes="100vw"
         alt="{{ section.settings.image.alt | default: section.settings.heading | escape }}"
         width="{{ section.settings.image.width }}"
@@ -43,7 +43,7 @@
               <a href="{{ hotspot_product.url }}" class="lb-fit-check__popup-inner">
                 {%- if hotspot_product.featured_media -%}
                   <img
-                    src="{{ hotspot_product.featured_media.preview_image | image_url: width: 120 }}"
+                    src="{{ hotspot_product.featured_media.preview_image | image_url: width: 120 , format: 'webp'}}"
                     alt="{{ hotspot_product.featured_media.alt | default: hotspot_product.title | escape }}"
                     width="80"
                     height="80"

@@ -91,7 +91,7 @@
 {%- if pageurl contains 'count=1' -%}
   "images": [
   {% for image in product.images %}
-    "{{ image | image_url: width: 2048 }}"
+    "{{ image | image_url: width: 2048 , format: 'webp'}}"
     {%- if forloop.last == false -%},{% endif -%}
   {% endfor %}
   ],

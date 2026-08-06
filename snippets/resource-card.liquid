@@ -20,15 +20,17 @@
   assign image_width = image_width | default: 2048
   assign widths = '240, 400, 600, 800, 1200, 1600, 2048'
   assign image_sizes = image_sizes | default: 'auto'
+  assign image_loading = image_loading | default: 'lazy'
+  assign image_fetchpriority = image_fetchpriority | default: 'auto'
   assign single_thumbnail_collection = false
   if resource_type == 'collection' and collection_thumbnails != 'multiple'
     assign single_thumbnail_collection = true
   endif
 
   if resource_type == 'product' and settings.transition_to_main_product
-    assign featured_media_url = resource.selected_or_first_available_variant.featured_image | image_url: width: image_width
+    assign featured_media_url = resource.selected_or_first_available_variant.featured_image | image_url: width: image_width, format: 'webp'
     if featured_media_url == blank
-      assign featured_media_url = resource.featured_media.preview_image | image_url: width: image_width
+      assign featured_media_url = resource.featured_media.preview_image | image_url: width: image_width, format: 'webp'
     endif
   endif
 %}
@@ -83,16 +85,17 @@
         %}
         {{
           featured_image
-          | image_url: width: image_width
+          | image_url: width: image_width, format: 'webp'
           | image_tag:
-            loading: 'lazy',
+            loading: image_loading,
             class: 'resource-card__image',
             widths: widths,
             sizes: image_sizes,
             ref: ref_image_to_transition,
             data-media-id: featured_image.id,
             style: primary_focal_point_style,
-            decoding: 'async'
+            decoding: 'async',
+            fetchpriority: image_fetchpriority
         }}
         {%- if image_hover and resource.media.size > 1 -%}
           {% liquid
@@ -103,16 +106,17 @@
           %}
           {{
             resource.media[1]
-            | image_url: width: image_width
+            | image_url: width: image_width, format: 'webp'
             | image_tag:
-              loading: 'lazy',
+              loading: image_loading,
               class: 'resource-card__image resource-card__image--secondary',
               widths: widths,
               sizes: image_sizes,
               ref: ref_image_to_transition,
               data-media-id: resource.media[1].id,
               style: secondary_focal_point_style,
-              decoding: 'async'
+              decoding: 'async',
+              fetchpriority: image_fetchpriority
           }}
         {%- endif -%}
       {%- else -%}
@@ -130,7 +134,7 @@
           {% for product in resource_products limit: 4 %}
             {{
               product.featured_media.preview_image
-              | image_url: width: image_width
+              | image_url: width: image_width, format: 'webp'
               | image_tag:
                 loading: 'lazy',
                 class: 'resource-card__collection-image',

@@ -30,7 +30,7 @@
           "url": {{ shop.url | append: prod.url | json }},
           "name": {{ prod.title | json }}
           {%- if prod.featured_image -%},
-          "image": {{ prod.featured_image | image_url: width: 800 | prepend: 'https:' | json }}
+          "image": {{ prod.featured_image | image_url: width: 800 , format: 'webp'| prepend: 'https:' | json }}
           {%- endif -%},
           "offers": {
             "@type": "Offer",

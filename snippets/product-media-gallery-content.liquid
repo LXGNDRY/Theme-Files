@@ -327,7 +327,7 @@
                     endif
                   -%}
                   <button type="button" class="button button-unstyled dialog-thumbnails-list__thumbnail" aria-label="{{ 'accessibility.scroll_to' | t: title: media.alt | default: media.media_type }}" on:click="/handleThumbnailClick/{{ forloop.index0 }}" on:pointerenter="/handleThumbnailPointerEnter/{{ forloop.index0 }}" style="--aspect-ratio: {{ aspect_ratio }}; --gallery-aspect-ratio: {{ aspect_ratio }};"{% if forloop.first %} aria-selected="true"{% endif %}>
-                    {{ media.preview_image | image_url: width: 1024 | image_tag: loading: 'lazy', sizes: 'auto, 110, (min-width: 750px) 160', widths: '240, 352, 832, 1200', alt: media.alt, style: focal_point_style | escape }}
+                    {{ media.preview_image | image_url: width: 1024 , format: 'webp'| image_tag: loading: 'lazy', sizes: 'auto, 110, (min-width: 750px) 160', widths: '240, 352, 832, 1200', alt: media.alt, style: focal_point_style | escape }}
                   </button>
                 {%- endfor -%}
               {% endif %}

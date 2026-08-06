@@ -13,7 +13,7 @@
     {% render 'util-product-media-sizes-attr', block: block, section: section, settings: settings, is_single_column: is_single_column %}
   {% endcapture %}
   {% assign media_sizes = media_sizes | strip %}
-  {{ media | image_url: width: 800 | image_tag: sizes: media_sizes }}
+  {{ media | image_url: width: 800 , format: 'webp'| image_tag: sizes: media_sizes }}
 {%- enddoc -%}
 
 {%- liquid
