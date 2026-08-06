@@ -39,15 +39,51 @@
     {
       "where": {
         "and": [
+          { "href_matches": "/collections/*/products/*" },
+          { "not": { "href_matches": "*variant=*" } }
+        ]
+      },
+      "eagerness": "moderate"
+    },
+    {
+      "where": {
+        "and": [
+          { "href_matches": "/products/*" },
+          { "not": { "href_matches": "*variant=*" } }
+        ]
+      },
+      "eagerness": "moderate"
+    },
+    {
+      "where": {
+        "and": [
+          { "href_matches": "/collections/*" },
+          { "not": { "href_matches": "/collections/*/products/*" } }
+        ]
+      },
+      "eagerness": "conservative"
+    },
+    {
+      "where": {
+        "and": [
           { "href_matches": "/*" },
           { "not": { "href_matches": "/cart*" } },
           { "not": { "href_matches": "/checkout*" } },
           { "not": { "href_matches": "/account*" } },
           { "not": { "href_matches": "/password*" } },
-          { "not": { "href_matches": "/challenge*" } }
+          { "not": { "href_matches": "/challenge*" } },
+          { "not": { "href_matches": "/collections/*/products/*" } },
+          { "not": { "href_matches": "/products/*" } },
+          { "not": { "href_matches": "/collections/*" } }
         ]
       },
-      "eagerness": "moderate"
+      "eagerness": "conservative"
+    }
+  ],
+  "prefetch": [
+    {
+      "where": { "href_matches": "/search*" },
+      "eagerness": "conservative"
     }
   ]
 }

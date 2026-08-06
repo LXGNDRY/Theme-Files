@@ -22,6 +22,32 @@
   }
 {% endjavascript %}
 
+{% comment %} Collection LCP optimization: set fetchpriority=high on the first product image
+  to ensure the LCP candidate loads as early as possible. Browsers normally
+  deprioritize lazy-loaded images, but the first product on a collection page
+  is often the LCP element. Runs inline so it executes before image parsing.
+{% endcomment %}
+<script>
+(function(){
+  function setFirstProductPriority(){
+    var grid = document.querySelector('.product-grid .resource-card__image, .product-grid img');
+    if(grid){
+      grid.setAttribute('fetchpriority','high');
+      grid.setAttribute('loading','eager');
+      return true;
+    }
+    return false;
+  }
+  if(!setFirstProductPriority()){
+    var mo = new MutationObserver(function(){
+      if(setFirstProductPriority()) mo.disconnect();
+    });
+    mo.observe(document.documentElement,{childList:true,subtree:true});
+    setTimeout(function(){ mo.disconnect(); }, 3000);
+  }
+})();
+</script>
+
 {% comment %} We always render this full-width, as the child blocks have width: page/full settings {% endcomment %}
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <results-list
