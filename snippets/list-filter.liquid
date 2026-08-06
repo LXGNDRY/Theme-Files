@@ -235,7 +235,7 @@
                   >
                     <div class="facets__image-wrapper">
                       {% if value.image %}
-                        {{ value.image | image_url: width: 300 , format: 'webp'| image_tag: alt: '' }}
+                        {{ value.image | image_url: width: 300 , format: 'webp'| image_tag: alt: '', loading: 'lazy', decoding: 'async' }}
                       {% endif %}
                       {% if is_disabled %}
                         <svg
