@@ -16,8 +16,12 @@
 -->
 {
   "sections": {
-    "header_group": {
-      "type": "header-group"
+    "header": {
+      "type": "lb-header-editorial",
+      "settings": {
+        "show_search": true,
+        "show_countdown": false
+      }
     },
     "hero": {
       "type": "lb-hero-editorial",
@@ -201,7 +205,7 @@
     }
   },
   "order": [
-    "header_group",
+    "header",
     "hero",
     "marquee",
     "product_grid",
