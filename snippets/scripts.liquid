@@ -54,7 +54,6 @@
 {% endif %}
 
 <link rel="modulepreload" href="{{ 'focus.js' | asset_url }}" fetchpriority="low">
-<link rel="modulepreload" href="{{ 'recently-viewed-products.js' | asset_url }}" fetchpriority="low">
 <link rel="modulepreload" href="{{ 'scrolling.js' | asset_url }}" fetchpriority="low">
 <link rel="modulepreload" href="{{ 'events.js' | asset_url }}" fetchpriority="low">
 
@@ -223,6 +222,7 @@
     {{ 'video-background.js' | asset_url | json }},
     {{ 'rte-formatter.js' | asset_url | json }},
     {{ 'layered-slideshow.js' | asset_url | json }},
+    {{ 'recently-viewed-products.js' | asset_url | json }},
 
     // Collection + search filter UI only
     {%- if template.name == 'collection' or template.name == 'search' -%}
