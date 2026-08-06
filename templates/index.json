@@ -1144,7 +1144,7 @@
       "settings": {
         "product": "land-of-the-goated-oversized-t-shirt190-gsm",
         "content_width": "content-full-width",
-        "desktop_media_position": "left",
+        "desktop_media_position": "right",
         "equal_columns": true,
         "limit_details_width": true,
         "gap": 48,

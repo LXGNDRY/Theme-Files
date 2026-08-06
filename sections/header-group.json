@@ -60,9 +60,9 @@
           "settings": {
             "menu": "main-menu-copy1",
             "color_scheme": "scheme-2",
-            "type_font_primary_size": "0.875rem",
+            "type_font_primary_size": "1.125rem",
             "menu_font_style": "inverse",
-            "type_font_primary_link": "body",
+            "type_font_primary_link": "accent",
             "type_case_primary_link": "uppercase",
             "menu_style": "text",
             "featured_products_aspect_ratio": "4 / 5",
