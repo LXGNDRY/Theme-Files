@@ -446,10 +446,10 @@
       },
       "settings": {
         "layout_type": "grid",
-        "product_card_size": "large",
+        "product_card_size": "medium",
         "mobile_product_card_size": "small",
         "enable_infinite_scroll": false,
-        "products_per_page": 16,
+        "products_per_page": 12,
         "collection_description_position": "bottom",
         "product_grid_width": "full-width",
         "full_width_on_mobile": false,
