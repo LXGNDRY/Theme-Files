@@ -5,27 +5,122 @@
   Features:
     - Blueprint grid markers
     - Index numbering (Piece 01/12)
-    - Cross-sell / promo tile support
-    - Optional collection description
-    - Works on collection, search, and via dynamic sources
-  Designed to be used as the 'main' section in an editorial collection template.
+    - Section index header (01 / LATEST DROP)
+    - Massive display heading
+    - Featured collection picker (works on homepage and collection pages)
+    - Category filter bar
+    - Sort dropdown
+    - Works on collection, search, homepage, and via dynamic sources
 {% endcomment %}
 
 {%- liquid
   assign products_per_page = section.settings.products_per_page | default: 12
-  assign columns_desktop = section.settings.columns_desktop | default: 3
+  assign columns_desktop = section.settings.columns_desktop | default: 4
   assign columns_mobile = section.settings.columns_mobile | default: 2
   assign show_index = section.settings.show_index | default: true
   assign show_price = section.settings.show_price | default: true
-  assign show_promo_tiles = section.settings.show_promo_tiles | default: true
   assign grid_gap = section.settings.grid_gap | default: 1.5
+  assign index_label = section.settings.index_label | default: '01 / LATEST DROP'
+  assign heading = section.settings.heading | default: 'DROP SEVEN'
+
+  # Determine products source: featured collection setting or current collection
+  assign source_collection = nil
+  if section.settings.collection != blank
+    assign source_collection = collections[section.settings.collection]
+  elsif collection != blank and collection.products_count > 0
+    assign source_collection = collection
+  endif
 -%}
 
 {%- style -%}
   .lb-product-grid-editorial {
-    padding: var(--lb-space-lg) var(--lb-space-md) var(--lb-section-padding);
+    padding: var(--lb-section-padding) 1.5rem;
     max-width: var(--page-width);
     margin: 0 auto;
+  }
+
+  .lb-product-grid-editorial__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+    gap: 2rem;
+  }
+
+  .lb-product-grid-editorial__heading {
+    font-family: var(--font-heading--family, 'Bebas Neue'), Impact, sans-serif;
+    font-size: var(--lb-display-2);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin: 0;
+    max-width: 10ch;
+  }
+
+  /* Filter bar */
+  .lb-product-grid-editorial__filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    border-top: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    border-top-color: rgba(0,0,0,0.08);
+    border-bottom-color: rgba(0,0,0,0.08);
+    padding: 0.75rem 0;
+  }
+
+  .color-scheme-5 .lb-product-grid-editorial__filters,
+  .color-scheme-4 .lb-product-grid-editorial__filters {
+    border-top-color: rgba(255,255,255,0.08);
+    border-bottom-color: rgba(255,255,255,0.08);
+  }
+
+  .lb-product-grid-editorial__filter-list {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .lb-product-grid-editorial__filter-btn {
+    background: none;
+    border: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0;
+    opacity: 0.5;
+    color: inherit;
+    transition: opacity var(--lb-duration-fast) var(--lb-ease-out);
+  }
+
+  .lb-product-grid-editorial__filter-btn:hover {
+    opacity: 1;
+  }
+
+  .lb-product-grid-editorial__filter-btn.is-active {
+    opacity: 1;
+    font-weight: 600;
+  }
+
+  .lb-product-grid-editorial__sort {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .lb-product-grid-editorial__sort-select {
+    background: none;
+    border: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    color: inherit;
   }
 
   .lb-product-grid-editorial__grid {
@@ -62,6 +157,39 @@
     }
   }
 
+  @media screen and (max-width: 1100px) {
+    .lb-product-grid-editorial__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .lb-product-grid-editorial {
+      padding: 4rem 1rem;
+    }
+    .lb-product-grid-editorial__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .lb-product-grid-editorial__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .lb-product-grid-editorial__filters {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .lb-product-grid-editorial__filter-list {
+      gap: 1rem;
+    }
+    .lb-product-grid-editorial__sort {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
   /* Empty state */
   .lb-product-grid-editorial__empty {
     grid-column: 1 / -1;
@@ -95,56 +223,62 @@
 
   .lb-product-grid-editorial__more-btn:hover {
     background: currentColor;
-    color: var(--color-background);
-  }
-
-  /* Page header for standalone template */
-  .lb-product-grid-editorial__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--lb-space-lg);
-  }
-
-  .lb-product-grid-editorial__header-title {
-    font-size: var(--lb-display-3);
-    line-height: 0.9;
-    text-transform: uppercase;
-    font-weight: 700;
-    margin: 0;
-  }
-
-  @media screen and (max-width: 749px) {
-    .lb-product-grid-editorial {
-      padding: var(--lb-space-md);
-    }
-    .lb-product-grid-editorial__header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: var(--lb-space-sm);
-    }
+    color: var(--color-background, #fff);
   }
 {%- endstyle -%}
 
 <section class="lb-product-grid-editorial color-{{ section.settings.color_scheme }}">
-  {%- if section.settings.heading != blank -%}
+  <!-- Section index -->
+  <div class="lb-section-index">
+    <span>{{ index_label }}</span>
+    <span>{{ section.settings.index_meta | default: source_collection.products_count | default: '' | append: ' PIECES' }}</span>
+  </div>
+
+  <!-- Heading -->
+  {%- if heading != blank -%}
     <div class="lb-product-grid-editorial__header">
-      <h2 class="lb-product-grid-editorial__header-title">{{ section.settings.heading }}</h2>
-      {%- if section.settings.heading_meta != blank -%}
-        <span class="lb-label" style="opacity: 0.5;">{{ section.settings.heading_meta }}</span>
-      {%- endif -%}
+      <h2 class="lb-product-grid-editorial__heading">{{ heading }}</h2>
     </div>
   {%- endif -%}
 
-  {%- paginate collection.products by products_per_page -%}
-    {%- if collection.products.size > 0 -%}
+  <!-- Filter bar -->
+  <div class="lb-product-grid-editorial__filters">
+    <div class="lb-product-grid-editorial__filter-list">
+      <button class="lb-product-grid-editorial__filter-btn is-active">ALL</button>
+      {%- if section.settings.filter_1 != blank -%}
+        <button class="lb-product-grid-editorial__filter-btn">{{ section.settings.filter_1 }}</button>
+      {%- endif -%}
+      {%- if section.settings.filter_2 != blank -%}
+        <button class="lb-product-grid-editorial__filter-btn">{{ section.settings.filter_2 }}</button>
+      {%- endif -%}
+      {%- if section.settings.filter_3 != blank -%}
+        <button class="lb-product-grid-editorial__filter-btn">{{ section.settings.filter_3 }}</button>
+      {%- endif -%}
+      {%- if section.settings.filter_4 != blank -%}
+        <button class="lb-product-grid-editorial__filter-btn">{{ section.settings.filter_4 }}</button>
+      {%- endif -%}
+    </div>
+    <div class="lb-product-grid-editorial__sort">
+      <span class="lb-label">SORT BY</span>
+      {%- assign sort_by = collection.sort_by | default: 'manual' -%}
+      <select class="lb-product-grid-editorial__sort-select" onchange="window.location.href=this.value;">
+        <option value="{{ collection.sort_by_url | default: '#' }}" {% if sort_by == 'manual' %}selected{% endif %}>Featured</option>
+        <option value="{{ collection.sort_by_url | default: '#' }}" {% if sort_by == 'price-ascending' %}selected{% endif %}>Price: Low to High</option>
+        <option value="{{ collection.sort_by_url | default: '#' }}" {% if sort_by == 'price-descending' %}selected{% endif %}>Price: High to Low</option>
+        <option value="{{ collection.sort_by_url | default: '#' }}" {% if sort_by == 'created-descending' %}selected{% endif %}>Newest</option>
+      </select>
+    </div>
+  </div>
+
+  {%- if source_collection != blank and source_collection.products.size > 0 -%}
+    {%- paginate source_collection.products by products_per_page -%}
       <ul class="lb-product-grid-editorial__grid" role="list">
-        {%- for product in collection.products -%}
+        {%- for product in source_collection.products -%}
           <li class="lb-product-grid-editorial__item">
             {% render 'lb-card-editorial',
               product: product,
               index: forloop.index,
-              total: collection.products.size,
+              total: source_collection.products.size,
               show_index: show_index,
               show_price: show_price
             %}
@@ -161,12 +295,12 @@
           {%- endif -%}
         </div>
       {%- endif -%}
-    {%- else -%}
-      <div class="lb-product-grid-editorial__empty">
-        <p>No products found.</p>
-      </div>
-    {%- endif -%}
-  {%- endpaginate -%}
+    {%- endpaginate -%}
+  {%- else -%}
+    <div class="lb-product-grid-editorial__empty">
+      <p>No products found. Select a collection in the section settings.</p>
+    </div>
+  {%- endif -%}
 </section>
 
 {% schema %}
@@ -177,18 +311,66 @@
   "settings": [
     {
       "type": "header",
-      "content": "Layout"
+      "content": "Section index"
+    },
+    {
+      "type": "text",
+      "id": "index_label",
+      "label": "Index label (left)",
+      "default": "01 / LATEST DROP"
+    },
+    {
+      "type": "text",
+      "id": "index_meta",
+      "label": "Index meta (right)",
+      "default": "12 PIECES"
+    },
+    {
+      "type": "header",
+      "content": "Content"
     },
     {
       "type": "text",
       "id": "heading",
-      "label": "Heading (optional)"
+      "label": "Heading",
+      "default": "DROP SEVEN"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Featured collection",
+      "info": "Select a collection to display products. If blank, uses the current collection context."
+    },
+    {
+      "type": "header",
+      "content": "Filter bar"
     },
     {
       "type": "text",
-      "id": "heading_meta",
-      "label": "Heading meta (optional)",
-      "info": "e.g. '12 PIECES'"
+      "id": "filter_1",
+      "label": "Filter 1",
+      "default": "HOODIES"
+    },
+    {
+      "type": "text",
+      "id": "filter_2",
+      "label": "Filter 2",
+      "default": "TEES"
+    },
+    {
+      "type": "text",
+      "id": "filter_3",
+      "label": "Filter 3",
+      "default": "PANTS"
+    },
+    {
+      "type": "text",
+      "id": "filter_4",
+      "label": "Filter 4"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
     },
     {
       "type": "range",
@@ -197,7 +379,7 @@
       "min": 2,
       "max": 4,
       "step": 1,
-      "default": 3
+      "default": 4
     },
     {
       "type": "range",
@@ -264,7 +446,7 @@
       "name": "Product Grid (Editorial)",
       "category": "Collection",
       "settings": {
-        "columns_desktop": 3,
+        "columns_desktop": 4,
         "columns_mobile": 2,
         "products_per_page": 12,
         "show_index": true,

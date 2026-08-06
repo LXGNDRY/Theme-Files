@@ -3,24 +3,33 @@
   LEGENDARY BRANDING — Complete Redesign
   Editorial product card inspired by Fuel's brutalism-lite aesthetic.
   Features:
-    - Blueprint crosshair marker in top-right
-    - Index / SKU numbering (Piece 04 / 12 style)
-    - All-caps tiny labels (brand, category)
-    - Bold display price
-    - Hover: image crossfade + subtle lift
-    - Works with any product object
+    - Index numbering (№ 01 / 12 style)
+    - Tag badge (SALE, NEW DROP, BESTSELLER)
+    - Bebas Neue product name
+    - Price + compare-at
+    - Color swatches
+    - Hover: image scale + quick view button + wishlist
+    - Sold out overlay
   Usage:
     {% render 'lb-card-editorial', product: product, index: forloop.index, total: collection.products_count %}
 {%- endcomment -%}
 
 {%- liquid
-  assign product = product
   assign card_index = index | default: 1
   assign card_total = total | default: ''
   assign show_index = show_index | default: true
   assign show_price = show_price | default: true
-  assign image_position = image_position | default: 'center'
   assign aspect_ratio = aspect_ratio | default: '4/5'
+
+  # Determine tag
+  assign card_tag = ''
+  if product.compare_at_price > product.price
+    assign card_tag = 'SALE'
+  elsif product.tags contains 'bestseller'
+    assign card_tag = 'BESTSELLER'
+  elsif product.tags contains 'new'
+    assign card_tag = 'NEW DROP'
+  endif
 -%}
 
 {%- style -%}
@@ -28,42 +37,29 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    gap: 1rem;
     text-decoration: none;
     color: inherit;
-    transition: transform var(--lb-duration-base) var(--lb-ease-out);
+    transition: transform var(--lb-duration-slow) var(--lb-ease-out);
   }
 
   .lb-card-editorial:hover {
-    transform: translateY(-2px);
+    transform: translateY(-6px);
   }
 
-  /* Blueprint crosshair */
-  .lb-card-editorial__crosshair {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 14px;
-    height: 14px;
-    border-right: 1px solid currentColor;
-    border-top: 1px solid currentColor;
-    opacity: 0.25;
-    z-index: 2;
-    pointer-events: none;
-    transition: opacity var(--lb-duration-base) var(--lb-ease-out);
+  .lb-card-editorial:hover .lb-card-editorial__hover-actions {
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  .lb-card-editorial:hover .lb-card-editorial__crosshair {
-    opacity: 0.6;
-  }
-
-  /* Index label */
+  /* Index number */
   .lb-card-editorial__index {
     position: absolute;
     top: 0.75rem;
     left: 0.75rem;
-    z-index: 2;
-    font-size: 10px;
-    letter-spacing: 0.15em;
+    z-index: 5;
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     font-weight: 500;
     opacity: 0.6;
@@ -71,48 +67,63 @@
     pointer-events: none;
   }
 
-  @media screen and (max-width: 749px) {
-    .lb-card-editorial__index {
-      font-size: 9px;
-      top: 0.5rem;
-      left: 0.5rem;
-    }
+  /* Tag badge */
+  .lb-card-editorial__tag {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 5;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    background: #fff;
+    color: #000;
+  }
+
+  .lb-card-editorial__tag--sale {
+    background: #e63946;
+    color: #fff;
+  }
+
+  .lb-card-editorial__tag--new-drop {
+    background: #000;
+    color: #fff;
+  }
+
+  .lb-card-editorial__tag--bestseller {
+    background: #d4af37;
+    color: #000;
   }
 
   /* Image container */
   .lb-card-editorial__image {
     position: relative;
-    width: 100%;
     aspect-ratio: {{ aspect_ratio }};
     overflow: hidden;
-    background: rgba(128, 128, 128, 0.05);
+    background: #f0ece6;
+  }
+
+  .color-scheme-5 .lb-card-editorial__image,
+  .color-scheme-4 .lb-card-editorial__image {
+    background: #1a1a1a;
   }
 
   .lb-card-editorial__image img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform var(--lb-duration-slow) var(--lb-ease-out),
-                opacity var(--lb-duration-base) var(--lb-ease-out);
+    transition: transform var(--lb-duration-slow) var(--lb-ease-out), opacity var(--lb-duration-base);
   }
 
   .lb-card-editorial:hover .lb-card-editorial__image img {
-    transform: scale(1.03);
+    transform: scale(1.06);
   }
 
-  /* Secondary image (hover crossfade) */
-  .lb-card-editorial__image--secondary {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity var(--lb-duration-base) var(--lb-ease-out);
-  }
-
-  .lb-card-editorial:hover .lb-card-editorial__image--secondary {
-    opacity: 1;
-  }
-
-  /* Sold-out overlay */
+  /* Sold out overlay */
   .lb-card-editorial__soldout {
     position: absolute;
     inset: 0;
@@ -120,150 +131,177 @@
     align-items: center;
     justify-content: center;
     background: rgba(0,0,0,0.5);
-    color: white;
-    font-size: 11px;
+    color: #fff;
+    font-size: 0.6875rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     font-weight: 600;
     z-index: 3;
   }
 
-  /* Product info */
-  .lb-card-editorial__info {
-    padding: 0.875rem 0 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-  }
-
-  .lb-card-editorial__brand {
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    opacity: 0.5;
-    font-weight: 500;
-    margin: 0;
-    order: -1;
-  }
-
-  .lb-card-editorial__title {
-    font-size: clamp(0.875rem, 1.2vw, 1rem);
-    font-weight: 600;
-    margin: 0;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-  }
-
-  .lb-card-editorial__price {
-    font-size: clamp(0.9375rem, 1.4vw, 1.125rem);
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    margin: 0;
-    margin-top: 0.25rem;
-  }
-
-  .lb-card-editorial__price--compare {
-    font-size: 0.75rem;
-    font-weight: 400;
-    text-decoration: line-through;
-    opacity: 0.4;
-    margin-left: 0.5rem;
-  }
-
-  /* Color swatches row */
-  .lb-card-editorial__swatches {
-    display: flex;
-    gap: 0.375rem;
-    margin-top: 0.5rem;
-  }
-
-  .lb-card-editorial__swatch {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1px solid rgba(128, 128, 128, 0.3);
-  }
-
-  /* Quick view / CTA on hover */
-  .lb-card-editorial__quick {
+  /* Hover actions */
+  .lb-card-editorial__hover-actions {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 0.75rem;
-    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
-    color: white;
-    transform: translateY(100%);
+    bottom: 1rem;
+    left: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    gap: 0.5rem;
+    z-index: 5;
     opacity: 0;
-    transition: transform var(--lb-duration-base) var(--lb-ease-out),
-                opacity var(--lb-duration-base) var(--lb-ease-out);
-    z-index: 3;
+    transform: translateY(8px);
+    transition: all var(--lb-duration-base) var(--lb-ease-out);
   }
 
-  .lb-card-editorial:hover .lb-card-editorial__quick {
-    transform: translateY(0);
-    opacity: 1;
-  }
-
-  .lb-card-editorial__quick-btn {
-    width: 100%;
-    padding: 0.625rem 1rem;
-    background: white;
-    color: black;
+  .lb-card-editorial__qv-btn {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: #000;
+    color: #fff;
     border: none;
-    font-size: 10px;
-    letter-spacing: 0.15em;
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     font-weight: 600;
     cursor: pointer;
-    transition: background var(--lb-duration-fast) var(--lb-ease-out);
+    transition: all var(--lb-duration-base) var(--lb-ease-out);
   }
 
-  .lb-card-editorial__quick-btn:hover {
-    background: #e5e5e5;
+  .color-scheme-5 .lb-card-editorial__qv-btn,
+  .color-scheme-4 .lb-card-editorial__qv-btn {
+    background: #fff;
+    color: #000;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .lb-card-editorial,
-    .lb-card-editorial__image img,
-    .lb-card-editorial__crosshair,
-    .lb-card-editorial__quick {
-      transition: none;
-    }
-    .lb-card-editorial:hover {
-      transform: none;
-    }
-    .lb-card-editorial:hover .lb-card-editorial__quick {
-      transform: none;
-      opacity: 0;
-    }
+  .lb-card-editorial__qv-btn:hover {
+    opacity: 0.85;
+  }
+
+  /* Product info */
+  .lb-card-editorial__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0 0.25rem;
+  }
+
+  .lb-card-editorial__brand {
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    margin: 0;
+  }
+
+  .lb-card-editorial__title {
+    font-family: var(--font-heading--family, 'Bebas Neue'), Impact, sans-serif;
+    font-size: 1.375rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    line-height: 1;
+    margin: 0;
+    font-weight: 400;
+  }
+
+  .lb-card-editorial__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.25rem;
+  }
+
+  .lb-card-editorial__price {
+    display: flex;
+    gap: 0.5rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    align-items: baseline;
+  }
+
+  .lb-card-editorial__price--compare {
+    text-decoration: line-through;
+    opacity: 0.35;
+    font-weight: 400;
+    font-size: 0.8125rem;
+  }
+
+  .lb-card-editorial--sale .lb-card-editorial__price {
+    color: #e63946;
+  }
+
+  .lb-card-editorial__swatches {
+    display: flex;
+    gap: 0.375rem;
+  }
+
+  .lb-card-editorial__swatch {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .color-scheme-5 .lb-card-editorial__swatch,
+  .color-scheme-4 .lb-card-editorial__swatch {
+    border-color: rgba(255,255,255,0.2);
   }
 
   @media screen and (max-width: 749px) {
-    .lb-card-editorial__quick {
+    .lb-card-editorial__title {
+      font-size: 1rem;
+    }
+    .lb-card-editorial__hover-actions {
       display: none;
     }
     .lb-card-editorial:hover {
       transform: none;
     }
+    .lb-card-editorial__tag {
+      font-size: 0.5625rem;
+      padding: 0.2rem 0.5rem;
+    }
+    .lb-card-editorial__index {
+      font-size: 0.5625rem;
+      top: 0.5rem;
+      left: 0.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lb-card-editorial,
+    .lb-card-editorial__image img,
+    .lb-card-editorial__hover-actions {
+      transition: none;
+    }
+    .lb-card-editorial:hover {
+      transform: none;
+    }
+    .lb-card-editorial:hover .lb-card-editorial__hover-actions {
+      opacity: 0;
+    }
   }
 {%- endstyle -%}
 
 {%- if product != blank -%}
-  <a href="{{ product.url }}" class="lb-card-editorial">
-    <!-- Blueprint crosshair -->
-    <div class="lb-card-editorial__crosshair" aria-hidden="true"></div>
-
+  <a href="{{ product.url }}" class="lb-card-editorial{% if card_tag == 'SALE' %} lb-card-editorial--sale{% endif %}">
     <!-- Index number -->
     {% if show_index and card_index != blank %}
       <div class="lb-card-editorial__index">
         {%- if card_total != blank -%}
-          {{ card_index }} / {{ card_total }}
+          № {{ card_index }} / {{ card_total }}
         {%- else -%}
           № {{ card_index }}
         {%- endif -%}
       </div>
     {% endif %}
+
+    <!-- Tag badge -->
+    {%- if card_tag != blank -%}
+      <div class="lb-card-editorial__tag lb-card-editorial__tag--{{ card_tag | downcase | replace: ' ', '-' }}">
+        {{ card_tag }}
+      </div>
+    {%- endif -%}
 
     <!-- Image -->
     <div class="lb-card-editorial__image">
@@ -275,23 +313,7 @@
           decoding="async"
           width="600"
           height="750"
-          loading="lazy">
-      {%- endif -%}
-
-      <!-- Secondary image on hover -->
-      {%- if product.media.size > 1 -%}
-        {%- assign secondary = product.media[1] -%}
-        {%- if secondary != blank -%}
-          <img
-            src="{{ secondary | image_url: width: 600, format: 'webp' }}"
-            alt=""
-            class="lb-card-editorial__image--secondary"
-            loading="lazy"
-            decoding="async"
-            width="600"
-            height="750"
-            aria-hidden="true">
-        {%- endif -%}
+        >
       {%- endif -%}
 
       <!-- Sold out overlay -->
@@ -300,40 +322,42 @@
       {%- endif -%}
 
       <!-- Quick view on hover -->
-      <div class="lb-card-editorial__quick">
+      <div class="lb-card-editorial__hover-actions">
         <button
           type="button"
-          class="lb-card-editorial__quick-btn"
+          class="lb-card-editorial__qv-btn"
           onclick="window.location.href='{{ product.url }}'">
-          View Product
+          QUICK VIEW
         </button>
       </div>
     </div>
 
     <!-- Product info -->
     <div class="lb-card-editorial__info">
-      <p class="lb-card-editorial__brand">Legendary Branding</p>
-      <h3 class="lb-card-editorial__title">{{ product.title }}</h3>
-      {% if show_price %}
-        <p class="lb-card-editorial__price">
-          {{ product.price | money }}
-          {%- if product.compare_at_price > product.price -%}
-            <span class="lb-card-editorial__price--compare">{{ product.compare_at_price | money }}</span>
-          {%- endif -%}
-        </p>
-      {% endif %}
-
-      <!-- Color swatches (first 4) -->
-      {%- if product.options contains 'Color' or product.options contains 'Colour' -%}
-        {%- assign color_option = product.options_by_name['Color'] | default: product.options_by_name['Colour'] -%}
-        {%- if color_option != blank -%}
-          <div class="lb-card-editorial__swatches" aria-label="Available colors">
-            {%- for value in color_option.values limit: 4 -%}
-              <span class="lb-card-editorial__swatch" style="background: {{ value | downcase }};" title="{{ value }}"></span>
-            {%- endfor -%}
+      <p class="lb-card-editorial__brand">LEGENDARY BRANDING</p>
+      <h3 class="lb-card-editorial__title">{{ product.title | truncate: 40 }}</h3>
+      <div class="lb-card-editorial__bottom">
+        {% if show_price %}
+          <div class="lb-card-editorial__price">
+            {{ product.price | money }}
+            {%- if product.compare_at_price > product.price -%}
+              <span class="lb-card-editorial__price--compare">{{ product.compare_at_price | money }}</span>
+            {%- endif -%}
           </div>
+        {% endif %}
+
+        <!-- Color swatches (first 4) -->
+        {%- if product.options contains 'Color' or product.options contains 'Colour' -%}
+          {%- assign color_option = product.options_by_name['Color'] | default: product.options_by_name['Colour'] -%}
+          {%- if color_option != blank -%}
+            <div class="lb-card-editorial__swatches" aria-label="Available colors">
+              {%- for value in color_option.values limit: 4 -%}
+                <span class="lb-card-editorial__swatch" style="background: {{ value | downcase }};" title="{{ value }}"></span>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
         {%- endif -%}
-      {%- endif -%}
+      </div>
     </div>
   </a>
 {%- endif -%}

@@ -1,162 +1,303 @@
-{%- if section.blocks.size > 0 -%}
-<section class="lb-lookbook color-{{ section.settings.color_scheme }}">
-  {%- if section.settings.heading != blank -%}
-    <div class="lb-lookbook__header page-width">
-      <p class="lb-lookbook__eyebrow">{{ section.settings.eyebrow | default: 'Lookbook' }}</p>
-      <h2 class="lb-lookbook__heading lb-display-md">{{ section.settings.heading }}</h2>
-    </div>
-  {%- endif -%}
+{% comment %}
+  lb-lookbook.liquid
+  LEGENDARY BRANDING — Complete Redesign
+  Editorial lookbook with hover overlays inspired by Fuel.
+  Features:
+    - Section index (03 / LOOKBOOK)
+    - Massive heading with italic accent
+    - 3-column grid of looks (blocks)
+    - Each look: image + hover overlay with volume title, subtitle, product mini-cards, CTA
+    - Mobile: overlay always visible
+{% endcomment %}
 
-  <div class="lb-lookbook__grid lb-lookbook__grid--{{ section.blocks.size }}">
-    {%- for block in section.blocks -%}
-      <div class="lb-lookbook__cell lb-lookbook__cell--{{ forloop.index }}" {{ block.shopify_attributes }}>
-        {%- if block.settings.image != blank -%}
-          {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}" class="lb-lookbook__link">{%- endif -%}
+{%- liquid
+  assign index_label = section.settings.index_label | default: '03 / LOOKBOOK'
+  assign index_meta = section.settings.index_meta | default: '3 COLLECTIONS'
+  assign heading = section.settings.heading | default: 'SHOP THE'
+  assign heading_accent = section.settings.heading_accent | default: 'EDITORIAL'
+  assign subheading = section.settings.subheading | default: 'Curated looks from the drop. Each piece is limited run — once they\u0027re gone, they\u0027re gone.'
+-%}
 
-          <div class="lb-lookbook__media-wrap">
-            <img
-              src="{{ block.settings.image | image_url: width: 800, format: 'webp'}}"
-              srcset="{{ block.settings.image | image_url: width: 400, format: 'webp'}} 400w, {{ block.settings.image | image_url: width: 800, format: 'webp'}} 800w, {{ block.settings.image | image_url: width: 1200, format: 'webp'}} 1200w"
-              sizes="(max-width: 749px) 100vw, 50vw"
-              alt="{{ block.settings.image.alt | default: block.settings.overlay_text | escape }}"
-              width="{{ block.settings.image.width }}"
-              height="{{ block.settings.image.height }}"
-              loading="lazy"
-              class="lb-lookbook__img"
-            >
-            {%- if block.settings.overlay_text != blank -%}
-              <div class="lb-lookbook__overlay" aria-hidden="true">
-                <span class="lb-lookbook__overlay-text">{{ block.settings.overlay_text }}</span>
-              </div>
-            {%- endif -%}
-          </div>
-
-          {%- if block.settings.link != blank -%}</a>{%- endif -%}
-        {%- endif -%}
-      </div>
-    {%- endfor -%}
-  </div>
-</section>
-{%- endif -%}
-
-{% stylesheet %}
-.lb-lookbook {
-  overflow: hidden;
-}
-
-.lb-lookbook__header {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: var(--lb-sp-xl, 48px) var(--lb-sp-md, 20px) var(--lb-sp-lg, 32px);
-}
-
-.lb-lookbook__eyebrow {
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #C9A84C;
-  margin: 0 0 8px;
-}
-
-.lb-lookbook__heading {
-  margin: 0;
-}
-
-.lb-lookbook__grid {
-  display: grid;
-  gap: 4px;
-}
-
-.lb-lookbook__grid--1 { grid-template-columns: 1fr; }
-.lb-lookbook__grid--2 { grid-template-columns: repeat(2, 1fr); }
-.lb-lookbook__grid--3 { grid-template-columns: 2fr 1fr; }
-.lb-lookbook__grid--4 {
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto auto;
-}
-.lb-lookbook__grid--4 .lb-lookbook__cell--1 {
-  grid-column: 1 / 2;
-  grid-row: 1 / 3;
-}
-.lb-lookbook__grid--5 {
-  grid-template-columns: repeat(3, 1fr);
-}
-.lb-lookbook__grid--5 .lb-lookbook__cell--1 {
-  grid-column: 1 / 3;
-}
-.lb-lookbook__grid--6 {
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto auto;
-}
-.lb-lookbook__grid--6 .lb-lookbook__cell--1,
-.lb-lookbook__grid--6 .lb-lookbook__cell--4 {
-  grid-column: span 2;
-}
-
-@media (max-width: 749px) {
-  .lb-lookbook__grid--3,
-  .lb-lookbook__grid--4,
-  .lb-lookbook__grid--5,
-  .lb-lookbook__grid--6 {
-    grid-template-columns: repeat(2, 1fr);
+{%- style -%}
+  .lb-lookbook {
+    padding: var(--lb-section-padding) 1.5rem;
+    overflow: hidden;
   }
-  .lb-lookbook__cell--1 { grid-column: 1 / -1 !important; grid-row: auto !important; }
-}
 
-@media (max-width: 499px) {
-  .lb-lookbook__grid { grid-template-columns: 1fr !important; }
-  .lb-lookbook__cell { grid-column: auto !important; grid-row: auto !important; }
-}
-
-.lb-lookbook__link {
-  display: block;
-  text-decoration: none;
-}
-
-.lb-lookbook__media-wrap {
-  position: relative;
-  overflow: hidden;
-  line-height: 0;
-}
-
-.lb-lookbook__img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 480ms cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-
-@media (hover: hover) {
-  .lb-lookbook__media-wrap:hover .lb-lookbook__img {
-    transform: scale(1.04);
+  .lb-lookbook__inner {
+    max-width: var(--page-width);
+    margin: 0 auto;
   }
-  .lb-lookbook__media-wrap:hover .lb-lookbook__overlay {
+
+  .lb-lookbook__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 3rem;
+    margin-bottom: 4rem;
+  }
+
+  .lb-lookbook__heading {
+    font-family: var(--font-heading--family, 'Bebas Neue'), Impact, sans-serif;
+    font-size: var(--lb-display-2);
+    line-height: 0.82;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin: 0;
+    max-width: 12ch;
+  }
+
+  .lb-lookbook__heading-accent {
+    opacity: 0.2;
+    font-style: italic;
+  }
+
+  .lb-lookbook__sub {
+    max-width: 32ch;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    opacity: 0.6;
+    margin: 0;
+  }
+
+  .lb-lookbook__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .lb-lookbook__item {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: all var(--lb-duration-base) var(--lb-ease-out);
+  }
+
+  .lb-lookbook__img-wrap {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+  }
+
+  .lb-lookbook__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--lb-duration-slow) var(--lb-ease-out);
+  }
+
+  .lb-lookbook__item:hover .lb-lookbook__img {
+    transform: scale(1.08);
+  }
+
+  .lb-lookbook__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.92) 100%);
+    opacity: 0;
+    transition: opacity var(--lb-duration-base) var(--lb-ease-out);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+  }
+
+  .lb-lookbook__item:hover .lb-lookbook__overlay {
     opacity: 1;
   }
-}
 
-.lb-lookbook__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 50%);
-  display: flex;
-  align-items: flex-end;
-  padding: 20px 18px;
-  opacity: 0;
-  transition: opacity 280ms ease;
-}
+  .lb-lookbook__vol {
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 0.5rem;
+  }
 
-.lb-lookbook__overlay-text {
-  font-family: 'Bebas Neue', 'Arial Black', sans-serif;
-  font-size: clamp(18px, 2.5vw, 28px);
-  color: #F5F5F0;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  line-height: 1;
-}
-{% endstylesheet %}
+  .lb-lookbook__vol-title {
+    font-family: var(--font-heading--family, 'Bebas Neue'), Impact, sans-serif;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+
+  .lb-lookbook__products {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .lb-lookbook__product {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .lb-lookbook__product img {
+    width: 56px;
+    height: 70px;
+    object-fit: cover;
+  }
+
+  .lb-lookbook__product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .lb-lookbook__product-name {
+    font-size: 0.625rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  .lb-lookbook__product-price {
+    font-size: 0.6875rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+
+  .lb-lookbook__shop-btn {
+    display: inline-block;
+    padding: 0.75rem 0;
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    font-weight: 600;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    text-decoration: none;
+    transition: opacity var(--lb-duration-fast) var(--lb-ease-out);
+  }
+
+  .lb-lookbook__shop-btn:hover {
+    opacity: 0.7;
+  }
+
+  .lb-lookbook__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0.5;
+  }
+
+  @media screen and (max-width: 900px) {
+    .lb-lookbook__grid {
+      grid-template-columns: 1fr;
+    }
+    .lb-lookbook__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+    .lb-lookbook__overlay {
+      opacity: 1;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .lb-lookbook {
+      padding: 4rem 1rem;
+    }
+  }
+{%- endstyle -%}
+
+<section class="lb-lookbook color-{{ section.settings.color_scheme }}">
+  <div class="lb-lookbook__inner">
+    <div class="lb-section-index" style="margin-bottom: 3rem;">
+      <span>{{ index_label }}</span>
+      <span>{{ index_meta }}</span>
+    </div>
+
+    <div class="lb-lookbook__header">
+      {%- if heading != blank -%}
+        <h2 class="lb-lookbook__heading">
+          {{ heading }}
+          {%- if heading_accent != blank -%}
+            <br><span class="lb-lookbook__heading-accent">{{ heading_accent }}</span>
+          {%- endif -%}
+        </h2>
+      {%- endif -%}
+      {%- if subheading != blank -%}
+        <p class="lb-lookbook__sub">{{ subheading }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="lb-lookbook__grid">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'look' -%}
+          <div class="lb-lookbook__item" {{ block.shopify_attributes }}>
+            <div class="lb-lookbook__img-wrap">
+              {%- if block.settings.image != blank -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 800, format: 'webp'
+                  | image_tag:
+                    loading: 'lazy',
+                    class: 'lb-lookbook__img',
+                    sizes: '(max-width: 900px) 100vw, 33vw',
+                    widths: '300, 400, 600, 800',
+                    alt: block.settings.image.alt | default: block.settings.vol_title | escape
+                }}
+              {%- endif -%}
+
+              <div class="lb-lookbook__overlay">
+                <div class="lb-lookbook__vol">{{ block.settings.vol_label | default: 'VOL. 01' }}</div>
+                <div class="lb-lookbook__vol-title">{{ block.settings.vol_title | default: 'Editorial' }}</div>
+
+                {%- if block.settings.product_1 != blank or block.settings.product_2 != blank or block.settings.product_3 != blank -%}
+                  <div class="lb-lookbook__products">
+                    {%- for n in (1..3) -%}
+                      {%- assign product_key = 'product_' | append: n -%}
+                      {%- assign look_product = block.settings[product_key] -%}
+                      {%- if look_product != blank and look_product != empty -%}
+                        <a href="{{ look_product.url }}" class="lb-lookbook__product">
+                          {%- if look_product.featured_media != blank -%}
+                            <img
+                              src="{{ look_product.featured_media | image_url: width: 120, format: 'webp' }}"
+                              alt="{{ look_product.title | escape }}"
+                              loading="lazy"
+                              width="56"
+                              height="70"
+                            >
+                          {%- endif -%}
+                          <div class="lb-lookbook__product-info">
+                            <span class="lb-lookbook__product-name">{{ look_product.title | truncate: 30 }}</span>
+                            <span class="lb-lookbook__product-price">{{ look_product.price | money }}</span>
+                          </div>
+                        </a>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+
+                {%- if block.settings.shop_url != blank -%}
+                  <a href="{{ block.settings.shop_url }}" class="lb-lookbook__shop-btn">
+                    SHOP THIS LOOK →
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+
+            <div class="lb-lookbook__meta">
+              <span class="lb-label">{{ block.settings.vol_label | default: 'VOL. 01' }}</span>
+              <span class="lb-label">{{ block.settings.vol_title | default: 'Editorial' }}</span>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
 
 {% schema %}
 {
@@ -165,46 +306,104 @@
   "class": "lb-lookbook-section",
   "blocks": [
     {
-      "type": "image",
-      "name": "Image",
+      "type": "look",
+      "name": "Look",
       "limit": 6,
       "settings": [
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Image"
+          "label": "Look image"
         },
         {
           "type": "text",
-          "id": "overlay_text",
-          "label": "Overlay text (on hover)"
+          "id": "vol_label",
+          "label": "Volume label",
+          "default": "VOL. 01"
+        },
+        {
+          "type": "text",
+          "id": "vol_title",
+          "label": "Volume title",
+          "default": "ESSENTIALS EDITORIAL"
+        },
+        {
+          "type": "product",
+          "id": "product_1",
+          "label": "Product 1"
+        },
+        {
+          "type": "product",
+          "id": "product_2",
+          "label": "Product 2"
+        },
+        {
+          "type": "product",
+          "id": "product_3",
+          "label": "Product 3"
         },
         {
           "type": "url",
-          "id": "link",
-          "label": "Link (optional)"
+          "id": "shop_url",
+          "label": "Shop this look URL"
         }
       ]
     }
   ],
   "settings": [
     {
+      "type": "header",
+      "content": "Section index"
+    },
+    {
       "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow label",
-      "default": "Lookbook"
+      "id": "index_label",
+      "label": "Index label (left)",
+      "default": "03 / LOOKBOOK"
+    },
+    {
+      "type": "text",
+      "id": "index_meta",
+      "label": "Index meta (right)",
+      "default": "3 COLLECTIONS"
+    },
+    {
+      "type": "header",
+      "content": "Header"
     },
     {
       "type": "text",
       "id": "heading",
-      "label": "Heading",
-      "default": "SS26 COLLECTION"
+      "label": "Heading line 1",
+      "default": "SHOP THE"
     },
     {
-      "type": "color_scheme",
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Heading line 2 (accent)",
+      "default": "EDITORIAL"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Curated looks from the drop. Each piece is limited run — once they're gone, they're gone."
+    },
+    {
+      "type": "header",
+      "content": "Color scheme"
+    },
+    {
+      "type": "select",
       "id": "color_scheme",
       "label": "Color scheme",
-      "default": "scheme-1"
+      "options": [
+        { "value": "scheme-1", "label": "Light (White)" },
+        { "value": "scheme-2", "label": "Light Alt" },
+        { "value": "scheme-4", "label": "Dark Grey" },
+        { "value": "scheme-5", "label": "True Black" }
+      ],
+      "default": "scheme-5"
     }
   ],
   "presets": [

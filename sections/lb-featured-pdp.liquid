@@ -1,0 +1,679 @@
+{% comment %}
+  lb-featured-pdp.liquid
+  LEGENDARY BRANDING — Complete Redesign
+  Featured product detail section for the editorial homepage.
+  Shows a single product as a "technical data sheet" with:
+    - Section index (02 / PRODUCT SHEET)
+    - Media gallery with thumbnails
+    - Price + compare at + reviews
+    - Trust badges
+    - Size / color selector
+    - Add to cart
+    - Technical data sheet
+    - Accordion details
+  Designed for the editorial homepage template.
+{% endcomment %}
+
+{%- liquid
+  assign featured_product = section.settings.product
+  assign index_label = section.settings.index_label | default: '02 / PRODUCT SHEET'
+  assign index_meta = section.settings.index_meta
+  assign color_scheme = section.settings.color_scheme | default: 'scheme-1'
+
+  if featured_product != blank and featured_product != empty
+    assign product = featured_product
+    assign selected_variant = product.selected_or_first_available_variant | default: product.variants.first
+    assign media = product.media
+  endif
+-%}
+
+{%- style -%}
+  .lb-featured-pdp {
+    padding: var(--lb-section-padding) 1.5rem;
+    max-width: var(--page-width);
+    margin: 0 auto;
+  }
+
+  .lb-featured-pdp__grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  /* Media */
+  .lb-featured-pdp__media {
+    position: relative;
+  }
+
+  .lb-featured-pdp__main-image {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: #f0ece6;
+    cursor: zoom-in;
+  }
+
+  .lb-featured-pdp__main-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--lb-duration-slow) var(--lb-ease-out);
+  }
+
+  .lb-featured-pdp__main-image:hover .lb-featured-pdp__main-img {
+    transform: scale(1.05);
+  }
+
+  .lb-featured-pdp__zoom-hint {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.25rem 0.625rem;
+    background: rgba(255,255,255,0.9);
+    color: #000;
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    z-index: 2;
+  }
+
+  .lb-featured-pdp__thumbs {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .lb-featured-pdp__thumb {
+    width: 72px;
+    height: 90px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid transparent;
+    padding: 0;
+    background: #f0ece6;
+    opacity: 0.5;
+    transition: all var(--lb-duration-fast) var(--lb-ease-out);
+  }
+
+  .lb-featured-pdp__thumb.is-active {
+    opacity: 1;
+    border-color: #000;
+  }
+
+  .lb-featured-pdp__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Info */
+  .lb-featured-pdp__info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: sticky;
+    top: 5rem;
+  }
+
+  .lb-featured-pdp__meta-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  .lb-featured-pdp__title {
+    font-family: var(--font-heading--family, 'Bebas Neue'), Impact, sans-serif;
+    font-size: var(--lb-display-3);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    margin: 0;
+    font-weight: 400;
+  }
+
+  .lb-featured-pdp__subtitle {
+    font-size: 0.875rem;
+    opacity: 0.6;
+    margin: -0.75rem 0 0;
+  }
+
+  .lb-featured-pdp__price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .lb-featured-pdp__price {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .lb-featured-pdp__compare {
+    font-size: 1rem;
+    text-decoration: line-through;
+    opacity: 0.35;
+  }
+
+  /* Trust badges */
+  .lb-featured-pdp__badges {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 1rem 0;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .lb-featured-pdp__badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
+
+  .lb-featured-pdp__badge-icon {
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  /* Options */
+  .lb-featured-pdp__option {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .lb-featured-pdp__option-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .lb-featured-pdp__option-label {
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  .lb-featured-pdp__option-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .lb-featured-pdp__option-btn {
+    position: relative;
+    padding: 0.625rem 1.25rem;
+    border: 1px solid rgba(0,0,0,0.2);
+    background: transparent;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: all var(--lb-duration-fast) var(--lb-ease-out);
+    color: inherit;
+  }
+
+  .lb-featured-pdp__option-btn:hover {
+    border-color: #000;
+  }
+
+  .lb-featured-pdp__option-btn.is-selected {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+  }
+
+  /* ATC */
+  .lb-featured-pdp__atc-row {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .lb-featured-pdp__atc {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    background: #000;
+    color: #fff;
+    border: 1px solid #000;
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--lb-duration-fast) var(--lb-ease-out);
+  }
+
+  .lb-featured-pdp__atc:hover {
+    opacity: 0.85;
+  }
+
+  /* Data sheet */
+  .lb-featured-pdp__sheet {
+    border-top: 1px solid rgba(0,0,0,0.1);
+    margin-top: 0.5rem;
+  }
+
+  .lb-featured-pdp__sheet-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .lb-featured-pdp__sheet-label {
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
+
+  .lb-featured-pdp__sheet-value {
+    font-size: 0.875rem;
+    text-align: right;
+    opacity: 0.85;
+  }
+
+  /* Description */
+  .lb-featured-pdp__desc {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    opacity: 0.75;
+  }
+
+  /* Accordions */
+  .lb-featured-pdp__accordions {
+    border-top: 1px solid rgba(0,0,0,0.08);
+  list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .lb-featured-pdp__acc {
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .lb-featured-pdp__acc-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    cursor: pointer;
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    font-weight: 600;
+    list-style: none;
+  }
+
+  .lb-featured-pdp__acc-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .lb-featured-pdp__acc-icon {
+    transition: transform var(--lb-duration-base) var(--lb-ease-out);
+  }
+
+  details[open] .lb-featured-pdp__acc-icon {
+    transform: rotate(45deg);
+  }
+
+  .lb-featured-pdp__acc-content {
+    padding: 0 0 1rem;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    opacity: 0.7;
+  }
+
+  @media screen and (max-width: 749px) {
+    .lb-featured-pdp__grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .lb-featured-pdp__info {
+      position: static;
+    }
+  }
+{%- endstyle -%}
+
+{%- if featured_product != blank and featured_product != empty -%}
+  <section class="lb-featured-pdp color-{{ color_scheme }}">
+    <div class="lb-section-index" style="margin-bottom: 3rem;">
+      <span>{{ index_label }}</span>
+      {%- if index_meta != blank -%}
+        <span>{{ index_meta }}</span>
+      {%- elsif selected_variant.sku != blank -%}
+        <span>SKU: {{ selected_variant.sku }}</span>
+      {%- endif -%}
+    </div>
+
+    <div class="lb-featured-pdp__grid">
+      <!-- Media gallery -->
+      <div class="lb-featured-pdp__media">
+        <div class="lb-featured-pdp__main-image">
+          {%- if product.featured_media != blank -%}
+            <img
+              src="{{ product.featured_media | image_url: width: 1200, format: 'webp' }}"
+              alt="{{ product.featured_media.alt | default: product.title | escape }}"
+              class="lb-featured-pdp__main-img"
+              loading="eager"
+              id="lb-featured-pdp-main-img"
+            >
+          {%- endif -%}
+          <div class="lb-featured-pdp__zoom-hint">
+            <span>ZOOM</span>
+          </div>
+        </div>
+
+        {%- if media.size > 1 -%}
+          <div class="lb-featured-pdp__thumbs" role="list" aria-label="Product media">
+            {%- for m in media limit: 6 -%}
+              <button
+                type="button"
+                class="lb-featured-pdp__thumb{% if forloop.first %} is-active{% endif %}"
+                data-media-id="{{ m.id }}"
+                onclick="document.getElementById('lb-featured-pdp-main-img').src = '{{ m | image_url: width: 1200, format: 'webp' }}'; document.querySelectorAll('.lb-featured-pdp__thumb').forEach(function(t) { t.classList.remove('is-active'); }); this.classList.add('is-active');"
+                aria-label="View media {{ forloop.index }}"
+              >
+                <img
+                  src="{{ m | image_url: width: 200, format: 'webp' }}"
+                  alt=""
+                  loading="lazy"
+                  width="72"
+                  height="90"
+                >
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- Info / Data sheet -->
+      <div class="lb-featured-pdp__info">
+        <div class="lb-featured-pdp__meta-top">
+          <span class="lb-label">LEGENDARY BRANDING</span>
+          {%- if product.type != blank -%}
+            <span class="lb-label">{{ product.type | upcase }}</span>
+          {%- endif -%}
+        </div>
+
+        <h1 class="lb-featured-pdp__title">{{ product.title }}</h1>
+
+        <div class="lb-featured-pdp__price-row">
+          <span class="lb-featured-pdp__price">{{ selected_variant.price | money }}</span>
+          {%- if selected_variant.compare_at_price > selected_variant.price -%}
+            <span class="lb-featured-pdp__compare">{{ selected_variant.compare_at_price | money }}</span>
+          {%- endif -%}
+        </div>
+
+        <!-- Trust badges -->
+        <div class="lb-featured-pdp__badges">
+          <div class="lb-featured-pdp__badge">
+            <span class="lb-featured-pdp__badge-icon">✓</span>
+            <span>Free shipping $100+</span>
+          </div>
+          <div class="lb-featured-pdp__badge">
+            <span class="lb-featured-pdp__badge-icon">↩</span>
+            <span>30-day returns</span>
+          </div>
+          <div class="lb-featured-pdp__badge">
+            <span class="lb-featured-pdp__badge-icon">⚡</span>
+            <span>Ships in 24h</span>
+          </div>
+        </div>
+
+        <!-- Size selector -->
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <div class="lb-featured-pdp__option">
+              <div class="lb-featured-pdp__option-row">
+                <span class="lb-featured-pdp__option-label">{{ option.name | upcase }}</span>
+              </div>
+              <div class="lb-featured-pdp__option-group">
+                {%- for value in option.values -%}
+                  <button
+                    type="button"
+                    class="lb-featured-pdp__option-btn{% if option.selected_value == value %} is-selected{% endif %}"
+                    data-value="{{ value | escape }}"
+                    onclick="this.closest('.lb-featured-pdp__option-group').querySelectorAll('.lb-featured-pdp__option-btn').forEach(function(b) { b.classList.remove('is-selected'); }); this.classList.add('is-selected');"
+                  >{{ value }}</button>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        <!-- Add to cart -->
+        <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="id" value="{{ selected_variant.id }}">
+          <div class="lb-featured-pdp__atc-row">
+            <button
+              type="submit"
+              class="lb-featured-pdp__atc"
+              {% unless product.available %}disabled{% endunless %}
+            >
+              {%- if product.available -%}
+                ADD TO CART — {{ selected_variant.price | money }}
+              {%- else -%}
+                SOLD OUT
+              {%- endif -%}
+            </button>
+          </div>
+        </form>
+
+        <!-- Technical data sheet -->
+        <div class="lb-featured-pdp__sheet">
+          {%- if product.vendor != blank -%}
+            <div class="lb-featured-pdp__sheet-row">
+              <span class="lb-featured-pdp__sheet-label">Brand</span>
+              <span class="lb-featured-pdp__sheet-value">{{ product.vendor }}</span>
+            </div>
+          {%- endif -%}
+          {%- if selected_variant.sku != blank -%}
+            <div class="lb-featured-pdp__sheet-row">
+              <span class="lb-featured-pdp__sheet-label">SKU</span>
+              <span class="lb-featured-pdp__sheet-value">{{ selected_variant.sku }}</span>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.fit != blank -%}
+            <div class="lb-featured-pdp__sheet-row">
+              <span class="lb-featured-pdp__sheet-label">Fit</span>
+              <span class="lb-featured-pdp__sheet-value">{{ section.settings.fit }}</span>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.print_method != blank -%}
+            <div class="lb-featured-pdp__sheet-row">
+              <span class="lb-featured-pdp__sheet-label">Print</span>
+              <span class="lb-featured-pdp__sheet-value">{{ section.settings.print_method }}</span>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.care != blank -%}
+            <div class="lb-featured-pdp__sheet-row">
+              <span class="lb-featured-pdp__sheet-label">Care</span>
+              <span class="lb-featured-pdp__sheet-value">{{ section.settings.care }}</span>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.drop_number != blank -%}
+            <div class="lb-featured-pdp__sheet-row">
+              <span class="lb-featured-pdp__sheet-label">Drop</span>
+              <span class="lb-featured-pdp__sheet-value">{{ section.settings.drop_number }}</span>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.origin != blank -%}
+            <div class="lb-featured-pdp__sheet-row">
+              <span class="lb-featured-pdp__sheet-label">Origin</span>
+              <span class="lb-featured-pdp__sheet-value">{{ section.settings.origin }}</span>
+            </div>
+          {%- endif -%}
+        </div>
+
+        <!-- Description -->
+        {%- if product.description != blank -%}
+          <div class="lb-featured-pdp__desc">
+            {{ product.description | strip_html | truncate: 400 }}
+          </div>
+        {%- endif -%}
+
+        <!-- Accordion details -->
+        <div class="lb-featured-pdp__accordions">
+          {%- if section.settings.shipping_info != blank -%}
+            <details class="lb-featured-pdp__acc">
+              <summary class="lb-featured-pdp__acc-summary">
+                <span>SHIPPING & RETURNS</span>
+                <span class="lb-featured-pdp__acc-icon">+</span>
+              </summary>
+              <div class="lb-featured-pdp__acc-content">{{ section.settings.shipping_info }}</div>
+            </details>
+          {%- endif -%}
+          {%- if section.settings.sizing_info != blank -%}
+            <details class="lb-featured-pdp__acc">
+              <summary class="lb-featured-pdp__acc-summary">
+                <span>SIZING & FIT</span>
+                <span class="lb-featured-pdp__acc-icon">+</span>
+              </summary>
+              <div class="lb-featured-pdp__acc-content">{{ section.settings.sizing_info }}</div>
+            </details>
+          {%- endif -%}
+          {%- if section.settings.materials_info != blank -%}
+            <details class="lb-featured-pdp__acc">
+              <summary class="lb-featured-pdp__acc-summary">
+                <span>MATERIALS</span>
+                <span class="lb-featured-pdp__acc-icon">+</span>
+              </summary>
+              <div class="lb-featured-pdp__acc-content">{{ section.settings.materials_info }}</div>
+            </details>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- else -%}
+  <section class="lb-featured-pdp color-{{ color_scheme }}">
+    <div class="lb-featured-pdp__info" style="text-align: center; padding: 4rem 1.5rem; opacity: 0.6;">
+      <p>Select a product in the section settings to display the featured product sheet.</p>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Featured PDP (Editorial)",
+  "tag": "section",
+  "class": "lb-featured-pdp-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section index"
+    },
+    {
+      "type": "text",
+      "id": "index_label",
+      "label": "Index label (left)",
+      "default": "02 / PRODUCT SHEET"
+    },
+    {
+      "type": "text",
+      "id": "index_meta",
+      "label": "Index meta (right)"
+    },
+    {
+      "type": "header",
+      "content": "Product"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Featured product"
+    },
+    {
+      "type": "header",
+      "content": "Data sheet"
+    },
+    {
+      "type": "text",
+      "id": "fit",
+      "label": "Fit",
+      "default": "Oversized / Boxy"
+    },
+    {
+      "type": "text",
+      "id": "print_method",
+      "label": "Print method",
+      "default": "DTG (direct to garment)"
+    },
+    {
+      "type": "text",
+      "id": "care",
+      "label": "Care instructions",
+      "default": "Cold wash, hang dry"
+    },
+    {
+      "type": "text",
+      "id": "drop_number",
+      "label": "Drop number",
+      "default": "Drop 07 / Fall 2026"
+    },
+    {
+      "type": "text",
+      "id": "origin",
+      "label": "Origin",
+      "default": "Made in USA"
+    },
+    {
+      "type": "header",
+      "content": "Accordions"
+    },
+    {
+      "type": "text",
+      "id": "shipping_info",
+      "label": "Shipping & returns",
+      "default": "Free shipping on orders over $100. Ships within 24 hours. 30-day hassle-free returns on unworn items."
+    },
+    {
+      "type": "text",
+      "id": "sizing_info",
+      "label": "Sizing & fit",
+      "default": "Oversized/boxy fit. Size down for a more regular fit. Model is 6'2\" wearing size M."
+    },
+    {
+      "type": "text",
+      "id": "materials_info",
+      "label": "Materials",
+      "default": "Premium heavyweight cotton blend. Sourced from certified mills. DTG printed with water-based inks."
+    },
+    {
+      "type": "header",
+      "content": "Color scheme"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Light (White)" },
+        { "value": "scheme-2", "label": "Light Alt" },
+        { "value": "scheme-4", "label": "Dark Grey" },
+        { "value": "scheme-5", "label": "True Black" }
+      ],
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured PDP (Editorial)"
+    }
+  ]
+}
+{% endschema %}

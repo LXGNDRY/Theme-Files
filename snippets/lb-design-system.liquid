@@ -12,32 +12,37 @@
 <style>
   /* =========================================================
      DESIGN SYSTEM TOKENS
+     Aligned to legendary-redesign-preview editorial.css
      ========================================================= */
 
   :root {
     /* ---- Type scale (editorial extreme contrast) ---- */
-    --lb-display-1: clamp(5rem, 18vw, 18rem);
-    --lb-display-2: clamp(3.5rem, 12vw, 10rem);
-    --lb-display-3: clamp(2.5rem, 8vw, 6rem);
+    --lb-display-1: clamp(4rem, 18vw, 18rem);
+    --lb-display-2: clamp(3rem, 12vw, 10rem);
+    --lb-display-3: clamp(2rem, 7vw, 5rem);
     --lb-heading-1: clamp(2rem, 5vw, 3.5rem);
     --lb-heading-2: clamp(1.5rem, 3vw, 2.25rem);
-    --lb-label: 0.625rem;       /* 10px — wide-tracked all-caps */
-    --lb-label-spacing: 0.18em;
+    --lb-body: clamp(0.9375rem, 1.2vw, 1.0625rem);
+    --lb-label: 0.6875rem;       /* 11px — wide-tracked all-caps */
+    --lb-label-spacing: 0.16em;
     --lb-data: 0.8125rem;        /* 13px — tech/data text */
 
     /* ---- Spacing rhythm (generous, editorial) ---- */
-    --lb-space-xs: 0.5rem;
-    --lb-space-sm: 1rem;
-    --lb-space-md: 2rem;
-    --lb-space-lg: 4rem;
-    --lb-space-xl: 8rem;
-    --lb-space-2xl: 12rem;
+    --lb-space-xs: 0.375rem;
+    --lb-space-sm: 0.75rem;
+    --lb-space-md: 1.5rem;
+    --lb-space-lg: 3rem;
+    --lb-space-xl: 5rem;
+    --lb-space-2xl: 8rem;
     --lb-section-padding: clamp(4rem, 10vw, 10rem);
 
+    /* ---- Page width ---- */
+    --page-width: 1440px;
+
     /* ---- Blueprint grid ---- */
-    --lb-grid-marker-size: 12px;
+    --lb-grid-marker-size: 14px;
     --lb-grid-marker-color: currentColor;
-    --lb-grid-marker-opacity: 0.15;
+    --lb-grid-marker-opacity: 0.2;
     --lb-grid-gutter: var(--gap, 1rem);
 
     /* ---- Index numbering ---- */
@@ -46,11 +51,11 @@
     --lb-index-tracking: 0.05em;
 
     /* ---- Animation ---- */
-    --lb-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --lb-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     --lb-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-    --lb-duration-fast: 150ms;
-    --lb-duration-base: 300ms;
-    --lb-duration-slow: 600ms;
+    --lb-duration-fast: 0.2s;
+    --lb-duration-base: 0.4s;
+    --lb-duration-slow: 0.8s;
   }
 
   /* =========================================================
@@ -66,30 +71,12 @@
   .lb-section-index {
     display: flex;
     align-items: center;
-    gap: var(--lb-space-sm);
-    font-size: var(--lb-index-font-size);
-    font-weight: var(--lb-index-weight);
-    letter-spacing: var(--lb-index-tracking);
+    justify-content: space-between;
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
     text-transform: uppercase;
     margin-bottom: var(--lb-space-md);
-    opacity: 0.7;
-  }
-
-  .lb-section-index::before,
-  .lb-section-index::after {
-    content: '';
-    display: block;
-    height: 1px;
-    background: currentColor;
-    opacity: 0.3;
-  }
-
-  .lb-section-index::before {
-    width: 24px;
-  }
-
-  .lb-section-index::after {
-    flex: 1;
+    opacity: 0.5;
   }
 
   .lb-index-number {
@@ -101,20 +88,22 @@
     opacity: 0.4;
   }
 
-  /* Product card index (Piece 03 / 12) */
+  /* Product card index (№ 01 / 12) */
   .lb-card-index {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
     font-size: var(--lb-label);
     letter-spacing: var(--lb-label-spacing);
     text-transform: uppercase;
     opacity: 0.6;
-    margin-bottom: 0.75rem;
+    z-index: 2;
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
   }
 
   /* =========================================================
-     BLUEPRINT GRID MARKERS (+ crosshairs at corners)
+     BLUEPRINT GRID MARKERS (corner crosshairs)
      Applied to any container with class `lb-blueprint-grid`.
      ========================================================= */
 
@@ -122,7 +111,6 @@
     position: relative;
   }
 
-  /* Corner crosshair markers */
   .lb-blueprint-grid::before,
   .lb-blueprint-grid::after {
     content: '';
@@ -136,31 +124,17 @@
   }
 
   .lb-blueprint-grid::before {
-    top: calc(var(--lb-space-sm) * -1);
-    left: calc(var(--lb-space-sm) * -1);
+    top: 0;
+    left: 0;
     border-right: none;
     border-bottom: none;
   }
 
   .lb-blueprint-grid::after {
-    bottom: calc(var(--lb-space-sm) * -1);
-    right: calc(var(--lb-space-sm) * -1);
+    bottom: 0;
+    right: 0;
     border-left: none;
     border-top: none;
-  }
-
-  /* Grid cell crosshairs (for product cards) */
-  .lb-card-crosshair {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: var(--lb-grid-marker-size);
-    height: var(--lb-grid-marker-size);
-    border-right: 1px solid currentColor;
-    border-top: 1px solid currentColor;
-    opacity: 0.2;
-    pointer-events: none;
-    z-index: 2;
   }
 
   /* =========================================================
@@ -169,17 +143,17 @@
 
   .lb-display-1 {
     font-size: var(--lb-display-1);
-    line-height: 0.85;
-    letter-spacing: -0.02em;
-    font-weight: 700;
+    line-height: 0.82;
+    letter-spacing: -0.03em;
+    font-weight: 400;
     text-transform: uppercase;
   }
 
   .lb-display-2 {
     font-size: var(--lb-display-2);
-    line-height: 0.9;
-    letter-spacing: -0.01em;
-    font-weight: 700;
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    font-weight: 400;
     text-transform: uppercase;
   }
 
@@ -207,11 +181,11 @@
      Floating status indicator — countdown, low stock, etc.
      ========================================================= */
 
-  .lb-drop-pill {
+  .lb-drop-status {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.375rem 0.875rem;
     border: 1px solid currentColor;
     border-radius: 999px;
     font-size: var(--lb-label);
@@ -221,22 +195,36 @@
     opacity: 0.9;
   }
 
-  .lb-drop-pill__dot {
+  .lb-drop-status__dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
     background: currentColor;
-    animation: lb-pulse 2s ease-in-out infinite;
   }
 
-  @keyframes lb-pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
+  .lb-drop-status--live .lb-drop-status__dot {
+    animation: lb-status-pulse 2s ease-in-out infinite;
+  }
+
+  .lb-drop-status--countdown .lb-drop-status__dot {
+    animation: lb-status-pulse 2s ease-in-out infinite;
+  }
+
+  .lb-drop-status--sold-out {
+    opacity: 0.6;
+  }
+
+  .lb-drop-status--sold-out .lb-drop-status__dot {
+    opacity: 0.4;
+  }
+
+  @keyframes lb-status-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(1.3); }
   }
 
   /* =========================================================
      SECTION METADATA FOOTER
-     "© 2026 / LEGENDARY / DROP 07" style row at section bottom
      ========================================================= */
 
   .lb-section-meta {
@@ -253,7 +241,6 @@
     border-top-color: rgba(255,255,255,0.1);
   }
 
-  /* Dark scheme adapt */
   .color-scheme-1 .lb-section-meta,
   .color-scheme-3 .lb-section-meta {
     border-top-color: rgba(0,0,0,0.1);

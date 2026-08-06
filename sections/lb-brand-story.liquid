@@ -1,133 +1,329 @@
-{%- if section.settings.image != blank or section.settings.heading != blank -%}
-<section class="lb-brand-story color-{{ section.settings.color_scheme }}">
-  <div class="lb-brand-story__inner lb-brand-story__inner--{{ section.settings.image_side }}">
-    {%- if section.settings.image != blank -%}
-      <div class="lb-brand-story__media">
-        <img
-          src="{{ section.settings.image | image_url: width: 1200, format: 'webp'}}"
-          srcset="{{ section.settings.image | image_url: width: 600, format: 'webp'}} 600w, {{ section.settings.image | image_url: width: 900, format: 'webp'}} 900w, {{ section.settings.image | image_url: width: 1200, format: 'webp'}} 1200w"
-          sizes="(max-width: 749px) 100vw, 50vw"
-          alt="{{ section.settings.image.alt | default: section.settings.heading | escape }}"
-          width="{{ section.settings.image.width }}"
-          height="{{ section.settings.image.height }}"
-          loading="lazy"
-          class="lb-brand-story__img"
-        >
-      </div>
-    {%- endif -%}
+{% comment %}
+  lb-brand-story.liquid
+  LEGENDARY BRANDING — Complete Redesign
+  Editorial brand story section inspired by Fuel (Westhill Studio).
+  Features:
+    - Section index (04 / THE BRAND)
+    - Massive heading with italic accent word
+    - Multi-paragraph body text
+    - Two-image media layout (main + side) with labels
+    - Stats strip (4 columns: products, drops, customers, rating)
+    - CTA link with arrow
+    - Full-bleed with color scheme control
+{% endcomment %}
 
-    <div class="lb-brand-story__content">
-      {%- if section.settings.eyebrow != blank -%}
-        <p class="lb-brand-story__eyebrow">{{ section.settings.eyebrow }}</p>
-      {%- endif -%}
-      {%- if section.settings.heading != blank -%}
-        <h2 class="lb-brand-story__heading lb-display-xl">{{ section.settings.heading }}</h2>
-      {%- endif -%}
-      {%- if section.settings.body != blank -%}
-        <div class="lb-brand-story__body">{{ section.settings.body }}</div>
-      {%- endif -%}
-      {%- if section.settings.button_label != blank and section.settings.button_url != blank -%}
-        <a href="{{ section.settings.button_url }}" class="lb-brand-story__cta lb-btn">
-          {{ section.settings.button_label }}
-        </a>
-      {%- endif -%}
+{%- liquid
+  assign eyebrow = section.settings.eyebrow | default: 'OUR PHILOSOPHY'
+  assign heading = section.settings.heading | default: 'BUILT TO OUTLAST THE TREND'
+  assign heading_line_2 = section.settings.heading_line_2 | default: 'OUTLAST'
+  assign heading_line_3 = section.settings.heading_line_3 | default: 'THE TREND'
+  assign body = section.settings.body
+  assign button_label = section.settings.button_label | default: 'READ OUR STORY'
+  assign button_url = section.settings.button_url
+  assign image_main = section.settings.image
+  assign image_side = section.settings.image_side
+  assign image_main_label = section.settings.image_main_label | default: 'Rose Bowl Crewneck'
+  assign index_label = section.settings.index_label | default: '04 / THE BRAND'
+  assign index_meta = section.settings.index_meta | default: 'EST. 2024'
+  assign stat_1_num = section.settings.stat_1_num | default: '84+'
+  assign stat_1_label = section.settings.stat_1_label | default: 'Products'
+  assign stat_2_num = section.settings.stat_2_num | default: '7'
+  assign stat_2_label = section.settings.stat_2_label | default: 'Drops'
+  assign stat_3_num = section.settings.stat_3_num | default: '3.2k'
+  assign stat_3_label = section.settings.stat_3_label | default: 'Customers'
+  assign stat_4_num = section.settings.stat_4_num | default: '4.9★'
+  assign stat_4_label = section.settings.stat_4_label | default: 'Avg Review'
+-%}
+
+{%- style -%}
+  .lb-brand-story {
+    padding: var(--lb-section-padding) 1.5rem;
+    overflow: hidden;
+  }
+
+  .lb-brand-story__inner {
+    max-width: var(--page-width);
+    margin: 0 auto;
+  }
+
+  .lb-brand-story__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .lb-brand-story__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .lb-brand-story__label {
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  .lb-brand-story__heading {
+    font-family: var(--font-heading--family, 'Bebas Neue'), Impact, sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin: 0;
+  }
+
+  .lb-brand-story__heading-accent {
+    font-style: italic;
+    opacity: 0.25;
+  }
+
+  .lb-brand-story__body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    opacity: 0.75;
+  }
+
+  .lb-brand-story__body p {
+    margin: 0;
+  }
+
+  .lb-brand-story__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid currentColor;
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    font-weight: 600;
+    text-decoration: none;
+    color: inherit;
+    width: fit-content;
+    transition: opacity var(--lb-duration-base) var(--lb-ease-out);
+  }
+
+  .lb-brand-story__cta span {
+    transition: transform var(--lb-duration-base) var(--lb-ease-out);
+  }
+
+  .lb-brand-story__cta:hover span {
+    transform: translateX(4px);
+  }
+
+  /* Media */
+  .lb-brand-story__media {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+  }
+
+  .lb-brand-story__image {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .lb-brand-story__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--lb-duration-slow) var(--lb-ease-out);
+  }
+
+  .lb-brand-story__image:hover img {
+    transform: scale(1.05);
+  }
+
+  .lb-brand-story__image--main {
+    aspect-ratio: 3 / 4;
+    grid-row: span 2;
+  }
+
+  .lb-brand-story__image--side {
+    aspect-ratio: 2 / 3;
+    align-self: end;
+  }
+
+  .lb-brand-story__image-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background: linear-gradient(180deg, transparent, rgba(0,0,0,0.7));
+    color: #fff;
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+
+  /* Stats */
+  .lb-brand-story__stats {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    border-top: 1px solid currentColor;
+    border-top-color: rgba(0,0,0,0.1);
+    border-bottom: 1px solid currentColor;
+    border-bottom-color: rgba(0,0,0,0.1);
+    padding: 3rem 0;
+    margin-top: 2rem;
+  }
+
+  .color-scheme-5 .lb-brand-story__stats,
+  .color-scheme-4 .lb-brand-story__stats {
+    border-top-color: rgba(255,255,255,0.1);
+    border-bottom-color: rgba(255,255,255,0.1);
+  }
+
+  .lb-brand-story__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .lb-brand-story__stat-num {
+    font-family: var(--font-heading--family, 'Bebas Neue'), Impact, sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    font-weight: 400;
+  }
+
+  .lb-brand-story__stat-label {
+    font-size: var(--lb-label);
+    letter-spacing: var(--lb-label-spacing);
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  @media screen and (max-width: 900px) {
+    .lb-brand-story__grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    .lb-brand-story__stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .lb-brand-story {
+      padding: 4rem 1rem;
+    }
+    .lb-brand-story__media {
+      grid-template-columns: 1fr;
+    }
+    .lb-brand-story__image--side {
+      display: none;
+    }
+  }
+{%- endstyle -%}
+
+<section class="lb-brand-story color-{{ section.settings.color_scheme }}">
+  <div class="lb-brand-story__inner">
+    <div class="lb-section-index" style="margin-bottom: 4rem;">
+      <span>{{ index_label }}</span>
+      <span>{{ index_meta }}</span>
+    </div>
+
+    <div class="lb-brand-story__grid">
+      <!-- Text column -->
+      <div class="lb-brand-story__text">
+        {%- if eyebrow != blank -%}
+          <div class="lb-brand-story__label">{{ eyebrow }}</div>
+        {%- endif -%}
+        {%- if heading != blank -%}
+          <h2 class="lb-brand-story__heading">
+            {{ heading }}
+            {%- if heading_line_2 != blank -%}
+              <br><span class="lb-brand-story__heading-accent">{{ heading_line_2 }}</span>
+            {%- endif -%}
+            {%- if heading_line_3 != blank -%}
+              <br>{{ heading_line_3 }}
+            {%- endif -%}
+          </h2>
+        {%- endif -%}
+        {%- if body != blank -%}
+          <div class="lb-brand-story__body">{{ body }}</div>
+        {%- endif -%}
+        {%- if button_label != blank and button_url != blank -%}
+          <a href="{{ button_url }}" class="lb-brand-story__cta">
+            {{ button_label }} <span>→</span>
+          </a>
+        {%- endif -%}
+      </div>
+
+      <!-- Image column -->
+      <div class="lb-brand-story__media">
+        {%- if image_main != blank -%}
+          <div class="lb-brand-story__image lb-brand-story__image--main">
+            {{
+              image_main
+              | image_url: width: 600, format: 'webp'
+              | image_tag:
+                loading: 'lazy',
+                sizes: '(max-width: 900px) 100vw, 50vw',
+                widths: '300, 400, 600',
+                alt: image_main.alt | default: image_main_label | escape
+            }}
+            {%- if image_main_label != blank -%}
+              <div class="lb-brand-story__image-label">
+                <span>01</span>
+                <span>{{ image_main_label }}</span>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if image_side != blank -%}
+          <div class="lb-brand-story__image lb-brand-story__image--side">
+            {{
+              image_side
+              | image_url: width: 400, format: 'webp'
+              | image_tag:
+                loading: 'lazy',
+                sizes: '(max-width: 900px) 100vw, 25vw',
+                widths: '200, 300, 400',
+                alt: image_side.alt | escape
+            }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- Stats row -->
+      <div class="lb-brand-story__stats">
+        <div class="lb-brand-story__stat">
+          <span class="lb-brand-story__stat-num">{{ stat_1_num }}</span>
+          <span class="lb-brand-story__stat-label">{{ stat_1_label }}</span>
+        </div>
+        <div class="lb-brand-story__stat">
+          <span class="lb-brand-story__stat-num">{{ stat_2_num }}</span>
+          <span class="lb-brand-story__stat-label">{{ stat_2_label }}</span>
+        </div>
+        <div class="lb-brand-story__stat">
+          <span class="lb-brand-story__stat-num">{{ stat_3_num }}</span>
+          <span class="lb-brand-story__stat-label">{{ stat_3_label }}</span>
+        </div>
+        <div class="lb-brand-story__stat">
+          <span class="lb-brand-story__stat-num">{{ stat_4_num }}</span>
+          <span class="lb-brand-story__stat-label">{{ stat_4_label }}</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
-{%- endif -%}
-
-{% stylesheet %}
-.lb-brand-story {
-  overflow: hidden;
-}
-
-.lb-brand-story__inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 560px;
-}
-
-.lb-brand-story__inner--right {
-  direction: rtl;
-}
-
-.lb-brand-story__inner--right > * {
-  direction: ltr;
-}
-
-.lb-brand-story__media {
-  position: relative;
-  overflow: hidden;
-  line-height: 0;
-}
-
-.lb-brand-story__img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.lb-brand-story__content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: var(--lb-sp-2xl, 80px) var(--lb-sp-xl, 48px);
-}
-
-.lb-brand-story__eyebrow {
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: #C9A84C;
-  margin: 0 0 16px;
-}
-
-.lb-brand-story__heading {
-  margin: 0 0 24px;
-  text-transform: uppercase;
-  line-height: 0.92;
-}
-
-.lb-brand-story__body {
-  font-size: 15px;
-  line-height: 1.7;
-  color: rgba(var(--color-foreground-rgb, 255,255,255), 0.75);
-  margin: 0 0 32px;
-  max-width: 460px;
-}
-
-.lb-brand-story__body p {
-  margin: 0 0 1em;
-}
-
-.lb-brand-story__body p:last-child {
-  margin-bottom: 0;
-}
-
-.lb-brand-story__cta {
-  align-self: flex-start;
-}
-
-@media (max-width: 899px) {
-  .lb-brand-story__inner,
-  .lb-brand-story__inner--right {
-    grid-template-columns: 1fr;
-    direction: ltr;
-    min-height: auto;
-  }
-
-  .lb-brand-story__media {
-    height: 60vw;
-    max-height: 480px;
-  }
-
-  .lb-brand-story__content {
-    padding: var(--lb-sp-xl, 48px) var(--lb-sp-md, 20px);
-  }
-}
-{% endstylesheet %}
 
 {% schema %}
 {
@@ -136,43 +332,60 @@
   "class": "lb-brand-story-section",
   "settings": [
     {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Image"
+      "type": "header",
+      "content": "Section index"
     },
     {
-      "type": "select",
-      "id": "image_side",
-      "label": "Image position",
-      "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "right", "label": "Right" }
-      ],
-      "default": "left"
+      "type": "text",
+      "id": "index_label",
+      "label": "Index label (left)",
+      "default": "04 / THE BRAND"
+    },
+    {
+      "type": "text",
+      "id": "index_meta",
+      "label": "Index meta (right)",
+      "default": "EST. 2024"
+    },
+    {
+      "type": "header",
+      "content": "Content"
     },
     {
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow label",
-      "default": "Our Story"
+      "default": "OUR PHILOSOPHY"
     },
     {
       "type": "text",
       "id": "heading",
-      "label": "Heading",
-      "default": "QUALITY OVER QUANTITY"
+      "label": "Heading line 1",
+      "default": "BUILT TO"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Heading line 2 (accent)",
+      "default": "OUTLAST"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_3",
+      "label": "Heading line 3",
+      "default": "THE TREND"
     },
     {
       "type": "richtext",
       "id": "body",
       "label": "Body text",
-      "default": "<p>We build for the ones who know the difference. 235GSM+ tees. 380–460GSM hoodies. Every garment DTG printed and built to outlast.</p><p>Legendary Branding isn't a brand — it's a standard.</p>"
+      "default": "<p>LEGENDARY BRANDING was born from a belief that streetwear shouldn't be disposable. Every piece is designed to be lived in, broken in, and worn until it tells its own story.</p><p>We don't chase seasons. We chase construction. 235GSM tees. 400GSM hoodies. DTG prints that survive hundreds of washes. No fast fashion. No drops designed to fail.</p><p>Limited runs mean less waste and more intention. Once a piece sells out, it's gone. That's how we keep it special — for the people who found it, not the algorithm.</p>"
     },
     {
       "type": "text",
       "id": "button_label",
       "label": "Button label",
-      "default": "OUR PROCESS"
+      "default": "READ OUR STORY"
     },
     {
       "type": "url",
@@ -180,9 +393,91 @@
       "label": "Button URL"
     },
     {
-      "type": "color_scheme",
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Main image"
+    },
+    {
+      "type": "text",
+      "id": "image_main_label",
+      "label": "Main image label",
+      "default": "Rose Bowl Crewneck"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_side",
+      "label": "Side image"
+    },
+    {
+      "type": "header",
+      "content": "Stats"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_num",
+      "label": "Stat 1 number",
+      "default": "84+"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_label",
+      "label": "Stat 1 label",
+      "default": "Products"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_num",
+      "label": "Stat 2 number",
+      "default": "7"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_label",
+      "label": "Stat 2 label",
+      "default": "Drops"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_num",
+      "label": "Stat 3 number",
+      "default": "3.2k"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_label",
+      "label": "Stat 3 label",
+      "default": "Customers"
+    },
+    {
+      "type": "text",
+      "id": "stat_4_num",
+      "label": "Stat 4 number",
+      "default": "4.9★"
+    },
+    {
+      "type": "text",
+      "id": "stat_4_label",
+      "label": "Stat 4 label",
+      "default": "Avg Review"
+    },
+    {
+      "type": "header",
+      "content": "Color scheme"
+    },
+    {
+      "type": "select",
       "id": "color_scheme",
       "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Light (White)" },
+        { "value": "scheme-2", "label": "Light Alt" },
+        { "value": "scheme-4", "label": "Dark Grey" },
+        { "value": "scheme-5", "label": "True Black" }
+      ],
       "default": "scheme-1"
     }
   ],

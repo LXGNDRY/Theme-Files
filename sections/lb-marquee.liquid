@@ -24,7 +24,7 @@
   .lb-marquee {
     position: relative;
     overflow: hidden;
-    padding: var(--lb-space-sm) 0;
+    padding: 1.25rem 0;
     border-top: 1px solid currentColor;
     border-bottom: 1px solid currentColor;
     border-color: rgba(255,255,255,0.1);
@@ -57,18 +57,18 @@
     display: inline-flex;
     align-items: center;
     gap: 2rem;
-    font-size: var(--lb-display-3);
+    font-family: var(--font-heading--family, 'Bebas Neue'), Impact, sans-serif;
+    font-size: clamp(1.5rem, 4vw, 3rem);
     line-height: 0.9;
     text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    font-weight: 400;
+    letter-spacing: 0.02em;
     opacity: 0.9;
   }
 
   .lb-marquee__separator {
-    font-size: var(--lb-label);
+    font-size: 0.75rem;
     opacity: 0.4;
-    letter-spacing: 0.2em;
   }
 
   @keyframes lb-marquee-scroll {
@@ -91,7 +91,7 @@
 
   @media screen and (max-width: 749px) {
     .lb-marquee__item {
-      font-size: var(--lb-heading-2);
+      font-size: clamp(1.25rem, 5vw, 2rem);
     }
   }
 {%- endstyle -%}
