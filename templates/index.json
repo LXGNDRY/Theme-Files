@@ -139,7 +139,7 @@
         "t1": {
           "type": "testimonial",
           "settings": {
-            "quote": "The quality is unmatched. I wear my hoodie every single day \u2014 it still looks brand new after a year.",
+            "quote": "The quality is unmatched. I wear my hoodie every single day — it still looks brand new after a year.",
             "name": "Jordan M.",
             "location": "London, UK",
             "stars": 5
@@ -191,7 +191,7 @@
         "stat_2_label": "Drops",
         "stat_3_num": "3.2k",
         "stat_3_label": "Customers",
-        "stat_4_num": "4.9\u2605",
+        "stat_4_num": "4.9★",
         "stat_4_label": "Avg Review"
       }
     },
