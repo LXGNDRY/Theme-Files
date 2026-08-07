@@ -39,7 +39,6 @@
     color: var(--vn-ink-50, #7A7A7A);
   }
 
-  {%- if collection.description != blank -%}
   .vn-col__description {
     font-size: var(--vn-body-sm, 0.875rem);
     color: var(--vn-ink-50, #7A7A7A);
@@ -47,7 +46,6 @@
     max-width: 60ch;
     margin-top: 0.75rem;
   }
-  {%- endif -%}
 
   /* ---- Sort/filter bar ---- */
   .vn-col__toolbar {
@@ -85,7 +83,7 @@
   /* ---- Grid ---- */
   .vn-col__grid {
     display: grid;
-    grid-template-columns: repeat({{ columns }}, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--vn-grid-gutter, 1.5rem);
   }
 
@@ -129,16 +127,11 @@
   }
 
   @media screen and (max-width: 900px) {
-    .vn-col__grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    .vn-col__grid { grid-template-columns: repeat(2, 1fr); }
   }
 
   @media screen and (max-width: 480px) {
-    .vn-col__grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.75rem;
-    }
+    .vn-col__grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
   }
 {%- endstyle -%}
 
@@ -155,10 +148,7 @@
     <span class="vn-col__sort-label">Sort by</span>
     <select class="vn-col__sort-select" id="vn-col-sort" aria-label="Sort products">
       {%- for option in collection.sort_options -%}
-        <option
-          value="{{ option.value }}"
-          {% if option.value == sort_by %}selected{% endif %}
-        >{{ option.name }}</option>
+        <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>{{ option.name }}</option>
       {%- endfor -%}
     </select>
   </div>
@@ -176,7 +166,6 @@
           {%- if paginate.previous -%}
             <a href="{{ paginate.previous.url }}" class="vn-col__page-link" aria-label="Previous page">&#8592;</a>
           {%- endif -%}
-
           {%- for part in paginate.parts -%}
             {%- if part.is_link -%}
               <a href="{{ part.url }}" class="vn-col__page-link">{{ part.title }}</a>
@@ -184,13 +173,11 @@
               <span class="vn-col__page-link is-current" aria-current="page">{{ part.title }}</span>
             {%- endif -%}
           {%- endfor -%}
-
           {%- if paginate.next -%}
             <a href="{{ paginate.next.url }}" class="vn-col__page-link" aria-label="Next page">&#8594;</a>
           {%- endif -%}
         </nav>
       {%- endif -%}
-
     {%- else -%}
       <p class="vn-col__empty">No products found in this collection.</p>
     {%- endif -%}
@@ -231,11 +218,6 @@
     }
   ],
   "blocks": [],
-  "presets": [
-    {
-      "name": "Veonn Collection",
-      "category": "Veonn"
-    }
-  ]
+  "presets": [{"name": "Veonn Collection", "category": "Veonn"}]
 }
 {% endschema %}
