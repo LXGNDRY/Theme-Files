@@ -63,7 +63,7 @@
           <p class="lb-nl-popup__error">{{ form.errors.translated_fields['email'] | first }}</p>
         {%- endif -%}
         {%- if form.posted_successfully? -%}
-          <p class="lb-nl-popup__success">{{ section.settings.success_message | default: 'You\'re in. Welcome to the movement.' }}</p>
+          <p class="lb-nl-popup__success">{{ section.settings.success_message }}</p>
         {%- endif -%}
       {%- endform -%}
 
