@@ -1,0 +1,287 @@
+{% comment %}
+  lb-veonn-instagram.liquid
+  VEONN-STYLE INSTAGRAM / SOCIAL FEED
+  6-column grid of social images with hover overlay + username.
+  Can be linked to Instagram or used as a curated gallery.
+{% endcomment %}
+
+{%- liquid
+  assign heading = section.settings.heading | default: 'Follow @veon.studio'
+  assign subheading = section.settings.subheading
+  assign cta_label = section.settings.cta_label | default: 'Follow Us'
+  assign cta_url = section.settings.cta_url
+-%}
+
+{%- style -%}
+  .vn-instagram {
+    padding: var(--vn-section-padding, 8rem) 0;
+    background: var(--vn-bg, #fff);
+  }
+
+  .vn-instagram__inner {
+    max-width: var(--vn-page-width, 1440px);
+    margin: 0 auto;
+    padding: 0 var(--vn-page-padding, 2rem);
+  }
+
+  .vn-instagram__head {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .vn-instagram__heading {
+    font-family: var(--vn-font-display, 'Inter'), sans-serif;
+    font-size: var(--vn-h2, 2.25rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0 0 0.5rem;
+    color: var(--vn-ink, #0A0A0A);
+  }
+
+  .vn-instagram__subheading {
+    font-size: var(--vn-body-sm, 0.875rem);
+    color: var(--vn-ink-50, #7A7A7A);
+    margin: 0;
+  }
+
+  .vn-instagram__grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1px;
+    background: var(--vn-ink-8, #EDEDED);
+  }
+
+  .vn-instagram__item {
+    position: relative;
+    display: block;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    text-decoration: none;
+    color: #fff;
+  }
+
+  .vn-instagram__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--vn-dur-slow, 600ms) var(--vn-ease-out, cubic-bezier(0.16,1,0.3,1)),
+      filter var(--vn-dur-base, 400ms);
+  }
+
+  .vn-instagram__item:hover .vn-instagram__image {
+    transform: scale(1.05);
+    filter: brightness(0.6);
+  }
+
+  .vn-instagram__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    opacity: 0;
+    transition: opacity var(--vn-dur-base, 400ms);
+    background: rgba(0,0,0,0.3);
+  }
+
+  .vn-instagram__item:hover .vn-instagram__overlay {
+    opacity: 1;
+  }
+
+  .vn-instagram__icon {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .vn-instagram__likes {
+    font-size: var(--vn-caption, 0.75rem);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .vn-instagram__cta {
+    margin-top: 2.5rem;
+    text-align: center;
+  }
+
+  .vn-instagram__cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 2rem;
+    border: 1px solid var(--vn-ink, #0A0A0A);
+    color: var(--vn-ink, #0A0A0A);
+    text-decoration: none;
+    font-size: var(--vn-caption, 0.75rem);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: all var(--vn-dur-base, 400ms) var(--vn-ease-out, cubic-bezier(0.16,1,0.3,1));
+  }
+
+  .vn-instagram__cta-link:hover {
+    background: var(--vn-ink, #0A0A0A);
+    color: #fff;
+  }
+
+  .vn-instagram__cta-link::after {
+    content: '→';
+    transition: transform var(--vn-dur-fast, 200ms);
+  }
+
+  .vn-instagram__cta-link:hover::after {
+    transform: translateX(4px);
+  }
+
+  @media screen and (max-width: 1024px) {
+    .vn-instagram__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .vn-instagram__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .vn-instagram__head {
+      margin-bottom: 2rem;
+    }
+    .vn-instagram__heading {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .vn-instagram__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+{%- endstyle -%}
+
+<section class="vn-section vn-instagram">
+  <div class="vn-instagram__inner">
+    <div class="vn-instagram__head">
+      <h2 class="vn-instagram__heading">{{ heading }}</h2>
+      {% if subheading != blank %}
+        <p class="vn-instagram__subheading">{{ subheading }}</p>
+      {% endif %}
+    </div>
+
+    <div class="vn-instagram__grid">
+      {% for block in section.blocks %}
+        <a href="{{ block.settings.link | default: '#' }}" class="vn-instagram__item">
+          {% if block.settings.image != blank %}
+            {{
+              block.settings.image
+              | image_url: width: 500
+              | image_tag:
+                class: 'vn-instagram__image',
+                loading: 'lazy',
+                sizes: '(max-width: 480px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw',
+                widths: '250, 400, 500, 700',
+                alt: block.settings.alt_text | default: ''
+            }}
+          {% else %}
+            <div class="vn-instagram__image" style="background: var(--vn-ink-8, #EDEDED);"></div>
+          {% endif %}
+          <div class="vn-instagram__overlay">
+            <span class="vn-instagram__icon">♡</span>
+            {% if block.settings.likes != blank %}
+              <span class="vn-instagram__likes">{{ block.settings.likes }}</span>
+            {% endif %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+
+    {% if cta_url != blank %}
+      <div class="vn-instagram__cta">
+        <a href="{{ cta_url }}" class="vn-instagram__cta-link">{{ cta_label }}</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Veonn Instagram",
+  "tag": "section",
+  "class": "vn-instagram-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Follow @veon.studio"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Tag us to get featured"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA button label",
+      "default": "Follow Us"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA URL"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Instagram Post",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Alt text",
+          "info": "Describe the image for accessibility"
+        },
+        {
+          "type": "text",
+          "id": "likes",
+          "label": "Like count (optional)",
+          "default": "2.4K"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Veonn Instagram",
+      "category": "Veonn",
+      "blocks": [
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" }
+      ]
+    }
+  ]
+}
+{% endschema %}

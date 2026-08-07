@@ -1,0 +1,353 @@
+{% comment %}
+  lb-veonn-feature-banner.liquid
+  VEONN-STYLE FEATURE BANNER
+  Split image + text section for brand story, about, or featured collection.
+  Two layouts: image left / text right, or text left / image right.
+{% endcomment %}
+
+{%- liquid
+  assign heading = section.settings.heading
+  assign subheading = section.settings.subheading
+  assign body = section.settings.body
+  assign cta_label = section.settings.cta_label | default: 'Learn More'
+  assign cta_url = section.settings.cta_url
+  assign image = section.settings.image
+  assign layout = section.settings.layout | default: 'image-left'
+  assign eyebrow = section.settings.eyebrow
+-%}
+
+{%- style -%}
+  .vn-feature {
+    padding: var(--vn-section-padding, 8rem) 0;
+    background: var(--vn-bg, #fff);
+  }
+
+  .vn-feature__inner {
+    max-width: var(--vn-page-width, 1440px);
+    margin: 0 auto;
+    padding: 0 var(--vn-page-padding, 2rem);
+  }
+
+  .vn-feature__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+  }
+
+  .vn-feature__grid--image-right {
+    direction: rtl;
+  }
+
+  .vn-feature__grid--image-right > * {
+    direction: ltr;
+  }
+
+  .vn-feature__image-wrap {
+    position: relative;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+  }
+
+  .vn-feature__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .vn-feature__text {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 480px;
+  }
+
+  .vn-feature__eyebrow {
+    font-size: var(--vn-eyebrow, 0.6875rem);
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--vn-ink-50, #7A7A7A);
+    margin: 0;
+  }
+
+  .vn-feature__heading {
+    font-family: var(--vn-font-display, 'Inter'), sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin: 0;
+    color: var(--vn-ink, #0A0A0A);
+  }
+
+  .vn-feature__body {
+    font-size: var(--vn-body, 1rem);
+    line-height: 1.6;
+    color: var(--vn-ink-70, #4A4A4A);
+    margin: 0;
+  }
+
+  .vn-feature__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--vn-ink-8, #EDEDED);
+    margin-top: 0.5rem;
+  }
+
+  .vn-feature__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .vn-feature__stat-num {
+    font-family: var(--vn-font-display, 'Inter'), sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--vn-ink, #0A0A0A);
+    line-height: 1;
+  }
+
+  .vn-feature__stat-label {
+    font-size: var(--vn-caption, 0.75rem);
+    color: var(--vn-ink-50, #7A7A7A);
+    line-height: 1.4;
+  }
+
+  .vn-feature__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    width: fit-content;
+    padding: 0.875rem 2rem;
+    border: 1px solid var(--vn-ink, #0A0A0A);
+    color: var(--vn-ink, #0A0A0A);
+    text-decoration: none;
+    font-size: var(--vn-caption, 0.75rem);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: all var(--vn-dur-base, 400ms) var(--vn-ease-out, cubic-bezier(0.16,1,0.3,1));
+    background: transparent;
+  }
+
+  .vn-feature__cta:hover {
+    background: var(--vn-ink, #0A0A0A);
+    color: #fff;
+  }
+
+  .vn-feature__cta::after {
+    content: '→';
+    transition: transform var(--vn-dur-fast, 200ms);
+  }
+
+  .vn-feature__cta:hover::after {
+    transform: translateX(4px);
+  }
+
+  @media screen and (max-width: 900px) {
+    .vn-feature__grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .vn-feature__grid--image-right {
+      direction: ltr;
+    }
+    .vn-feature__image-wrap {
+      aspect-ratio: 16/10;
+    }
+    .vn-feature__text {
+      max-width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .vn-feature__stats {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+  }
+{%- endstyle -%}
+
+<section class="vn-section vn-feature">
+  <div class="vn-feature__inner">
+    <div class="vn-feature__grid vn-feature__grid--{{ layout }}">
+      <div class="vn-feature__image-wrap">
+        {% if image != blank %}
+          {{
+            image
+            | image_url: width: 1200
+            | image_tag:
+              class: 'vn-feature__image',
+              loading: 'lazy',
+              sizes: '(max-width: 900px) 100vw, 50vw',
+              widths: '600, 800, 1200, 1600',
+              alt: heading
+          }}
+        {% else %}
+          <div class="vn-feature__image" style="background: var(--vn-ink-8, #EDEDED);"></div>
+        {% endif %}
+      </div>
+
+      <div class="vn-feature__text">
+        {% if eyebrow != blank %}
+          <p class="vn-feature__eyebrow">{{ eyebrow }}</p>
+        {% endif %}
+
+        {% if heading != blank %}
+          <h2 class="vn-feature__heading">{{ heading }}</h2>
+        {% endif %}
+
+        {% if body != blank %}
+          <p class="vn-feature__body">{{ body }}</p>
+        {% endif %}
+
+        {% if section.settings.show_stats %}
+          <div class="vn-feature__stats">
+            {% if section.settings.stat_1_num != blank %}
+              <div class="vn-feature__stat">
+                <span class="vn-feature__stat-num">{{ section.settings.stat_1_num }}</span>
+                <span class="vn-feature__stat-label">{{ section.settings.stat_1_label }}</span>
+              </div>
+            {% endif %}
+            {% if section.settings.stat_2_num != blank %}
+              <div class="vn-feature__stat">
+                <span class="vn-feature__stat-num">{{ section.settings.stat_2_num }}</span>
+                <span class="vn-feature__stat-label">{{ section.settings.stat_2_label }}</span>
+              </div>
+            {% endif %}
+            {% if section.settings.stat_3_num != blank %}
+              <div class="vn-feature__stat">
+                <span class="vn-feature__stat-num">{{ section.settings.stat_3_num }}</span>
+                <span class="vn-feature__stat-label">{{ section.settings.stat_3_label }}</span>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if cta_url != blank and cta_label != blank %}
+          <a href="{{ cta_url }}" class="vn-feature__cta">{{ cta_label }}</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Veonn Feature Banner",
+  "tag": "section",
+  "class": "vn-feature-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Our Story"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Crafted with intention, built to last."
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body text",
+      "default": "<p>Every piece is designed with purpose — from the fabric selection to the final stitch. We believe in quality over quantity, and that the right pieces get better with time.</p>"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA button label",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA URL"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Feature image"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "image-left", "label": "Image left, text right" },
+        { "value": "image-right", "label": "Text left, image right" }
+      ],
+      "default": "image-left"
+    },
+    {
+      "type": "header",
+      "content": "Stats"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stats",
+      "label": "Show stats row",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "stat_1_num",
+      "label": "Stat 1 number",
+      "default": "100%"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_label",
+      "label": "Stat 1 label",
+      "default": "Premium cotton"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_num",
+      "label": "Stat 2 number",
+      "default": "250+"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_label",
+      "label": "Stat 2 label",
+      "default": "GSM weight"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_num",
+      "label": "Stat 3 number",
+      "default": "5K+"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_label",
+      "label": "Stat 3 label",
+      "default": "Happy customers"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Veonn Feature Banner",
+      "category": "Veonn"
+    }
+  ]
+}
+{% endschema %}
