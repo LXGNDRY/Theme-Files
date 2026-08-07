@@ -1,0 +1,288 @@
+{% comment %}
+  lb-veonn-design-system.liquid
+  VEONN-STYLE MINIMALIST FASHION DESIGN SYSTEM
+  Clean white background, black text, premium editorial feel.
+  Typography: Inter (sans-serif), minimal, high contrast.
+  Spacing: Generous white space, clean grid.
+{% endcomment %}
+
+{%- style -%}
+  /* ================================================================
+     VEONN DESIGN SYSTEM — Minimalist Fashion Editorial
+     ================================================================ */
+
+  :root {
+    /* Colors — clean monochrome */
+    --vn-cream: #FAFAF8;
+    --vn-bg: #FFFFFF;
+    --vn-charcoal: #111111;
+    --vn-ink: #0A0A0A;
+    --vn-ink-70: #4A4A4A;
+    --vn-ink-50: #7A7A7A;
+    --vn-ink-30: #B5B5B5;
+    --vn-ink-15: #D8D8D8;
+    --vn-ink-8: #EDEDED;
+    --vn-ink-3: #F6F6F6;
+    --vn-accent: #000000;
+
+    /* Typography */
+    --vn-font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --vn-font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    /* Type scale */
+    --vn-display-xl: clamp(3.5rem, 8vw, 7rem);
+    --vn-display-lg: clamp(2.5rem, 5vw, 4.5rem);
+    --vn-display-md: clamp(2rem, 4vw, 3rem);
+    --vn-h1: clamp(2rem, 4vw, 3.5rem);
+    --vn-h2: clamp(1.5rem, 3vw, 2.25rem);
+    --vn-h3: clamp(1.25rem, 2vw, 1.5rem);
+    --vn-h4: 1.125rem;
+    --vn-body-lg: 1.125rem;
+    --vn-body: 1rem;
+    --vn-body-sm: 0.875rem;
+    --vn-caption: 0.75rem;
+    --vn-eyebrow: 0.6875rem;
+
+    /* Line heights */
+    --vn-lh-display: 0.95;
+    --vn-lh-heading: 1.1;
+    --vn-lh-body: 1.6;
+    --vn-lh-tight: 1.3;
+
+    /* Letter spacing */
+    --vn-ls-tight: -0.02em;
+    --vn-ls-normal: 0;
+    --vn-ls-wide: 0.05em;
+    --vn-ls-label: 0.12em;
+
+    /* Font weights */
+    --vn-fw-regular: 400;
+    --vn-fw-medium: 500;
+    --vn-fw-semibold: 600;
+    --vn-fw-bold: 700;
+
+    /* Spacing scale */
+    --vn-space-xs: 0.5rem;
+    --vn-space-sm: 1rem;
+    --vn-space-md: 1.5rem;
+    --vn-space-lg: 2rem;
+    --vn-space-xl: 3rem;
+    --vn-space-2xl: 5rem;
+    --vn-space-3xl: 8rem;
+    --vn-space-4xl: 12rem;
+
+    /* Section padding */
+    --vn-section-padding: clamp(4rem, 8vw, 8rem);
+    --vn-section-padding-sm: clamp(3rem, 5vw, 5rem);
+
+    /* Layout */
+    --vn-page-width: 1440px;
+    --vn-page-padding: clamp(1rem, 3vw, 3rem);
+    --vn-grid-gutter: clamp(1rem, 2vw, 2rem);
+
+    /* Border radius */
+    --vn-radius-sm: 2px;
+    --vn-radius-md: 4px;
+    --vn-radius-lg: 8px;
+    --vn-radius-xl: 16px;
+
+    /* Easing */
+    --vn-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --vn-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+    /* Durations */
+    --vn-dur-fast: 200ms;
+    --vn-dur-base: 400ms;
+    --vn-dur-slow: 600ms;
+  }
+
+  /* Base reset for Veonn sections */
+  .vn-section {
+    background: var(--vn-bg);
+    color: var(--vn-ink);
+    font-family: var(--vn-font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .vn-section * {
+    box-sizing: border-box;
+  }
+
+  .vn-section h1, .vn-section h2, .vn-section h3, .vn-section h4,
+  .vn-section h5, .vn-section h6 {
+    font-family: var(--vn-font-display);
+    font-weight: var(--vn-fw-bold);
+    letter-spacing: var(--vn-ls-tight);
+    line-height: var(--vn-lh-heading);
+    margin: 0;
+    color: var(--vn-ink);
+  }
+
+  .vn-section p {
+    margin: 0;
+    line-height: var(--vn-lh-body);
+    color: var(--vn-ink-70);
+    font-size: var(--vn-body);
+  }
+
+  .vn-section a {
+    color: inherit;
+    text-decoration: none;
+    transition: opacity var(--vn-dur-fast) var(--vn-ease-out);
+  }
+
+  .vn-section a:hover {
+    opacity: 0.6;
+  }
+
+  .vn-section img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Eyebrow / label */
+  .vn-eyebrow {
+    font-size: var(--vn-eyebrow);
+    font-weight: var(--fw-medium, 500);
+    letter-spacing: var(--vn-ls-label);
+    text-transform: uppercase;
+    color: var(--vn-ink-50);
+  }
+
+  /* Button styles */
+  .vn-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 2rem;
+    font-size: var(--vn-caption);
+    font-weight: var(--vn-fw-medium);
+    letter-spacing: var(--vn-ls-label);
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--vn-ink);
+    transition: all var(--vn-dur-base) var(--vn-ease-out);
+    cursor: pointer;
+    background: var(--vn-ink);
+    color: var(--vn-bg);
+    white-space: nowrap;
+  }
+
+  .vn-btn:hover {
+    opacity: 0.85;
+  }
+
+  .vn-btn--ghost {
+    background: transparent;
+    color: var(--vn-ink);
+    border-color: var(--vn-ink);
+  }
+
+  .vn-btn--ghost:hover {
+    background: var(--vn-ink);
+    color: var(--vn-bg);
+    opacity: 1;
+  }
+
+  .vn-btn--white {
+    background: var(--vn-bg);
+    color: var(--vn-ink);
+    border-color: var(--vn-bg);
+  }
+
+  .vn-btn--white-ghost {
+    background: transparent;
+    color: #fff;
+    border-color: rgba(255,255,255,0.6);
+  }
+
+  .vn-btn--white-ghost:hover {
+    background: #fff;
+    color: var(--vn-ink);
+    opacity: 1;
+    border-color: #fff;
+  }
+
+  /* Text link with underline */
+  .vn-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--vn-caption);
+    font-weight: var(--vn-fw-medium);
+    letter-spacing: var(--vn-ls-label);
+    text-transform: uppercase;
+    color: var(--vn-ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--vn-ink);
+    padding-bottom: 2px;
+    transition: all var(--vn-dur-fast) var(--vn-ease-out);
+  }
+
+  .vn-link:hover {
+    opacity: 0.6;
+  }
+
+  .vn-link::after {
+    content: '→';
+    transition: transform var(--vn-dur-fast) var(--vn-ease-out);
+  }
+
+  .vn-link:hover::after {
+    transform: translateX(4px);
+  }
+
+  /* Container */
+  .vn-container {
+    max-width: var(--vn-page-width);
+    margin: 0 auto;
+    padding-left: var(--vn-page-padding);
+    padding-right: var(--vn-page-padding);
+  }
+
+  /* Section header */
+  .vn-section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--vn-space-xl);
+    gap: var(--vn-space-lg);
+  }
+
+  .vn-section-head__title {
+    font-size: var(--vn-h2);
+    font-weight: var(--vn-fw-bold);
+    letter-spacing: var(--vn-ls-tight);
+    line-height: var(--vn-lh-heading);
+  }
+
+  @media screen and (max-width: 768px) {
+    .vn-section-head {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: var(--vn-space-lg);
+    }
+  }
+
+  /* Tag / badge */
+  .vn-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    background: var(--vn-ink-3);
+    color: var(--vn-ink-70);
+    font-size: 0.625rem;
+    font-weight: var(--vn-fw-medium);
+    letter-spacing: var(--vn-ls-label);
+    text-transform: uppercase;
+    border-radius: var(--vn-radius-sm);
+  }
+
+  .vn-tag--black {
+    background: var(--vn-ink);
+    color: var(--vn-bg);
+  }
+{%- endstyle -%}

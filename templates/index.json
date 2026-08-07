@@ -1,135 +1,82 @@
 <!--
   index.json
-  LEGENDARY BRANDING — Complete Redesign
-  Default homepage: editorial brutalism style.
-  Uses the new editorial sections to showcase the Fuel-inspired redesign.
-  Apply via the theme editor (Home page > template: Editorial).
+  VEONN-STYLE HOMEPAGE
+  Minimalist fashion editorial homepage.
+  Sections: Marquee + Header + Hero + Best Sellers + New Arrivals + Footer
 -->
 {
   "sections": {
-    "header_group": {
-      "type": "header-group"
+    "marquee": {
+      "type": "lb-veonn-marquee",
+      "settings": {
+        "text": "FREE SHIPPING ON ALL ORDERS",
+        "speed": "medium"
+      }
+    },
+    "header": {
+      "type": "lb-veonn-header",
+      "settings": {
+        "logo_text": "V\u00c9ON",
+        "menu_left": "main-menu",
+        "menu_right": "footer"
+      }
     },
     "hero": {
-      "type": "lb-hero-editorial",
+      "type": "lb-veonn-hero",
       "settings": {
-        "heading": "DROP\n07",
-        "heading_size": "medium",
-        "subheading": "Essentials reimagined. 235GSM heavyweight tees. 380-460GSM hoodies. Every garment DTG printed and built to outlast.",
-        "cta_label": "Shop the drop",
-        "cta_url": "/collections/essentials",
-        "drop_status": "live",
-        "live_label": "LIVE NOW",
-        "index_label": "DROP 07",
-        "meta_label": "12 PIECES",
-        "color_scheme": "scheme-5"
+        "heading": "Bold Layers, Confident Looks.",
+        "subheading": "Layer up with confidence and style all season.",
+        "cta_label": "Browse Collection",
+        "cta_url": "/collections/all",
+        "current_slide": 1,
+        "slide_count": 3
       }
     },
-    "marquee": {
-      "type": "lb-marquee",
+    "best_sellers": {
+      "type": "lb-veonn-product-grid",
       "settings": {
-        "text": "LIMITED / 235GSM / 380-460GSM / DTG PRINTED / NO RESTOCKS / FREE SHIPPING OVER $100",
-        "speed": "slow",
-        "color_scheme": "scheme-1"
-      }
-    },
-    "brand_story": {
-      "type": "lb-brand-story",
-      "settings": {
-        "eyebrow": "Our Story",
-        "heading": "QUALITY OVER QUANTITY",
-        "color_scheme": "scheme-1"
-      }
-    },
-    "editorial_cta": {
-      "type": "lb-footer-editorial",
-      "settings": {
-        "email_heading": "DROP UPDATES",
-        "email_subtext": "First access to drops. No restocks. No noise.",
-        "giant_word": "LEGENDARY",
-        "color_scheme": "scheme-5"
-      }
-    },
-    "lookbook": {
-      "type": "lb-lookbook",
-      "settings": {
-        "index_label": "03 / LOOKBOOK",
-        "index_meta": "3 COLLECTIONS",
-        "heading": "SHOP THE",
-        "heading_accent": "EDITORIAL",
-        "subheading": "Curated looks from the drop. Each piece is limited run \u2014 once they're gone, they're gone.",
-        "color_scheme": "scheme-5"
-      },
-      "blocks": {
-        "look_1": {
-          "type": "look",
-          "settings": {
-            "vol_label": "VOL. 01",
-            "vol_title": "ESSENTIALS EDITORIAL"
-          }
-        },
-        "look_2": {
-          "type": "look",
-          "settings": {
-            "vol_label": "VOL. 02",
-            "vol_title": "GRAPHIC TEE SERIES"
-          }
-        },
-        "look_3": {
-          "type": "look",
-          "settings": {
-            "vol_label": "VOL. 03",
-            "vol_title": "WASHED & DISTRESSED"
-          }
-        }
-      },
-      "block_order": [
-        "look_1",
-        "look_2",
-        "look_3"
-      ]
-    },
-    "product_grid": {
-      "type": "lb-product-grid-editorial",
-      "settings": {
-        "index_label": "01 / LATEST DROP",
-        "index_meta": "12 PIECES",
-        "heading": "DROP\nSEVEN",
-        "columns_desktop": 4,
-        "columns_mobile": 2,
+        "heading": "Best Sellers",
+        "view_all_label": "View All",
+        "view_all_url": "/collections/all",
         "products_per_page": 8,
-        "show_index": true,
-        "show_price": true,
-        "filter_1": "HOODIES",
-        "filter_2": "TEES",
-        "filter_3": "PANTS",
-        "color_scheme": "scheme-1"
+        "columns_desktop": 4,
+        "show_tags": false
       }
     },
-    "featured_pdp": {
-      "type": "lb-featured-pdp",
+    "new_arrivals": {
+      "type": "lb-veonn-product-grid",
       "settings": {
-        "index_label": "02 / PRODUCT SHEET",
-        "fit": "Oversized / Boxy",
-        "print_method": "DTG (direct to garment)",
-        "care": "Cold wash, hang dry",
-        "drop_number": "Drop 07 / Fall 2026",
-        "origin": "Made in USA",
-        "shipping_info": "Free shipping on orders over $100. Ships within 24 hours. 30-day hassle-free returns on unworn items.",
-        "sizing_info": "Oversized/boxy fit. Size down for a more regular fit. Model is 6'2\" wearing size M.",
-        "materials_info": "Premium heavyweight cotton blend. Sourced from certified mills. DTG printed with water-based inks.",
-        "color_scheme": "scheme-1"
+        "heading": "New Arrivals",
+        "view_all_label": "Shop All",
+        "view_all_url": "/collections/new-arrivals",
+        "products_per_page": 4,
+        "columns_desktop": 4,
+        "show_tags": false
+      }
+    },
+    "footer": {
+      "type": "lb-veonn-footer",
+      "settings": {
+        "logo_text": "V\u00c9ON",
+        "tagline": "Premium minimalist fashion for the modern individual.",
+        "newsletter_heading": "Stay in the loop",
+        "newsletter_subtext": "Subscribe for exclusive drops, early access, and 10% off your first order.",
+        "footer_title_1": "Shop",
+        "footer_menu_1": "main-menu",
+        "footer_title_2": "About",
+        "footer_menu_2": "footer",
+        "footer_title_3": "Support",
+        "footer_menu_3": "footer",
+        "copyright_text": "\u00a9 2025 V\u00e9on. All rights reserved."
       }
     }
   },
   "order": [
-    "header_group",
-    "hero",
     "marquee",
-    "product_grid",
-    "lookbook",
-    "featured_pdp",
-    "brand_story",
-    "editorial_cta"
+    "header",
+    "hero",
+    "best_sellers",
+    "new_arrivals",
+    "footer"
   ]
 }

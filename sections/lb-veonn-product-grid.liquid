@@ -1,0 +1,195 @@
+{% comment %}
+  lb-veonn-product-grid.liquid
+  VEONN-STYLE PRODUCT GRID SECTION
+  Clean minimalist product grid with "Best Sellers" heading, View All link,
+  adjustable columns, optional collection picker for homepage use.
+{% endcomment %}
+
+{%- liquid
+  assign heading = section.settings.heading | default: 'Best Sellers'
+  assign view_all_label = section.settings.view_all_label | default: 'View All'
+  assign view_all_url = section.settings.view_all_url | default: '/collections/all'
+  assign columns_desktop = section.settings.columns_desktop | default: 4
+  assign columns_tablet = section.settings.columns_tablet | default: 3
+  assign columns_mobile = section.settings.columns_mobile | default: 2
+  assign products_to_show = section.settings.products_per_page | default: 8
+  assign show_tags = section.settings.show_tags | default: false
+
+  # Get products
+  assign products = all_products
+  if section.settings.collection != blank
+    assign collection_obj = collections[section.settings.collection]
+    if collection_obj != blank
+      assign products = collection_obj.products
+    endif
+  endif
+
+  assign product_limit = products_to_show
+-%}
+
+{%- style -%}
+  .vn-product-grid {
+    padding: var(--vn-section-padding, 8rem) 0;
+    background: var(--vn-bg, #fff);
+  }
+
+  .vn-product-grid__inner {
+    max-width: var(--vn-page-width, 1440px);
+    margin: 0 auto;
+    padding: 0 var(--vn-page-padding, 2rem);
+  }
+
+  .vn-product-grid__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+    gap: 2rem;
+  }
+
+  .vn-product-grid__heading {
+    font-family: var(--vn-font-display, 'Inter'), sans-serif;
+    font-size: var(--vn-h2, 2.25rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0;
+    color: var(--vn-ink, #0A0A0A);
+  }
+
+  .vn-product-grid__view-all {
+    font-size: var(--vn-caption, 0.75rem);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--vn-ink, #0A0A0A);
+    text-decoration: none;
+    border-bottom: 1px solid var(--vn-ink, #0A0A0A);
+    padding-bottom: 2px;
+    white-space: nowrap;
+    transition: opacity var(--vn-dur-fast, 200ms);
+  }
+
+  .vn-product-grid__view-all:hover {
+    opacity: 0.5;
+  }
+
+  .vn-product-grid__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(1rem, 2vw, 2rem);
+  }
+
+  @media screen and (max-width: 1024px) {
+    .vn-product-grid__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .vn-product-grid__head {
+      margin-bottom: 2rem;
+      gap: 1rem;
+    }
+    .vn-product-grid__heading {
+      font-size: 1.5rem;
+    }
+    .vn-product-grid__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+  }
+{%- endstyle -%}
+
+<section class="vn-section vn-product-grid">
+  <div class="vn-product-grid__inner">
+    <div class="vn-product-grid__head">
+      <h2 class="vn-product-grid__heading">{{ heading }}</h2>
+      {% if view_all_url != blank %}
+        <a href="{{ view_all_url }}" class="vn-product-grid__view-all">{{ view_all_label }} →</a>
+      {% endif %}
+    </div>
+
+    <div class="vn-product-grid__grid">
+      {% for product in products limit: product_limit %}
+        {% render 'lb-veonn-product-card', product: product, show_tag: show_tags, tag_text: 'Best Seller' %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Veonn Product Grid",
+  "tag": "section",
+  "class": "vn-product-grid-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "Best Sellers"
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View all label",
+      "default": "View All"
+    },
+    {
+      "type": "url",
+      "id": "view_all_url",
+      "label": "View all URL",
+      "default": "/collections/all"
+    },
+    {
+      "type": "header",
+      "content": "Collection"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Featured collection",
+      "info": "Select a collection to show products from. Leave empty for latest products."
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products to show",
+      "min": 2,
+      "max": 16,
+      "step": 2,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns (desktop)",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Display"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "Show product tags",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Veonn Product Grid",
+      "category": "Veonn"
+    }
+  ]
+}
+{% endschema %}
