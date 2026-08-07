@@ -1,0 +1,256 @@
+{% comment %}
+  lb-veonn-testimonials.liquid
+  VEONN-STYLE TESTIMONIALS SECTION
+  Clean minimalist testimonial cards with quote, author, and rating.
+  3-column grid on desktop, 2-col tablet, 1-col mobile.
+{% endcomment %}
+
+{%- liquid
+  assign heading = section.settings.heading | default: 'What Our Customers Say'
+  assign subheading = section.settings.subheading
+-%}
+
+{%- style -%}
+  .vn-testimonials {
+    padding: var(--vn-section-padding, 8rem) 0;
+    background: var(--vn-bg, #fff);
+  }
+
+  .vn-testimonials__inner {
+    max-width: var(--vn-page-width, 1440px);
+    margin: 0 auto;
+    padding: 0 var(--vn-page-padding, 2rem);
+  }
+
+  .vn-testimonials__head {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .vn-testimonials__heading {
+    font-family: var(--vn-font-display, 'Inter'), sans-serif;
+    font-size: var(--vn-h2, 2.25rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0 0 0.75rem;
+    color: var(--vn-ink, #0A0A0A);
+  }
+
+  .vn-testimonials__subheading {
+    font-size: var(--vn-body-sm, 0.875rem);
+    color: var(--vn-ink-50, #7A7A7A);
+    margin: 0 auto;
+    max-width: 40ch;
+  }
+
+  .vn-testimonials__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1rem, 2vw, 2rem);
+  }
+
+  .vn-testimonial-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 2rem;
+    background: var(--vn-cream, #FAFAF8);
+    border: 1px solid var(--vn-ink-8, #EDEDED);
+    transition: all var(--vn-dur-base, 400ms) var(--vn-ease-out, cubic-bezier(0.16,1,0.3,1));
+  }
+
+  .vn-testimonial-card:hover {
+    border-color: var(--vn-ink-30, #B5B5B5);
+    transform: translateY(-2px);
+  }
+
+  .vn-testimonial__stars {
+    display: flex;
+    gap: 2px;
+    color: var(--vn-ink, #0A0A0A);
+    font-size: 0.875rem;
+  }
+
+  .vn-testimonial__quote {
+    font-size: var(--vn-body-sm, 0.875rem);
+    line-height: 1.6;
+    color: var(--vn-ink-70, #4A4A4A);
+    margin: 0;
+    flex: 1;
+  }
+
+  .vn-testimonial__author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--vn-ink-8, #EDEDED);
+  }
+
+  .vn-testimonial__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--vn-ink-8, #EDEDED);
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .vn-testimonial__author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .vn-testimonial__author-name {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--vn-ink, #0A0A0A);
+    line-height: 1.3;
+  }
+
+  .vn-testimonial__author-title {
+    font-size: 0.75rem;
+    color: var(--vn-ink-50, #7A7A7A);
+    line-height: 1.3;
+  }
+
+  @media screen and (max-width: 900px) {
+    .vn-testimonials__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .vn-testimonials__head {
+      margin-bottom: 2rem;
+    }
+    .vn-testimonials__heading {
+      font-size: 1.5rem;
+    }
+    .vn-testimonials__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+{%- endstyle -%}
+
+<section class="vn-section vn-testimonials">
+  <div class="vn-testimonials__inner">
+    <div class="vn-testimonials__head">
+      <h2 class="vn-testimonials__heading">{{ heading }}</h2>
+      {% if subheading != blank %}
+        <p class="vn-testimonials__subheading">{{ subheading }}</p>
+      {% endif %}
+    </div>
+
+    <div class="vn-testimonials__grid">
+      {% for block in section.blocks %}
+        <div class="vn-testimonial-card">
+          <div class="vn-testimonial__stars">
+            {% assign rating = block.settings.rating | default: 5 %}
+            {% for i in (1..5) %}
+              <span>{% if i <= rating %}★{% else %}☆{% endif %}</span>
+            {% endfor %}
+          </div>
+          <p class="vn-testimonial__quote">"{{ block.settings.quote }}"</p>
+          <div class="vn-testimonial__author">
+            {% if block.settings.avatar != blank %}
+              {{
+                block.settings.avatar
+                | image_url: width: 100
+                | image_tag:
+                  class: 'vn-testimonial__avatar',
+                  loading: 'lazy',
+                  alt: block.settings.name
+              }}
+            {% else %}
+              <div class="vn-testimonial__avatar"></div>
+            {% endif %}
+            <div class="vn-testimonial__author-info">
+              <span class="vn-testimonial__author-name">{{ block.settings.name | default: 'Customer' }}</span>
+              {% if block.settings.title != blank %}
+                <span class="vn-testimonial__author-title">{{ block.settings.title }}</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Veonn Testimonials",
+  "tag": "section",
+  "class": "vn-testimonials-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Our Customers Say"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "avatar",
+          "label": "Avatar"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Alex M."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title / Location"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Star rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "Amazing quality and fit. These pieces have become my go-to essentials. Worth every penny."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Veonn Testimonials",
+      "category": "Veonn",
+      "blocks": [
+        { "type": "testimonial", "settings": { "name": "Alex M.", "rating": 5, "quote": "Amazing quality and fit. These pieces have become my go-to essentials. Worth every penny." } },
+        { "type": "testimonial", "settings": { "name": "Jordan K.", "rating": 5, "quote": "The attention to detail is incredible. You can feel the quality the moment you put it on." } },
+        { "type": "testimonial", "settings": { "name": "Sam R.", "rating": 5, "quote": "Best hoodie I've ever owned. Heavyweight but breathable, and the print is still perfect after 30 washes." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,122 @@
+{% comment %}
+  lb-veonn-stat-strip.liquid
+  VEONN-STYLE STAT STRIP
+  Clean minimalist stat row with large numbers + labels.
+  Block-based: add/remove stats via theme editor.
+{% endcomment %}
+
+{%- style -%}
+  .vn-stat-strip {
+    padding: var(--vn-space-2xl, 5rem) 0;
+    background: var(--vn-cream, #FAFAF8);
+    border-top: 1px solid var(--vn-ink-8, #EDEDED);
+    border-bottom: 1px solid var(--vn-ink-8, #EDEDED);
+  }
+
+  .vn-stat-strip__inner {
+    max-width: var(--vn-page-width, 1440px);
+    margin: 0 auto;
+    padding: 0 var(--vn-page-padding, 2rem);
+  }
+
+  .vn-stat-strip__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    text-align: center;
+  }
+
+  .vn-stat-strip__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .vn-stat-strip__number {
+    font-family: var(--vn-font-display, 'Inter'), sans-serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--vn-ink, #0A0A0A);
+  }
+
+  .vn-stat-strip__label {
+    font-size: var(--vn-caption, 0.75rem);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--vn-ink-50, #7A7A7A);
+    line-height: 1.4;
+  }
+
+  @media screen and (max-width: 768px) {
+    .vn-stat-strip__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .vn-stat-strip {
+      padding: 3rem 0;
+    }
+    .vn-stat-strip__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+  }
+{%- endstyle -%}
+
+<section class="vn-section vn-stat-strip">
+  <div class="vn-stat-strip__inner">
+    <div class="vn-stat-strip__grid">
+      {% for block in section.blocks %}
+        <div class="vn-stat-strip__item">
+          <span class="vn-stat-strip__number">{{ block.settings.number }}</span>
+          <span class="vn-stat-strip__label">{{ block.settings.label }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Veonn Stat Strip",
+  "tag": "section",
+  "class": "vn-stat-strip-section",
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "default": "84+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Products"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Veonn Stat Strip",
+      "category": "Veonn",
+      "blocks": [
+        { "type": "stat", "settings": { "number": "84+", "label": "Products" } },
+        { "type": "stat", "settings": { "number": "7", "label": "Drops" } },
+        { "type": "stat", "settings": { "number": "3.2K", "label": "Customers" } },
+        { "type": "stat", "settings": { "number": "4.9★", "label": "Avg Review" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
