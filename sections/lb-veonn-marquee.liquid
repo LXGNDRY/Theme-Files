@@ -1,109 +1,16 @@
-{% comment %}
-  lb-veonn-marquee.liquid
-  VEONN-STYLE ANNOUNCEMENT MARQUEE
-  Scrolling announcement bar at top of page.
-  Black background, white uppercase text, auto-scrolling.
-{% endcomment %}
-
+{% comment %}lb-veonn-marquee{% endcomment %}
 {%- liquid
   assign text = section.settings.text | default: 'FREE SHIPPING ON ALL ORDERS'
-  assign speed = section.settings.speed | default: 'medium'
 -%}
-
 {%- style -%}
-  .vn-marquee {
-    background: var(--vn-ink, #0A0A0A);
-    color: #fff;
-    padding: 0.75rem 0;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .vn-marquee__track {
-    display: flex;
-    width: fit-content;
-    animation: vn-marquee-scroll 30s linear infinite;
-    gap: 4rem;
-  }
-
-  .vn-marquee__item {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    gap: 4rem;
-    font-size: var(--vn-caption, 0.75rem);
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  .vn-marquee__text {
-    display: inline-flex;
-    align-items: center;
-    gap: 4rem;
-  }
-
-  .vn-marquee__dot {
-    width: 4px;
-    height: 4px;
-    background: rgba(255,255,255,0.3);
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  @keyframes vn-marquee-scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .vn-marquee__track {
-      animation: none;
-    }
-  }
+  .vn-marquee { background: var(--vn-ink, #0A0A0A); color: #fff; padding: 0.75rem 0; overflow: hidden; }
+  .vn-marquee__track { display: flex; width: fit-content; animation: vn-marquee-scroll 30s linear infinite; gap: 4rem; }
+  .vn-marquee__item { flex-shrink: 0; display: flex; align-items: center; gap: 4rem; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; white-space: nowrap; }
+  .vn-marquee__dot { width: 4px; height: 4px; background: rgba(255,255,255,0.3); border-radius: 50%; display: inline-block; }
+  @keyframes vn-marquee-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .vn-marquee__track { animation: none; } }
 {%- endstyle -%}
-
-<div class="vn-marquee">
-  <div class="vn-marquee__track">
-    {% for i in (1..6) %}
-      <span class="vn-marquee__item">
-        <span>{{ text }}</span>
-        <span class="vn-marquee__dot"></span>
-      </span>
-    {% endfor %}
-  </div>
-</div>
-
+<div class="vn-marquee"><div class="vn-marquee__track">{% for i in (1..6) %}<span class="vn-marquee__item"><span>{{ text }}</span><span class="vn-marquee__dot"></span></span>{% endfor %}</div></div>
 {% schema %}
-{
-  "name": "Veonn Marquee",
-  "tag": "section",
-  "class": "vn-marquee-section",
-  "settings": [
-    {
-      "type": "text",
-      "id": "text",
-      "label": "Marquee text",
-      "default": "FREE SHIPPING ON ALL ORDERS"
-    },
-    {
-      "type": "select",
-      "id": "speed",
-      "label": "Scroll speed",
-      "options": [
-        { "value": "slow", "label": "Slow" },
-        { "value": "medium", "label": "Medium" },
-        { "value": "fast", "label": "Fast" }
-      ],
-      "default": "medium"
-    }
-  ],
-  "presets": [
-    {
-      "name": "Veonn Marquee",
-      "category": "Veonn"
-    }
-  ]
-}
+{"name":"Veonn Marquee","tag":"section","class":"vn-marquee-section","settings":[{"type":"text","id":"text","label":"Marquee text","default":"FREE SHIPPING ON ALL ORDERS"},{"type":"select","id":"speed","label":"Scroll speed","options":[{"value":"slow","label":"Slow"},{"value":"medium","label":"Medium"},{"value":"fast","label":"Fast"}],"default":"medium"}],"presets":[{"name":"Veonn Marquee","category":"Veonn"}]}
 {% endschema %}
