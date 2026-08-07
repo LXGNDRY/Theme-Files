@@ -94,7 +94,7 @@
       }
     },
     "stat_strip": {
-      "type": "lb-veonn-stat-strip",
+      "type": "lb-stat-strip",
       "blocks": {
         "stat_1": {
           "type": "stat",
@@ -134,7 +134,7 @@
       "settings": {}
     },
     "testimonials": {
-      "type": "lb-veonn-testimonials",
+      "type": "lb-testimonials",
       "blocks": {
         "t1": {
           "type": "testimonial",
@@ -175,7 +175,7 @@
       }
     },
     "brand_story": {
-      "type": "lb-veonn-brand-story",
+      "type": "lb-brand-story",
       "settings": {
         "eyebrow": "Our Philosophy",
         "heading": "Built to outlast",
@@ -251,7 +251,7 @@
       }
     },
     "newsletter_popup": {
-      "type": "lb-veonn-newsletter-popup",
+      "type": "lb-newsletter-popup",
       "settings": {
         "enabled": true,
         "delay": 4,
