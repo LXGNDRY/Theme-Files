@@ -1,26 +1,5 @@
-<!--
-  index.json
-  VEONN-STYLE HOMEPAGE
-  Minimalist fashion editorial homepage.
-  Sections: Marquee + Header + Hero + Best Sellers + New Arrivals + Footer
--->
 {
   "sections": {
-    "marquee": {
-      "type": "lb-veonn-marquee",
-      "settings": {
-        "text": "FREE SHIPPING ON ALL ORDERS",
-        "speed": "medium"
-      }
-    },
-    "header": {
-      "type": "lb-veonn-header",
-      "settings": {
-        "logo_text": "V\u00c9ON",
-        "menu_left": "main-menu",
-        "menu_right": "footer"
-      }
-    },
     "hero": {
       "type": "lb-veonn-hero",
       "settings": {
@@ -41,50 +20,6 @@
         "products_per_page": 8,
         "columns_desktop": 4,
         "show_tags": false
-      }
-    },
-    "new_arrivals": {
-      "type": "lb-veonn-product-grid",
-      "settings": {
-        "heading": "New Arrivals",
-        "view_all_label": "Shop All",
-        "view_all_url": "/collections/new-arrivals",
-        "products_per_page": 4,
-        "columns_desktop": 4,
-        "show_tags": false
-      }
-    },
-    "footer": {
-      "type": "lb-veonn-footer",
-      "settings": {
-        "logo_text": "V\u00c9ON",
-        "tagline": "Premium minimalist fashion for the modern individual.",
-        "newsletter_heading": "Stay in the loop",
-        "newsletter_subtext": "Subscribe for exclusive drops, early access, and 10% off your first order.",
-        "footer_title_1": "Shop",
-        "footer_menu_1": "main-menu",
-        "footer_title_2": "About",
-        "footer_menu_2": "footer",
-        "footer_title_3": "Support",
-        "footer_menu_3": "footer",
-        "copyright_text": "\u00a9 2025 V\u00e9on. All rights reserved."
-      }
-    },
-    "feature_banner": {
-      "type": "lb-veonn-feature-banner",
-      "settings": {
-        "eyebrow": "Our Story",
-        "heading": "Crafted with intention, built to last.",
-        "layout": "image-right",
-        "cta_label": "Learn More",
-        "cta_url": "/pages/about",
-        "show_stats": true,
-        "stat_1_num": "100%",
-        "stat_1_label": "Premium cotton",
-        "stat_2_num": "250+",
-        "stat_2_label": "GSM weight",
-        "stat_3_num": "5K+",
-        "stat_3_label": "Happy customers"
       }
     },
     "collections": {
@@ -123,6 +58,34 @@
         "cat_3"
       ]
     },
+    "feature_banner": {
+      "type": "lb-veonn-feature-banner",
+      "settings": {
+        "eyebrow": "Our Story",
+        "heading": "Crafted with intention, built to last.",
+        "layout": "image-right",
+        "cta_label": "Learn More",
+        "cta_url": "/pages/about",
+        "show_stats": true,
+        "stat_1_num": "100%",
+        "stat_1_label": "Premium cotton",
+        "stat_2_num": "250+",
+        "stat_2_label": "GSM weight",
+        "stat_3_num": "5K+",
+        "stat_3_label": "Happy customers"
+      }
+    },
+    "new_arrivals": {
+      "type": "lb-veonn-product-grid",
+      "settings": {
+        "heading": "New Arrivals",
+        "view_all_label": "Shop All",
+        "view_all_url": "/collections/new-arrivals",
+        "products_per_page": 4,
+        "columns_desktop": 4,
+        "show_tags": false
+      }
+    },
     "instagram": {
       "type": "lb-veonn-instagram",
       "settings": {
@@ -132,62 +95,22 @@
         "cta_url": "https://instagram.com"
       },
       "blocks": {
-        "ig_1": {
-          "type": "image",
-          "settings": {
-            "likes": "2.4K"
-          }
-        },
-        "ig_2": {
-          "type": "image",
-          "settings": {
-            "likes": "3.1K"
-          }
-        },
-        "ig_3": {
-          "type": "image",
-          "settings": {
-            "likes": "1.8K"
-          }
-        },
-        "ig_4": {
-          "type": "image",
-          "settings": {
-            "likes": "4.2K"
-          }
-        },
-        "ig_5": {
-          "type": "image",
-          "settings": {
-            "likes": "2.9K"
-          }
-        },
-        "ig_6": {
-          "type": "image",
-          "settings": {
-            "likes": "3.7K"
-          }
-        }
+        "ig_1": { "type": "image", "settings": { "likes": "2.4K" } },
+        "ig_2": { "type": "image", "settings": { "likes": "3.1K" } },
+        "ig_3": { "type": "image", "settings": { "likes": "1.8K" } },
+        "ig_4": { "type": "image", "settings": { "likes": "4.2K" } },
+        "ig_5": { "type": "image", "settings": { "likes": "2.9K" } },
+        "ig_6": { "type": "image", "settings": { "likes": "3.7K" } }
       },
-      "block_order": [
-        "ig_1",
-        "ig_2",
-        "ig_3",
-        "ig_4",
-        "ig_5",
-        "ig_6"
-      ]
+      "block_order": ["ig_1", "ig_2", "ig_3", "ig_4", "ig_5", "ig_6"]
     }
   },
   "order": [
-    "marquee",
-    "header",
     "hero",
     "best_sellers",
     "collections",
     "feature_banner",
     "new_arrivals",
-    "instagram",
-    "footer"
+    "instagram"
   ]
 }
