@@ -275,9 +275,11 @@
 
       {% for i in (1..3) %}
         <div class="vn-footer__col">
-          {% assign menu_id = section.settings['footer_menu_' | append: i] %}
+          {% assign menu_key = 'footer_menu_' | append: i %}
+          {% assign title_key = 'footer_title_' | append: i %}
+          {% assign menu_id = section.settings[menu_key] %}
           {% assign menu = linklists[menu_id] %}
-          <h4 class="vn-footer__col-title">{{ section.settings['footer_title_' | append: i] | default: 'Menu ' | append: i }}</h4>
+          <h4 class="vn-footer__col-title">{{ section.settings[title_key] | default: 'Menu' }}</h4>
           <div class="vn-footer__col-links">
             {% if menu != blank %}
               {% for link in menu.links %}

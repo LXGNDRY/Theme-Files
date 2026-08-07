@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
@@ -18,17 +27,11 @@
         "view_all_label": "View All",
         "view_all_url": "/collections/all",
         "products_per_page": 8,
-        "columns_desktop": 4,
         "show_tags": false
       }
     },
     "collections": {
       "type": "lb-veonn-collections",
-      "settings": {
-        "heading": "Shop by Category",
-        "view_all_label": "View All",
-        "view_all_url": "/collections/all"
-      },
       "blocks": {
         "cat_1": {
           "type": "collection",
@@ -56,16 +59,21 @@
         "cat_1",
         "cat_2",
         "cat_3"
-      ]
+      ],
+      "settings": {
+        "heading": "Shop by Category",
+        "view_all_label": "View All",
+        "view_all_url": "/collections/all"
+      }
     },
     "feature_banner": {
       "type": "lb-veonn-feature-banner",
       "settings": {
         "eyebrow": "Our Story",
         "heading": "Crafted with intention, built to last.",
-        "layout": "image-right",
         "cta_label": "Learn More",
         "cta_url": "/pages/about",
+        "layout": "image-right",
         "show_stats": true,
         "stat_1_num": "100%",
         "stat_1_label": "Premium cotton",
@@ -82,27 +90,63 @@
         "view_all_label": "Shop All",
         "view_all_url": "/collections/new-arrivals",
         "products_per_page": 4,
-        "columns_desktop": 4,
         "show_tags": false
       }
     },
     "instagram": {
       "type": "lb-veonn-instagram",
+      "blocks": {
+        "ig_1": {
+          "type": "image",
+          "settings": {
+            "likes": "2.4K"
+          }
+        },
+        "ig_2": {
+          "type": "image",
+          "settings": {
+            "likes": "3.1K"
+          }
+        },
+        "ig_3": {
+          "type": "image",
+          "settings": {
+            "likes": "1.8K"
+          }
+        },
+        "ig_4": {
+          "type": "image",
+          "settings": {
+            "likes": "4.2K"
+          }
+        },
+        "ig_5": {
+          "type": "image",
+          "settings": {
+            "likes": "2.9K"
+          }
+        },
+        "ig_6": {
+          "type": "image",
+          "settings": {
+            "likes": "3.7K"
+          }
+        }
+      },
+      "block_order": [
+        "ig_1",
+        "ig_2",
+        "ig_3",
+        "ig_4",
+        "ig_5",
+        "ig_6"
+      ],
       "settings": {
         "heading": "Follow @veon.studio",
         "subheading": "Tag us to get featured",
         "cta_label": "Follow Us",
         "cta_url": "https://instagram.com"
-      },
-      "blocks": {
-        "ig_1": { "type": "image", "settings": { "likes": "2.4K" } },
-        "ig_2": { "type": "image", "settings": { "likes": "3.1K" } },
-        "ig_3": { "type": "image", "settings": { "likes": "1.8K" } },
-        "ig_4": { "type": "image", "settings": { "likes": "4.2K" } },
-        "ig_5": { "type": "image", "settings": { "likes": "2.9K" } },
-        "ig_6": { "type": "image", "settings": { "likes": "3.7K" } }
-      },
-      "block_order": ["ig_1", "ig_2", "ig_3", "ig_4", "ig_5", "ig_6"]
+      }
     }
   },
   "order": [
