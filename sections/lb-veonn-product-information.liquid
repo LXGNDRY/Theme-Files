@@ -1,0 +1,581 @@
+{% comment %}
+  lb-veonn-product-information.liquid
+  VEONN-STYLE PRODUCT PAGE
+  Two-column layout: stacked image gallery left, sticky details right.
+  Trust strip, variant selector, ATC, accordion details.
+{% endcomment %}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign featured_image = current_variant.featured_image | default: product.featured_image
+-%}
+
+{%- style -%}
+  .vn-pdp {
+    max-width: var(--vn-page-width, 1440px);
+    margin: 0 auto;
+    padding: 0 var(--vn-page-padding, 2rem);
+    padding-top: 2rem;
+    padding-bottom: var(--vn-section-padding, 6rem);
+  }
+
+  .vn-pdp__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  /* ---- Gallery ---- */
+  .vn-pdp__gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .vn-pdp__gallery-main {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--vn-ink-3, #F6F6F6);
+  }
+
+  .vn-pdp__gallery-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .vn-pdp__gallery-thumbs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+  }
+
+  .vn-pdp__thumb {
+    aspect-ratio: 1;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    background: var(--vn-ink-3, #F6F6F6);
+    transition: border-color 200ms;
+  }
+
+  .vn-pdp__thumb.is-active,
+  .vn-pdp__thumb:hover {
+    border-color: var(--vn-ink, #0A0A0A);
+  }
+
+  .vn-pdp__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ---- Details panel ---- */
+  .vn-pdp__details {
+    position: sticky;
+    top: 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .vn-pdp__breadcrumb {
+    font-size: var(--vn-caption, 0.75rem);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vn-ink-50, #7A7A7A);
+  }
+
+  .vn-pdp__breadcrumb a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .vn-pdp__breadcrumb a:hover {
+    color: var(--vn-ink, #0A0A0A);
+  }
+
+  .vn-pdp__title {
+    font-family: var(--vn-font-display, 'Inter'), sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0;
+    color: var(--vn-ink, #0A0A0A);
+  }
+
+  .vn-pdp__price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .vn-pdp__price {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--vn-ink, #0A0A0A);
+  }
+
+  .vn-pdp__price--compare {
+    font-size: 1rem;
+    color: var(--vn-ink-50, #7A7A7A);
+    text-decoration: line-through;
+    font-weight: 400;
+  }
+
+  .vn-pdp__badge {
+    font-size: var(--vn-caption, 0.75rem);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--vn-ink, #0A0A0A);
+    color: var(--vn-bg, #fff);
+    padding: 0.25rem 0.5rem;
+  }
+
+  /* ---- Variant selector ---- */
+  .vn-pdp__option-label {
+    font-size: var(--vn-caption, 0.75rem);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vn-ink, #0A0A0A);
+    margin-bottom: 0.5rem;
+  }
+
+  .vn-pdp__option-label span {
+    font-weight: 400;
+    color: var(--vn-ink-50, #7A7A7A);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .vn-pdp__size-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .vn-pdp__size-btn {
+    min-width: 3rem;
+    padding: 0.625rem 1rem;
+    border: 1px solid var(--vn-ink-15, #D8D8D8);
+    background: transparent;
+    font-size: var(--vn-body-sm, 0.875rem);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 200ms;
+    font-family: inherit;
+    color: var(--vn-ink, #0A0A0A);
+  }
+
+  .vn-pdp__size-btn:hover,
+  .vn-pdp__size-btn.is-selected {
+    border-color: var(--vn-ink, #0A0A0A);
+    background: var(--vn-ink, #0A0A0A);
+    color: var(--vn-bg, #fff);
+  }
+
+  .vn-pdp__size-btn.is-unavailable {
+    opacity: 0.35;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+
+  /* ---- ATC zone ---- */
+  .vn-pdp__atc-zone {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .vn-pdp__atc {
+    width: 100%;
+    padding: 1.125rem 2rem;
+    background: var(--vn-ink, #0A0A0A);
+    color: var(--vn-bg, #fff);
+    border: none;
+    font-size: var(--vn-caption, 0.75rem);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 200ms;
+    font-family: inherit;
+  }
+
+  .vn-pdp__atc:hover:not(:disabled) {
+    opacity: 0.8;
+  }
+
+  .vn-pdp__atc:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* ---- Trust strip ---- */
+  .vn-pdp__trust {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--vn-ink-8, #EDEDED);
+    border-bottom: 1px solid var(--vn-ink-8, #EDEDED);
+  }
+
+  .vn-pdp__trust-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    flex: 1;
+  }
+
+  .vn-pdp__trust-label {
+    font-size: var(--vn-caption, 0.75rem);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--vn-ink, #0A0A0A);
+  }
+
+  .vn-pdp__trust-sub {
+    font-size: 0.6875rem;
+    color: var(--vn-ink-50, #7A7A7A);
+  }
+
+  /* ---- Accordions ---- */
+  .vn-pdp__accordion {
+    border-top: 1px solid var(--vn-ink-8, #EDEDED);
+  }
+
+  .vn-pdp__accordion:last-child {
+    border-bottom: 1px solid var(--vn-ink-8, #EDEDED);
+  }
+
+  .vn-pdp__accordion-trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: var(--vn-body-sm, 0.875rem);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--vn-ink, #0A0A0A);
+    font-family: inherit;
+    text-align: left;
+  }
+
+  .vn-pdp__accordion-icon {
+    width: 16px;
+    height: 16px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .vn-pdp__accordion-icon::before,
+  .vn-pdp__accordion-icon::after {
+    content: '';
+    position: absolute;
+    background: var(--vn-ink, #0A0A0A);
+    transition: transform 200ms;
+  }
+
+  .vn-pdp__accordion-icon::before {
+    width: 100%;
+    height: 1px;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
+
+  .vn-pdp__accordion-icon::after {
+    width: 1px;
+    height: 100%;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+  }
+
+  .vn-pdp__accordion[open] .vn-pdp__accordion-icon::after {
+    transform: translateX(-50%) rotate(90deg);
+    opacity: 0;
+  }
+
+  .vn-pdp__accordion-body {
+    padding-bottom: 1rem;
+    font-size: var(--vn-body-sm, 0.875rem);
+    color: var(--vn-ink-50, #7A7A7A);
+    line-height: 1.7;
+  }
+
+  .vn-pdp__accordion-body p { margin: 0 0 0.5rem; }
+  .vn-pdp__accordion-body p:last-child { margin-bottom: 0; }
+
+  /* ---- Mobile ---- */
+  @media screen and (max-width: 900px) {
+    .vn-pdp__grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .vn-pdp__details {
+      position: static;
+    }
+    .vn-pdp__trust {
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .vn-pdp__trust-item {
+      flex: 1 1 40%;
+    }
+  }
+{%- endstyle -%}
+
+<div class="vn-section vn-pdp">
+  <div class="vn-pdp__grid">
+
+    {%- comment -%} Gallery {%- endcomment -%}
+    <div class="vn-pdp__gallery" id="vn-pdp-gallery">
+      <div class="vn-pdp__gallery-main">
+        {%- if featured_image -%}
+          <img
+            id="vn-pdp-main-img"
+            src="{{ featured_image | image_url: width: 900, format: 'webp' }}"
+            srcset="{{ featured_image | image_url: width: 600, format: 'webp' }} 600w, {{ featured_image | image_url: width: 900, format: 'webp' }} 900w, {{ featured_image | image_url: width: 1200, format: 'webp' }} 1200w"
+            sizes="(max-width: 900px) 100vw, 55vw"
+            alt="{{ featured_image.alt | escape | default: product.title | escape }}"
+            width="{{ featured_image.width }}"
+            height="{{ featured_image.height }}"
+            loading="eager"
+            fetchpriority="high"
+          >
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+      </div>
+
+      {%- if product.images.size > 1 -%}
+        <div class="vn-pdp__gallery-thumbs">
+          {%- for image in product.images limit: 8 -%}
+            <button
+              class="vn-pdp__thumb{% if image == featured_image %} is-active{% endif %}"
+              data-src="{{ image | image_url: width: 900, format: 'webp' }}"
+              data-srcset="{{ image | image_url: width: 600, format: 'webp' }} 600w, {{ image | image_url: width: 900, format: 'webp' }} 900w"
+              data-alt="{{ image.alt | escape }}"
+              aria-label="{{ 'products.product.media.load_image' | t | default: 'Load image' }} {{ forloop.index }}"
+            >
+              <img
+                src="{{ image | image_url: width: 200, format: 'webp' }}"
+                alt="{{ image.alt | escape }}"
+                width="{{ image.width }}"
+                height="{{ image.height }}"
+                loading="lazy"
+              >
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Details {%- endcomment -%}
+    <div class="vn-pdp__details">
+      <p class="vn-pdp__breadcrumb">
+        <a href="{{ routes.root_url }}">Home</a> /
+        {%- if product.collections.first -%}
+          <a href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a> /
+        {%- endif -%}
+        {{ product.title }}
+      </p>
+
+      <h1 class="vn-pdp__title">{{ product.title }}</h1>
+
+      <div class="vn-pdp__price-row">
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <span class="vn-pdp__price">{{ current_variant.price | money }}</span>
+          <s class="vn-pdp__price--compare">{{ current_variant.compare_at_price | money }}</s>
+          <span class="vn-pdp__badge">Sale</span>
+        {%- else -%}
+          <span class="vn-pdp__price">{{ current_variant.price | money }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- assign form_id = 'vn-pdp-form-' | append: product.id -%}
+
+      {%- form 'product', product, id: form_id, data-type: 'add-to-cart-form' -%}
+        {%- for option in product.options_with_values -%}
+          <div>
+            <p class="vn-pdp__option-label">
+              {{ option.name }}
+              {%- if option.name == 'Size' -%}
+                <span> — {{ current_variant.title }}</span>
+              {%- endif -%}
+            </p>
+            <div class="vn-pdp__size-grid">
+              {%- for value in option.values -%}
+                {%- assign variant_for_value = product.variants | where: 'option1', value | first -%}
+                {%- if product.options.size > 1 -%}
+                  {%- assign variant_for_value = product.variants | where: 'option' | append: forloop.parentloop.index, value | first -%}
+                {%- endif -%}
+                <button
+                  type="button"
+                  class="vn-pdp__size-btn{% if value == current_variant.option1 %} is-selected{% endif %}{% unless variant_for_value.available %} is-unavailable{% endunless %}"
+                  data-option-position="{{ option.position }}"
+                  data-option-value="{{ value | escape }}"
+                  {% unless variant_for_value.available %}aria-label="{{ value }} — {{ 'products.product.sold_out' | t | default: 'Sold out' }}"{% endunless %}
+                >
+                  {{ value }}
+                </button>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endfor -%}
+
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+
+        <div class="vn-pdp__atc-zone">
+          <button
+            type="submit"
+            name="add"
+            class="vn-pdp__atc"
+            {% unless current_variant.available %}disabled{% endunless %}
+          >
+            {%- if current_variant.available -%}
+              {{ section.settings.atc_label | default: 'Add to cart' }}
+            {%- else -%}
+              {{ 'products.product.sold_out' | t | default: 'Sold out' }}
+            {%- endif -%}
+          </button>
+        </div>
+      {%- endform -%}
+
+      <div class="vn-pdp__trust">
+        <div class="vn-pdp__trust-item">
+          <span class="vn-pdp__trust-label">Free Returns</span>
+          <span class="vn-pdp__trust-sub">30-day hassle-free</span>
+        </div>
+        <div class="vn-pdp__trust-item">
+          <span class="vn-pdp__trust-label">Premium Fabric</span>
+          <span class="vn-pdp__trust-sub">Heavyweight quality</span>
+        </div>
+        <div class="vn-pdp__trust-item">
+          <span class="vn-pdp__trust-label">Free Shipping</span>
+          <span class="vn-pdp__trust-sub">On orders over $100</span>
+        </div>
+        <div class="vn-pdp__trust-item">
+          <span class="vn-pdp__trust-label">Secure Checkout</span>
+          <span class="vn-pdp__trust-sub">SSL encrypted</span>
+        </div>
+      </div>
+
+      {%- if product.description != blank -%}
+        <details class="vn-pdp__accordion" open>
+          <summary class="vn-pdp__accordion-trigger">
+            Description
+            <span class="vn-pdp__accordion-icon" aria-hidden="true"></span>
+          </summary>
+          <div class="vn-pdp__accordion-body">
+            {{ product.description }}
+          </div>
+        </details>
+      {%- endif -%}
+
+      {%- if section.settings.size_guide != blank -%}
+        <details class="vn-pdp__accordion">
+          <summary class="vn-pdp__accordion-trigger">
+            Size Guide
+            <span class="vn-pdp__accordion-icon" aria-hidden="true"></span>
+          </summary>
+          <div class="vn-pdp__accordion-body">
+            {{ section.settings.size_guide }}
+          </div>
+        </details>
+      {%- endif -%}
+
+      <details class="vn-pdp__accordion">
+        <summary class="vn-pdp__accordion-trigger">
+          Shipping &amp; Returns
+          <span class="vn-pdp__accordion-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="vn-pdp__accordion-body">
+          {{ section.settings.shipping_returns | default: '<p>Free standard shipping on orders over $100. Express and international options available at checkout. Returns accepted within 30 days of delivery — items must be unworn and unwashed.</p>' }}
+        </div>
+      </details>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var gallery = document.getElementById('vn-pdp-gallery');
+    if (!gallery) return;
+
+    var mainImg = document.getElementById('vn-pdp-main-img');
+    var thumbs = gallery.querySelectorAll('.vn-pdp__thumb');
+
+    thumbs.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (mainImg) {
+          mainImg.src = btn.dataset.src;
+          mainImg.srcset = btn.dataset.srcset || '';
+          mainImg.alt = btn.dataset.alt || '';
+        }
+        thumbs.forEach(function (t) { t.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+      });
+    });
+
+    var sizeBtns = document.querySelectorAll('.vn-pdp__size-btn');
+    var variantInput = document.querySelector('#{{ form_id }} input[name="id"]');
+
+    sizeBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var pos = btn.dataset.optionPosition;
+        var val = btn.dataset.optionValue;
+        document.querySelectorAll('.vn-pdp__size-btn[data-option-position="' + pos + '"]').forEach(function (b) {
+          b.classList.remove('is-selected');
+        });
+        btn.classList.add('is-selected');
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Veonn Product",
+  "tag": "section",
+  "class": "vn-pdp-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "atc_label",
+      "label": "Add to cart button text",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "richtext",
+      "id": "size_guide",
+      "label": "Size guide content"
+    },
+    {
+      "type": "richtext",
+      "id": "shipping_returns",
+      "label": "Shipping & returns text"
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Veonn Product",
+      "category": "Veonn"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,241 @@
+{% comment %}
+  lb-veonn-collection.liquid
+  VEONN-STYLE COLLECTION PAGE
+  Collection header, sort bar, product grid using lb-veonn-product-card.
+{% endcomment %}
+
+{%- liquid
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+  assign products_per_page = section.settings.products_per_page | default: 12
+  assign columns = section.settings.columns_desktop | default: 4
+-%}
+
+{%- style -%}
+  .vn-col {
+    max-width: var(--vn-page-width, 1440px);
+    margin: 0 auto;
+    padding: 0 var(--vn-page-padding, 2rem);
+    padding-bottom: var(--vn-section-padding, 6rem);
+  }
+
+  /* ---- Header ---- */
+  .vn-col__header {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid var(--vn-ink-8, #EDEDED);
+    margin-bottom: 2rem;
+  }
+
+  .vn-col__title {
+    font-family: var(--vn-font-display, 'Inter'), sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.5rem;
+    color: var(--vn-ink, #0A0A0A);
+  }
+
+  .vn-col__meta {
+    font-size: var(--vn-body-sm, 0.875rem);
+    color: var(--vn-ink-50, #7A7A7A);
+  }
+
+  {%- if collection.description != blank -%}
+  .vn-col__description {
+    font-size: var(--vn-body-sm, 0.875rem);
+    color: var(--vn-ink-50, #7A7A7A);
+    line-height: 1.7;
+    max-width: 60ch;
+    margin-top: 0.75rem;
+  }
+  {%- endif -%}
+
+  /* ---- Sort/filter bar ---- */
+  .vn-col__toolbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+  }
+
+  .vn-col__sort-label {
+    font-size: var(--vn-caption, 0.75rem);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vn-ink-50, #7A7A7A);
+  }
+
+  .vn-col__sort-select {
+    font-size: var(--vn-caption, 0.75rem);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--vn-ink, #0A0A0A);
+    border: 1px solid var(--vn-ink-15, #D8D8D8);
+    background: transparent;
+    padding: 0.5rem 1.5rem 0.5rem 0.75rem;
+    appearance: none;
+    cursor: pointer;
+    font-family: inherit;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%230A0A0A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+  }
+
+  /* ---- Grid ---- */
+  .vn-col__grid {
+    display: grid;
+    grid-template-columns: repeat({{ columns }}, 1fr);
+    gap: var(--vn-grid-gutter, 1.5rem);
+  }
+
+  /* ---- Empty state ---- */
+  .vn-col__empty {
+    padding: 4rem 0;
+    text-align: center;
+    color: var(--vn-ink-50, #7A7A7A);
+    font-size: var(--vn-body-sm, 0.875rem);
+  }
+
+  /* ---- Pagination ---- */
+  .vn-col__pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 4rem;
+  }
+
+  .vn-col__page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    padding: 0 0.75rem;
+    font-size: var(--vn-caption, 0.75rem);
+    font-weight: 500;
+    border: 1px solid var(--vn-ink-15, #D8D8D8);
+    color: var(--vn-ink, #0A0A0A);
+    text-decoration: none;
+    transition: all 200ms;
+  }
+
+  .vn-col__page-link:hover,
+  .vn-col__page-link.is-current {
+    background: var(--vn-ink, #0A0A0A);
+    border-color: var(--vn-ink, #0A0A0A);
+    color: var(--vn-bg, #fff);
+  }
+
+  @media screen and (max-width: 900px) {
+    .vn-col__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .vn-col__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+  }
+{%- endstyle -%}
+
+<div class="vn-section vn-col">
+  <header class="vn-col__header">
+    <h1 class="vn-col__title">{{ collection.title }}</h1>
+    <p class="vn-col__meta">{{ collection.products_count }} {{ collection.products_count | pluralize: 'product', 'products' }}</p>
+    {%- if collection.description != blank -%}
+      <div class="vn-col__description">{{ collection.description }}</div>
+    {%- endif -%}
+  </header>
+
+  <div class="vn-col__toolbar">
+    <span class="vn-col__sort-label">Sort by</span>
+    <select class="vn-col__sort-select" id="vn-col-sort" aria-label="Sort products">
+      {%- for option in collection.sort_options -%}
+        <option
+          value="{{ option.value }}"
+          {% if option.value == sort_by %}selected{% endif %}
+        >{{ option.name }}</option>
+      {%- endfor -%}
+    </select>
+  </div>
+
+  {%- paginate collection.products by products_per_page -%}
+    {%- if collection.products_count > 0 -%}
+      <div class="vn-col__grid">
+        {%- for product in collection.products -%}
+          {%- render 'lb-veonn-product-card', product: product -%}
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="vn-col__pagination" aria-label="Pagination">
+          {%- if paginate.previous -%}
+            <a href="{{ paginate.previous.url }}" class="vn-col__page-link" aria-label="Previous page">&#8592;</a>
+          {%- endif -%}
+
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}
+              <a href="{{ part.url }}" class="vn-col__page-link">{{ part.title }}</a>
+            {%- else -%}
+              <span class="vn-col__page-link is-current" aria-current="page">{{ part.title }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- if paginate.next -%}
+            <a href="{{ paginate.next.url }}" class="vn-col__page-link" aria-label="Next page">&#8594;</a>
+          {%- endif -%}
+        </nav>
+      {%- endif -%}
+
+    {%- else -%}
+      <p class="vn-col__empty">No products found in this collection.</p>
+    {%- endif -%}
+  {%- endpaginate -%}
+</div>
+
+<script>
+  document.getElementById('vn-col-sort')?.addEventListener('change', function () {
+    var url = new URL(window.location.href);
+    url.searchParams.set('sort_by', this.value);
+    window.location.href = url.toString();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Veonn Collection",
+  "tag": "section",
+  "class": "vn-col-section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns (desktop)",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Veonn Collection",
+      "category": "Veonn"
+    }
+  ]
+}
+{% endschema %}
