@@ -1,59 +1,53 @@
 <!--
   index.editorial.json
   LEGENDARY BRANDING — Complete Redesign
-  Full editorial homepage: hero marquee product-grid lookbook featured-pdp brand-story footer
-  Applied automatically to the homepage (default index.json is identical).
-  Can also be assigned via Theme Editor → Home page → Template: editorial.
+  Alternate home page: editorial brutalism style.
+  Uses the new editorial sections to showcase the Fuel-inspired redesign.
+  Apply via the theme editor (Home page > template: Editorial).
 -->
 {
   "sections": {
-    "editorial_header": {
-      "type": "lb-header-editorial",
-      "settings": {
-        "show_search": true,
-        "show_countdown": false
-      }
+    "header_group": {
+      "type": "header-group"
     },
     "hero": {
       "type": "lb-hero-editorial",
       "settings": {
-        "heading": "DROP\nSEVEN",
+        "heading": "DROP\n07",
         "heading_size": "medium",
         "subheading": "Essentials reimagined. 235GSM heavyweight tees. 380-460GSM hoodies. Every garment DTG printed and built to outlast.",
-        "cta_label": "SHOP THE DROP",
-        "cta_url": "/collections/all-products",
+        "cta_label": "Shop the drop",
+        "cta_url": "/collections/essentials",
         "drop_status": "live",
         "live_label": "LIVE NOW",
-        "index_label": "DROP 07 · 2026",
+        "index_label": "DROP 07",
         "meta_label": "12 PIECES",
-        "meta_bottom_right": "NO RESTOCKS",
         "color_scheme": "scheme-5"
       }
     },
     "marquee": {
       "type": "lb-marquee",
       "settings": {
-        "text": "LIMITED RUNS / 235GSM / 380-460GSM / DTG PRINTED / NO RESTOCKS / FREE SHIPPING $100+ / HANDMADE IN USA",
-        "separator": "✦",
+        "text": "LIMITED / 235GSM / 380-460GSM / DTG PRINTED / NO RESTOCKS / FREE SHIPPING OVER $100",
         "speed": "slow",
         "color_scheme": "scheme-1"
       }
     },
-    "product_grid": {
-      "type": "lb-product-grid-editorial",
+    "brand_story": {
+      "type": "lb-brand-story",
       "settings": {
-        "index_label": "01 / LATEST DROP",
-        "index_meta": "12 PIECES",
-        "heading": "DROP\nSEVEN",
-        "columns_desktop": 4,
-        "columns_mobile": 2,
-        "products_per_page": 8,
-        "show_index": true,
-        "show_price": true,
-        "filter_1": "HOODIES",
-        "filter_2": "TEES",
-        "filter_3": "PANTS",
+        "eyebrow": "Our Story",
+        "heading": "QUALITY OVER QUANTITY",
         "color_scheme": "scheme-1"
+      }
+    },
+    "editorial_cta": {
+      "type": "lb-footer-editorial",
+      "settings": {
+        "email_heading": "DROP UPDATES",
+        "email_subtext": "First access to drops. No restocks. No noise.",
+        "giant_word": "LEGENDARY",
+        "color_scheme": "scheme-5"
       }
     },
     "lookbook": {
@@ -63,7 +57,7 @@
         "index_meta": "3 COLLECTIONS",
         "heading": "SHOP THE",
         "heading_accent": "EDITORIAL",
-        "subheading": "Curated looks from the drop. Each piece is limited run — once they're gone, they're gone.",
+        "subheading": "Curated looks from the drop. Each piece is limited run \u2014 once they're gone, they're gone.",
         "color_scheme": "scheme-5"
       },
       "blocks": {
@@ -95,6 +89,23 @@
         "look_3"
       ]
     },
+    "product_grid": {
+      "type": "lb-product-grid-editorial",
+      "settings": {
+        "index_label": "01 / LATEST DROP",
+        "index_meta": "12 PIECES",
+        "heading": "DROP\nSEVEN",
+        "columns_desktop": 4,
+        "columns_mobile": 2,
+        "products_per_page": 8,
+        "show_index": true,
+        "show_price": true,
+        "filter_1": "HOODIES",
+        "filter_2": "TEES",
+        "filter_3": "PANTS",
+        "color_scheme": "scheme-1"
+      }
+    },
     "featured_pdp": {
       "type": "lb-featured-pdp",
       "settings": {
@@ -109,101 +120,16 @@
         "materials_info": "Premium heavyweight cotton blend. Sourced from certified mills. DTG printed with water-based inks.",
         "color_scheme": "scheme-1"
       }
-    },
-    "brand_story": {
-      "type": "lb-brand-story",
-      "settings": {
-        "index_label": "04 / THE BRAND",
-        "index_meta": "EST. 2024",
-        "eyebrow": "OUR PHILOSOPHY",
-        "heading": "BUILT TO",
-        "heading_line_2": "OUTLAST",
-        "heading_line_3": "THE TREND",
-        "body": "<p>LEGENDARY BRANDING was born from a belief that streetwear shouldn't be disposable. Every piece is designed to be lived in, broken in, and worn until it tells its own story.</p><p>We don't chase seasons. We chase construction. 235GSM tees. 400GSM hoodies. DTG prints that survive hundreds of washes. No fast fashion. No drops designed to fail.</p><p>Limited runs mean less waste and more intention. Once a piece sells out, it's gone. That's how we keep it special — for the people who found it, not the algorithm.</p>",
-        "button_label": "READ OUR STORY",
-        "stat_1_num": "84+",
-        "stat_1_label": "Products",
-        "stat_2_num": "7",
-        "stat_2_label": "Drops",
-        "stat_3_num": "3.2k",
-        "stat_3_label": "Customers",
-        "stat_4_num": "4.9★",
-        "stat_4_label": "Avg Review",
-        "color_scheme": "scheme-1"
-      }
-    },
-    "editorial_footer": {
-      "type": "lb-footer-editorial",
-      "settings": {
-        "cta_label": "JOIN THE LIST",
-        "email_heading": "DROP\nUPDATES",
-        "email_subtext": "First access to drops. No restocks. No noise.",
-        "form_note": "No noise. Drop alerts only.",
-        "giant_word": "LEGENDARY",
-        "color_scheme": "scheme-5"
-      },
-      "blocks": {
-        "shop_col": {
-          "type": "link_column",
-          "settings": {
-            "title": "Shop",
-            "menu": ""
-          }
-        },
-        "about_col": {
-          "type": "link_column",
-          "settings": {
-            "title": "About",
-            "menu": ""
-          }
-        },
-        "support_col": {
-          "type": "link_column",
-          "settings": {
-            "title": "Support",
-            "menu": ""
-          }
-        },
-        "social_ig": {
-          "type": "social",
-          "settings": {
-            "label": "IG",
-            "url": ""
-          }
-        },
-        "social_tt": {
-          "type": "social",
-          "settings": {
-            "label": "TT",
-            "url": ""
-          }
-        },
-        "social_yt": {
-          "type": "social",
-          "settings": {
-            "label": "YT",
-            "url": ""
-          }
-        }
-      },
-      "block_order": [
-        "shop_col",
-        "about_col",
-        "support_col",
-        "social_ig",
-        "social_tt",
-        "social_yt"
-      ]
     }
   },
   "order": [
-    "editorial_header",
+    "header_group",
     "hero",
     "marquee",
     "product_grid",
     "lookbook",
     "featured_pdp",
     "brand_story",
-    "editorial_footer"
+    "editorial_cta"
   ]
 }
