@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -9,22 +18,10 @@
     "stat_strip": {
       "type": "lb-stat-strip",
       "blocks": {
-        "stat_1": {
-          "type": "stat",
-          "settings": { "number": "Premium", "label": "Quality Fabrics" }
-        },
-        "stat_2": {
-          "type": "stat",
-          "settings": { "number": "Satisfaction", "label": "Guaranteed" }
-        },
-        "stat_3": {
-          "type": "stat",
-          "settings": { "number": "30 Days", "label": "Free Returns" }
-        },
-        "stat_4": {
-          "type": "stat",
-          "settings": { "number": "Free", "label": "Worldwide Shipping" }
-        }
+        "stat_1": { "type": "stat", "settings": { "number": "Premium", "label": "Quality Fabrics" } },
+        "stat_2": { "type": "stat", "settings": { "number": "Satisfaction", "label": "Guaranteed" } },
+        "stat_3": { "type": "stat", "settings": { "number": "30 Days", "label": "Free Returns" } },
+        "stat_4": { "type": "stat", "settings": { "number": "Free", "label": "Worldwide Shipping" } }
       },
       "block_order": ["stat_1", "stat_2", "stat_3", "stat_4"],
       "settings": {}
@@ -36,7 +33,6 @@
         "heading": "Built to outlast",
         "heading_line_2": "outlast",
         "heading_line_3": "the trend",
-        "body": "Legendary Branding was built for people who demand more from their wardrobe. We source only the heaviest, most premium fabrics and cut them for the modern silhouette. No fast fashion. No compromises.",
         "button_label": "Read Our Story",
         "button_url": "/pages/about",
         "index_label": "The Brand",
