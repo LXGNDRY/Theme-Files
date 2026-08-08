@@ -1,0 +1,68 @@
+{
+  "sections": {
+    "main": {
+      "type": "lb-product-page",
+      "settings": {
+        "atc_label": "Add to Cart",
+        "payment_note": "Secure checkout · SSL encrypted · All major cards accepted",
+        "show_quantity": false,
+        "fabric_details": "<p>Crafted from premium ring-spun cotton at 460GSM — nearly 50% heavier than industry-standard hoodies. Every piece is garment-washed for a lived-in feel that doesn’t fade or pill after washing.</p><ul><li>460GSM heavyweight fleece</li><li>100% ring-spun cotton</li><li>Garment-washed for softness</li><li>Reinforced stitching at stress points</li><li>Ribbed cuffs and hem</li></ul>",
+        "shipping_text": "",
+        "care_text": "<p>Machine wash cold with like colors. Do not bleach. Tumble dry low. Do not iron over print. Wash inside out to preserve colour and graphic integrity.</p>",
+        "trust_1_label": "Free Returns",
+        "trust_1_sub": "30-day hassle-free",
+        "trust_2_label": "Premium Fabric",
+        "trust_2_sub": "460GSM heavyweight",
+        "trust_3_label": "Free Shipping",
+        "trust_3_sub": "On all orders worldwide",
+        "trust_4_label": "Secure Checkout",
+        "trust_4_sub": "SSL encrypted",
+        "show_reviews": true
+      }
+    },
+    "stat_strip": {
+      "type": "lb-stat-strip",
+      "blocks": {
+        "stat_1": {
+          "type": "stat",
+          "settings": {
+            "stat_number": "460GSM",
+            "stat_label": "FABRIC WEIGHT"
+          }
+        },
+        "stat_2": {
+          "type": "stat",
+          "settings": {
+            "stat_number": "100%",
+            "stat_label": "RING-SPUN COTTON"
+          }
+        },
+        "stat_3": {
+          "type": "stat",
+          "settings": {
+            "stat_number": "30 Days",
+            "stat_label": "FREE RETURNS"
+          }
+        },
+        "stat_4": {
+          "type": "stat",
+          "settings": {
+            "stat_number": "Free",
+            "stat_label": "WORLDWIDE SHIPPING"
+          }
+        }
+      },
+      "block_order": ["stat_1", "stat_2", "stat_3", "stat_4"]
+    },
+    "brand_story": {
+      "type": "lb-brand-story",
+      "settings": {
+        "eyebrow": "Our Philosophy",
+        "heading": "Built to outlast the trend",
+        "button_label": "Read Our Story",
+        "button_url": "/pages/about"
+      }
+    }
+  },
+  "order": ["main", "stat_strip", "brand_story"]
+}
