@@ -834,7 +834,8 @@
             if opt_name_lower == 'color' or opt_name_lower == 'colour'
               assign is_color = true
             endif
-            assign selected_val = current_variant['option' | append: forloop.index]
+            assign opt_key = 'option' | append: forloop.index
+            assign selected_val = current_variant[opt_key]
           -%}
           <div class="lb-pdp__option" data-option-index="{{ forloop.index0 }}">
             <p class="lb-pdp__option-label">
@@ -846,7 +847,8 @@
                 {%- liquid
                   assign available = false
                   for variant in product.variants
-                    if variant['option' | append: forloop.parentloop.index] == value
+                    assign popt_key = 'option' | append: forloop.parentloop.index
+                    if variant[popt_key] == value
                       if variant.available
                         assign available = true
                       endif
