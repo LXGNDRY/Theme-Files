@@ -806,7 +806,7 @@
             {%- endfor -%}
           </div>
           <span class="lb-pdp__reviews-count" role="button" tabindex="0">
-            {{ review_count }} {{ review_count == '1' | ternary: 'review', 'reviews' }}
+            {{ review_count }} {%- if review_count == '1' -%}review{%- else -%}reviews{%- endif -%}
           </span>
         </div>
       {%- endif -%}
