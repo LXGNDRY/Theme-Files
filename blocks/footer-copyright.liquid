@@ -16,6 +16,11 @@
       , {{ powered_by_link }}
     {%- endif -%}
   </span>
+  {%- if block_settings.legal_entity_text != blank -%}
+    <span class="footer-utilities__text footer-utilities__text--legal" style="display:block;margin-top:4px;">
+      {{ block_settings.legal_entity_text }}
+    </span>
+  {%- endif -%}
 </div>
 
 {% schema %}
@@ -28,6 +33,12 @@
       "id": "show_powered_by",
       "label": "t:settings.show_powered_by_shopify",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "legal_entity_text",
+      "label": "Legal entity line",
+      "default": "Legendary Branding is a registered brand owned and operated by LEGENDARY BRANDING, LLC."
     },
     {
       "type": "paragraph",
