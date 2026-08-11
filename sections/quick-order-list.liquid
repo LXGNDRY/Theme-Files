@@ -155,12 +155,13 @@
                           {% if variant.image %}
                             {{
                               variant.image
-                              | image_url: width: 86
+                              | image_url: width: 86, format: 'webp'
                               | image_tag:
                                 widths: '86',
                                 class: 'quick-order-list__table-image',
                                 sizes: '43px',
-                                loading: 'lazy'
+                                loading: 'lazy',
+                                decoding: 'async'
                             }}
                           {% endif %}
                         </div>

@@ -12,7 +12,7 @@
 {%- liquid
   assign brand_name = shop.name
   assign brand_url = shop.url
-  assign logo_url = settings.logo | default: settings.share_image | image_url: width: 512
+  assign logo_url = settings.logo | default: settings.share_image | image_url: width: 512, format: 'webp'
   if logo_url != blank
     assign logo_url = logo_url | prepend: 'https:'
   endif

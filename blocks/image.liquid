@@ -44,14 +44,16 @@
   {%- if block_settings.image -%}
     {{
       block_settings.image
-      | image_url: width: 3840
+      | image_url: width: 3840, format: 'webp'
       | image_tag:
         width: block_settings.image.width,
         widths: widths,
         height: block_settings.image.height,
         class: 'image-block__image border-style',
         style: image_border_style,
-        sizes: sizes
+        sizes: sizes,
+        loading: 'lazy',
+        decoding: 'async'
     }}
   {%- else -%}
     <div class="placeholder-image border-style size-style" style="{{ image_border_style }}">

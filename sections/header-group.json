@@ -20,9 +20,9 @@
             "text": "<strong>20% Off First Order — Free US Shipping on Orders $100+</strong>",
             "link": "",
             "font": "var(--font-body--family)",
-            "font_size": "1.125rem",
+            "font_size": "1rem",
             "weight": "",
-            "letter_spacing": "normal",
+            "letter_spacing": "tight",
             "case": "none"
           },
           "blocks": {}
@@ -34,11 +34,11 @@
       "name": "t:names.announcement_bar",
       "settings": {
         "speed": 5,
-        "section_width": "page-width",
-        "color_scheme": "scheme-1",
+        "section_width": "full-width",
+        "color_scheme": "scheme-2",
         "divider_width": 0,
-        "padding-block-start": 10,
-        "padding-block-end": 10
+        "padding-block-start": 0,
+        "padding-block-end": 0
       }
     },
     "header_section": {
@@ -60,8 +60,8 @@
           "settings": {
             "menu": "main-menu-copy1",
             "color_scheme": "scheme-2",
-            "type_font_primary_size": "0.875rem",
-            "menu_font_style": "inverse",
+            "type_font_primary_size": "1.125rem",
+            "menu_font_style": "inverse_large",
             "type_font_primary_link": "body",
             "type_case_primary_link": "uppercase",
             "menu_style": "text",
@@ -81,7 +81,7 @@
         "logo_position": "left",
         "menu_position": "center",
         "menu_row": "bottom",
-        "customer_account_menu": "main-menu",
+        "customer_account_menu": "main-menu-copy1",
         "show_search": true,
         "search_position": "right",
         "search_row": "top",
@@ -92,7 +92,7 @@
         "localization_font_size": "1.125rem",
         "localization_position": "left",
         "localization_row": "bottom",
-        "section_width": "page-width",
+        "section_width": "full-width",
         "section_height": "standard",
         "enable_sticky_header": "always",
         "divider_width": 0,
@@ -106,7 +106,7 @@
         "color_scheme_bottom": "scheme-2",
         "color_scheme_transparent": "scheme-5",
         "enable_transparent_header_home": true,
-        "home_color_scheme": "default",
+        "home_color_scheme": "inverse",
         "enable_transparent_header_product": false,
         "product_color_scheme": "default",
         "enable_transparent_header_collection": false,

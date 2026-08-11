@@ -19,7 +19,7 @@
           "settings": {
             "text": "<h1><strong>{{ article.title }}</strong></h1>",
             "width": "100%",
-            "max_width": "normal",
+            "max_width": "none",
             "alignment": "center",
             "type_preset": "h1",
             "font": "var(--font-primary--family)",

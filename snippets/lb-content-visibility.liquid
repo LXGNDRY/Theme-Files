@@ -38,6 +38,22 @@
     contain-intrinsic-size: auto 900px;
   }
 
+  /* Product grid items below the first row — skip layout/paint until scrolled near.
+     Temporarily disabled — investigating mobile collection layout issue.
+  .product-grid .product-grid__item:nth-child(n+5) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 600px;
+  }
+
+  On mobile (2-col grid), only first 2 items need to be painted initially.
+  @media screen and (max-width: 749px) {
+    .product-grid .product-grid__item:nth-child(n+3) {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 500px;
+    }
+  }
+  */
+
   /* Never apply to header, footer, announcement bar, or sticky elements.
      These are either above the fold or must remain layout-present at all times. */
   #header-group .shopify-section,

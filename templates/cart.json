@@ -18,7 +18,7 @@
           "settings": {
             "title": "<em><strong>My Bag:</strong></em>",
             "show_count": true,
-            "type_preset": "h4",
+            "type_preset": "h3",
             "alignment": "left",
             "padding-block-start": 8,
             "padding-block-end": 8,
@@ -60,7 +60,7 @@
       "settings": {
         "section_width": "page-width",
         "color_scheme": "scheme-2",
-        "padding-block-start": 25,
+        "padding-block-start": 16,
         "padding-block-end": 0
       }
     },
@@ -105,18 +105,18 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<p><strong>Recommended</strong></p>",
+                "text": "<p><strong>Dont miss out !</strong></p>",
                 "width": "100%",
                 "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h3",
+                "alignment": "center",
+                "type_preset": "h2",
                 "font": "var(--font-body--family)",
                 "font_size": "",
                 "line_height": "normal",
                 "letter_spacing": "normal",
                 "case": "none",
                 "wrap": "pretty",
-                "color": "var(--color-foreground)",
+                "color": "var(--color-foreground-heading)",
                 "background": false,
                 "background_color": "#00000026",
                 "corner_radius": 0,
@@ -169,7 +169,7 @@
               "type": "_product-card-gallery",
               "name": "t:names.product_card_media",
               "settings": {
-                "image_ratio": "portrait",
+                "image_ratio": "square",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
@@ -287,7 +287,7 @@
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "center",
-                        "type_preset": "custom",
+                        "type_preset": "h6",
                         "font": "var(--font-body--family)",
                         "font_size": "0.75rem",
                         "line_height": "tight",
@@ -394,12 +394,12 @@
         "rows_gap": 36,
         "icons_style": "arrow",
         "icons_shape": "none",
-        "section_width": "page-width",
+        "section_width": "full-width",
         "horizontal_alignment": "flex-start",
         "gap": 28,
-        "color_scheme": "scheme-2",
-        "padding-block-start": 100,
-        "padding-block-end": 100
+        "color_scheme": "scheme-5",
+        "padding-block-start": 16,
+        "padding-block-end": 0
       }
     }
   },

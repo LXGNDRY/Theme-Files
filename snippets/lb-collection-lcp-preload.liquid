@@ -1,0 +1,43 @@
+{%- comment -%}
+  lb-collection-lcp-preload.liquid
+  Purpose:
+    On collection/search pages, preload the first product's featured image
+    with fetchpriority=high so the LCP candidate starts downloading during
+    head parse, before the product grid HTML is even parsed.
+
+    Collection pages often have no hero/banner above the fold, making the
+    first product image the LCP element. Without this preload, the browser
+    doesn't discover the image until it parses the product grid (which is
+    inside a section, often after many KB of header/nav HTML).
+
+  Scope: collection + search templates only.
+  Format: WebP (match resource-card.liquid format for cache reuse).
+  Safe for non-product collections: exits early if no products.
+
+  NOTE: Kept deliberately simple (single href preload, no loops) so this
+  head-rendered snippet can never throw and break page rendering.
+{%- endcomment -%}
+
+{%- if template.name == 'collection' and collection.products.size > 0 -%}
+  {%- assign first_product = collection.products.first -%}
+  {%- if first_product.featured_image != blank -%}
+    <link
+      rel="preload"
+      as="image"
+      fetchpriority="high"
+      href="{{ first_product.featured_image | image_url: width: 1200, format: 'webp' }}"
+      imagesrcset="{{ first_product.featured_image | image_url: width: 480, format: 'webp' }} 480w, {{ first_product.featured_image | image_url: width: 800, format: 'webp' }} 800w, {{ first_product.featured_image | image_url: width: 1200, format: 'webp' }} 1200w, {{ first_product.featured_image | image_url: width: 1600, format: 'webp' }} 1600w"
+      imagesizes="(max-width: 749px) 50vw, 25vw">
+  {%- endif -%}
+{%- elsif template.name == 'search' and search.products.size > 0 -%}
+  {%- assign first_product = search.products.first -%}
+  {%- if first_product.featured_image != blank -%}
+    <link
+      rel="preload"
+      as="image"
+      fetchpriority="high"
+      href="{{ first_product.featured_image | image_url: width: 1200, format: 'webp' }}"
+      imagesrcset="{{ first_product.featured_image | image_url: width: 480, format: 'webp' }} 480w, {{ first_product.featured_image | image_url: width: 800, format: 'webp' }} 800w, {{ first_product.featured_image | image_url: width: 1200, format: 'webp' }} 1200w, {{ first_product.featured_image | image_url: width: 1600, format: 'webp' }} 1600w"
+      imagesizes="(max-width: 749px) 50vw, 25vw">
+  {%- endif -%}
+{%- endif -%}

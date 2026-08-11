@@ -1,9 +1,11 @@
+{% comment %} synced: edits-here-2 perf branch {% endcomment %}
+
 <section class="lb-col-editorial color-{{ section.settings.color_scheme }}">
   {%- if section.settings.bg_image != blank -%}
     <div class="lb-col-editorial__bg" aria-hidden="true">
       <img
-        src="{{ section.settings.bg_image | image_url: width: 1800 }}"
-        srcset="{{ section.settings.bg_image | image_url: width: 900 }} 900w, {{ section.settings.bg_image | image_url: width: 1400 }} 1400w, {{ section.settings.bg_image | image_url: width: 1800 }} 1800w"
+        src="{{ section.settings.bg_image | image_url: width: 1800, format: 'webp'}}"
+        srcset="{{ section.settings.bg_image | image_url: width: 900, format: 'webp'}} 900w, {{ section.settings.bg_image | image_url: width: 1400, format: 'webp'}} 1400w, {{ section.settings.bg_image | image_url: width: 1800, format: 'webp'}} 1800w"
         sizes="100vw"
         alt=""
         width="{{ section.settings.bg_image.width }}"

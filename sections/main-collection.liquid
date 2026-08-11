@@ -1,4 +1,4 @@
-
+{% comment %} synced: edits-here {% endcomment %}
 
 <script
   src="{{ 'results-list.js' | asset_url }}"
@@ -22,7 +22,6 @@
   }
 {% endjavascript %}
 
-{% comment %} We always render this full-width, as the child blocks have width: page/full settings {% endcomment %}
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <results-list
   class="section product-grid-container color-{{ section.settings.color_scheme }}"
@@ -36,18 +35,10 @@
     {%- render 'lb-collection-description', collection: collection, section: section, position: 'top' -%}
   {%- endif -%}
 
-  <div
-    class="collection-wrapper grid gap-style{% if section.settings.product_grid_width == 'full-width' %} collection-wrapper--grid-full-width{% endif %}"
-  >
-    {% content_for 'block',
-      type: 'filters',
-      id: 'filters',
-      results: collection,
-      results_size: collection.products_count
-    %}
+  <div class="collection-wrapper grid gap-style{% if section.settings.product_grid_width == 'full-width' %} collection-wrapper--grid-full-width{% endif %}">
+    {% content_for 'block', type: 'filters', id: 'filters', results: collection, results_size: collection.products_count %}
 
     {% assign products_per_page = 24 %}
-
     {% if section.settings.enable_infinite_scroll == false %}
       {% assign products_per_page = section.settings.products_per_page %}
     {% endif %}
@@ -59,30 +50,8 @@
           <a href="{{ collection.url }}" class="button button--secondary">Clear all filters</a>
         </div>
       {% else %}
-        {%- assign promo_blocks = section.blocks | where: 'type', 'promo_tile' -%}
         {% capture children %}
           {% for product in collection.products %}
-            {%- assign item_index = forloop.index -%}
-            {%- for promo in promo_blocks -%}
-              {%- if promo.settings.position == item_index -%}
-                <li class="product-grid__item lb-promo-tile" style="{% if promo.settings.bg_color != blank %}background: {{ promo.settings.bg_color }};{% endif %}" {{ promo.shopify_attributes }}>
-                  {%- if promo.settings.image != blank -%}
-                    <img src="{{ promo.settings.image | image_url: width: 600 }}" alt="{{ promo.settings.headline | escape }}" loading="lazy" class="lb-promo-tile__bg-img">
-                  {%- endif -%}
-                  <div class="lb-promo-tile__content">
-                    {%- if promo.settings.headline != blank -%}
-                      <p class="lb-promo-tile__headline lb-display-md">{{ promo.settings.headline }}</p>
-                    {%- endif -%}
-                    {%- if promo.settings.subtext != blank -%}
-                      <p class="lb-promo-tile__sub">{{ promo.settings.subtext }}</p>
-                    {%- endif -%}
-                    {%- if promo.settings.cta_label != blank and promo.settings.cta_url != blank -%}
-                      <a href="{{ promo.settings.cta_url }}" class="lb-promo-tile__cta lb-btn lb-btn--sm">{{ promo.settings.cta_label }}</a>
-                    {%- endif -%}
-                  </div>
-                </li>
-              {%- endif -%}
-            {%- endfor -%}
             <li
               id="{{ section.id }}-{{ product.id }}"
               class="product-grid__item product-grid__item--{{ forloop.index0 }}"
@@ -96,14 +65,7 @@
             </li>
           {% endfor %}
         {% endcapture %}
-
-        {% render 'product-grid',
-          section: section,
-          children: children,
-          products: collection.products,
-          paginate: paginate,
-          enable_infinite_scroll: section.settings.enable_infinite_scroll
-        %}
+        {% render 'product-grid', section: section, children: children, products: collection.products, paginate: paginate, enable_infinite_scroll: section.settings.enable_infinite_scroll %}
       {% endif %}
     {% endpaginate %}
   </div>
@@ -119,311 +81,28 @@
 {% schema %}
 {
   "name": "t:names.collection_container",
-  "enabled_on": {
-    "templates": ["collection"]
-  },
+  "enabled_on": { "templates": ["collection"] },
   "settings": [
-    {
-      "type": "select",
-      "id": "layout_type",
-      "label": "t:settings.type",
-      "options": [
-        {
-          "value": "grid",
-          "label": "t:options.grid"
-        },
-        {
-          "value": "organic",
-          "label": "t:options.editorial"
-        }
-      ],
-      "default": "grid"
-    },
-    {
-      "type": "select",
-      "id": "product_card_size",
-      "label": "t:settings.card_size",
-      "options": [
-        {
-          "value": "small",
-          "label": "t:options.small"
-        },
-        {
-          "value": "medium",
-          "label": "t:options.medium"
-        },
-        {
-          "value": "large",
-          "label": "t:options.large"
-        },
-        {
-          "value": "extra-large",
-          "label": "t:options.extra_large"
-        }
-      ],
-      "default": "medium",
-      "visible_if": "{{ section.settings.layout_type == 'grid' }}"
-    },
-    {
-      "type": "select",
-      "id": "mobile_product_card_size",
-      "label": "t:settings.mobile_card_size",
-      "options": [
-        {
-          "value": "small",
-          "label": "t:options.small"
-        },
-        {
-          "value": "large",
-          "label": "t:options.large"
-        }
-      ],
-      "default": "small"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_infinite_scroll",
-      "label": "t:settings.auto_load_products",
-      "default": true
-    },
-    {
-      "type": "range",
-      "id": "products_per_page",
-      "label": "t:settings.products_per_page",
-      "min": 8,
-      "max": 36,
-      "step": 4,
-      "default": 24,
-      "visible_if": "{{ section.settings.enable_infinite_scroll == false }}"
-    },
-    {
-      "type": "header",
-      "content": "SEO description"
-    },
-    {
-      "type": "paragraph",
-      "content": "Surface this collection's description (set in Shopify admin under Products › Collections) as visible, crawlable copy on the page. Off by default so the layout is unchanged until you opt in."
-    },
-    {
-      "type": "select",
-      "id": "collection_description_position",
-      "label": "Collection description placement",
-      "options": [
-        {
-          "value": "none",
-          "label": "Hidden"
-        },
-        {
-          "value": "top",
-          "label": "Above product grid"
-        },
-        {
-          "value": "bottom",
-          "label": "Below product grid"
-        }
-      ],
-      "default": "none"
-    },
-    {
-      "type": "header",
-      "content": "t:content.layout"
-    },
-    {
-      "type": "select",
-      "id": "product_grid_width",
-      "label": "t:settings.width",
-      "options": [
-        {
-          "value": "centered",
-          "label": "t:options.page"
-        },
-        {
-          "value": "full-width",
-          "label": "t:options.full"
-        }
-      ],
-      "default": "centered"
-    },
-    {
-      "type": "checkbox",
-      "id": "full_width_on_mobile",
-      "label": "t:settings.full_width_on_mobile",
-      "default": true,
-      "visible_if": "{{ section.settings.product_grid_width != 'full-width' }}"
-    },
-    {
-      "type": "range",
-      "id": "columns_gap_horizontal",
-      "label": "t:settings.horizontal_gap",
-      "min": 0,
-      "max": 50,
-      "step": 1,
-      "unit": "px",
-      "default": 16
-    },
-    {
-      "type": "range",
-      "id": "columns_gap_vertical",
-      "label": "t:settings.vertical_gap",
-      "min": 0,
-      "max": 50,
-      "step": 1,
-      "unit": "px",
-      "default": 16
-    },
-    {
-      "type": "range",
-      "id": "padding-inline-start",
-      "label": "t:settings.left_padding",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "padding-inline-end",
-      "label": "t:settings.right_padding",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 0
-    },
-    {
-      "type": "header",
-      "content": "t:content.section_layout"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:settings.color_scheme",
-      "default": "scheme-1"
-    },
-    {
-      "type": "range",
-      "id": "padding-block-start",
-      "label": "t:settings.top_padding",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 8
-    },
-    {
-      "type": "range",
-      "id": "padding-block-end",
-      "label": "t:settings.bottom_padding",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 8
-    }
-  ],
-  "blocks": [
-    {
-      "type": "promo_tile",
-      "name": "Promo tile",
-      "settings": [
-        {
-          "type": "range",
-          "id": "position",
-          "label": "Grid position (insert before item #)",
-          "min": 1,
-          "max": 24,
-          "step": 1,
-          "default": 5
-        },
-        {
-          "type": "text",
-          "id": "headline",
-          "label": "Headline",
-          "default": "NEW DROP"
-        },
-        {
-          "type": "text",
-          "id": "subtext",
-          "label": "Subtext",
-          "default": "Limited quantities. No restocks."
-        },
-        {
-          "type": "text",
-          "id": "cta_label",
-          "label": "Button label",
-          "default": "SHOP NOW"
-        },
-        {
-          "type": "url",
-          "id": "cta_url",
-          "label": "Button URL"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Background image (optional)"
-        },
-        {
-          "type": "color",
-          "id": "bg_color",
-          "label": "Background color",
-          "default": "#111111"
-        }
-      ]
-    }
+    { "type": "select", "id": "layout_type", "label": "t:settings.type", "options": [{ "value": "grid", "label": "t:options.grid" }, { "value": "organic", "label": "t:options.editorial" }], "default": "grid" },
+    { "type": "select", "id": "product_card_size", "label": "t:settings.card_size", "options": [{ "value": "small", "label": "t:options.small" }, { "value": "medium", "label": "t:options.medium" }, { "value": "large", "label": "t:options.large" }, { "value": "extra-large", "label": "t:options.extra_large" }], "default": "medium", "visible_if": "{{ section.settings.layout_type == 'grid' }}" },
+    { "type": "select", "id": "mobile_product_card_size", "label": "t:settings.mobile_card_size", "options": [{ "value": "small", "label": "t:options.small" }, { "value": "large", "label": "t:options.large" }], "default": "small" },
+    { "type": "checkbox", "id": "enable_infinite_scroll", "label": "t:settings.auto_load_products", "default": true },
+    { "type": "range", "id": "products_per_page", "label": "t:settings.products_per_page", "min": 8, "max": 36, "step": 4, "default": 24, "visible_if": "{{ section.settings.enable_infinite_scroll == false }}" },
+    { "type": "header", "content": "SEO description" },
+    { "type": "paragraph", "content": "Surface this collection's description as visible, crawlable copy on the page." },
+    { "type": "select", "id": "collection_description_position", "label": "Collection description placement", "options": [{ "value": "none", "label": "Hidden" }, { "value": "top", "label": "Above product grid" }, { "value": "bottom", "label": "Below product grid" }], "default": "none" },
+    { "type": "header", "content": "t:content.layout" },
+    { "type": "select", "id": "product_grid_width", "label": "t:settings.width", "options": [{ "value": "centered", "label": "t:options.page" }, { "value": "full-width", "label": "t:options.full" }], "default": "centered" },
+    { "type": "checkbox", "id": "full_width_on_mobile", "label": "t:settings.full_width_on_mobile", "default": true, "visible_if": "{{ section.settings.product_grid_width != 'full-width' }}" },
+    { "type": "range", "id": "columns_gap_horizontal", "label": "t:settings.horizontal_gap", "min": 0, "max": 50, "step": 1, "unit": "px", "default": 16 },
+    { "type": "range", "id": "columns_gap_vertical", "label": "t:settings.vertical_gap", "min": 0, "max": 50, "step": 1, "unit": "px", "default": 16 },
+    { "type": "range", "id": "padding-inline-start", "label": "t:settings.left_padding", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding-inline-end", "label": "t:settings.right_padding", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "header", "content": "t:content.section_layout" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:settings.color_scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding-block-start", "label": "t:settings.top_padding", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 8 },
+    { "type": "range", "id": "padding-block-end", "label": "t:settings.bottom_padding", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 8 }
   ],
   "presets": []
 }
 {% endschema %}
-
-{% stylesheet %}
-.lb-promo-tile {
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-  min-height: 320px;
-  background: #111111;
-}
-
-.lb-promo-tile__bg-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.45;
-}
-
-.lb-promo-tile__content {
-  position: relative;
-  z-index: 1;
-  padding: 24px 20px;
-}
-
-.lb-promo-tile__headline {
-  color: #F5F5F0;
-  text-transform: uppercase;
-  margin: 0 0 8px;
-  line-height: 0.92;
-}
-
-.lb-promo-tile__sub {
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 10px;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: rgba(245, 245, 240, 0.6);
-  margin: 0 0 16px;
-}
-
-.lb-promo-tile__cta {
-  display: inline-block;
-}
-
-.lb-btn--sm {
-  font-size: 11px;
-  padding: 8px 16px;
-}
-{% endstylesheet %}

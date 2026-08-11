@@ -9,8 +9,8 @@
   <div class="lb-ba" role="img" aria-label="{{ section.settings.heading | default: 'Before and after comparison' | escape }}">
     <div class="lb-ba__before">
       <img
-        src="{{ section.settings.before_image | image_url: width: 1400 }}"
-        srcset="{{ section.settings.before_image | image_url: width: 750 }} 750w, {{ section.settings.before_image | image_url: width: 1100 }} 1100w, {{ section.settings.before_image | image_url: width: 1400 }} 1400w"
+        src="{{ section.settings.before_image | image_url: width: 1400, format: 'webp'}}"
+        srcset="{{ section.settings.before_image | image_url: width: 750, format: 'webp'}} 750w, {{ section.settings.before_image | image_url: width: 1100, format: 'webp'}} 1100w, {{ section.settings.before_image | image_url: width: 1400, format: 'webp'}} 1400w"
         sizes="100vw"
         alt="{{ section.settings.before_label | default: 'Before' | escape }}"
         width="{{ section.settings.before_image.width }}"
@@ -25,8 +25,8 @@
 
     <div class="lb-ba__after">
       <img
-        src="{{ section.settings.after_image | image_url: width: 1400 }}"
-        srcset="{{ section.settings.after_image | image_url: width: 750 }} 750w, {{ section.settings.after_image | image_url: width: 1100 }} 1100w, {{ section.settings.after_image | image_url: width: 1400 }} 1400w"
+        src="{{ section.settings.after_image | image_url: width: 1400, format: 'webp'}}"
+        srcset="{{ section.settings.after_image | image_url: width: 750, format: 'webp'}} 750w, {{ section.settings.after_image | image_url: width: 1100, format: 'webp'}} 1100w, {{ section.settings.after_image | image_url: width: 1400, format: 'webp'}} 1400w"
         sizes="100vw"
         alt="{{ section.settings.after_label | default: 'After' | escape }}"
         width="{{ section.settings.after_image.width }}"
