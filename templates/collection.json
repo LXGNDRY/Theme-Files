@@ -449,7 +449,7 @@
         "product_card_size": "large",
         "mobile_product_card_size": "small",
         "enable_infinite_scroll": false,
-        "products_per_page": 12,
+        "products_per_page": 8,
         "collection_description_position": "bottom",
         "product_grid_width": "centered",
         "full_width_on_mobile": false,
