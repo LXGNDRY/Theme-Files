@@ -107,6 +107,12 @@
           enable_infinite_scroll: section.settings.enable_infinite_scroll
         %}
       {% endif %}
+
+      {%- unless section.settings.enable_infinite_scroll -%}
+        <div class="collection-pagination-wrapper">
+          {%- render 'pagination-controls', paginate: paginate -%}
+        </div>
+      {%- endunless -%}
     {% endpaginate %}
   </div>
 
@@ -427,5 +433,16 @@
 .lb-btn--sm {
   font-size: 11px;
   padding: 8px 16px;
+}
+
+.collection-pagination-wrapper {
+  grid-column: 1 / -1;
+  position: relative;
+  z-index: 2;
+}
+
+.collection-pagination-wrapper .pagination {
+  content-visibility: visible;
+  contain: none;
 }
 {% endstylesheet %}
