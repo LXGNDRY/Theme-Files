@@ -70,6 +70,7 @@
   {%- render 'seo-preconnect' -%}
   {%- render 'lb-hero-lcp-preload' -%}
   {%- render 'lb-collection-lcp-preload' -%}
+  {%- render 'lb-article-lcp-preload' -%}
 
   {%- comment -%}── 4 + 5. CHAOS UNLEASHED ────────────────────────────────────
     Must render BEFORE content_for_header is emitted so Chaos can
@@ -276,14 +277,24 @@
   <noscript><link rel="stylesheet" href="{{ 'lb-collection.css' | asset_url }}"></noscript>
   {%- endif -%}
 
+  {%- if template.name == 'product' -%}
+  <link rel="preload" href="{{ 'lb-product-page.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
+  <noscript><link rel="stylesheet" href="{{ 'lb-product-page.css' | asset_url }}"></noscript>
+  {%- endif -%}
+
   {%- comment -%}── 15. VIEW TRANSITIONS (guarded) ───────────────────────────
     <link rel="expect" href="#MainContent"> explicitly gates rendering
     until #MainContent is parsed. Only inject when transitions are active
     in theme settings — do not leave it in unconditionally.
   {%- endcomment -%}
-  {%- if settings.transition_to_main_product or settings.page_transition_enabled -%}
-    <link rel="expect" href="#MainContent" id="view-transition-render-blocker">
-  {%- endif -%}
+  {%- comment -%}── 15. VIEW TRANSITIONS ─────────────────────────────────────
+    blocking="render" and <link rel="expect"> removed — both prevented first
+    paint until the script executed / <main> was parsed, causing severe LCP
+    regression on mobile. view-transitions.js now loads with defer, which
+    allows the page to render immediately while the script downloads.
+    Cross-document transitions still work; the initial page load is no longer
+    gated on the transition script.
+  {%- endcomment -%}
 
   {%- comment -%}── 16. THEME EDITOR (design mode only) ──────────────────────{%- endcomment -%}
   {%- if request.design_mode -%}{%- render 'theme-editor' -%}{%- endif -%}
@@ -318,6 +329,8 @@
 </head>
 
 <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
+
+  <a class="lb-skip-link" href="#MainContent">Skip to main content</a>
 
   {%- comment -%}── GTM NOSCRIPT (required by Google, must be first in <body>) ─
     Gated out of theme editor / visual preview so editor renders never log a
