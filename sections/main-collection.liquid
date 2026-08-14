@@ -67,6 +67,11 @@
         {% endcapture %}
         {% render 'product-grid', section: section, children: children, products: collection.products, paginate: paginate, enable_infinite_scroll: section.settings.enable_infinite_scroll %}
 
+        {%- unless section.settings.enable_infinite_scroll -%}
+          <div class="collection-pagination-wrapper">
+            {%- render 'pagination-controls', paginate: paginate -%}
+          </div>
+        {%- endunless -%}
       {% endif %}
     {% endpaginate %}
   </div>
