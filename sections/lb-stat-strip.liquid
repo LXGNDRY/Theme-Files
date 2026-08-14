@@ -1,12 +1,12 @@
 {%- if section.blocks.size > 0 -%}
-<div class="lb-stats color-{{ section.settings.color_scheme | default: 'scheme-1' }}">
+<dl class="lb-stats color-{{ section.settings.color_scheme | default: 'scheme-1' }}" role="list">
   {%- for block in section.blocks -%}
-    <div class="lb-stat" {{ block.shopify_attributes }}>
-      <span class="lb-stat__num">{{ block.settings.number }}</span>
-      <span class="lb-stat__label">{{ block.settings.label }}</span>
+    <div class="lb-stat" role="listitem" {{ block.shopify_attributes }}>
+      <dd class="lb-stat__num">{{ block.settings.number }}</dd>
+      <dt class="lb-stat__label">{{ block.settings.label }}</dt>
     </div>
   {%- endfor -%}
-</div>
+</dl>
 {%- endif -%}
 
 {% schema %}
