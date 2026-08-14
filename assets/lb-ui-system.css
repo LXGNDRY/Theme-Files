@@ -16,14 +16,12 @@
  */
 
 /* ─── 1. BRAND TOKENS ─────────────────────────────────────────────────────────────────── */
+/*
+ * Gold accent removed per design direction 2026-08-14.
+ * Judge.me review stars retain their gold via .jdgm-star selectors elsewhere.
+ * All former gold usages now inherit from --color-foreground / --lb-fg.
+ */
 :root {
-  /* Marque Gold */
-  --lb-gold:         #C9A84C;
-  --lb-gold-light:   #E0BE72;
-  --lb-gold-dim:     #A88A38;
-  --lb-gold-subtle:  rgba(201,168,76,0.12);
-  --lb-gold-border:  rgba(201,168,76,0.28);
-
   /* Dark surfaces */
   --lb-black:        #0A0A0A;
   --lb-surface:      #111111;
@@ -73,9 +71,9 @@
   --lb-shadow:     0 2px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.06);
   --lb-shadow-lg:  0 8px 40px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.08);
 
-  /* Accent */
-  --lb-accent:     var(--lb-gold);
-  --lb-accent-dim: var(--lb-gold-dim);
+  /* Accent — inherits from foreground; no gold */
+  --lb-accent:     var(--color-foreground);
+  --lb-accent-dim: rgba(var(--color-foreground-rgb), 0.6);
 }
 
 /* ─── 2. DARK MODE OVERRIDES ───────────────────────────────────────────────────────── */
@@ -84,6 +82,16 @@ html[data-theme="dark"] {
   --lb-fg:     #F0EDE8;
   --lb-border: rgba(240,237,232,0.10);
   --lb-shadow: 0 2px 16px rgba(0,0,0,0.40);
+}
+
+/* OS dark preference — applies on first visit before JS sets data-theme */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --lb-bg:     #0A0A0A;
+    --lb-fg:     #F0EDE8;
+    --lb-border: rgba(240,237,232,0.10);
+    --lb-shadow: 0 2px 16px rgba(0,0,0,0.40);
+  }
 }
 
 /* ─── 3. MOTION SAFETY ────────────────────────────────────────────────────────────────── */
@@ -98,6 +106,35 @@ html[data-theme="dark"] {
 
 /* ─── 4. GLOBAL RESETS ─────────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
+
+/* Skip navigation — WCAG 2.4.1 Level A */
+.lb-skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 9999;
+}
+.lb-skip-link:focus-visible {
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  padding: 0.5rem 1.25rem;
+  background: var(--lb-bg);
+  color: var(--lb-fg);
+  border: 1px solid var(--lb-border);
+  border-radius: var(--lb-radius);
+  font-family: var(--lb-font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: var(--lb-shadow);
+}
 
 img, video {
   display: block;
@@ -152,13 +189,13 @@ img, video {
 }
 
 .lb-btn--primary {
-  background: var(--lb-gold);
-  color: var(--lb-black);
+  background: var(--color-foreground);
+  color: var(--color-background);
 }
 .lb-btn--primary:hover {
-  background: var(--lb-gold-light);
+  background: rgba(var(--color-foreground-rgb), 0.85);
   transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(201,168,76,0.35);
+  box-shadow: 0 4px 20px rgba(var(--color-foreground-rgb), 0.18);
 }
 .lb-btn--primary:active { transform: translateY(0); }
 
@@ -267,7 +304,7 @@ html[data-theme="dark"] .lb-icon-sun  { display: block; }
   font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--lb-gold);
+  color: rgba(240, 237, 232, 0.7);
   margin-bottom: 12px;
 }
 
@@ -346,7 +383,7 @@ html[data-theme="dark"] .lb-icon-sun  { display: block; }
   font-family: var(--lb-font-display);
   font-size: clamp(2rem, 4vw, 3.2rem);
   line-height: 1;
-  color: var(--lb-gold);
+  color: var(--lb-fg);
   display: block;
   margin-bottom: 4px;
 }
@@ -423,7 +460,7 @@ html[data-theme="dark"] .lb-icon-sun  { display: block; }
   line-height: 1.4;
 }
 
-.lb-badge--new     { background: var(--lb-gold-subtle); color: var(--lb-gold); border: 1px solid var(--lb-gold-border); }
+.lb-badge--new     { background: rgba(var(--color-foreground-rgb), 0.06); color: var(--lb-fg); border: 1px solid rgba(var(--color-foreground-rgb), 0.15); }
 .lb-badge--sale    { background: rgba(239,68,68,0.1);   color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
 .lb-badge--soldout { background: rgba(0,0,0,0.06);      color: var(--lb-gray-500); border: 1px solid var(--lb-border); }
 
@@ -473,7 +510,8 @@ html[data-theme="dark"] .lb-icon-sun  { display: block; }
   font-size: 9px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--lb-gold);
+  color: var(--lb-fg);
+  opacity: 0.5;
   margin-bottom: 16px;
 }
 
@@ -538,8 +576,8 @@ html[data-theme="dark"] .lb-icon-sun  { display: block; }
 
 .lb-newsletter__btn {
   padding: 10px 16px;
-  background: var(--lb-gold);
-  color: var(--lb-black);
+  background: var(--lb-fg);
+  color: var(--lb-bg);
   border: none;
   border-radius: var(--lb-radius);
   font-family: var(--lb-font-mono);
@@ -550,10 +588,10 @@ html[data-theme="dark"] .lb-icon-sun  { display: block; }
   white-space: nowrap;
   transition: background var(--lb-dur-fast) var(--lb-ease);
 }
-.lb-newsletter__btn:hover { background: var(--lb-gold-light); }
+.lb-newsletter__btn:hover { background: rgba(var(--color-foreground-rgb), 0.80); }
 
 /* ─── 17. UTILITY CLASSES ───────────────────────────────────────────────────────────────── */
-.lb-text-gold    { color: var(--lb-gold); }
+.lb-text-gold    { color: var(--lb-fg); } /* gold removed; inherits foreground */
 .lb-text-muted   { opacity: 0.55; }
 .lb-text-center  { text-align: center; }
 .lb-text-upper   { text-transform: uppercase; letter-spacing: 0.08em; }
@@ -666,14 +704,7 @@ body.overflow-hidden {
   touch-action: none;
 }
 
-/* ─── 22. PICKUP AVAILABILITY — hide site-wide ────────────────────────────── */
-pickup-availability,
-[class*="pickup-availability"],
-[data-pickup-availability] {
-  display: none !important;
-}
-
-/* ─── 23. RICH TEXT / CMS TABLE OVERFLOW FIX ───────────────────────────── */
+/* ─── 22. RICH TEXT / CMS TABLE OVERFLOW FIX ───────────────────────────── */
 
 .details-content .text-block div:has(> table) {
   overflow-x: auto;

@@ -1,73 +1,74 @@
 /*
  * lb-announcement-bar.css
  * Legendary Branding Theme — dev branch
- * Clean mono announcement bar: white bg, black text, JetBrains Mono.
- * Strips any rich-text green/yellow color set in Shopify admin.
- * Ported from ui-redesign-2026 commit 27734e2 (2026-05-19).
+ * Clean mono announcement bar: dark bg, light text, consistent mono type.
+ * !important is retained only on color/text rules that fight Shopify admin
+ * inline styles (set via the rich text editor). Structural rules use html
+ * prefix for specificity instead.
  */
 
-aside.announcement-bar,
-.announcement-bar {
-  background-color: #0A0A0A !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-  --padding-block-start: 9px !important;
-  --padding-block-end:   9px !important;
+html aside.announcement-bar,
+html .announcement-bar {
+  background-color: #0A0A0A;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  --padding-block-start: 9px;
+  --padding-block-end:   9px;
 }
 
 /* Kill any color-scheme background bleed */
-.announcement-bar .section-background { display: none !important; }
+html .announcement-bar .section-background { display: none !important; }
 
-/* Force all text to mono black — overrides rich-text inline color */
-.announcement-bar__text,
-.announcement-bar__text p,
-.announcement-bar__text span,
-.announcement-bar__text a,
-.announcement-bar p,
-.announcement-bar span {
+/* Force all text to mono — !important required to defeat Shopify admin inline styles */
+html .announcement-bar__text,
+html .announcement-bar__text p,
+html .announcement-bar__text span,
+html .announcement-bar__text a,
+html .announcement-bar p,
+html .announcement-bar span {
   color: #F0EDE8 !important;
-  font-family: 'Helvetica Neue', Arial, sans-serif !important;
-  font-size: 12px !important;
-  font-weight: 400 !important;
-  letter-spacing: 0.08em !important;
-  text-transform: uppercase !important;
-  text-decoration: none !important;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
   -webkit-text-fill-color: #F0EDE8 !important;
-  white-space: normal !important;
+  white-space: normal;
 }
 
 /* Mobile: tighten tracking slightly */
 @media screen and (max-width: 749px) {
-  .announcement-bar__text,
-  .announcement-bar__text p,
-  .announcement-bar__text span,
-  .announcement-bar__text a,
-  .announcement-bar p,
-  .announcement-bar span {
-    font-size: 11px !important;
-    letter-spacing: 0.06em !important;
+  html .announcement-bar__text,
+  html .announcement-bar__text p,
+  html .announcement-bar__text span,
+  html .announcement-bar__text a,
+  html .announcement-bar p,
+  html .announcement-bar span {
+    font-size: 11px;
+    letter-spacing: 0.06em;
   }
 }
 
 /* Slide background — transparent */
-.announcement-bar__slide,
-slideshow-slide.announcement-bar__slide {
-  background: transparent !important;
+html .announcement-bar__slide,
+html slideshow-slide.announcement-bar__slide {
+  background: transparent;
 }
 
 /* Arrows — match mono look */
-.announcement-bar .slideshow-arrow-button,
-.announcement-bar .slideshow-prev,
-.announcement-bar .slideshow-next {
-  color: #F0EDE8 !important;
+html .announcement-bar .slideshow-arrow-button,
+html .announcement-bar .slideshow-prev,
+html .announcement-bar .slideshow-next {
+  color: #F0EDE8;
   opacity: 0.5;
 }
-.announcement-bar .slideshow-arrow-button:hover { opacity: 1; }
+html .announcement-bar .slideshow-arrow-button:hover { opacity: 1; }
 
 /* Dark mode — already dark, no change needed */
 html[data-theme="dark"] aside.announcement-bar,
 html[data-theme="dark"] .announcement-bar {
-  background-color: #0A0A0A !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background-color: #0A0A0A;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 html[data-theme="dark"] .announcement-bar__text,
 html[data-theme="dark"] .announcement-bar__text p,

@@ -78,9 +78,25 @@
       img.setAttribute('srcset', buildSrcset(src));
     }
 
-    // Upgrade sizes if missing
+    // Upgrade sizes if missing — use data-sizes from calling context if provided,
+    // otherwise infer from closest grid container column count.
     if (!img.getAttribute('sizes')) {
-      img.setAttribute('sizes', '(min-width: 1200px) 50vw, 100vw');
+      const dataSizes = img.closest('[data-img-sizes]');
+      if (dataSizes) {
+        img.setAttribute('sizes', dataSizes.dataset.imgSizes);
+      } else {
+        // Infer from grid: count sibling cards to approximate column width
+        const card = img.closest('.product-card, .collection-card, .featured-blog-posts-card');
+        const grid = card && card.parentElement;
+        const cols = grid ? Math.round(grid.getBoundingClientRect().width / (card.getBoundingClientRect().width || 1)) : 1;
+        if (cols >= 4) {
+          img.setAttribute('sizes', '(min-width: 1200px) 25vw, (min-width: 750px) 50vw, 100vw');
+        } else if (cols >= 2) {
+          img.setAttribute('sizes', '(min-width: 750px) 50vw, 100vw');
+        } else {
+          img.setAttribute('sizes', '100vw');
+        }
+      }
     }
 
     // Ensure decoding is async for non-LCP images
