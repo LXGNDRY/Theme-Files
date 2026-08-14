@@ -106,13 +106,13 @@
           paginate: paginate,
           enable_infinite_scroll: section.settings.enable_infinite_scroll
         %}
-      {% endif %}
 
-      {%- unless section.settings.enable_infinite_scroll -%}
-        <div class="collection-pagination-wrapper">
-          {%- render 'pagination-controls', paginate: paginate -%}
-        </div>
-      {%- endunless -%}
+        {%- unless section.settings.enable_infinite_scroll -%}
+          <div class="collection-pagination-wrapper">
+            {%- render 'pagination-controls', paginate: paginate -%}
+          </div>
+        {%- endunless -%}
+      {% endif %}
     {% endpaginate %}
   </div>
 
@@ -437,6 +437,8 @@
 
 .collection-pagination-wrapper {
   grid-column: 1 / -1;
+  display: block;
+  width: 100%;
   position: relative;
   z-index: 2;
 }
