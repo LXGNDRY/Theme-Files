@@ -5,7 +5,7 @@
 
 {%- comment -%} SEO: Inject meta description for /collections page if none set {%- endcomment -%}
 {%- if template == 'list-collections' -%}
-  {%- assign page_desc = page_description | default: 'Shop all Legendary Branding collections — heavyweight graphic tees, oversized hoodies, streetwear accessories, and more. Free worldwide shipping.' -%}
+  {%- assign page_desc = page_description | default: 'Shop all Legendary Branding collections — heavyweight graphic tees, oversized hoodies, streetwear accessories, and more.' -%}
   <meta name="description" content="{{ page_desc | escape }}">
 {%- endif -%}
 

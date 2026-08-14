@@ -13,23 +13,22 @@
         {%- if block.settings.image != blank -%}
           {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}" class="lb-lookbook__link">{%- endif -%}
 
-          <div class="lb-lookbook__media-wrap">
+          <figure class="lb-lookbook__media-wrap">
             <img
               src="{{ block.settings.image | image_url: width: 800, format: 'webp'}}"
               srcset="{{ block.settings.image | image_url: width: 400, format: 'webp'}} 400w, {{ block.settings.image | image_url: width: 800, format: 'webp'}} 800w, {{ block.settings.image | image_url: width: 1200, format: 'webp'}} 1200w"
               sizes="(max-width: 749px) 100vw, 50vw"
-              alt="{{ block.settings.image.alt | default: block.settings.overlay_text | escape }}"
+              alt="{{ block.settings.image.alt | escape }}"
               width="{{ block.settings.image.width }}"
               height="{{ block.settings.image.height }}"
               loading="lazy"
               class="lb-lookbook__img"
             >
             {%- if block.settings.overlay_text != blank -%}
-              <div class="lb-lookbook__overlay" aria-hidden="true">
-                <span class="lb-lookbook__overlay-text">{{ block.settings.overlay_text }}</span>
-              </div>
+              <div class="lb-lookbook__overlay" aria-hidden="true"></div>
+              <figcaption class="lb-lookbook__caption">{{ block.settings.overlay_text }}</figcaption>
             {%- endif -%}
-          </div>
+          </figure>
 
           {%- if block.settings.link != blank -%}</a>{%- endif -%}
         {%- endif -%}
@@ -55,7 +54,8 @@
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #C9A84C;
+  color: var(--color-foreground);
+  opacity: 0.5;
   margin: 0 0 8px;
 }
 
@@ -118,6 +118,7 @@
   position: relative;
   overflow: hidden;
   line-height: 0;
+  margin: 0;
 }
 
 .lb-lookbook__img {
@@ -135,26 +136,43 @@
   .lb-lookbook__media-wrap:hover .lb-lookbook__overlay {
     opacity: 1;
   }
+  .lb-lookbook__media-wrap:hover .lb-lookbook__caption {
+    opacity: 1;
+  }
 }
 
 .lb-lookbook__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 50%);
-  display: flex;
-  align-items: flex-end;
-  padding: 20px 18px;
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 55%);
+  pointer-events: none;
   opacity: 0;
   transition: opacity 280ms ease;
 }
 
-.lb-lookbook__overlay-text {
+.lb-lookbook__caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 18px;
   font-family: 'Bebas Neue', 'Arial Black', sans-serif;
   font-size: clamp(18px, 2.5vw, 28px);
   color: #F5F5F0;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   line-height: 1;
+  opacity: 0;
+  transition: opacity 280ms ease;
+}
+
+@media (hover: none) {
+  .lb-lookbook__caption {
+    opacity: 1;
+  }
+  .lb-lookbook__overlay {
+    opacity: 1;
+  }
 }
 {% endstylesheet %}
 

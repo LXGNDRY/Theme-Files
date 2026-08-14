@@ -7,7 +7,7 @@
         {%- if block.settings.logo != blank -%}
           <div class="lb-press__logo-wrap" {{ block.shopify_attributes }}>
             {%- if block.settings.link != blank -%}
-              <a href="{{ block.settings.link }}" class="lb-press__logo-link" target="_blank" rel="noopener noreferrer" aria-label="{{ block.settings.alt | default: block.settings.link }}">
+              <a href="{{ block.settings.link }}" class="lb-press__logo-link" target="_blank" rel="noopener noreferrer" aria-label="{{ block.settings.alt | default: 'Press mention' }}">
             {%- endif -%}
 
             <img

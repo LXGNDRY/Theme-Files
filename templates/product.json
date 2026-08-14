@@ -87,7 +87,7 @@
                 "letter_spacing": "normal",
                 "case": "uppercase",
                 "color": "var(--color-foreground-heading)",
-                "padding-block-start": 8,
+                "padding-block-start": 25,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
@@ -101,7 +101,7 @@
                 "text": "<h1><strong>{{ closest.product.title }}</strong></h1>",
                 "width": "100%",
                 "max_width": "none",
-                "alignment": "center",
+                "alignment": "left",
                 "type_preset": "h3",
                 "font": "var(--font-accent--family)",
                 "font_size": "1.5rem",
@@ -197,9 +197,36 @@
               },
               "block_order": []
             },
+            "text_DpkCnt": {
+              "type": "text",
+              "name": "t:names.text",
+              "settings": {
+                "text": "<p>Merch is <strong>unisex</strong> & <strong>true to size</strong>. So, feel free to order your normal fit. We work closely with our vendors to ensure quality and premium textures. </p>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "center",
+                "type_preset": "custom",
+                "font": "var(--font-accent--family)",
+                "font_size": "1.25rem",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "balance",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 8,
+                "padding-block-end": 8,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
             "image_wUdQUh": {
               "type": "image",
               "name": "t:names.image",
+              "disabled": true,
               "settings": {
                 "image": "shopify://shop_images/Hat_s_-_Logo_White_1200x301_1.png",
                 "link": "",
@@ -223,6 +250,7 @@
             "image_WpKDGh": {
               "type": "image",
               "name": "t:names.image",
+              "disabled": true,
               "settings": {
                 "image": "shopify://shop_images/Hat_s_-_Artboard_3_1.png",
                 "link": "",
@@ -238,32 +266,6 @@
                 "border_radius": 0,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_DpkCnt": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>Merch is <strong>unisex</strong> & <strong>true to size</strong>. So, feel free to order your normal fit. We work closely with our vendors to ensure quality and premium textures. </p>",
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "center",
-                "type_preset": "custom",
-                "font": "var(--font-accent--family)",
-                "font_size": "1.25rem",
-                "line_height": "tight",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "balance",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 8,
-                "padding-block-end": 8,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
@@ -481,6 +483,7 @@
             "image_L97JKV": {
               "type": "image",
               "name": "t:names.image",
+              "disabled": true,
               "settings": {
                 "image": "shopify://shop_images/Hat_s_-_Logo_White_1200x301_26e34206-d511-4c76-b931-ffdc325d268d.png",
                 "link": "",
@@ -533,9 +536,9 @@
             "text_enejcM",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
+            "text_DpkCnt",
             "image_wUdQUh",
             "image_WpKDGh",
-            "text_DpkCnt",
             "lb_size_guide_pdp",
             "lb_low_stock_pdp",
             "lb_stat_strip_pdp",
@@ -547,7 +550,7 @@
       },
       "settings": {
         "content_width": "content-full-width",
-        "desktop_media_position": "right",
+        "desktop_media_position": "left",
         "equal_columns": true,
         "limit_details_width": true,
         "gap": 0,

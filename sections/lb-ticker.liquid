@@ -1,15 +1,59 @@
 {%- if section.blocks.size > 0 -%}
-<div class="lb-ticker" aria-hidden="true">
+<div
+  class="lb-ticker color-{{ section.settings.color_scheme | default: 'scheme-1' }}"
+  aria-hidden="true"
+  role="marquee"
+>
   <div class="lb-ticker__track">
     {%- for block in section.blocks -%}
-      <span class="lb-ticker__word">{{ block.settings.text }}<span class="lb-ticker__dot">·</span></span>
+      <span class="lb-ticker__word">{{ block.settings.text }}<span class="lb-ticker__dot" aria-hidden="true">&nbsp;·&nbsp;</span></span>
     {%- endfor -%}
+    {%- comment -%}Duplicate set for seamless loop{%- endcomment -%}
     {%- for block in section.blocks -%}
-      <span class="lb-ticker__word">{{ block.settings.text }}<span class="lb-ticker__dot">·</span></span>
+      <span class="lb-ticker__word" aria-hidden="true">{{ block.settings.text }}<span class="lb-ticker__dot">&nbsp;·&nbsp;</span></span>
     {%- endfor -%}
   </div>
 </div>
 {%- endif -%}
+
+{% stylesheet %}
+.lb-ticker {
+  overflow: hidden;
+  padding-block: clamp(12px, 2vw, 18px);
+  border-block: 1px solid rgba(var(--color-foreground-rgb, 0,0,0), 0.08);
+  white-space: nowrap;
+}
+
+.lb-ticker__track {
+  display: inline-flex;
+  gap: 0;
+  animation: lb-ticker-scroll 24s linear infinite;
+  will-change: transform;
+}
+
+.lb-ticker__word {
+  font-family: var(--lb-font-display, 'Bebas Neue', 'Arial Black', sans-serif);
+  font-size: clamp(0.8rem, 1.6vw, 1.1rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-foreground);
+  padding-inline: 0.5em;
+  flex-shrink: 0;
+}
+
+.lb-ticker__dot {
+  opacity: 0.35;
+}
+
+@keyframes lb-ticker-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lb-ticker__track { animation: none; }
+}
+{% endstylesheet %}
 
 {% schema %}
 {
@@ -28,6 +72,14 @@
           "default": "LEGENDARY BRANDING"
         }
       ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
     }
   ],
   "presets": [

@@ -17,7 +17,7 @@
         "announcement_zprb7R": {
           "type": "_announcement",
           "settings": {
-            "text": "<strong>20% Off First Order — FREE WORLDWIDE SHIPPING</strong>",
+            "text": "<strong>20% Off First Order — Free US Shipping on Orders $100+</strong>",
             "link": "",
             "font": "var(--font-body--family)",
             "font_size": "1rem",
