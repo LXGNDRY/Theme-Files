@@ -54,6 +54,18 @@
   }
   */
 
+  /* Collection + search results must never be skipped. Pagination renders at the
+     bottom of this section; content-visibility: auto leaves it unpainted until the
+     user scrolls or taps into the skipped region, so the controls read as missing.
+     #shopify-section-main matches by section key (no :has() support needed); the
+     :has() selectors cover templates where the section key differs. */
+  #shopify-section-main,
+  .shopify-section:has(results-list),
+  .shopify-section:has(.product-grid-container) {
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+  }
+
   /* Never apply to header, footer, announcement bar, or sticky elements.
      These are either above the fold or must remain layout-present at all times. */
   #header-group .shopify-section,
