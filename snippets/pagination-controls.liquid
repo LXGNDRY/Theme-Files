@@ -16,6 +16,71 @@
   {%- endpaginate -%}
 {%- enddoc -%}
 
+{%- comment -%}
+  ┌──────────────────────────────────────────────────────────────────────┐
+  │ TEMPORARY DIAGNOSTIC — REMOVE AFTER DEBUGGING (pagination mobile bug) │
+  └──────────────────────────────────────────────────────────────────────┘
+  Hidden unless the URL contains ?pgdebug=1 — normal shoppers never see it.
+  Deliberately placed OUTSIDE the paginate.pages > 1 guard so we can tell
+  whether the guard itself is what suppresses the nav on mobile.
+{%- endcomment -%}
+<div class="lb-pg-debug" hidden>
+  paginate.pages={{ paginate.pages | default: 'NIL' }}
+  items={{ paginate.items | default: 'NIL' }}
+  current_page={{ paginate.current_page | default: 'NIL' }}
+  parts_size={{ paginate.parts.size | default: 'NIL' }}
+  nav_rendered={% if paginate.pages > 1 %}YES{% else %}NO{% endif %}
+  viewport=<span class="lb-pg-debug__vw"></span>
+</div>
+<style>
+  .lb-pg-debug {
+    font: 12px/1.5 monospace;
+    background: #ff0;
+    color: #000;
+    padding: 8px;
+    border: 2px dashed #f00;
+    word-break: break-word;
+  }
+  /* Outline the nav and each item so we can see whether they exist but are
+     collapsed/zero-size, versus not present at all. */
+  .lb-pg-debug-on .pagination { outline: 3px solid #f00 !important; min-height: 44px; }
+  .lb-pg-debug-on .pagination__list { outline: 2px solid #08f !important; }
+  .lb-pg-debug-on .pagination__item { outline: 1px solid #0a0 !important; }
+  /* KEY TEST: force-reveal the items the mobile media query hides. If the
+     controls appear only with this on, the mobile-hide logic is the cause. */
+  .lb-pg-debug-on .pagination__item--mobile-hide { display: grid !important; }
+</style>
+<script>
+  (function () {
+    if (!/[?&]pgdebug=1/.test(window.location.search)) return;
+    document.documentElement.classList.add('lb-pg-debug-on');
+    document.querySelectorAll('.lb-pg-debug').forEach(function (el) {
+      el.hidden = false;
+      var vw = el.querySelector('.lb-pg-debug__vw');
+      if (vw) vw.textContent = window.innerWidth + 'px';
+      var nav = document.querySelector('.pagination');
+      var report = document.createElement('div');
+      if (!nav) {
+        report.textContent = 'RESULT: no .pagination element in the DOM.';
+      } else {
+        var r = nav.getBoundingClientRect();
+        var cs = getComputedStyle(nav);
+        var items = nav.querySelectorAll('.pagination__item');
+        var shown = 0;
+        items.forEach(function (i) {
+          if (getComputedStyle(i).display !== 'none') shown++;
+        });
+        report.textContent =
+          'RESULT: nav in DOM. box=' + Math.round(r.width) + 'x' + Math.round(r.height) +
+          ' display=' + cs.display + ' visibility=' + cs.visibility +
+          ' opacity=' + cs.opacity + ' content-visibility=' + (cs.contentVisibility || 'n/a') +
+          ' | items total=' + items.length + ' displayed=' + shown;
+      }
+      el.appendChild(report);
+    });
+  })();
+</script>
+
 {%- if paginate.pages > 1 -%}
   <nav
     class="pagination"
