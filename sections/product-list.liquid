@@ -17,6 +17,11 @@
     {%- content_for 'block', type: '_product-list-content', id: 'static-header' -%}
   </div>
 
+  {%- if template.name == 'index' and homepage_links_rendered != 'true' -%}
+    {%- render 'lb-internal-links', context: 'homepage' -%}
+    {%- assign homepage_links_rendered = 'true' -%}
+  {%- endif -%}
+
   {%- capture list_items -%}
     {%- if has_products -%}
       {%- paginate collection.products by max_items -%}
@@ -60,8 +65,44 @@
   </div>
 </div>
 
-{% schema %}
+{%- if has_products and collection != blank -%}
+{%- comment -%}
+  ItemList JSON-LD for rich results eligibility.
+  Renders here (in the section, not in <head>) so it uses the exact
+  products this section displays. Multiple product-list sections on
+  the same page each emit their own ItemList, which is valid — Google
+  reads every script[type=application/ld+json] on the page.
+{%- endcomment -%}
+<script type="application/ld+json">
 {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": {{ collection.title | json }},
+  "numberOfItems": {{ max_items }},
+  "itemListElement": [
+    {%- for product in collection.products limit: max_items -%}
+    {
+      "@type": "ListItem",
+      "position": {{ forloop.index }},
+      "url": {{ shop.url | append: product.url | json }},
+      "name": {{ product.title | json }}
+      {%- if product.featured_image -%},
+      "image": {{ product.featured_image | image_url: width: 800, format: 'webp' | prepend: 'https:' | json }}
+      {%- endif -%},
+      "offers": {
+        "@type": "Offer",
+        "price": {{ product.price | money_without_currency | json }},
+        "priceCurrency": {{ cart.currency.iso_code | json }},
+        "availability": {% if product.available %}"https://schema.org/InStock"{% else %}"https://schema.org/OutOfStock"{% endif %}
+      }
+    }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ]
+}
+</script>
+{%- endif -%}
+
+{% schema %}
   "name": "t:names.product_list",
   "class": "ui-test-product-list",
   "blocks": [

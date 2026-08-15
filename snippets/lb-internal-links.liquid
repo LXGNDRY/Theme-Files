@@ -9,7 +9,13 @@
     product context:    render 'lb-internal-links', context: 'product', product: product
     collection context: render 'lb-internal-links', context: 'collection', collection: collection
     footer context:     render 'lb-internal-links', context: 'footer'
+    homepage context:   render 'lb-internal-links', context: 'homepage'
   Dependencies: Shopify linklists, product/page content objects
+  Changes:
+    - v1.2.0: added 'homepage' context (2026-08-15). Shows up to 6
+      top collections as pill navigation, rendered in the first
+      product-list section on the homepage. Distributes link equity
+      from the highest-authority page into key collection pages.
 {%- endcomment -%}
 
 {%- liquid
@@ -71,6 +77,32 @@
         {%- endfor -%}
       </ul>
     </div>
+  {%- endif -%}
+
+{%- elsif context == 'homepage' -%}
+  {%- comment -%}
+    Homepage contextual internal links.
+    Shows up to 6 top collections as pill navigation near the top of
+    the homepage. Distributes link equity from the highest-authority
+    page on the domain into key collection pages — one of the
+    strongest internal-linking patterns for apparel SEO.
+  {%- endcomment -%}
+
+  {%- assign hp_collection_count = 0 -%}
+  {%- for coll in collections limit: 6 -%}
+    {%- assign hp_collection_count = hp_collection_count | plus: 1 -%}
+  {%- endfor -%}
+
+  {%- if hp_collection_count > 0 -%}
+    <nav class="lb-collection-nav lb-collection-nav--homepage" aria-label="{{ 'accessibility.shop_by_category' | t | default: 'Shop by category' }}">
+      <ul class="lb-collection-nav__list">
+        {%- for coll in collections limit: 6 -%}
+          <li>
+            <a href="{{ coll.url }}" class="lb-collection-nav__pill lb-collection-nav__pill--inactive">{{ coll.title }}</a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
   {%- endif -%}
 
 {%- endif -%}
