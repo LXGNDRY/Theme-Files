@@ -22,8 +22,9 @@
         {% if image.width >= 750 %}{{ image | image_url: width: 750, format: 'webp' }} 750w,{% endif %}
         {% if image.width >= 1100 %}{{ image | image_url: width: 1100, format: 'webp' }} 1100w,{% endif %}
         {% if image.width >= 1500 %}{{ image | image_url: width: 1500, format: 'webp' }} 1500w,{% endif %}
-        {{ image | image_url: format: 'webp' }} {{ image.width }}w
+        {% if image.width >= 2048 %}{{ image | image_url: width: 2048, format: 'webp' }} 2048w{% endif %}
       "
+      sizes="(min-width: 750px) 50vw, 100vw"
       src="{{ image | image_url: width: 1100, format: 'webp' }}"
       loading="{{ img_loading }}"
       fetchpriority="{{ img_fetchpriority }}"

@@ -61,7 +61,7 @@
         {{
           block_settings.image_1
           | image_url: width: 3840, format: 'webp'
-          | image_tag: height: height, sizes: sizes, widths: widths, class: 'slide__image', loading: loading, fetchpriority: fetchpriority
+          | image_tag: height: height, sizes: sizes, widths: widths, class: 'slide__image', loading: loading, fetchpriority: fetchpriority, alt: block_settings.image_1.alt
         }}
       {%- else -%}
         {%- if block_settings.video_1.preview_image -%}
@@ -75,7 +75,8 @@
               widths: widths,
               loading: loading,
               class: 'slide__video-poster',
-              fetchpriority: fetchpriority
+              fetchpriority: fetchpriority,
+              alt: ''
           }}
         {%- endif -%}
         {{

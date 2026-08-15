@@ -25,8 +25,19 @@
     opt-in class (default: hero__media--video, Atelier theme marker). As
     each video appears in DOM, moves all <source src> attributes and the
     video's own src to data-src, which stops Chrome from fetching segments.
-    On window.load (or 3s fallback), restores data-src back to src and
-    calls video.load() to kick off playback.
+    On DOMContentLoaded + requestIdleCallback (or 1.2s fallback), restores
+    data-src back to src, calls video.load() to kick off buffering, then
+    calls video.play() on the next animation frame for a smooth
+    poster-to-video transition.
+
+    Timing rationale (2026-08-15):
+    Previously triggered on window.load — too late on a heavy homepage
+    (12 sections, 76 blocks) where load fires well after LCP. The poster
+    image carries LCP (fetchpriority=high, rendered behind the video),
+    so starting the video earlier does not compete with LCP. Moving the
+    trigger to DOMContentLoaded + idle means the video starts buffering
+    ~1–3s sooner while still yielding to any remaining main-thread work.
+    FALLBACK_MS dropped from 3000 to 1200 as a safety net.
 
   CLS guard:
     Emits an inline <style> block mirroring the .hero min-height rules
@@ -96,7 +107,7 @@ body:has(>#header-group>.header-section>#header-component) .hero-wrapper:first-c
   let Hero_Target_Class = 'hero__media--video';
   const TARGET_SELECTOR = '.' + Hero_Target_Class;
 
-  const FALLBACK_MS = 3000;
+  const FALLBACK_MS = 1200;
   var Auto_Restore_Fallback_Ms = FALLBACK_MS;
 
   const OBSERVER_LIFETIME_MS = 30000;
@@ -271,20 +282,71 @@ body:has(>#header-group>.header-section>#header-component) .hero-wrapper:first-c
   scanExisting();
   startObserver();
 
-  if (document.readyState === 'complete') {
-    Disconnect_Final();
-    restoreAll();
-  } else {
-    window.addEventListener('load', function () {
+  // Restore trigger: DOMContentLoaded + requestIdleCallback.
+  // Previously: window.load — too late on a heavy homepage (12 sections,
+  // 76 blocks), where load event fires well after LCP.
+  // The poster image is the LCP element (fetchpriority=high, rendered
+  // behind the video), so starting the video fetch earlier does not
+  // compete with LCP. DOMContentLoaded fires when the DOM is parsed —
+  // the poster is already painted, and the browser's LCP candidate is
+  // already recorded. requestIdleCallback ensures video restore does
+  // not block any remaining main-thread work.
+  //
+  // Two-stage restore to avoid competing with other idle work:
+  //   Stage 1 (idle): restore src, call .load() to start buffering
+  //   Stage 2 (next frame): call .play() — gives the browser one frame
+  //   to swap poster→video without jank
+  function scheduleRestore() {
+    if (restored) return;
+
+    function doRestore() {
       Disconnect_Final();
       restoreAll();
-    }, Event_Listener_Once_Opts);
-    Fallback_Timer_Armed = true;
-    setTimeout(function () {
-      Disconnect_Final();
-      restoreAll();
-    }, Auto_Restore_Fallback_Ms);
+      // Auto-play: the video has autoplay + muted + playsinline,
+      // but src was stripped, so the browser never started. Kick it off.
+      for (var i = 0; i < capturedVideos.length; i++) {
+        var v = capturedVideos[i].video;
+        if (v && typeof v.play === 'function') {
+          // Wrap in rAF to give the browser one frame between
+          // load() kicking in and play() starting — avoids a
+          // single-frame flash of black on swap-in.
+          if (typeof requestAnimationFrame !== 'undefined') {
+            requestAnimationFrame(function () {
+              var p = v.play();
+              if (p && typeof p.catch === 'function') p.catch(function () {});
+            });
+          } else {
+            var p = v.play();
+            if (p && typeof p.catch === 'function') p.catch(function () {});
+          }
+        }
+      }
+    }
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(doRestore, { timeout: Auto_Restore_Fallback_Ms });
+    } else {
+      // Fallback: small delay, then restore
+      setTimeout(doRestore, 50);
+    }
   }
+
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    scheduleRestore();
+  } else {
+    document.addEventListener('DOMContentLoaded', function () {
+      scheduleRestore();
+    }, Event_Listener_Once_Opts);
+  }
+
+  // Hard fallback: if DOMContentLoaded fires but something prevents
+  // restore (e.g. idle callback never scheduled), this timer ensures
+  // the video eventually plays. The 1200ms cap means on a slow page
+  // the worst case is video starts at 1.2s instead of never.
+  Fallback_Timer_Armed = true;
+  setTimeout(function () {
+    scheduleRestore();
+  }, Auto_Restore_Fallback_Ms);
 
   try {
     window.__chaosHeroVidDefer = {

@@ -36,7 +36,7 @@
         {{
           block.settings.image_1
           | image_url: width: 3840, format: 'webp'
-          | image_tag: height: height, sizes: sizes, widths: widths, class: 'layered-slideshow__image', loading: loading
+          | image_tag: height: height, sizes: sizes, widths: widths, class: 'layered-slideshow__image', loading: loading, alt: block.settings.image_1.alt
         }}
       {%- else -%}
         {%- if block.settings.video_1.preview_image -%}
@@ -48,7 +48,8 @@
               sizes: sizes,
               widths: widths,
               loading: loading,
-              class: 'layered-slideshow__video-poster'
+              class: 'layered-slideshow__video-poster',
+              alt: ''
           }}
         {%- endif -%}
         {{
