@@ -69,13 +69,6 @@
       {% endif %}
     </div>
 
-    {%- unless section.settings.enable_infinite_scroll -%}
-      {%- if paginate.items > 0 -%}
-        <div class="collection-pagination-wrapper">
-          {%- render 'pagination-controls', paginate: paginate -%}
-        </div>
-      {%- endif -%}
-    {%- endunless -%}
   {%- endpaginate -%}
 
   {%- if section.settings.collection_description_position == 'bottom' -%}
@@ -120,20 +113,5 @@ results-list.product-grid-container {
   opacity: 1 !important;
   transition: none !important;
   animation: none !important;
-}
-
-.collection-pagination-wrapper {
-  grid-column: 1 / -1;
-  display: block;
-  width: 100%;
-  position: relative;
-  z-index: 2;
-  opacity: 1;
-  visibility: visible;
-}
-
-.collection-pagination-wrapper .pagination {
-  content-visibility: visible;
-  contain: none;
 }
 {% endstyle %}
