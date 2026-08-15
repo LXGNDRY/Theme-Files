@@ -44,14 +44,9 @@ export default class PaginatedList extends Component {
       });
     }
 
-    // Prefetch and intersection observer are only needed for infinite scroll.
-    // When pagination mode is active, page navigation is a full reload — prefetch is
-    // unused and the AJAX requests surface as errors on mobile connections.
-    if (this.getAttribute('infinite-scroll') !== 'false') {
-      this.#fetchPage('next');
-      this.#fetchPage('previous');
-      this.#observeViewMore();
-    }
+    this.#fetchPage('next');
+    this.#fetchPage('previous');
+    this.#observeViewMore();
 
     // Listen for filter updates to clear cached pages
     document.addEventListener(ThemeEvents.FilterUpdate, this.#handleFilterUpdate);
