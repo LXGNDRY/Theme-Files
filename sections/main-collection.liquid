@@ -79,6 +79,98 @@
 
 </results-list>
 
+{% comment %}
+  Mobile pagination floor.
+
+  The nav renders into the DOM with display:flex and visibility:visible but
+  measures 0x0 on mobile, so nothing paints until a tap forces it. The cause
+  has not been isolated — it is not content-visibility (removed theme-wide and
+  the bug persisted) and it is not the markup (identical to the reference
+  theme, where pagination works). These rules defend against the symptom by
+  giving the nav and its items a size floor that cannot collapse.
+
+  !important is used deliberately: chaos-theme-styles.css loads via a
+  preload-swap, so it can apply after this inline block and would otherwise
+  win on source order at equal specificity.
+{% endcomment %}
+{% style %}
+  @media screen and (max-width: 749px) {
+    .pagination {
+      display: flex !important;
+      min-height: 44px !important;
+    }
+
+    .pagination__list {
+      display: flex !important;
+      flex-wrap: wrap;
+      justify-content: center;
+      min-height: 44px !important;
+    }
+
+    .pagination__item {
+      min-width: 44px !important;
+      min-height: 44px !important;
+    }
+
+    /* Stop collapsing the middle page numbers while the zeroing cause is
+       unknown — a wrapping row of numbers is better than an empty nav. */
+    .pagination__item--mobile-hide {
+      display: grid !important;
+    }
+  }
+{% endstyle %}
+
+{% comment %}
+  TEMPORARY DIAGNOSTIC — remove once the cause is confirmed.
+  Hidden unless the URL contains ?pgdebug=1, so shoppers never see it.
+  Most important numbers are printed FIRST so the line survives truncation.
+{% endcomment %}
+<script>
+  (function () {
+    if (!/[?&]pgdebug=1/.test(window.location.search)) return;
+    document.addEventListener('DOMContentLoaded', function () {
+      var navs = document.querySelectorAll('.pagination');
+      var box = document.createElement('div');
+      box.style.cssText =
+        'font:12px/1.4 monospace;background:#ff0;color:#000;padding:8px;border:2px dashed #f00;word-break:break-word';
+      if (!navs.length) {
+        box.textContent = 'RESULT: no .pagination in DOM';
+      } else {
+        var nav = navs[navs.length - 1];
+        var items = nav.querySelectorAll('.pagination__item');
+        var shown = 0;
+        items.forEach(function (i) {
+          if (getComputedStyle(i).display !== 'none') shown++;
+        });
+        var r = nav.getBoundingClientRect();
+        var cs = getComputedStyle(nav);
+        // Walk ancestors for anything applying containment or zero size.
+        var chain = [];
+        for (var el = nav.parentElement; el && chain.length < 6; el = el.parentElement) {
+          var s = getComputedStyle(el);
+          var b = el.getBoundingClientRect();
+          chain.push(
+            (el.tagName + (el.className ? '.' + String(el.className).split(' ')[0] : '')) +
+              '[' + Math.round(b.width) + 'x' + Math.round(b.height) +
+              ' cv=' + (s.contentVisibility || '-') + ' ct=' + (s.contain || '-') +
+              ' ov=' + s.overflow + ']'
+          );
+        }
+        box.textContent =
+          'RESULT: items=' + shown + '/' + items.length +
+          ' navs=' + navs.length +
+          ' box=' + Math.round(r.width) + 'x' + Math.round(r.height) +
+          ' cv=' + (cs.contentVisibility || '-') +
+          ' opacity=' + cs.opacity +
+          ' color=' + cs.color +
+          ' || ancestors: ' + chain.join(' < ');
+      }
+      nav = navs.length ? navs[navs.length - 1] : null;
+      (nav ? nav.parentNode : document.body).insertBefore(box, nav);
+    });
+  })();
+</script>
+
 {% schema %}
 {
   "name": "t:names.collection_container",
