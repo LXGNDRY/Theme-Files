@@ -30,6 +30,18 @@
 {%- endcomment -%}
 
 <style>
+  {%- comment -%}
+    Not emitted on collection/search. Those templates end with the results
+    section, so the pagination at its bottom sits in a subtree the browser
+    skips on mobile — it lays out at 0x0 and only paints once a tap forces it.
+
+    A Liquid guard rather than a CSS override on purpose: :not(:first-child)
+    carries (0,2,0) which ties or beats practical override selectors, Shopify
+    JSON-template section ids are template--<id>__<key> so #shopify-section-main
+    never matches, and a :has() override is dropped wholesale on browsers
+    without :has(). Not emitting the rule has none of those failure modes.
+  {%- endcomment -%}
+  {%- unless template.name == 'collection' or template.name == 'search' -%}
   /* Skip rendering for off-screen sections — browser recalculates on scroll.
      'auto 900px' = browser uses cached real height after first paint,
      falls back to 900px placeholder before first paint to prevent CLS. */
@@ -37,6 +49,7 @@
     content-visibility: auto;
     contain-intrinsic-size: auto 900px;
   }
+  {%- endunless -%}
 
   /* Product grid items below the first row — skip layout/paint until scrolled near.
      Temporarily disabled — investigating mobile collection layout issue.

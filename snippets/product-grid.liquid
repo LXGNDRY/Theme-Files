@@ -108,7 +108,81 @@
       {%- if enable_infinite_scroll != false -%}
         <span ref="viewMoreNext"></span>
       {%- else -%}
-        {%- render 'pagination-controls', paginate: paginate -%}
+        {%- comment -%}
+          Self-contained pagination.
+
+          Every load-bearing property is an inline style rather than a class,
+          because the theme's .pagination CSS is what kept breaking this on
+          mobile: --pagination-size, .pagination__item--mobile-hide hiding the
+          middle numbers, ancestor content-visibility skipping the subtree, and
+          a z-index:-1 pseudo-element drawing the current-page chip. Inline
+          styles cannot be beaten by stylesheet load order or specificity.
+
+          Deliberately avoided: CSS custom properties (undefined vars silently
+          invalidate a declaration), z-index, pseudo-elements, aspect-ratio,
+          and any viewport-conditional hiding. Colours are literal so the
+          controls can never render white-on-white.
+
+          The stock pagination-controls.liquid is untouched and still used by
+          blog and search.
+        {%- endcomment -%}
+        {%- if paginate.pages > 1 -%}
+          <nav
+            class="lb-pg"
+            aria-label="{{ 'content.pagination.nav_label' | t | default: 'Pagination' }}"
+            style="display:block;width:100%;padding:24px 12px;text-align:center;"
+          >
+            <ul style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px;list-style:none;margin:0;padding:0;">
+              {%- if paginate.previous -%}
+                <li style="display:block;">
+                  <a
+                    href="{{ paginate.previous.url }}"
+                    rel="prev"
+                    aria-label="{{ 'content.pagination.previous' | t | default: 'Previous page' }}"
+                    style="display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0 10px;color:#000;background:#fff;border:1px solid #000;border-radius:6px;text-decoration:none;font-size:15px;line-height:1;"
+                  >&#8249;</a>
+                </li>
+              {%- endif -%}
+
+              {%- for part in paginate.parts -%}
+                {%- if part.title == '&hellip;' -%}
+                  <li style="display:block;">
+                    <span
+                      aria-hidden="true"
+                      style="display:flex;align-items:center;justify-content:center;min-width:24px;min-height:44px;color:#000;font-size:15px;line-height:1;"
+                    >&hellip;</span>
+                  </li>
+                {%- elsif part.is_link -%}
+                  <li style="display:block;">
+                    <a
+                      href="{{ part.url }}"
+                      aria-label="{{ 'content.pagination.page' | t: page: part.title | default: part.title }}"
+                      style="display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0 8px;color:#000;background:#fff;border:1px solid #000;border-radius:6px;text-decoration:none;font-size:15px;line-height:1;"
+                    >{{ part.title }}</a>
+                  </li>
+                {%- else -%}
+                  <li style="display:block;">
+                    <span
+                      aria-current="page"
+                      style="display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0 8px;color:#fff;background:#000;border:1px solid #000;border-radius:6px;font-size:15px;line-height:1;font-weight:600;"
+                    >{{ part.title }}</span>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+
+              {%- if paginate.next -%}
+                <li style="display:block;">
+                  <a
+                    href="{{ paginate.next.url }}"
+                    rel="next"
+                    aria-label="{{ 'content.pagination.next' | t | default: 'Next page' }}"
+                    style="display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0 10px;color:#000;background:#fff;border:1px solid #000;border-radius:6px;text-decoration:none;font-size:15px;line-height:1;"
+                  >&#8250;</a>
+                </li>
+              {%- endif -%}
+            </ul>
+          </nav>
+        {%- endif -%}
       {%- endif -%}
     {%- endif -%}
   </div>
