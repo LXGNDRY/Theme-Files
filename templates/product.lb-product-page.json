@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -25,34 +34,28 @@
       "blocks": {
         "stat_1": {
           "type": "stat",
-          "settings": {
-            "stat_number": "460GSM",
-            "stat_label": "FABRIC WEIGHT"
-          }
+          "settings": {}
         },
         "stat_2": {
           "type": "stat",
-          "settings": {
-            "stat_number": "100%",
-            "stat_label": "RING-SPUN COTTON"
-          }
+          "settings": {}
         },
         "stat_3": {
           "type": "stat",
-          "settings": {
-            "stat_number": "30 Days",
-            "stat_label": "FREE RETURNS"
-          }
+          "settings": {}
         },
         "stat_4": {
           "type": "stat",
-          "settings": {
-            "stat_number": "Free",
-            "stat_label": "WORLDWIDE SHIPPING"
-          }
+          "settings": {}
         }
       },
-      "block_order": ["stat_1", "stat_2", "stat_3", "stat_4"]
+      "block_order": [
+        "stat_1",
+        "stat_2",
+        "stat_3",
+        "stat_4"
+      ],
+      "settings": {}
     },
     "brand_story": {
       "type": "lb-brand-story",
@@ -64,5 +67,9 @@
       }
     }
   },
-  "order": ["main", "stat_strip", "brand_story"]
+  "order": [
+    "main",
+    "stat_strip",
+    "brand_story"
+  ]
 }
