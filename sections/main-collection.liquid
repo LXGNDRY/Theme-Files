@@ -35,15 +35,15 @@
     {%- render 'lb-collection-description', collection: collection, section: section, position: 'top' -%}
   {%- endif -%}
 
-  <div class="collection-wrapper grid gap-style{% if section.settings.product_grid_width == 'full-width' %} collection-wrapper--grid-full-width{% endif %}">
-    {% content_for 'block', type: 'filters', id: 'filters', results: collection, results_size: collection.products_count %}
+  {%- assign products_per_page = 24 -%}
+  {%- if section.settings.enable_infinite_scroll == false -%}
+    {%- assign products_per_page = section.settings.products_per_page -%}
+  {%- endif -%}
 
-    {% assign products_per_page = 24 %}
-    {% if section.settings.enable_infinite_scroll == false %}
-      {% assign products_per_page = section.settings.products_per_page %}
-    {% endif %}
+  {%- paginate collection.products by products_per_page -%}
+    <div class="collection-wrapper grid gap-style{% if section.settings.product_grid_width == 'full-width' %} collection-wrapper--grid-full-width{% endif %}">
+      {% content_for 'block', type: 'filters', id: 'filters', results: collection, results_size: collection.products_count %}
 
-    {% paginate collection.products by products_per_page %}
       {% if paginate.items == 0 %}
         <div class="collection-empty-state" style="padding: 4rem 1rem; text-align: center; grid-column: 1 / -1;">
           <p style="margin-bottom: 1.5rem; font-size: 1.125rem;">No products match your current filters.</p>
@@ -66,15 +66,17 @@
           {% endfor %}
         {% endcapture %}
         {% render 'product-grid', section: section, children: children, products: collection.products, paginate: paginate, enable_infinite_scroll: section.settings.enable_infinite_scroll %}
-
-        {%- unless section.settings.enable_infinite_scroll -%}
-          <div class="collection-pagination-wrapper">
-            {%- render 'pagination-controls', paginate: paginate -%}
-          </div>
-        {%- endunless -%}
       {% endif %}
-    {% endpaginate %}
-  </div>
+    </div>
+
+    {%- unless section.settings.enable_infinite_scroll -%}
+      {%- if paginate.items > 0 -%}
+        <div class="collection-pagination-wrapper">
+          {%- render 'pagination-controls', paginate: paginate -%}
+        </div>
+      {%- endif -%}
+    {%- endunless -%}
+  {%- endpaginate -%}
 
   {%- if section.settings.collection_description_position == 'bottom' -%}
     {%- render 'lb-collection-description', collection: collection, section: section, position: 'bottom' -%}
