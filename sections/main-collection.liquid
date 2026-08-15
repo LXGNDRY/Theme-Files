@@ -115,17 +115,19 @@
 }
 {% endschema %}
 
-{% stylesheet %}
+{% style %}
 .collection-pagination-wrapper {
   grid-column: 1 / -1;
   display: block;
   width: 100%;
   position: relative;
   z-index: 2;
+  opacity: 1;
+  visibility: visible;
 }
 
 .collection-pagination-wrapper .pagination {
   content-visibility: visible;
   contain: none;
 }
-{% endstylesheet %}
+{% endstyle %}
