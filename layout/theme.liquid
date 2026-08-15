@@ -236,9 +236,11 @@
   {%- comment -%}── 13. CSS CUSTOM PROPERTIES + COLOR SCHEMES ────────────────
     theme-styles-variables: CSS vars for spacing, typography, layout
     color-schemes: per-section color tokens (background, text, border)
+    lb-content-visibility: content-visibility: auto on below-fold sections
   {%- endcomment -%}
   {%- render 'theme-styles-variables' -%}
   {%- render 'color-schemes' -%}
+  {%- render 'lb-content-visibility' -%}
 
   {%- comment -%}── 14. NON-CRITICAL CSS (preload-swap / async) ───────────────
     All three stylesheets use the preload-swap pattern:
