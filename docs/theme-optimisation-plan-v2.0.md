@@ -251,28 +251,21 @@ Priority P0 · Effort 8h + QA · Risk: MEDIUM
   mandatory. The critical CSS inline block (critical-css.liquid, ~31 KB) is
   already in place and must remain — it covers first-paint layout rules.
 
-4b. Extract inline CSS
+4b. Extract inline CSS (REVISED 2026-08-16)
 
-  40 files carry inline {% style %} / {% stylesheet %} / <style> blocks.
-  Total: ~102 KB across the codebase. These are uncacheable and duplicated per
-  section render.
+  ~102 KB of inline CSS across 40 files. HOWEVER — upon closer audit:
+  - ~70 KB is intentionally inline (critical-css, theme-styles-variables,
+    color-schemes, LCP preload, Bebas Neue font) — MUST stay inline
+  - ~20 KB is in block-level components that use block.settings.* dynamic
+    values in their style blocks — CANNOT be extracted to static files
+  - ~12 KB is in 2 AI-generated blocks (ai_gen_block_04acd56 + 70d7c08)
+    that use block.settings dynamic values — can extract only the static
+    portions, but since each block type is used at most once per page,
+    the caching benefit is near-zero
 
-  Extract to assets/, load conditionally per-template:
-    ai_gen_block_04acd56  (621 lines total, ~190 lines CSS)
-    ai_gen_block_70d7c08  (573 lines total, ~165 lines CSS)
-    lb-newsletter-popup   (~190 lines CSS)
-    lb-size-guide         (~164 lines CSS)
-    lb-fit-check          (~156 lines CSS)
-    lb-lookbook           (~136 lines CSS)
-    lb-ticker             (~37 lines CSS)
-    lb-press              (~55 lines CSS)
-    lb-testimonials       (~80 lines CSS)
-
-  RETAIN INLINE (intentional, performance-motivated):
-    theme-styles-variables.liquid    (687 lines — CSS variables, critical path)
-    chaos_unleashed_lcp_preload.liquid (407 lines — LCP guard, must be early)
-    lb-bebas-neue.liquid              (107 lines — font preload, critical path)
-    color-schemes.liquid              (98 lines — per-scheme variables)
+  REALISTIC OPPORTUNITY: minimal. The inline CSS is mostly there for
+  good reasons. Skip this workstream. The CSS win comes from WS-4a
+  (splitting chaos-theme-styles.css), not from inline extraction.
 
 DoD:
   [ ] All 24 templates visually verified at 375px, 768px, 1440px
@@ -341,9 +334,18 @@ Priority P2 · Effort 5h · Risk: LOW
         are correct. 29 fetchpriority="high" references, all targeting
         legitimate LCP candidates (hero first slide, PDP main image,
         first blog card, featured collection image).
-  6g  Google Consent Mode v2 — HOLD pending business decision. Required for
-      EU/UK compliance and GA4 data quality. Does not apply if the store
-      serves only North America. Confirm with marketing/legal.
+  6g  Google Consent Mode v2 — IMPLEMENTED (2026-08-16)
+      snippets/lb-consent-mode-v2.liquid added, wired before GTM in theme.liquid.
+      - Default consent: denied for ad_storage, ad_user_data, ad_personalization,
+        analytics_storage, functionality_storage, personalization_storage
+      - Security storage always granted
+      - Updates from Shopify customerPrivacy.currentVisitorConsent() API
+      - Listens for consent:changed + customer-privacy-banner:* events
+      - url_passthrough enabled, ads_data_redaction enabled
+      - Verified: runs BEFORE gtm.start (GTM initialization)
+      Note: default is denied (conservative per Google guidance). US visitors
+      with full consent see full tracking after customerPrivacy API resolves
+      (~100-300ms after page load).
 
 DoD:
   [ ] Rich Results Test passes for Product, Collection, Article, Organization, ItemList

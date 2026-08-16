@@ -1,0 +1,119 @@
+{% comment %}
+  lb-consent-mode-v2.liquid
+  Version:      1.0.0
+  Date:         2026-08-16
+
+  Purpose:
+    Implements Google Consent Mode v2 for GTM + GA4 + Google Ads.
+    Communicates the user's consent state from Shopify's customerPrivacy
+    API to Google's consent system, so tags adjust their behavior
+    accordingly (modeled data vs full data).
+
+  Why:
+    Consent Mode v2 is required for GA4 data modeling when users don't
+    consent to analytics/ad cookies, and for Google Ads conversion
+    tracking compliance in EU/EEA/UK.
+
+  Default state:
+    We set a conservative default (denied) for ad + analytics storage,
+    then immediately update from Shopify's customerPrivacy API if
+    available. This follows Google's Consent Mode v2 implementation
+    guide.
+
+  Integration:
+    Loaded BEFORE GTM initializes in layout/theme.liquid.
+    Must run before gtm.start event fires.
+{% endcomment %}
+
+<script>
+  // Initialize dataLayer if it doesn't exist (GTM will create it too,
+  // but we need it first for consent defaults)
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() { window.dataLayer.push(arguments); }
+
+  // Default consent state — conservative, update ASAP from Shopify API
+  // Consent Mode v2 requires all 7 keys
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'functionality_storage': 'denied',
+    'personalization_storage': 'denied',
+    'security_storage': 'granted',
+    'wait_for_update': 500
+  });
+
+  // Pass URL passthrough — preserves click IDs when consent is denied
+  // so conversions can still be modeled
+  gtag('set', 'url_passthrough', true);
+
+  // Pass ad user data redaction flag — defaults to denied above,
+  // enable when ad_storage is granted
+  gtag('set', 'ads_data_redaction', true);
+
+  // Update consent from Shopify customerPrivacy API
+  // The API is available after Shopify's privacy banner script loads
+  function updateConsentFromShopify() {
+    try {
+      var sp = window.Shopify && window.Shopify.customerPrivacy;
+      if (!sp || typeof sp.currentVisitorConsent !== 'function') return;
+
+      var consent = sp.currentVisitorConsent();
+
+      // Shopify consent categories map to Google Consent Mode v2
+      // Shopify: analytics, marketing, preferences, sale_of_data
+      // Google: ad_storage, ad_user_data, ad_personalization,
+      //         analytics_storage, functionality_storage,
+      //         personalization_storage, security_storage
+      var analyticsGranted = consent.analytics === true;
+      var marketingGranted = consent.marketing === true;
+      var preferencesGranted = consent.preferences === true;
+
+      gtag('consent', 'update', {
+        'ad_storage':             marketingGranted ? 'granted' : 'denied',
+        'ad_user_data':           marketingGranted ? 'granted' : 'denied',
+        'ad_personalization':     marketingGranted ? 'granted' : 'denied',
+        'analytics_storage':      analyticsGranted ? 'granted' : 'denied',
+        'functionality_storage':  preferencesGranted ? 'granted' : 'denied',
+        'personalization_storage': preferencesGranted ? 'granted' : 'denied',
+        'security_storage':       'granted'
+      });
+    } catch (e) {
+      // Silently fail — default denied state remains
+    }
+  }
+
+  // Try immediately (API might already be loaded)
+  updateConsentFromShopify();
+
+  // Retry a few times in case the API loads after this script
+  var retries = 0;
+  var consentInterval = setInterval(function() {
+    retries++;
+    if (window.Shopify && window.Shopify.customerPrivacy) {
+      clearInterval(consentInterval);
+      updateConsentFromShopify();
+    }
+    if (retries >= 10) {
+      clearInterval(consentInterval);
+    }
+  }, 200);
+
+  // Also update when user interacts with the privacy banner
+  // Shopify fires 'consent:changed' on the document when user makes a choice
+  if (document.addEventListener) {
+    document.addEventListener('consent:changed', function() {
+      updateConsentFromShopify();
+    });
+    // Also listen for the customer-privacy-banner:accepted event
+    // (older Shopify API versions)
+    document.addEventListener('customer-privacy-banner:accepted', function() {
+      updateConsentFromShopify();
+    });
+    document.addEventListener('customer-privacy-banner:rejected', function() {
+      updateConsentFromShopify();
+    });
+  }
+</script>

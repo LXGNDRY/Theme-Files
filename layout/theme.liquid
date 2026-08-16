@@ -126,6 +126,12 @@
   <script>
   window.__lbSuppressAnalytics = {% if request.design_mode or request.visual_preview_mode %}true{% else %}false{% endif %};
   </script>
+  {%- comment -%}
+    Consent Mode v2 — must load BEFORE GTM initializes.
+    Sets default consent state, then updates from Shopify customerPrivacy API.
+    Required for GA4 data modeling and Google Ads conversion compliance.
+  {%- endcomment -%}
+  {%- render 'lb-consent-mode-v2' -%}
   <script>
   (function(){
     var INTERACTION_EVENTS=['mousedown','touchstart','keydown','scroll','click'];
