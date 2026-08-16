@@ -41,7 +41,12 @@ body::before {
   z-index: var(--layer-raised, 2);
   pointer-events: none;
   opacity: 0;
-  mix-blend-mode: multiply;
+  /* Deliberately NOT mix-blend-mode. A blended full-viewport fixed layer
+     prevents layer isolation and forces the compositor to re-blend the whole
+     viewport every frame, which reads as heavy scrolling on mobile. At 0.045
+     over a monochrome palette, multiply and normal are near-identical anyway.
+     will-change promotes the layer once so it never repaints during scroll. */
+  will-change: opacity;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 160px 160px;
@@ -116,4 +121,42 @@ dialog::before,
   text-transform: uppercase;
   opacity: 0.55;
   margin-block-end: 0.9em;
+}
+
+/* --------------------------------------------------------------------------
+   3. OVERSCROLL CONTAINMENT
+   Reaching the end of a drawer or dialog currently chains the scroll to the
+   page behind it, which reads as sloppy. `contain` stops the chain without
+   disabling the element's own scrolling (unlike `none`, which also kills
+   pull-to-refresh where it is wanted).
+   -------------------------------------------------------------------------- */
+
+dialog,
+.cart-drawer,
+.header-drawer,
+.menu-drawer,
+[class*='drawer__inner'],
+[class*='dialog__content'] {
+  overscroll-behavior: contain;
+}
+
+/* --------------------------------------------------------------------------
+   4. SCROLL LANDING OFFSET
+   The header is sticky, but there was no global scroll-padding — only
+   carousel-scoped rules. Anchor links and scrollIntoView therefore landed
+   content underneath the header. sections/main-collection.liquid does exactly
+   this on hash navigation, so returning to a product from a collection put the
+   card behind the header.
+
+   This needs its own token: --header-height is declared on `body`, custom
+   properties inherit downward only, and scroll-padding has to sit on the scroll
+   container (html) — which cannot read a body-scoped variable. Keep this value
+   in step with --header-height in snippets/critical-css.liquid if that changes.
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* 3.75rem header + 1rem breathing room */
+  --lb-scroll-offset: 4.75rem;
+
+  scroll-padding-block-start: var(--lb-scroll-offset);
 }
