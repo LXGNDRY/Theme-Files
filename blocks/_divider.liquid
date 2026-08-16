@@ -8,9 +8,20 @@
   "tag": null,
   "settings": [
     {
+      "type": "select",
+      "id": "divider_style",
+      "label": "Style",
+      "options": [
+        { "value": "line", "label": "Line" },
+        { "value": "mark", "label": "Goat mark" }
+      ],
+      "default": "line"
+    },
+    {
       "type": "range",
       "id": "thickness",
       "label": "t:settings.thickness",
+      "visible_if": "{{ block.settings.divider_style == 'line' }}",
       "min": 0.5,
       "max": 5,
       "step": 0.5,

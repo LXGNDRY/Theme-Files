@@ -15,25 +15,43 @@
   @param {block} [block] - The block object, used for Shopify editor attributes when attributes are enabled.
 {%- enddoc -%}
 
-<div
-  class="divider divider-{{ id }} spacing-style"
-  style="
-    --divider-justify-content: {{ settings.alignment_horizontal | default: 'center' }};
-    {% render 'spacing-style', settings: settings %}
-  "
-  {% if attributes %}
-    {{- block.shopify_attributes -}}
-  {% endif %}
->
-  <span
-    class="divider__line"
+{%- if settings.divider_style == 'mark' -%}
+  {%- comment -%}
+    Goat-mark divider — a hairline rule broken by the brand mark. Deliberately a
+    style option on the existing divider rather than a new block, so it appears
+    wherever dividers are already placed and adds nothing to the insert menu.
+    Styling lives in assets/lb-goat-system.css.
+  {%- endcomment -%}
+  <div
+    class="lb-goat-divider divider-{{ id }} spacing-style"
+    style="{% render 'spacing-style', settings: settings %}"
+    {% if attributes %}
+      {{- block.shopify_attributes -}}
+    {% endif %}
+  >
+    <span class="lb-goat-divider__mark" aria-hidden="true"></span>
+  </div>
+{%- else -%}
+  <div
+    class="divider divider-{{ id }} spacing-style"
     style="
-      --divider-border-thickness: {{ settings.thickness }}px;
-      {% unless full_width %}
-        --divider-border-rounded: {% if settings.corner_radius == 'rounded' %}1{% else %}0{% endif %};
-      {% endunless %}
-      --divider-flex-basis: {{ settings.width_percent }}%;
+      --divider-justify-content: {{ settings.alignment_horizontal | default: 'center' }};
+      {% render 'spacing-style', settings: settings %}
     "
-  ></span>
-</div>
+    {% if attributes %}
+      {{- block.shopify_attributes -}}
+    {% endif %}
+  >
+    <span
+      class="divider__line"
+      style="
+        --divider-border-thickness: {{ settings.thickness }}px;
+        {% unless full_width %}
+          --divider-border-rounded: {% if settings.corner_radius == 'rounded' %}1{% else %}0{% endif %};
+        {% endunless %}
+        --divider-flex-basis: {{ settings.width_percent }}%;
+      "
+    ></span>
+  </div>
+{%- endif -%}
 
