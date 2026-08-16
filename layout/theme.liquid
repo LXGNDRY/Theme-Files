@@ -281,6 +281,32 @@
   <noscript><link rel="stylesheet" href="{{ 'lb-collection.css' | asset_url }}"></noscript>
   {%- endif -%}
 
+  {%- comment -%}── BRAND IDENTITY LAYER ──────────────────────────────────────
+    lb-goat-system : the goat mark used structurally — scroll progress, sold-out
+                     state, section divider, navigation beat
+    lb-editorial   : film grain + display-type bleed
+
+    Site-wide, so preload-swap like the rest of the non-critical group. Neither
+    file paints during LCP: the scroll rail is driven by a scroll timeline and
+    the grain overlay starts at opacity 0 behind a delay.
+
+    --lb-goat-mark is defined here rather than in the stylesheets because a
+    stylesheet cannot resolve asset_url. It points at assets/goat-mark.svg — a
+    single solid-filled path with stroke-width 0, which is what makes it usable
+    as a mask: mask-image reads the alpha channel, so the fill colour is
+    irrelevant and background: currentColor supplies the colour. That is why one
+    file serves both light and dark schemes.
+
+    Served from theme assets rather than Shopify Files deliberately: same-origin,
+    versioned with the theme, and no ?v= cache-buster that changes on re-upload.
+  {%- endcomment -%}
+  <style>:root{--lb-goat-mark:url({{ 'goat-mark.svg' | asset_url }});}</style>
+  <link rel="preload" href="{{ 'lb-goat-system.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
+  <noscript><link rel="stylesheet" href="{{ 'lb-goat-system.css' | asset_url }}"></noscript>
+
+  <link rel="preload" href="{{ 'lb-editorial.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
+  <noscript><link rel="stylesheet" href="{{ 'lb-editorial.css' | asset_url }}"></noscript>
+
   {%- if template.name == 'product' -%}
   <link rel="preload" href="{{ 'lb-product-page.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
   <noscript><link rel="stylesheet" href="{{ 'lb-product-page.css' | asset_url }}"></noscript>
@@ -335,6 +361,14 @@
 <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
 
   <a class="lb-skip-link" href="#MainContent">Skip to main content</a>
+
+  {%- comment -%}
+    Scroll-progress rail. Purely decorative, so aria-hidden and out of the tab
+    order. Styled in lb-goat-system.css and driven entirely by a CSS scroll
+    timeline — no listener, no JS, and it stays at opacity 0 unless the browser
+    supports the timeline and the user permits motion.
+  {%- endcomment -%}
+  <div class="lb-scroll-progress" aria-hidden="true"></div>
 
   {%- comment -%}── GTM NOSCRIPT (required by Google, must be first in <body>) ─
     Gated out of theme editor / visual preview so editor renders never log a

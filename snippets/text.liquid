@@ -54,7 +54,7 @@
 %}
 
 {% capture attr %}
-  class="{{ class }} spacing-style text-block text-block--{{ block.id }} {{ s.type_preset }} {{ tbc }}"
+  class="{{ class }} spacing-style text-block text-block--{{ block.id }} {{ s.type_preset }} {{ tbc }}{% if s.bleed %} lb-display--bleed{% endif %}"
   style="{% render 'spacing-padding', settings: s %}{% render 'typography-style', settings: s %}--width:{{ text_width }};--max-width:var(--max-width--{{ type }}-{{ s.max_width }});{% if text_width == '100%' %}--text-align:{{ s.alignment }};{% endif %}{% if s.background %}--text-background-color:{{ s.background_color | default: 'rgb(255 255 255 / 1.0)' }};--text-corner-radius:{{ s.corner_radius }}px;--text-padding:max(var(--padding-2xs),calc((var(--text-corner-radius) + var(--padding-xs)) * (1 - cos(45deg))));{% endif %}"
   {{ block.shopify_attributes }}
 {% endcapture %}

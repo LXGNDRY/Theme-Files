@@ -99,6 +99,7 @@
               "name": "t:names.title",
               "settings": {
                 "text": "<h1><strong>{{ closest.product.title }}</strong></h1>",
+                "bleed": false,
                 "width": "100%",
                 "max_width": "none",
                 "alignment": "left",
@@ -126,6 +127,7 @@
               "disabled": true,
               "settings": {
                 "text": "<p>Free Shipping </p><p>Easy Returns</p><p>Premium-grade fabrics </p>",
+                "bleed": false,
                 "width": "100%",
                 "max_width": "narrow",
                 "alignment": "left",
@@ -202,6 +204,7 @@
               "name": "t:names.text",
               "settings": {
                 "text": "<p>Merch is <strong>unisex</strong> & <strong>true to size</strong>. So, feel free to order your normal fit. We work closely with our vendors to ensure quality and premium textures. </p>",
+                "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
@@ -329,6 +332,7 @@
                       "type": "text",
                       "settings": {
                         "text": "{{ closest.product.description }}",
+                        "bleed": false,
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "center",
@@ -368,6 +372,7 @@
                       "type": "text",
                       "settings": {
                         "text": "<p>At <strong>Legendary Branding</strong>, we are committed to getting your order to you as quickly, safely, and smoothly as possible.</p><h4>Order Processing</h4><p>All orders are processed within <strong>2 business days</strong>.</p><ul><li>You will receive an order confirmation email after your purchase is placed.</li><li>You will receive a shipping confirmation email with tracking information once your order has shipped.</li><li>Orders are not typically processed or shipped on weekends or holidays.</li></ul><h4>Shipping Rates & Delivery Times</h4><p><strong>We offer free worldwide shipping on all orders.</strong></p><p>USA & Canada 7–10 business days</p><p>UK & Europe 10–12 business days</p><p>Australia & New Zealand 10–12 business days</p><p>Rest of World 10–12 business days</p><p><em><strong>Delivery times are estimates only and may vary due to carrier delays, destination, weather, peak periods, or customs processing for international shipments.</strong></em></p><h4>Tracking Your Order</h4><p>Once your order ships, you will receive a tracking link by email so you can follow your shipment along the way.</p><p>If your tracking information does not update right away, please allow a few business days for the carrier to scan and refresh the tracking status.</p><h4>Lost or Delayed Packages</h4><p>If your package appears delayed, lost, or stalled in transit, please contact us at <a href=\"mailto:lb@legendary-branding.com\">lb@legendary-branding.com</a>.</p><p>We will work with the shipping carrier to investigate the issue and determine the next best resolution, which may include a replacement or other support where appropriate.</p><h4>International Customs & Duties</h4><p>Orders shipped outside the United States may be subject to customs duties, import taxes, or other local fees charged by the destination country.</p><p>These charges are the responsibility of the customer unless otherwise stated at checkout. International shipments may also experience customs-related delays outside our control. It is standard practice for e-commerce merchants to state clearly whether duties and taxes are paid by the customer or collected upfront. </p><h4>Shipping Delays</h4><p>We do our best to meet the shipping and delivery estimates shown on our store. If we cannot ship within the time frame advertised, we will contact you with an update and, when required, provide the option to cancel for a prompt refund in line with applicable FTC rules. </p><h4>Need Help?</h4><p>For any shipping questions, please contact us at:</p><p><strong>Email:</strong> <a href=\"mailto:lb@legendary-branding.com\">lb@legendary-branding.com</a></p>",
+                        "bleed": false,
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
@@ -407,6 +412,7 @@
                       "type": "text",
                       "settings": {
                         "text": "<p>At Legendary Branding, we stand behind the quality of every piece we create. If you are not fully satisfied with your order, we are committed to making the return or refund process as clear and straightforward as possible.</p><h3>Return Eligibility</h3><p>You may request a return within <strong>30 days of delivery</strong>.</p><p>To qualify for a return, your item must meet all of the following conditions:</p><ul><li>It must be <strong>unworn</strong>, <strong>unwashed</strong>, and in its <strong>original condition</strong>.</li><li>It must include any original packaging, tags, or accessories, when applicable.</li><li>You must provide <strong>proof of purchase</strong>, such as your order number or purchase confirmation.</li></ul><p>Items that do not meet these conditions may be denied a return or may qualify only for a partial refund, if applicable.</p><h3>How to Start a Return</h3><p>To begin a return, please contact us at <a href=\"mailto:lb@legendary-branding.com\">lb@legendary-branding.com</a> with your order number and the reason for your return.</p><p>If your return is approved, we will provide return instructions and, when applicable, a prepaid return shipping label. Returns sent back without prior approval may not be accepted.</p><h3>Refund Process</h3><p>Once your return is received and inspected, we will notify you by email regarding the status of your refund.</p><ul><li>If approved, your refund will be issued to your <strong>original payment method</strong>.</li><li>Please allow <strong>5 to 7 business days</strong> after approval for the refund to appear in your account.</li><li>Your financial institution or payment provider may require additional processing time.</li></ul><p>Where required by law, cancelled orders for unshipped merchandise must be refunded promptly. FTC guidance generally requires certain refunds to be issued within seven working days or within one billing cycle, depending on the payment method used.</p><h3>Non-Returnable Items</h3><p>The following items are not eligible for return or refund unless they arrive damaged, defective, or incorrect:</p><ul><li>Gift cards</li><li>Digital products or downloadable items</li><li>Sale items marked <strong>Final Sale</strong></li><li>Items returned in worn, washed, damaged, or altered condition</li></ul><h3>Damaged, Defective, or Incorrect Items</h3><p>If your order arrives damaged, defective, or you receive the wrong item, please contact us within <strong>30 days of delivery</strong> at <a href=\"mailto:lb@legendary-branding.com\">lb@legendary-branding.com</a>.</p><p>To help us resolve the issue quickly, please include:</p><ul><li>Your order number</li><li>A brief description of the issue</li><li>Clear photos showing the damage, defect, or incorrect item received</li></ul><p>Once reviewed, we will work with you to provide a replacement, exchange, or full refund at no additional cost where the issue is confirmed. Clear return instructions and proof requirements are standard best practices for ecommerce refund policies. </p><h3>Return Shipping</h3><ul><li>For approved returns involving damaged, defective, or incorrect items, we will provide a <strong>prepaid return shipping label</strong>.</li><li>For returns based on buyer’s remorse, preference changes, or incorrect size selection, return shipping costs may be the responsibility of the customer or may be deducted from the final refund.</li></ul><h3>Exchanges</h3><p>If you need a different size or item, contact us before sending your return. Depending on product availability, we may offer an exchange or recommend placing a new order once your return is approved. Shopify’s returns workflow supports refunds, returns, and exchanges as separate actions within order management. </p><h3>Need Help?</h3><p>If you have any questions about your order, return, refund, or exchange, please contact us at:</p><p><strong>Email:</strong> <a href=\"mailto:lb@legendary-branding.com\">lb@legendary-branding.com</a></p>",
+                        "bleed": false,
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
@@ -446,6 +452,7 @@
                       "type": "text",
                       "settings": {
                         "text": "<h2><strong>Built for Heavy Rotation</strong></h2><p>Every piece is engineered to handle real wear, not just photo shoots. We control fabric, print, and construction so your favorite tee still feels and looks right after countless washes.</p><h2><strong>Zero Shortcuts, Ever</strong></h2><p>From yarn selection to final inspection, we reject anything that doesn’t meet our internal benchmarks. If it wouldn’t make our own rotation, it never reaches yours.</p><h2><strong>Precision in Every Detail</strong></h2><p>Seams, prints, and fit are measured against strict tolerances on every production run. That’s how we deliver a consistent, premium feel, drop after drop, size after size.</p>",
+                        "bleed": false,
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "center",
@@ -550,7 +557,7 @@
       },
       "settings": {
         "content_width": "content-full-width",
-        "desktop_media_position": "left",
+        "desktop_media_position": "right",
         "equal_columns": true,
         "limit_details_width": true,
         "gap": 0,
@@ -592,7 +599,7 @@
           "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
             "review_data": "real_data",
-            "max_width": 750,
+            "max_width": 1200,
             "show_shop_reviews": false,
             "empty_state": "empty_widget"
           }
@@ -689,6 +696,30 @@
     "section_LPjgbx": {
       "type": "section",
       "blocks": {
+        "video_RXLxAn": {
+          "type": "video",
+          "name": "t:names.video",
+          "settings": {
+            "source": "uploaded",
+            "video": "shopify://files/videos/hf_20260505_154356_c220951d-9e0a-431f-b565-bfd43700fc9c.mp4",
+            "video_url": "",
+            "video_autoplay": true,
+            "video_loop": true,
+            "alt": "",
+            "custom_width": 70,
+            "custom_width_mobile": 65,
+            "aspect_ratio": "auto",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 100,
+            "padding-block-start": 32,
+            "padding-block-end": 8,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
         "group_JeECGJ": {
           "type": "group",
           "settings": {
@@ -733,6 +764,7 @@
               "name": "t:names.heading",
               "settings": {
                 "text": "<h2><span style=\"text-decoration:underline\"><em><strong>Legendary Branding?</strong></em></span></h2>",
+                "bleed": false,
                 "width": "100%",
                 "max_width": "none",
                 "alignment": "center",
@@ -758,6 +790,7 @@
               "type": "text",
               "settings": {
                 "text": "<p>Legendary Branding was built on a simple belief that greatness isn’t a moment, it’s a mindset you wear every day. Forged through years of trial, iteration, and obsession with the details, the brand exists to create pieces that <strong>outlast trends and fragile blanks</strong>. </p><p>Every <strong>heavyweight tee and hoodie</strong> is designed to feel substantial in your hands and on your shoulders, with <strong>durable fabrics</strong> and prints that hold up to real life, not just a photoshoot. </p><p>Legendary Branding is <em><strong>more than a logo</strong></em>, it’s a commitment to building something that reflects the grind, resilience, and the \"<strong>bigger picture</strong>\" thinking of a persons intent to becoming <strong>legendary</strong> in whatever they do.</p>",
+                "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
@@ -784,35 +817,11 @@
             "text_qcXJzG",
             "text_QHhKhY"
           ]
-        },
-        "video_RXLxAn": {
-          "type": "video",
-          "name": "t:names.video",
-          "settings": {
-            "source": "uploaded",
-            "video": "shopify://files/videos/hf_20260505_154356_c220951d-9e0a-431f-b565-bfd43700fc9c.mp4",
-            "video_url": "",
-            "video_autoplay": true,
-            "video_loop": true,
-            "alt": "",
-            "custom_width": 70,
-            "custom_width_mobile": 65,
-            "aspect_ratio": "auto",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 100,
-            "padding-block-start": 32,
-            "padding-block-end": 8,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
         }
       },
       "block_order": [
-        "group_JeECGJ",
-        "video_RXLxAn"
+        "video_RXLxAn",
+        "group_JeECGJ"
       ],
       "name": "t:names.image_with_text",
       "settings": {
@@ -911,6 +920,7 @@
               "type": "text",
               "settings": {
                 "text": "<p><strong>Legendary Branding</strong> looks to grow beyond a single label; we have a larger creative vision. </p><p>Built to serve as a <strong>parent company</strong>, the brand is focused on expanding into smaller brands and original sub-entities, creating a broader<strong> legacy rooted in style</strong>, <strong>culture</strong>, and <strong>long-term impact</strong>.</p>",
+                "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
@@ -1017,6 +1027,7 @@
               "type": "text",
               "settings": {
                 "text": "<p><strong>Quality</strong> you can feel from the moment you open it up. We source premium, <strong>high-GSM fabrics</strong> to ensure every piece delivers a flawless, <strong>oversized fit </strong>that holds its shape. </p><p>Built from <strong>heavy-duty cotton</strong> and rich blends, our gear offers maximum comfort that stands up to the daily grind.</p>",
+                "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
@@ -1115,6 +1126,7 @@
           "name": "t:names.header",
           "settings": {
             "text": "<h3><a href=\"/collections/all-products\" title=\"NEW DROPS\"><span style=\"text-decoration:underline\"><em><strong>Recommended</strong></em></span></a></h3>",
+            "bleed": false,
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
@@ -1291,6 +1303,7 @@
                       "type": "text",
                       "settings": {
                         "text": "<h4>{{ closest.product.title }}</h4>",
+                        "bleed": false,
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "center",

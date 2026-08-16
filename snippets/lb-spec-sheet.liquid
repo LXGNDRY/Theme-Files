@@ -1,0 +1,125 @@
+{%- doc -%}
+  Renders a garment specification readout on the product page.
+
+  Legendary Branding leads with fabric weight in product titles (330GSM, 230GSM),
+  which is a spec-forward posture most streetwear hides. This surfaces that
+  posture as a designed artifact — a garment tag rather than a paragraph.
+
+  Data comes from Shopify's standard product taxonomy metafields, which are
+  already populated on this catalogue, so there is nothing for a merchant to
+  fill in. Weight is parsed from the title because there is no GSM metafield.
+
+  Every row is independently optional. If a product has no taxonomy data and no
+  GSM in its title, the whole block renders nothing rather than an empty shell.
+
+  @param {object} product - The product object
+
+  @example
+  {%- render 'lb-spec-sheet', product: product -%}
+{%- enddoc -%}
+
+{%- liquid
+  assign rows = ''
+
+  # Fabric composition — list.metaobject_reference, .label holds the display value
+  assign fabric = product.metafields.shopify.fabric.value
+  if fabric != blank
+    assign parts = ''
+    for item in fabric
+      assign parts = parts | append: item.label | append: ', '
+    endfor
+    assign parts = parts | split: ', ' | uniq | join: ' / '
+    if parts != blank
+      assign rows = rows | append: 'Fabric|' | append: parts | append: '||'
+    endif
+  endif
+
+  # Weight — parsed from the title, e.g. "… | 330GSM" or "… | 330 GSM"
+  if product.title contains 'GSM'
+    assign gsm = product.title | split: 'GSM' | first | strip | split: ' ' | last | strip
+    assign gsm_number = gsm | plus: 0
+    if gsm_number > 0
+      assign rows = rows | append: 'Weight|' | append: gsm_number | append: ' GSM||'
+    endif
+  endif
+
+  assign neckline = product.metafields.shopify.neckline.value
+  if neckline != blank
+    assign parts = ''
+    for item in neckline
+      assign parts = parts | append: item.label | append: ', '
+    endfor
+    assign parts = parts | split: ', ' | uniq | join: ' / '
+    if parts != blank
+      assign rows = rows | append: 'Neckline|' | append: parts | append: '||'
+    endif
+  endif
+
+  assign sleeve = product.metafields.shopify["sleeve-length-type"].value
+  if sleeve != blank
+    assign parts = ''
+    for item in sleeve
+      assign parts = parts | append: item.label | append: ', '
+    endfor
+    assign parts = parts | split: ', ' | uniq | join: ' / '
+    if parts != blank
+      assign rows = rows | append: 'Sleeve|' | append: parts | append: '||'
+    endif
+  endif
+
+  assign length_type = product.metafields.shopify["top-length-type"].value
+  if length_type != blank
+    assign parts = ''
+    for item in length_type
+      assign parts = parts | append: item.label | append: ', '
+    endfor
+    assign parts = parts | split: ', ' | uniq | join: ' / '
+    if parts != blank
+      assign rows = rows | append: 'Length|' | append: parts | append: '||'
+    endif
+  endif
+
+  assign features = product.metafields.shopify["outerwear-clothing-features"].value
+  if features != blank
+    assign parts = ''
+    for item in features
+      assign parts = parts | append: item.label | append: ', '
+    endfor
+    assign parts = parts | split: ', ' | uniq | join: ' / '
+    if parts != blank
+      assign rows = rows | append: 'Features|' | append: parts | append: '||'
+    endif
+  endif
+
+  assign care = product.metafields.shopify["care-instructions"].value
+  if care != blank
+    assign parts = ''
+    for item in care
+      assign parts = parts | append: item.label | append: ', '
+    endfor
+    assign parts = parts | split: ', ' | uniq | join: ' / '
+    if parts != blank
+      assign rows = rows | append: 'Care|' | append: parts | append: '||'
+    endif
+  endif
+
+  assign row_list = rows | split: '||'
+-%}
+
+{%- if row_list.size > 0 -%}
+  <section class="lb-spec" aria-labelledby="lb-spec-title">
+    <h2 class="lb-spec__title" id="lb-spec-title">Specification</h2>
+
+    <dl class="lb-spec__list">
+      {%- for row in row_list -%}
+        {%- assign cells = row | split: '|' -%}
+        {%- if cells.size == 2 -%}
+          <div class="lb-spec__row">
+            <dt class="lb-spec__key">{{ cells[0] }}</dt>
+            <dd class="lb-spec__value">{{ cells[1] }}</dd>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </dl>
+  </section>
+{%- endif -%}
