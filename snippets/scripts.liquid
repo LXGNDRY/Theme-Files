@@ -50,8 +50,16 @@
 {% endif %}
 
 <link rel="modulepreload" href="{{ 'focus.js' | asset_url }}" fetchpriority="low">
-<link rel="modulepreload" href="{{ 'scrolling.js' | asset_url }}" fetchpriority="low">
 <link rel="modulepreload" href="{{ 'events.js' | asset_url }}" fetchpriority="low">
+
+{%- comment -%}
+  scrolling.js: consumed by slideshow, zoom-dialog, and collection-links.
+  Only needed on homepage (slideshow) and product templates (zoom-dialog, slideshow).
+  Saves 12 KB preload on collection, cart, search, blog, article, page, 404, password.
+{%- endcomment -%}
+{% if template.name == 'index' or template.name == 'product' %}
+<link rel="modulepreload" href="{{ 'scrolling.js' | asset_url }}" fetchpriority="low">
+{% endif %}
 
 {%- comment -%}
   popover-polyfill.js: moved to idle load (2026-05-20).
