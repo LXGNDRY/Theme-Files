@@ -290,14 +290,17 @@
     file paints during LCP: the scroll rail is driven by a scroll timeline and
     the grain overlay starts at opacity 0 behind a delay.
 
-    --lb-goat-mark is defined here rather than in the stylesheets because the
-    mark comes from a theme setting. It masks a PNG today; to upgrade, upload a
-    vector as assets/goat-mark.svg and change only this one line to
-    url({{ 'goat-mark.svg' | asset_url }}).
+    --lb-goat-mark is defined here rather than in the stylesheets because a
+    stylesheet cannot resolve asset_url. It points at assets/goat-mark.svg — a
+    single solid-filled path with stroke-width 0, which is what makes it usable
+    as a mask: mask-image reads the alpha channel, so the fill colour is
+    irrelevant and background: currentColor supplies the colour. That is why one
+    file serves both light and dark schemes.
+
+    Served from theme assets rather than Shopify Files deliberately: same-origin,
+    versioned with the theme, and no ?v= cache-buster that changes on re-upload.
   {%- endcomment -%}
-  {%- if settings.favicon != blank -%}
-  <style>:root{--lb-goat-mark:url({{ settings.favicon | image_url: width: 128 }});}</style>
-  {%- endif -%}
+  <style>:root{--lb-goat-mark:url({{ 'goat-mark.svg' | asset_url }});}</style>
   <link rel="preload" href="{{ 'lb-goat-system.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
   <noscript><link rel="stylesheet" href="{{ 'lb-goat-system.css' | asset_url }}"></noscript>
 
