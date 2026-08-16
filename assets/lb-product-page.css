@@ -628,3 +628,84 @@
   .lb-pdp-sticky-bar { gap: 1rem; }
   .lb-pdp-sg-modal { padding: 1.5rem; }
 }
+
+/* ==========================================================================
+   GARMENT SPECIFICATION
+   Added 2026-08-16.
+
+   Legendary Branding leads with fabric weight in product titles, which is a
+   spec-forward posture most streetwear hides. This renders that posture as a
+   garment tag: mono voice, hairline rules, tabular alignment.
+
+   Mono is a system stack — no font is downloaded. The theme's configured faces
+   are Bebas Neue (heading) and Ovo (body, a serif); neither reads as technical,
+   and adding a webfont for one component is not worth the request.
+   ========================================================================== */
+
+.lb-spec {
+  --lb-spec-rule: rgb(from currentColor r g b / 0.16);
+
+  margin-block-start: var(--padding-xl, 2rem);
+  padding-block-start: var(--padding-lg, 1.5rem);
+  border-block-start: 1px solid var(--lb-spec-rule);
+  color: var(--color-foreground);
+}
+
+.lb-spec__title {
+  margin: 0 0 var(--padding-md, 1rem);
+  font-family: var(--font-heading--family);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.lb-spec__list {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+}
+
+.lb-spec__row {
+  display: grid;
+  grid-template-columns: minmax(5.5rem, 8rem) 1fr;
+  gap: var(--gap-sm, 0.75rem);
+  align-items: baseline;
+  padding-block: 0.7rem;
+  border-block-end: 1px solid var(--lb-spec-rule);
+}
+
+.lb-spec__row:last-child {
+  border-block-end: 0;
+}
+
+.lb-spec__key,
+.lb-spec__value {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  /* Digits align down the column — the point of a spec sheet. */
+  font-variant-numeric: tabular-nums;
+}
+
+.lb-spec__key {
+  margin: 0;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.lb-spec__value {
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+/* Below 750px the two columns crowd; stack and tighten instead of shrinking. */
+@media screen and (max-width: 749px) {
+  .lb-spec__row {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+}
