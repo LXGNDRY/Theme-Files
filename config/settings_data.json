@@ -9,11 +9,11 @@
  */
 {
   "current": {
-    "logo": "shopify://shop_images/Official_Logo_Black_1.png",
-    "logo_inverse": "shopify://shop_images/Hats_-_Artboard_10_778cff2e-baae-4b50-bd6c-f884899133ad_1_-white.png",
+    "logo": "shopify://shop_images/Hype_-_illustration.svg",
+    "logo_inverse": "shopify://shop_images/Hype_-_illustration_1.svg",
     "logo_height": 63,
     "logo_height_mobile": 48,
-    "favicon": "shopify://shop_images/Black_GOAT_Logo.png",
+    "favicon": "shopify://shop_images/Hype_-_illustration.svg",
     "type_body_font": "ovo_n4",
     "type_subheading_font": "bebas_neue_n4",
     "type_heading_font": "bebas_neue_n4",

@@ -17,6 +17,7 @@
           "name": "Title",
           "settings": {
             "text": "<h1><span style=\"text-decoration:underline\"><em><strong>{{ closest.collection.title }}</strong></em></span></h1>",
+            "bleed": false,
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
@@ -27,7 +28,7 @@
             "letter_spacing": "normal",
             "case": "none",
             "wrap": "pretty",
-            "color": "",
+            "color": "var(--color-foreground-heading)",
             "background": true,
             "background_color": "#ffffff",
             "corner_radius": 0,
@@ -42,6 +43,7 @@
           "type": "_divider",
           "name": "Divider",
           "settings": {
+            "divider_style": "line",
             "thickness": 1,
             "corner_radius": "square",
             "width_percent": 100,
