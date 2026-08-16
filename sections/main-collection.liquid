@@ -35,6 +35,8 @@
     {%- render 'lb-collection-description', collection: collection, section: section, position: 'top' -%}
   {%- endif -%}
 
+  {%- render 'lb-subcollection-nav' -%}
+
   {%- assign products_per_page = 24 -%}
   {%- if section.settings.enable_infinite_scroll == false -%}
     {%- assign products_per_page = section.settings.products_per_page -%}

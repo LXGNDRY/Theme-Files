@@ -1,11 +1,15 @@
 {%- comment -%}
   lb-schema-breadcrumb.liquid
-  Version:      1.1.0
-  Last updated: 2026-05-18
+  Version:      1.2.0
+  Last updated: 2026-08-15
   Purpose:      Emits BreadcrumbList JSON-LD for Google rich results.
                 Renders distinct trails for product, collection, article.
-  Usage:        Rendered by snippets/seo-schema.liquid on product / article
-                pages. Pass product or article as a parameter.
+  Usage:        Rendered by snippets/seo-schema.liquid on product / collection / article
+                pages. Pass product, collection, or article as a parameter.
+  Changes:
+    - v1.2.0: added collection BreadcrumbList (2026-08-15). Product and
+      article both had one; collection was missing despite being the
+      biggest organic landing page type on fashion stores.
 {%- endcomment -%}
 {%- liquid
   assign home_url = shop.url
@@ -73,6 +77,28 @@
         "position": 3,
         "name": {{ article.title | json }},
         "item": {{ home_url | append: article.url | json }}
+      }
+    ]
+  }
+  </script>
+{%- elsif collection != blank and collection != empty -%}
+  {%- assign trail_built = true -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": {{ home_url | json }}
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": {{ collection.title | json }},
+        "item": {{ home_url | append: collection.url | json }}
       }
     ]
   }

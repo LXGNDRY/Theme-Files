@@ -178,11 +178,10 @@
         </nav>
       </div>
 
-      <script
-        src="{{ 'header-menu.js' | asset_url }}"
-        type="module"
-        fetchpriority="low"
-      ></script>
+      {% comment %}
+        header-menu.js loaded via lb-idle-defer.liquid at idle priority (v2.0 2026-08-16)
+        Moved from inline <script> to reduce initial TBT — menu interactions work after idle load.
+      {% endcomment %}
     </header-menu>
 {% endcase %}
 

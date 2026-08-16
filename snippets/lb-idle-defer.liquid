@@ -1,7 +1,7 @@
 {%- comment -%}
   lb-idle-defer.liquid
-  Version:      1.0.0
-  Last updated: 2026-05-19
+  Version:      2.0.0
+  Last updated: 2026-08-16
 
   Purpose:
     Universal idle-time deferral layer. Runs AFTER the Chaos Unleashed
@@ -14,16 +14,19 @@
     1. lb-video-optimizer.js     — not needed until user scrolls to video
     2. lb-cart-animations.js     — not needed until cart interaction
     3. lb-image-optimizer.js     — not needed until images enter viewport
-    4. Any element with          — [data-lb-defer] attribute
+    4. header-menu.js            — idle load (was: inline module script)
+    5. predictive-search.js      — idle load (was: inline module script)
+    6. localization.js           — idle load, gated on multi-lang/country
+    7. Any element with          — [data-lb-defer] attribute
        data-lb-defer attribute
-    5. Below-fold <video>        — paused until IntersectionObserver fires
-    6. Non-critical CSS classes  — added after idle via requestIdleCallback
+    8. Below-fold <video>        — paused until IntersectionObserver fires
+    9. Non-critical CSS classes  — added after idle via requestIdleCallback
 
   What this NEVER defers (safe list):
     - Anything in <head> above the fold
     - cart-notification, cart-drawer, cart-items (checkout flow)
-    - predictive-search (UX-critical)
     - section--header, announcement-bar
+    - dialog.js (modal open/close is core UX)
     - Any script with data-lb-critical="true"
 
   Usage:
@@ -120,6 +123,18 @@
   //     These were loaded with `defer` in theme.liquid which still parses +
   //     compiles them during initial page load, adding to TBT.
   // ─────────────────────────────────────────────────────────────────────────
+  // ─── Utility: load a module script URL lazily ─────────────────────────────
+  function lazyModule(src, onDone) {
+    if (loadedScripts[src]) return;
+    loadedScripts[src] = true;
+    var s = document.createElement('script');
+    s.src = src;
+    s.type = 'module';
+    if (onDone) s.onload = onDone;
+    document.body.appendChild(s);
+    log('loaded module:', src);
+  }
+
   var lbScripts = [
     {
       // v1.0 2026-05-20: IntersectionObserver trigger for deferred-media[autoplay].
@@ -143,23 +158,47 @@
     {
       src:     '{{ "lb-image-optimizer.js" | asset_url }}',
       trigger: 'idle'      // safe to run whenever CPU is free
+    },
+    {
+      // v2.0 2026-08-16: Header menu JS — not needed for first paint
+      // header-menu.js (12.8 KB) handles desktop mega-menu + mobile drawer interactions
+      module:  true,
+      src:     '{{ "header-menu.js" | asset_url }}',
+      trigger: 'idle'
+    },
+    {
+      // v2.0 2026-08-16: Predictive search — secondary feature, can wait for idle
+      // predictive-search.js (13.4 KB) powers the predictive search dropdown
+      module:  true,
+      src:     '{{ "predictive-search.js" | asset_url }}',
+      trigger: 'idle'
+    },
+    {
+      // v2.0 2026-08-16: Localization — rarely interacted with
+      // localization.js (17.1 KB) handles the country/currency selector form
+      module:  true,
+      src:     '{{ "localization.js" | asset_url }}',
+      trigger: 'idle',
+      enabled: {% if localization.available_countries.size > 1 or localization.available_languages.size > 1 %}true{% else %}false{% endif %}
     }
   ];
 
   lbScripts.forEach(function (item) {
+    if (item.enabled === false) return;
+    var loader = item.module ? lazyModule : lazyScript;
     if (item.trigger === 'idle') {
-      whenIdle(function () { lazyScript(item.src); });
+      whenIdle(function () { loader(item.src); });
 
     } else if (item.trigger === 'interact') {
-      onFirstInteract(function () { lazyScript(item.src); });
+      onFirstInteract(function () { loader(item.src); });
 
     } else if (item.trigger === 'visible') {
       var anchor = item.anchor && document.querySelector(item.anchor);
       if (anchor) {
-        whenVisible(anchor, function () { lazyScript(item.src); });
+        whenVisible(anchor, function () { loader(item.src); });
       } else {
         // No matching element on this page — still load on idle as fallback
-        whenIdle(function () { lazyScript(item.src); });
+        whenIdle(function () { loader(item.src); });
       }
     }
   });
@@ -267,7 +306,7 @@
     document.head.appendChild(lbSeoLink);
   });
 
-  log('lb-idle-defer v1.0.0 initialized');
+  log('lb-idle-defer v2.0.0 initialized');
 
 })();
 </script>
