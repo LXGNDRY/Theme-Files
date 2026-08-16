@@ -1,0 +1,205 @@
+/* ==========================================================================
+   lb-goat-system.css
+   Version:      1.0.0
+   Last updated: 2026-08-16
+
+   Purpose:
+     Uses the goat mark as a structural element rather than a logo — scroll
+     progress, sold-out state, section division, and the navigation beat.
+     One mark, four jobs, so the interface reads as designed rather than themed.
+
+   Direction: restrained / maison. Monochrome, hairline weights, slow easing,
+   low opacity. Nothing bounces.
+
+   Mark source:
+     Every rule masks `var(--lb-goat-mark)`, defined in layout/theme.liquid from
+     settings.favicon (Black_GOAT_Logo.png — the goat alone, no wordmark).
+     Masking with `background: currentColor` means the mark inherits the active
+     colour scheme, so it works on both light and dark sections with no variants.
+
+     UPGRADE PATH: the mark is currently a PNG, so it is resolution-bound. Upload
+     a vector as assets/goat-mark.svg and change only the --lb-goat-mark
+     definition in theme.liquid. Every rule below stays as-is.
+
+   Performance:
+     No JS, no scroll listeners. Scroll progress uses animation-timeline: scroll(),
+     already used elsewhere in this theme. All motion is gated behind
+     prefers-reduced-motion, matching the @view-transition block in base.aio.min.css.
+   ========================================================================== */
+
+:root {
+  --lb-goat-size: 18px;
+  --lb-goat-rail: 1px;
+  --lb-goat-rail-opacity: 0.14;
+}
+
+/* --------------------------------------------------------------------------
+   1. SCROLL PROGRESS
+   A hairline rail across the top of the viewport with the mark travelling it.
+   Deliberately thin and low-contrast — this is a peripheral cue, not a feature.
+   -------------------------------------------------------------------------- */
+
+.lb-scroll-progress {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: var(--layer-raised, 2);
+  block-size: var(--lb-goat-size);
+  pointer-events: none;
+  /* Hidden until the scroll timeline drives it, so it never paints during LCP. */
+  opacity: 0;
+}
+
+/* The rail itself. */
+.lb-scroll-progress::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  block-size: var(--lb-goat-rail);
+  background: currentColor;
+  opacity: var(--lb-goat-rail-opacity);
+}
+
+/* The travelling mark. */
+.lb-scroll-progress::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: var(--lb-goat-size);
+  block-size: var(--lb-goat-size);
+  background: currentColor;
+  mask-image: var(--lb-goat-mark);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-image: var(--lb-goat-mark);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  translate: -50% 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lb-scroll-progress {
+    opacity: 1;
+  }
+
+  .lb-scroll-progress::after {
+    animation: lb-goat-travel linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+@keyframes lb-goat-travel {
+  from {
+    inset-inline-start: 0;
+  }
+  to {
+    inset-inline-start: 100%;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. SOLD-OUT STAMP
+   Scarcity presented as a designed state rather than an apology. The mark
+   overprints the image at low opacity; the label sits beneath it in the
+   theme's mono voice.
+   -------------------------------------------------------------------------- */
+
+.product-badges__badge--sold-out {
+  position: relative;
+  display: grid;
+  place-items: center;
+  gap: 0.35em;
+  padding-block: 0.6em;
+  padding-inline: 0.9em;
+  background: transparent;
+  border: var(--lb-goat-rail) solid currentColor;
+  border-radius: 0;
+  color: currentColor;
+  font-family: var(--font-body--family);
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.product-badges__badge--sold-out::before {
+  content: '';
+  inline-size: 1.35em;
+  block-size: 1.35em;
+  background: currentColor;
+  mask-image: var(--lb-goat-mark);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-image: var(--lb-goat-mark);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  opacity: 0.55;
+}
+
+/* --------------------------------------------------------------------------
+   3. SECTION DIVIDER
+   A hairline rule broken by the mark. Opt-in via .lb-goat-divider so it can be
+   placed deliberately rather than appearing between every section.
+   -------------------------------------------------------------------------- */
+
+.lb-goat-divider {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--gap-md, 1rem);
+  inline-size: 100%;
+  padding-block: var(--padding-xl, 2rem);
+  color: var(--color-foreground);
+}
+
+.lb-goat-divider::before,
+.lb-goat-divider::after {
+  content: '';
+  block-size: var(--lb-goat-rail);
+  background: currentColor;
+  opacity: var(--lb-goat-rail-opacity);
+}
+
+.lb-goat-divider > .lb-goat-divider__mark {
+  inline-size: 22px;
+  block-size: 22px;
+  background: currentColor;
+  mask-image: var(--lb-goat-mark);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-image: var(--lb-goat-mark);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  opacity: 0.5;
+}
+
+/* --------------------------------------------------------------------------
+   4. NAVIGATION BEAT
+   During a cross-document view transition the page briefly has nothing to show.
+   The mark holds at low opacity so that moment reads as brand rather than blank.
+   Scoped to the existing page-navigation transition type so it never appears
+   outside a navigation.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html:active-view-transition-type(page-navigation)::view-transition-new(root-custom) {
+    animation: lb-goat-beat var(--animation-speed-slow, 0.2s) var(--animation-timing-fade-in, ease-out) both;
+  }
+}
+
+@keyframes lb-goat-beat {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
