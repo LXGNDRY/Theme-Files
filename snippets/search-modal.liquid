@@ -5,15 +5,15 @@
   @param {string} [class] - Additional CSS classes to apply to the predictive search component.
 {% enddoc %}
 
+{% comment %}
+  predictive-search.js loaded via lb-idle-defer.liquid at idle priority (v2.0 2026-08-16)
+  Moved from inline <script> to reduce initial TBT — search works after idle load.
+  dialog.js is kept inline because it's needed for the modal to open.
+{% endcomment %}
+
 <script
   src="{{ 'dialog.js' | asset_url }}"
   type="module"
-></script>
-
-<script
-  src="{{ 'predictive-search.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
 ></script>
 
 <dialog-component

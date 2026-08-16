@@ -55,7 +55,9 @@
 {
   "name": "t:names.featured_product",
   "disabled_on": {
-    "groups": ["header"]
+    "groups": [
+      "header"
+    ]
   },
   "settings": [
     {
@@ -108,56 +110,6 @@
       "step": 1,
       "unit": "px",
       "default": 0
-    }
-  ],
-  "presets": [
-    {
-      "name": "t:names.featured_product",
-      "category": "t:categories.products",
-      "settings": {
-        "color_scheme": "scheme-3"
-      },
-      "blocks": {
-        "media": {
-          "type": "_media-without-appearance",
-          "static": true,
-          "name": "t:names.product_media"
-        },
-        "featured-product": {
-          "type": "_featured-product",
-          "static": true,
-          "name": "t:names.product",
-          "blocks": {
-            "featured-product-title": {
-              "type": "product-title",
-              "name": "t:names.title",
-              "static": true,
-              "settings": {
-                "type_preset": "h5",
-                "width": "100%"
-              }
-            },
-            "featured-product-price": {
-              "type": "_featured-product-price",
-              "name": "t:names.price",
-              "static": true
-            },
-            "featured-product-gallery": {
-              "type": "_featured-product-gallery",
-              "name": "t:names.image",
-              "static": true
-            },
-            "featured-product-swatches": {
-              "type": "swatches",
-              "name": "t:names.swatches",
-              "static": true,
-              "settings": {
-                "hide_padding": true
-              }
-            }
-          }
-        }
-      }
     }
   ]
 }
