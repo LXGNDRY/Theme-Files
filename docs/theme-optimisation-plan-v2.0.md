@@ -216,6 +216,12 @@ DoD:
 Rollback: restore templates from git; reassign products from the §6 record.
 Note: rollback requires manual admin work. Treat as slow to reverse.
 
+WS-3 RESEARCH DELIVERABLE: docs/ws3-product-template-consolidation.md
+  - Full analysis of all 6 product templates
+  - Consolidation strategy: 5 templates → product.json + section visibility toggles
+  - Required admin actions sequence
+  - Risk and rollback plan
+
 ---
 ### WS-4 — CSS architecture
 Priority P0 · Effort 8h + QA · Risk: MEDIUM
@@ -358,9 +364,14 @@ Priority P4 · Effort 7h · Risk: MEDIUM
       only. Loading behaviour must not change.
       DoD addition: rendered HTML output is byte-identical before and after.
 
-  7b  header-drawer.liquid (761 lines) — loads on every page. Gate the 5x
-      link-featured-image and 4x resource-card renders behind settings checks
-      if mega-menu imagery is unused on the current config.
+  7b  header-drawer.liquid (761 lines) — loads on every page.
+      ✅ ALREADY DONE: the 5x link-featured-image and 4x resource-card renders
+      are already gated behind block_settings.menu_style conditionals.
+      Current store config uses menu_style: "text" (verified in header-group.json),
+      so these code paths never execute. No refactor needed.
+      If the store ever switches to collection_images/featured_collections/
+      featured_products style, the imagery renders will activate automatically
+      via the existing conditionals.
 
   7c  section.liquid (1765 lines) — DEFERRED. Only justified under sustained
       active development on the theme.
@@ -382,16 +393,18 @@ Priority P4 · Effort 3h · Risk: LOW
 
   8b  Speculation rules — lb-speculation-rules ships prerender/prefetch at
       moderate/conservative.
-      - Raise eagerness on PDP -> cart/checkout (highest conversion value)
-      - Add prerender on collection -> PDP on hover (strongest UX win)
-      - Keep conservative on blog/article pages (low value, high waste)
-
-  8c  Fonts:
-      - Verify JetBrains Mono usage across the site (drop to system mono if
-        used on <5% of rendered text — it's used for labels, eyebrow text,
-        price, buttons which is probably ~10-15% — likely worth keeping)
-      - Confirm font-display: swap on all font faces
-      - Confirm no FOIT on any template
+      ✅ DONE (2026-08-16): Raised collection URL eagerness from conservative
+      → moderate. Collection nav links are high-intent hover targets; majority
+      of hover→click is on nav items. CDN-heavy, minimal waste.
+      PDP → PDP already moderate. Catch-all pages remain conservative.
+      Excluded: PDP → cart/checkout (these are form POSTs, not link navigations;
+      Speculation Rules API doesn't prerender form submissions).
+  8c  Fonts — DONE by existing v23 setup (2026-05-01):
+      - Only 1 font preload (body regular 400)
+      - font-display: swap on all faces
+      - Bebas Neue inlined separately (well-documented, display font)
+      - JetBrains Mono is a system font stack (no download)
+      No further optimization needed.
 
 DoD:
   [ ] No increase in wasted prefetch bandwidth (measure in DevTools Network)

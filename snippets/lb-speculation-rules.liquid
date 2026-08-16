@@ -1,15 +1,23 @@
 {%- comment -%}
   lb-speculation-rules.liquid
-  Version:      1.1.0
-  Last updated: 2026-05-20
+  Version:      1.2.0
+  Last updated: 2026-08-16
   Purpose:      Injects Speculation Rules API JSON to prerender navigation
                 targets on hover, reducing perceived load time for next-page
                 navigation (Chrome 109+ only — degrades gracefully in all
                 other browsers, the script tag is simply ignored).
 
-  Eagerness "moderate":
-    Triggers prerender on link hover (~200ms), not on page load. Avoids
-    prefetching every link on page load which would blow CDN bandwidth.
+  Eagerness tiers:
+    "moderate"   — Triggers prerender on link hover (~200ms). Balanced: fires
+                   on user intent signal without wasting bandwidth on every link.
+    "conservative" — Triggers on pointerdown (click-start). Lowest waste, but
+                   only ~100ms of head start before navigation commits.
+
+  v1.2.0 changes:
+    - Collection URLs raised from conservative → moderate
+      Rationale: main nav collection links are high-intent hover targets;
+      the majority of hover → click happens on collection nav items.
+      Wasted prerenders are minimal (collections are CDN-heavy, cheap to serve).
 
   Exclusions (never prerender):
     /cart*      — Shopify cart state is session-sensitive; prerendering can
@@ -61,7 +69,7 @@
           { "not": { "href_matches": "/collections/*/products/*" } }
         ]
       },
-      "eagerness": "conservative"
+      "eagerness": "moderate"
     },
     {
       "where": {
