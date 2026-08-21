@@ -28,7 +28,7 @@
   height: 3.25rem;
   border-radius: 50%;
   background: rgb(var(--color-foreground-rgb));
-  color: rgb(var(--color-background));
+  color: var(--color-background);
   box-shadow: 0 4px 16px rgb(var(--color-foreground-rgb) / 0.25);
   cursor: pointer;
 }
@@ -96,7 +96,7 @@
 .lb-chat-widget__message--user {
   align-self: flex-end;
   background: rgb(var(--color-foreground-rgb));
-  color: rgb(var(--color-background));
+  color: var(--color-background);
 }
 
 .lb-chat-widget__message[data-pending] {

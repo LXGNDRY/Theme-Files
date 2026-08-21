@@ -41,7 +41,7 @@
       shopDomain: {{ shop.permanent_domain | json }},
       locale: {{ request.locale.iso_code | json }},
       templateName: {{ template.name | json }},
-      pageHandle: {{ product.handle | default: collection.handle | default: page.handle | default: blog.handle | default: article.handle | json }},
+      pageHandle: {{ product.handle | default: collection.handle | default: page.handle | default: article.handle | default: blog.handle | json }},
       customerLoggedIn: {{ customer_logged_in | json }},
       // customerId is a UX hint only (e.g. to greet a signed-in customer by
       // name client-side). The backend must NEVER treat it as proof of

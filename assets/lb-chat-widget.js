@@ -1,4 +1,4 @@
-import { DialogComponent } from '@theme/dialog';
+import { DialogComponent, DialogOpenEvent } from '@theme/dialog';
 
 /**
  * lb-chat-widget.js — Legendary Branding AI customer-service widget.
@@ -36,17 +36,25 @@ class LbChatWidgetComponent extends DialogComponent {
     }
 
     this.#sessionId = this.#getOrCreateSessionId();
+    this.addEventListener(DialogOpenEvent.eventName, this.#handleOpen);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener(DialogOpenEvent.eventName, this.#handleOpen);
   }
 
   open() {
     this.showDialog();
+  }
 
+  #handleOpen = () => {
     if (this.refs.messages && this.refs.messages.childElementCount === 0) {
       this.#appendMessage('assistant', window.LB_CHAT_CONFIG?.greeting ?? '');
     }
 
     this.refs.input?.focus();
-  }
+  };
 
   close() {
     this.closeDialog();
