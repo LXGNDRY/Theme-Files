@@ -491,6 +491,12 @@
     {%- render 'lb-judgeme-carousel-css' -%}
   {%- endif -%}
 
+  {%- comment -%}── AI ASSISTANT (global floating widget) ────────────────────
+    lb-chat-widget renders nothing unless settings.ai_chat_enabled and a
+    backend URL are both set. See snippets/lb-chat-widget.liquid.
+  {%- endcomment -%}
+  {%- render 'lb-chat-widget' -%}
+
   {%- comment -%}── IDLE DEFER (last — catches everything below-fold) ─────────
     lb-idle-defer runs after all content is in the DOM. It uses
     requestIdleCallback to load lb-video-optimizer, lb-cart-animations,
