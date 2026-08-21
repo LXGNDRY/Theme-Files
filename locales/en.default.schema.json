@@ -212,6 +212,8 @@
   },
   "info": {
     "actions_display_style": "Icons are always used on mobile",
+    "ai_chat_backend_base": "The base URL of the assistant backend service. Never enter an API key or secret here.",
+    "ai_chat_authenticated_features_enabled": "Lets signed-in customers ask about their own orders. Requires the backend to support authenticated order lookups.",
     "applies_on_image_only": "Applies to images only",
     "aspect_ratio_adjusted": "Adjusted in some layouts",
     "carousel_hover_behavior_not_supported": "\"Carousel\" hover is not supported when \"Carousel\" type is selected at the section level",
@@ -244,6 +246,7 @@
     "accordion": "Accordion",
     "accordion_row": "Accordion row",
     "add_to_cart": "Add to cart",
+    "ai_assistant": "AI Assistant",
     "alternating_content_rows": "Alternating rows",
     "animations": "Animations",
     "announcement": "Announcement",
@@ -751,6 +754,11 @@
   "settings": {
     "accordion": "Accordion",
     "account": "Account",
+    "ai_chat_enabled": "Enable AI assistant",
+    "ai_chat_backend_base": "Assistant backend URL",
+    "ai_chat_greeting": "Greeting message",
+    "ai_chat_position": "Launcher position",
+    "ai_chat_authenticated_features_enabled": "Enable order lookup (beta)",
     "actions_display_style": "Menu style",
     "alignment": "Alignment",
     "alignment_mobile": "Mobile alignment",

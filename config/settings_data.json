@@ -99,6 +99,11 @@
     "razorpay_badge_enabled": false,
     "razorpay_gcp_base": "https://lb-razorpay-backend-exy37drh4q-uc.a.run.app",
     "razorpay_key_id": "rzp_live_THxiCiKHbW3rMy",
+    "ai_chat_enabled": false,
+    "ai_chat_backend_base": "",
+    "ai_chat_greeting": "",
+    "ai_chat_position": "bottom-right",
+    "ai_chat_authenticated_features_enabled": false,
     "content_for_index": [],
     "blocks": {
       "14060646107696862457": {

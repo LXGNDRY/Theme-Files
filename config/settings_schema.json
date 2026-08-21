@@ -1830,6 +1830,51 @@
     ]
   },
   {
+    "name": "t:names.ai_assistant",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "ai_chat_enabled",
+        "label": "t:settings.ai_chat_enabled",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "ai_chat_backend_base",
+        "label": "t:settings.ai_chat_backend_base",
+        "info": "t:info.ai_chat_backend_base"
+      },
+      {
+        "type": "text",
+        "id": "ai_chat_greeting",
+        "label": "t:settings.ai_chat_greeting"
+      },
+      {
+        "type": "select",
+        "id": "ai_chat_position",
+        "label": "t:settings.ai_chat_position",
+        "options": [
+          {
+            "value": "bottom-right",
+            "label": "t:options.bottom_right"
+          },
+          {
+            "value": "bottom-left",
+            "label": "t:options.bottom_left"
+          }
+        ],
+        "default": "bottom-right"
+      },
+      {
+        "type": "checkbox",
+        "id": "ai_chat_authenticated_features_enabled",
+        "label": "t:settings.ai_chat_authenticated_features_enabled",
+        "info": "t:info.ai_chat_authenticated_features_enabled",
+        "default": false
+      }
+    ]
+  },
+  {
     "name": "t:names.drawers",
     "settings": [
       {

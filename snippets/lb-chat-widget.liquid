@@ -1,0 +1,144 @@
+{%- comment -%}
+  lb-chat-widget.liquid
+  Purpose:  Global floating AI customer-service widget for Legendary Branding.
+  Backend:  A separate service (not part of this theme) holds the Anthropic
+            API key and answers questions using product/policy/brand
+            knowledge. This snippet only injects a small PUBLIC config object
+            (backend base URL + non-secret page context) and loads the
+            widget script, mirroring the pattern used for the Razorpay
+            integration in snippets/cart-summary.liquid.
+  Guard:    Renders nothing unless settings.ai_chat_enabled is on AND a
+            backend URL is configured, so an empty/unfinished setup never
+            ships broken UI to customers.
+  Note:     Deliberately not gated behind Shopify's consent-mode API
+            (see snippets/lb-consent-mode-v2.liquid) — treated as core site
+            functionality like search, not marketing/analytics.
+{%- endcomment -%}
+
+{%- if settings.ai_chat_enabled and settings.ai_chat_backend_base != blank -%}
+  <link
+    rel="preconnect"
+    href="{{ settings.ai_chat_backend_base }}"
+    crossorigin
+  >
+
+  {%- liquid
+    assign chat_greeting = settings.ai_chat_greeting
+    if chat_greeting == blank
+      assign chat_greeting = 'content.ai_chat_greeting' | t
+    endif
+
+    assign customer_logged_in = false
+    if customer
+      assign customer_logged_in = true
+    endif
+  -%}
+  <script>
+    window.LB_CHAT_CONFIG = {
+      backendBase: {{ settings.ai_chat_backend_base | json }},
+      greeting: {{ chat_greeting | json }},
+      position: {{ settings.ai_chat_position | json }},
+      shopDomain: {{ shop.permanent_domain | json }},
+      locale: {{ request.locale.iso_code | json }},
+      templateName: {{ template.name | json }},
+      pageHandle: {{ product.handle | default: collection.handle | default: page.handle | default: blog.handle | default: article.handle | json }},
+      customerLoggedIn: {{ customer_logged_in | json }},
+      // customerId is a UX hint only (e.g. to greet a signed-in customer by
+      // name client-side). The backend must NEVER treat it as proof of
+      // identity — authenticated order lookups require their own verified
+      // session proof, independent of this value.
+      customerId: {{ customer.id | json }},
+      authenticatedFeaturesEnabled: {{ settings.ai_chat_authenticated_features_enabled | json }}
+    };
+  </script>
+
+  <lb-chat-widget-component
+    class="lb-chat-widget lb-chat-widget--{{ settings.ai_chat_position }}"
+    color-scheme="{{ settings.popover_color_scheme }}"
+  >
+    <button
+      ref="launcher"
+      type="button"
+      on:click="/open"
+      class="lb-chat-widget__launcher button-unstyled"
+      aria-haspopup="dialog"
+      aria-label="{{ 'accessibility.ai_chat_launcher' | t }}"
+    >
+      <span class="svg-wrapper lb-chat-widget__launcher-icon">
+        {{- 'icon-info.svg' | inline_asset_content -}}
+      </span>
+    </button>
+
+    <dialog
+      ref="dialog"
+      class="lb-chat-widget__dialog dialog-modal color-{{ settings.popover_color_scheme }}"
+      aria-labelledby="lb-chat-widget-heading"
+      scroll-lock
+    >
+      <div class="lb-chat-widget__header">
+        <h2
+          id="lb-chat-widget-heading"
+          class="lb-chat-widget__heading h4"
+        >
+          {{ shop.name }}
+        </h2>
+        <button
+          ref="closeButton"
+          type="button"
+          on:click="/closeDialog"
+          class="button button-unstyled close-button lb-chat-widget__close-button"
+          aria-label="{{ 'accessibility.ai_chat_close' | t }}"
+        >
+          {{- 'icon-close.svg' | inline_asset_content -}}
+        </button>
+      </div>
+
+      <div
+        ref="messages"
+        class="lb-chat-widget__messages"
+        role="log"
+        aria-live="polite"
+      ></div>
+
+      <form
+        ref="form"
+        class="lb-chat-widget__form"
+        on:submit="/sendMessage"
+      >
+        <label
+          for="lb-chat-widget-input"
+          class="visually-hidden"
+        >
+          {{ 'content.ai_chat_placeholder' | t }}
+        </label>
+        <input
+          ref="input"
+          id="lb-chat-widget-input"
+          class="lb-chat-widget__input"
+          type="text"
+          name="message"
+          autocomplete="off"
+          placeholder="{{ 'content.ai_chat_placeholder' | t }}"
+        >
+        <button
+          type="submit"
+          class="button lb-chat-widget__send-button"
+        >
+          {{ 'content.ai_chat_send' | t }}
+        </button>
+      </form>
+    </dialog>
+  </lb-chat-widget-component>
+
+  <link
+    rel="stylesheet"
+    href="{{ 'lb-chat-widget.css' | asset_url }}"
+    media="print"
+    onload="this.media='all'"
+  >
+  <script
+    src="{{ 'lb-chat-widget.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+{%- endif -%}
