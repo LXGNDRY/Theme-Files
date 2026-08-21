@@ -107,6 +107,37 @@
 }
 
 /* --------------------------------------------------------------------------
+   International Payment Notice
+   .lb-international-notice
+   Shown above the checkout button when the customer's selected country
+   differs from the store's home country. Gated behind
+   settings.show_international_payment_notice in cart-summary.liquid.
+   -------------------------------------------------------------------------- */
+
+.lb-international-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: var(--rounded-sm, 6px);
+  background: rgb(var(--color-foreground-rgb) / 0.05);
+}
+
+.lb-international-notice svg {
+  flex-shrink: 0;
+  margin-top: 0.1em;
+  opacity: 0.7;
+}
+
+.lb-international-notice__text {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: rgb(var(--color-foreground-rgb) / 0.75);
+}
+
+/* --------------------------------------------------------------------------
    Checkout Button
    -------------------------------------------------------------------------- */
 

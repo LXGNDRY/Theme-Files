@@ -273,6 +273,18 @@
   </div>
 {%- endunless -%}
 
+{%- comment -%} LB International Payment Notice — warns customers whose card-issuing country may differ from the store's home country that their bank could block the charge {%- endcomment -%}
+{%- if settings.show_international_payment_notice and shop.address.country and localization.country and localization.country.iso_code != shop.address.country.iso_code -%}
+  <div class="lb-international-notice" role="note">
+    <span class="svg-wrapper" aria-hidden="true">
+      {{- 'icon-info.svg' | inline_asset_content -}}
+    </span>
+    <p class="lb-international-notice__text">
+      Paying from {{ localization.country.name }}? Some banks block international card charges by default. If your payment doesn't go through, ask your bank to authorize international transactions, or use PayPal / Shop Pay as an alternative.
+    </p>
+  </div>
+{%- endif -%}
+
 {%- comment -%} LB Razorpay — config injected by push script, not theme settings {%- endcomment -%}
 {%- if settings.razorpay_badge_enabled -%}
   <link rel="preconnect" href="https://checkout.razorpay.com" crossorigin>

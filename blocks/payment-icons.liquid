@@ -16,11 +16,24 @@
   {{ block.shopify_attributes }}
 >
   <span class="visually-hidden">{{ 'blocks.payment_methods' | t }}</span>
+  {%- liquid
+    assign is_international = false
+    if block_settings.filter_by_market and shop.address.country and localization.country
+      unless localization.country.iso_code == shop.address.country.iso_code
+        assign is_international = true
+      endunless
+    endif
+
+    assign excluded_payment_types = block_settings.domestic_only_payment_types | strip | remove: ' ' | downcase | split: ','
+  -%}
   <ul
     class="payment-icons__list"
     role="list"
   >
     {%- for type in shop.enabled_payment_types -%}
+      {%- if is_international and excluded_payment_types contains type -%}
+        {%- continue -%}
+      {%- endif -%}
       <li class="payment-icons__item">
         {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
       </li>
@@ -67,6 +80,24 @@
       "step": 1,
       "unit": "px",
       "default": 10
+    },
+    {
+      "type": "header",
+      "content": "International markets"
+    },
+    {
+      "type": "checkbox",
+      "id": "filter_by_market",
+      "label": "Hide selected payment methods for international customers",
+      "info": "Uses the customer's active market/country to detect when they're outside your store's home country.",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "domestic_only_payment_types",
+      "label": "Domestic-only payment methods",
+      "info": "Comma-separated payment type handles to hide when the customer isn't in your home country, e.g. afterpay, klarna, shopify_installments.",
+      "visible_if": "{{ block.settings.filter_by_market == true }}"
     },
     {
       "type": "header",
