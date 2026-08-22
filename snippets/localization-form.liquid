@@ -184,6 +184,9 @@
             >
               {{- 'content.no_results_found' | t -}}
             </span>
+            {% if show_country_filter %}
+              <template data-lb-country-list-template>
+            {% endif %}
             {%- for country in localization.available_countries -%}
               {% liquid
                 assign aliases = ''
@@ -225,6 +228,9 @@
                 </span>
               </li>
             {%- endfor -%}
+            {% if show_country_filter %}
+              </template>
+            {% endif %}
           </ul>
         </div>
         <div class="country-selector__overlay"></div>
@@ -276,3 +282,6 @@
   {%- endform -%}
 </localization-form-component>
 
+{% if show_country_filter %}
+  <script src="{{ 'lb-localization-hydrate.js' | asset_url }}" defer></script>
+{% endif %}
