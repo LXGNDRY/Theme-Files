@@ -1,45 +1,18 @@
 {% # theme-check-disable %}
 
 {% comment %}
-  ═══════════════════════════════════════════════════════════════════════════
-  Font Preloads — TRIMMED for LCP critical path (May 1 2026, v23)
-  ═══════════════════════════════════════════════════════════════════════════
+  Font preload policy — performance-critical path.
 
-  Pre-trim baseline: 5 font preloads from this file + 1 (GTStandard) from
-  chaos_unleashed_font_preload.liquid = 6 total competing for bandwidth in
-  the first ~666ms after HTML response. On Slow 4G mobile this added
-  ~117KB (instrumentsans n4+n7, roboto n7, barlow n3) of contention against
-  the 18.6KB poster image, causing the poster's download to take 3.6s
-  instead of an expected ~700ms.
+  Keep exactly one preload: body_regular. It is the most broadly used face and
+  uses font-display: swap. Heading/accent fonts are intentionally discovered
+  from CSS instead of being preloaded, so font traffic cannot compete with the
+  LCP image on constrained mobile connections.
 
-  Decision: Keep ONLY body_regular preload. The other fonts will load
-  via standard CSS @font-face discovery — slightly later, but no longer
-  competing on the critical path. body_regular is kept because:
-    1. It's the most-used font on most pages (paragraph + UI text)
-    2. It already has font-display: swap set, so no FOFT cost
-    3. Some renderable text in the hero region uses it
-
-  Verification post-deploy: confirm no perceptible FOFT on hero CTA text
-  rendered with the deferred fonts. If FOFT is visible and unacceptable,
-  add back ONLY the specific font(s) actually rendered above the fold —
-  not all of them. Most likely candidate to add back: type_heading_font
-  if hero headlines render in it.
-
-  Original behavior preserved by:
-    - body_regular preload kept intact (lines below)
-    - @font-face declaration with font-display: swap kept intact
-    - font_url filter still resolves correctly for non-preloaded fonts
-      via the theme's CSS that references them
-
-  v23 CHANGELOG (May 1 2026):
-    Removed 4 of 5 preload <link> tags (body_bold, type_subheading_font,
-    heading_bold, type_accent_font). Kept body_regular preload + its
-    @font-face declaration. Original file structure preserved with
-    deletions only — easy to restore if needed.
-  ═══════════════════════════════════════════════════════════════════════════
+  This restores the file to its documented "body font only" policy. If field
+  evidence later shows a measurable heading-font regression, add back only the
+  exact above-the-fold face and validate it against LCP before promotion.
 {% endcomment %}
 
-{% # Self-host + preload body font weight 400 to eliminate font-swap CLS %}
 {%- unless settings.type_body_font.system? -%}
   {%- assign body_regular = settings.type_body_font | font_modify: 'weight', '400' -%}
   {%- if body_regular != blank -%}
@@ -51,21 +24,6 @@
       crossorigin
     >
     <style>{{ body_regular | font_face: font_display: 'swap' }}</style>
-  {%- endif -%}
-{%- endunless -%}
-
-{% # Heading font (Bebas Neue) preload — fetchpriority=low so it queues behind the hero poster %}
-{%- unless settings.type_heading_font.system? -%}
-  {%- assign heading_regular = settings.type_heading_font | font_modify: 'weight', '400' -%}
-  {%- if heading_regular != blank -%}
-    <link
-      rel="preload"
-      as="font"
-      href="{{ heading_regular | font_url }}"
-      type="font/woff2"
-      crossorigin
-      fetchpriority="low"
-    >
   {%- endif -%}
 {%- endunless -%}
 
