@@ -47,7 +47,7 @@ jobs:
           done
 
   json:
-    name: Shopify JSON syntax
+    name: Shopify JSON/JSONC syntax
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -66,20 +66,68 @@ jobs:
           roots = [Path('config'), Path('locales'), Path('sections'), Path('templates')]
           files = sorted(path for root in roots if root.exists() for path in root.rglob('*.json'))
           errors = []
-          shopify_header = re.compile(r'^\s*/\*.*?\*/\s*', re.DOTALL)
+
+          def strip_jsonc_comments(text: str) -> str:
+              """Remove // and /* */ comments while preserving quoted strings."""
+              out = []
+              i = 0
+              in_string = False
+              escaped = False
+              length = len(text)
+
+              while i < length:
+                  ch = text[i]
+                  nxt = text[i + 1] if i + 1 < length else ''
+
+                  if in_string:
+                      out.append(ch)
+                      if escaped:
+                          escaped = False
+                      elif ch == '\\':
+                          escaped = True
+                      elif ch == '"':
+                          in_string = False
+                      i += 1
+                      continue
+
+                  if ch == '"':
+                      in_string = True
+                      out.append(ch)
+                      i += 1
+                      continue
+
+                  if ch == '/' and nxt == '/':
+                      i += 2
+                      while i < length and text[i] not in '\r\n':
+                          i += 1
+                      continue
+
+                  if ch == '/' and nxt == '*':
+                      end = text.find('*/', i + 2)
+                      if end == -1:
+                          raise ValueError('unterminated block comment')
+                      i = end + 2
+                      continue
+
+                  out.append(ch)
+                  i += 1
+
+              if in_string:
+                  raise ValueError('unterminated string')
+              return ''.join(out)
 
           for path in files:
               try:
                   text = path.read_text(encoding='utf-8-sig')
-                  # Shopify theme-editor JSON commonly starts with one generated
-                  # block-comment warning. Strip only that leading header; the
-                  # remaining payload must be strict JSON.
-                  text = shopify_header.sub('', text, count=1)
+                  text = strip_jsonc_comments(text)
+                  # Shopify-generated JSONC can contain trailing commas. Remove
+                  # only commas immediately before a closing object/array token.
+                  text = re.sub(r',\s*([}\]])', r'\1', text)
                   json.loads(text)
               except Exception as exc:
                   errors.append(f'{path}: {exc}')
 
-          print(f'Checked {len(files)} Shopify JSON files')
+          print(f'Checked {len(files)} Shopify JSON/JSONC files')
           if errors:
               raise SystemExit('\n'.join(errors))
           PY
