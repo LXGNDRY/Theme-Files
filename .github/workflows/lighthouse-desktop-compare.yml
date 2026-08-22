@@ -1,0 +1,152 @@
+name: Lighthouse Desktop Compare
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/lighthouse-desktop-compare.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lighthouse-desktop-compare-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  desktop:
+    name: Desktop ${{ matrix.target }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [production, staging]
+    env:
+      STORE_ORIGIN: 'https://legendary-branding.com'
+      PREVIEW_THEME_ID: '151147413657'
+      LH_VERSION: '13.4.1'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.19.0'
+
+      - name: Verify Chrome
+        run: google-chrome --version
+
+      - name: Install pinned Lighthouse
+        run: npm install --global "lighthouse@${LH_VERSION}"
+
+      - name: Run three desktop audits per commerce surface
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          mkdir -p lighthouse-results
+
+          if [[ "$TARGET" == 'staging' ]]; then
+            preview="preview_theme_id=${PREVIEW_THEME_ID}"
+            suffix="?${preview}"
+          else
+            suffix=""
+          fi
+
+          declare -A URLS=(
+            [home]="${STORE_ORIGIN}/${suffix}"
+            [collection]="${STORE_ORIGIN}/collections/shirts-tops${suffix}"
+            [product]="${STORE_ORIGIN}/products/unisex-boxy-t-shirt-280gsm${suffix}"
+            [cart]="${STORE_ORIGIN}/cart${suffix}"
+          )
+
+          for surface in home collection product cart; do
+            for run in 1 2 3; do
+              echo "Auditing ${TARGET}/${surface}, run ${run}/3"
+              lighthouse "${URLS[$surface]}" \
+                --chrome-flags='--headless --no-sandbox --disable-dev-shm-usage' \
+                --preset=desktop \
+                --only-categories=performance,accessibility,best-practices,seo \
+                --output=json \
+                --output-path="lighthouse-results/${surface}-${run}.json" \
+                --quiet
+            done
+          done
+
+      - name: Build median scorecard
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import os
+          import statistics
+          from pathlib import Path
+
+          target = os.environ['TARGET']
+          surfaces = ['home', 'collection', 'product', 'cart']
+          fields = {
+              'performance': ('categories', 'performance', 'score'),
+              'accessibility': ('categories', 'accessibility', 'score'),
+              'best_practices': ('categories', 'best-practices', 'score'),
+              'seo': ('categories', 'seo', 'score'),
+              'lcp_ms': ('audits', 'largest-contentful-paint', 'numericValue'),
+              'fcp_ms': ('audits', 'first-contentful-paint', 'numericValue'),
+              'tbt_ms': ('audits', 'total-blocking-time', 'numericValue'),
+              'cls': ('audits', 'cumulative-layout-shift', 'numericValue'),
+              'speed_index_ms': ('audits', 'speed-index', 'numericValue'),
+          }
+
+          def get(data, path):
+              value = data
+              for key in path:
+                  value = value[key]
+              return value
+
+          rows = []
+          for surface in surfaces:
+              reports = [json.loads(Path(f'lighthouse-results/{surface}-{run}.json').read_text()) for run in (1, 2, 3)]
+              row = {'surface': surface}
+              for name, path in fields.items():
+                  values = [get(report, path) for report in reports]
+                  median = statistics.median(values)
+                  if name in {'performance', 'accessibility', 'best_practices', 'seo'}:
+                      median = round(median * 100)
+                  elif name == 'cls':
+                      median = round(median, 3)
+                  else:
+                      median = round(median)
+                  row[name] = median
+              rows.append(row)
+
+          lines = [
+              f'# Desktop Lighthouse Median — {target}',
+              '',
+              'Three desktop Lighthouse runs per surface; values below are medians.',
+              '',
+              '| Surface | Perf | A11y | Best | SEO | LCP ms | FCP ms | TBT ms | CLS | Speed Index ms |',
+              '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|',
+          ]
+          for row in rows:
+              lines.append(
+                  f"| {row['surface']} | {row['performance']} | {row['accessibility']} | {row['best_practices']} | "
+                  f"{row['seo']} | {row['lcp_ms']} | {row['fcp_ms']} | {row['tbt_ms']} | {row['cls']} | {row['speed_index_ms']} |"
+              )
+
+          text = '\n'.join(lines) + '\n'
+          Path('lighthouse-results/SUMMARY.md').write_text(text)
+          print(text)
+          Path(os.environ['GITHUB_STEP_SUMMARY']).write_text(text)
+          PY
+
+      - name: Upload Lighthouse reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-desktop-${{ matrix.target }}-${{ github.sha }}
+          path: lighthouse-results/
+          retention-days: 30
