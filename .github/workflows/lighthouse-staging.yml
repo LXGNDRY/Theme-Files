@@ -1,18 +1,12 @@
-name: Lighthouse Staging
+name: Lighthouse Deployed Staging
 
+# This workflow measures Shopify theme ID 151147413657. That theme is synced
+# from `edits-here-2`, so a feature-branch PR cannot be benchmarked truthfully
+# until its code is merged/synced to staging. Pre-merge correctness is covered
+# by Theme Check + static parsing; performance is verified immediately after
+# the staging merge and the slice is reverted if medians regress materially.
 on:
   workflow_dispatch:
-  pull_request:
-    paths:
-      - 'assets/**'
-      - 'blocks/**'
-      - 'config/**'
-      - 'layout/**'
-      - 'locales/**'
-      - 'sections/**'
-      - 'snippets/**'
-      - 'templates/**'
-      - '.github/workflows/lighthouse-staging.yml'
   push:
     branches:
       - edits-here-2
@@ -31,12 +25,12 @@ permissions:
   contents: read
 
 concurrency:
-  group: lighthouse-staging-${{ github.ref }}
+  group: lighthouse-deployed-staging-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   lighthouse:
-    name: Median Lighthouse audit
+    name: Median deployed-staging audit
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -77,7 +71,7 @@ jobs:
 
           for surface in home collection product cart; do
             for run in 1 2 3; do
-              echo "Auditing ${surface}, run ${run}/3"
+              echo "Auditing deployed staging: ${surface}, run ${run}/3"
               lighthouse "${URLS[$surface]}" \
                 --chrome-flags='--headless --no-sandbox --disable-dev-shm-usage' \
                 --form-factor=mobile \
@@ -137,9 +131,9 @@ jobs:
               rows.append(row)
 
           lines = [
-              '# Staging Lighthouse Median Scorecard',
+              '# Deployed Staging Lighthouse Median Scorecard',
               '',
-              'Three mobile Lighthouse runs per surface; values below are medians.',
+              'Three mobile Lighthouse runs per surface against Shopify staging theme 151147413657; values below are medians.',
               '',
               '| Surface | Perf | A11y | Best | SEO | LCP ms | FCP ms | TBT ms | CLS | Speed Index ms |',
               '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|',
@@ -174,6 +168,6 @@ jobs:
       - name: Upload Lighthouse reports
         uses: actions/upload-artifact@v4
         with:
-          name: lighthouse-staging-${{ github.sha }}
+          name: lighthouse-deployed-staging-${{ github.sha }}
           path: lighthouse-results/
           retention-days: 30
