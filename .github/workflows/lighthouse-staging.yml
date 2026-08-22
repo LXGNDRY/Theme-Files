@@ -4,6 +4,14 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
+      - 'assets/**'
+      - 'blocks/**'
+      - 'config/**'
+      - 'layout/**'
+      - 'locales/**'
+      - 'sections/**'
+      - 'snippets/**'
+      - 'templates/**'
       - '.github/workflows/lighthouse-staging.yml'
   push:
     branches:
