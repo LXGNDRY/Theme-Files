@@ -1,0 +1,155 @@
+{%- comment -%}
+  Legendary Branding — Judge.me Intent Deferrer v1.0
+
+  Scope: homepage + collection only (wired conditionally by chaos_unleashed_master).
+
+  Purpose:
+    Keep Judge.me out of the no-interaction/Lighthouse critical window while
+    preserving fast reviews on real customer intent. The previous shared
+    deferrer restored its queue after 6 seconds; on the current storefront
+    window.load/CPU pressure pushes Judge.me long tasks deep into the TBT
+    measurement window.
+
+  Behavior:
+    - Captures dynamically inserted scripts whose URL contains "judgeme".
+    - Preserves script attributes and execution order.
+    - Restores on first real interaction: pointerdown/touchstart/scroll/keydown/click.
+    - 45s fail-safe guarantees eventual loading for long, no-interaction sessions.
+    - Observer self-terminates after 45s.
+    - Product pages continue using the existing fast Judge.me deferrer.
+
+  This module intentionally does not intercept Shopify WPM, GTM, Klaviyo, or
+  commerce scripts. Analytics and conversion instrumentation stay untouched.
+{%- endcomment -%}
+<script>
+(function () {
+  'use strict';
+
+  if (typeof window === 'undefined' || typeof document === 'undefined' || !document.documentElement) return;
+
+  var PATTERN = 'judgeme';
+  var DEFERRED_TYPE = 'text/x-lb-judgeme-deferred';
+  var FALLBACK_MS = 45000;
+  var OBSERVER_MS = 45000;
+  var queue = [];
+  var restored = false;
+  var observer = null;
+  var restoreTimer = null;
+  var interactionEvents = ['pointerdown', 'touchstart', 'scroll', 'keydown', 'click'];
+
+  function matches(src) {
+    return typeof src === 'string' && src.indexOf(PATTERN) !== -1;
+  }
+
+  function capture(script) {
+    if (!script || script.tagName !== 'SCRIPT') return;
+    if (script.dataset.lbJudgemeDeferred === '1' || script.dataset.lbJudgemeRestored === '1') return;
+    var src = script.getAttribute('src') || script.src || '';
+    if (!matches(src)) return;
+
+    var attrs = {};
+    for (var i = 0; i < script.attributes.length; i++) {
+      var attr = script.attributes[i];
+      if (attr.name === 'src' || attr.name === 'type' || attr.name === 'data-lb-judgeme-deferred') continue;
+      attrs[attr.name] = attr.value;
+    }
+
+    queue.push({
+      src: src,
+      type: script.getAttribute('type') || '',
+      attrs: attrs,
+      original: script
+    });
+
+    script.dataset.lbJudgemeDeferred = '1';
+    script.setAttribute('type', DEFERRED_TYPE);
+    script.removeAttribute('src');
+  }
+
+  function scanNode(node) {
+    if (!node || node.nodeType !== 1) return;
+    if (node.tagName === 'SCRIPT') capture(node);
+    if (node.querySelectorAll) {
+      var scripts = node.querySelectorAll('script[src]');
+      for (var i = 0; i < scripts.length; i++) capture(scripts[i]);
+    }
+  }
+
+  function disconnect() {
+    if (observer) {
+      try { observer.disconnect(); } catch (e) {}
+      observer = null;
+    }
+  }
+
+  function removeIntentListeners() {
+    for (var i = 0; i < interactionEvents.length; i++) {
+      document.removeEventListener(interactionEvents[i], restore, true);
+    }
+  }
+
+  function restore() {
+    if (restored) return;
+    restored = true;
+    disconnect();
+    removeIntentListeners();
+    if (restoreTimer !== null) {
+      clearTimeout(restoreTimer);
+      restoreTimer = null;
+    }
+
+    for (var i = 0; i < queue.length; i++) {
+      var item = queue[i];
+      try {
+        var script = document.createElement('script');
+        if (item.type && item.type !== DEFERRED_TYPE) script.type = item.type;
+        for (var name in item.attrs) {
+          if (Object.prototype.hasOwnProperty.call(item.attrs, name)) {
+            script.setAttribute(name, item.attrs[name]);
+          }
+        }
+        script.dataset.lbJudgemeRestored = '1';
+        script.src = item.src;
+        if (item.original && item.original.parentNode) {
+          item.original.parentNode.insertBefore(script, item.original.nextSibling);
+        } else {
+          document.head.appendChild(script);
+        }
+      } catch (e) {
+        // Fail open: a single malformed app script must not block the queue.
+      }
+    }
+  }
+
+  // Catch already-present dynamically created scripts where possible.
+  var existing = document.querySelectorAll('script[src]');
+  for (var i = 0; i < existing.length; i++) capture(existing[i]);
+
+  try {
+    observer = new MutationObserver(function (mutations) {
+      for (var i = 0; i < mutations.length; i++) {
+        var added = mutations[i].addedNodes;
+        for (var j = 0; j < added.length; j++) scanNode(added[j]);
+      }
+    });
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+  } catch (e) {
+    observer = null;
+  }
+
+  for (var e = 0; e < interactionEvents.length; e++) {
+    document.addEventListener(interactionEvents[e], restore, { passive: true, capture: true, once: true });
+  }
+
+  restoreTimer = setTimeout(restore, FALLBACK_MS);
+  setTimeout(disconnect, OBSERVER_MS);
+
+  try {
+    window.__lbJudgemeIntentDefer = {
+      queued: function () { return queue.length; },
+      restored: function () { return restored; },
+      fallbackMs: FALLBACK_MS
+    };
+  } catch (e) {}
+})();
+</script>
