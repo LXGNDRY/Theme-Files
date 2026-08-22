@@ -49,7 +49,7 @@
           "static": true,
           "settings": {
             "hide_logo_on_home_page": true,
-            "padding-block-start": 0,
+            "padding-block-start": 8,
             "padding-block-end": 0
           },
           "blocks": {}
