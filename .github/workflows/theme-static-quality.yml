@@ -60,20 +60,26 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           import json
+          import re
           from pathlib import Path
 
           roots = [Path('config'), Path('locales'), Path('sections'), Path('templates')]
           files = sorted(path for root in roots if root.exists() for path in root.rglob('*.json'))
           errors = []
+          shopify_header = re.compile(r'^\s*/\*.*?\*/\s*', re.DOTALL)
 
           for path in files:
               try:
-                  with path.open(encoding='utf-8') as handle:
-                      json.load(handle)
+                  text = path.read_text(encoding='utf-8-sig')
+                  # Shopify theme-editor JSON commonly starts with one generated
+                  # block-comment warning. Strip only that leading header; the
+                  # remaining payload must be strict JSON.
+                  text = shopify_header.sub('', text, count=1)
+                  json.loads(text)
               except Exception as exc:
                   errors.append(f'{path}: {exc}')
 
-          print(f'Checked {len(files)} JSON files')
+          print(f'Checked {len(files)} Shopify JSON files')
           if errors:
               raise SystemExit('\n'.join(errors))
           PY
