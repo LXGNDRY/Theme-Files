@@ -1,0 +1,133 @@
+name: Theme Static Quality
+
+on:
+  pull_request:
+    paths:
+      - 'assets/**/*.js'
+      - 'config/**/*.json'
+      - 'locales/**/*.json'
+      - 'sections/**/*.json'
+      - 'templates/**/*.json'
+      - '.github/workflows/theme-static-quality.yml'
+  push:
+    branches:
+      - edits-here-2
+    paths:
+      - 'assets/**/*.js'
+      - 'config/**/*.json'
+      - 'locales/**/*.json'
+      - 'sections/**/*.json'
+      - 'templates/**/*.json'
+      - '.github/workflows/theme-static-quality.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: theme-static-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  javascript:
+    name: JavaScript syntax
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Parse JavaScript assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -d '' files < <(find assets -type f -name '*.js' -print0 | sort -z)
+          printf 'Checking %s JavaScript assets\n' "${#files[@]}"
+          for file in "${files[@]}"; do
+            node --input-type=module --check < "$file"
+          done
+
+  json:
+    name: Shopify JSON/JSONC syntax
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Parse Shopify JSON files
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import re
+          from pathlib import Path
+
+          roots = [Path('config'), Path('locales'), Path('sections'), Path('templates')]
+          files = sorted(path for root in roots if root.exists() for path in root.rglob('*.json'))
+          errors = []
+
+          def strip_jsonc_comments(text: str) -> str:
+              """Remove // and /* */ comments while preserving quoted strings."""
+              out = []
+              i = 0
+              in_string = False
+              escaped = False
+              length = len(text)
+
+              while i < length:
+                  ch = text[i]
+                  nxt = text[i + 1] if i + 1 < length else ''
+
+                  if in_string:
+                      out.append(ch)
+                      if escaped:
+                          escaped = False
+                      elif ch == '\\':
+                          escaped = True
+                      elif ch == '"':
+                          in_string = False
+                      i += 1
+                      continue
+
+                  if ch == '"':
+                      in_string = True
+                      out.append(ch)
+                      i += 1
+                      continue
+
+                  if ch == '/' and nxt == '/':
+                      i += 2
+                      while i < length and text[i] not in '\r\n':
+                          i += 1
+                      continue
+
+                  if ch == '/' and nxt == '*':
+                      end = text.find('*/', i + 2)
+                      if end == -1:
+                          raise ValueError('unterminated block comment')
+                      i = end + 2
+                      continue
+
+                  out.append(ch)
+                  i += 1
+
+              if in_string:
+                  raise ValueError('unterminated string')
+              return ''.join(out)
+
+          for path in files:
+              try:
+                  text = path.read_text(encoding='utf-8-sig')
+                  text = strip_jsonc_comments(text)
+                  # Shopify-generated JSONC can contain trailing commas. Remove
+                  # only commas immediately before a closing object/array token.
+                  text = re.sub(r',\s*([}\]])', r'\1', text)
+                  json.loads(text)
+              except Exception as exc:
+                  errors.append(f'{path}: {exc}')
+
+          print(f'Checked {len(files)} Shopify JSON/JSONC files')
+          if errors:
+              raise SystemExit('\n'.join(errors))
+          PY

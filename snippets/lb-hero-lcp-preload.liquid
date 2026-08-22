@@ -1,153 +1,19 @@
 {%- comment -%}
   lb-hero-lcp-preload.liquid
-  Version:      3.0.0
-  Last updated: 2026-07-24
-  Purpose:      Emit <link rel="preload" as="image"> tags for the homepage
-                hero so the browser fetches the LCP images during HTML head
-                parse, before the hero section's <img> tags are reached.
+  Version:      4.0.0
+  Last updated: 2026-08-21
+  Status:       Intentionally no-op.
 
-  v1.0.0 – v1.3.0 (2026-05-18 – 2026-05-21):
-    Hardcoded hf_* PNG hashes + video poster hashes. Verified against live
-    srcset on each update. See git history for details.
+  The homepage hero already owns LCP preloading inside sections/hero.liquid.
+  That implementation uses Shopify's preload_tag and mirrors the exact image
+  widths/sizes selected by the rendered hero branch. Keeping a second, head-
+  level preload path here caused duplicate high-priority image discovery and
+  could make Chrome download competing desktop/mobile candidates.
 
-  v2.0.0 (2026-07-24):
-    Root-cause of 18.6s mobile LCP (PSI run #110): hero images migrated
-    from hf_* hash filename format to numeric IDs (11209515617993528113.jpg).
-    The hardcoded hf_* hashes in v1.3.0 pointed to non-existent CDN URLs.
-    Fix: switched from hardcoded hashes to sections['hero_MVUtj6'].settings
-    dynamic lookup.
+  This compatibility snippet remains because layout/theme.liquid renders it.
+  Rendering nothing preserves that call site while establishing a single
+  source of truth for hero LCP preloading: sections/hero.liquid.
 
-  v3.0.0 (2026-07-24):
-    Root-cause of 20.3s mobile LCP (PSI run #111): v2.0.0 unified preload
-    targets image_1 at all viewports. But in hero_MVUtj6, image_1 is the
-    DESKTOP-only image — CSS hides it on mobile via
-    .hero__media-wrapper--desktop{display:none} at max-width:749px in
-    chaos-theme-styles.css. The actual mobile LCP element is image_2_mobile.
-    With no preload for image_2_mobile, Chrome discovers it only when the
-    parser reaches the hero section HTML — hundreds of milliseconds late.
-
-    Fix: gate the image_1 preload to desktop only (media="(min-width:750px)").
-    Add a separate mobile-gated preload for image_2_mobile with widths
-    matching hero.liquid's mobile_widths (416, 600, 800, 1200, 1600) and
-    sizes="100vw". href at 800w — Chrome's pick at 412px DPR 1.75 device.
-
-    The two-preload branch (image_1_mobile distinct from image_1) is
-    unchanged — it already handles the distinct-mobile-image case correctly.
-
-  Usage:
-    Rendered in layout/theme.liquid <head>, AFTER seo-preconnect.
-    Scope: template.name == 'index' only.
+  Do not re-introduce manual homepage hero <link rel="preload"> tags here
+  unless the section-level preload mechanism is removed in the same release.
 {%- endcomment -%}
-
-{%- if template.name == 'index' -%}
-
-  {%- liquid
-    assign _hs         = sections['hero_MVUtj6'].settings
-    assign _img        = _hs.image_1
-    assign _img_mobile = _hs.image_1_mobile | default: _img
-    assign _img2_mob   = _hs.image_2_mobile
-  -%}
-
-  {%- if _img != blank -%}
-
-    {%- if _img_mobile != blank and _img_mobile != _img -%}
-
-      {%- comment -%}
-        Distinct desktop and mobile images: emit two media-gated preloads.
-        Desktop has no gate (v1.3.0 fix: PSI at 375px must receive desktop
-        preload because hero <img> fallback still uses desktop image).
-        Mobile gate prevents downloading both images on narrow viewports.
-      {%- endcomment -%}
-      <link
-        rel="preload"
-        as="image"
-        href="{{ _img_mobile | image_url: width: 800, format: 'webp' }}"
-        imagesrcset="{{ _img_mobile | image_url: width: 416, format: 'webp' }} 416w, {{ _img_mobile | image_url: width: 600, format: 'webp' }} 600w, {{ _img_mobile | image_url: width: 800, format: 'webp' }} 800w, {{ _img_mobile | image_url: width: 1200, format: 'webp' }} 1200w, {{ _img_mobile | image_url: width: 1600, format: 'webp' }} 1600w"
-        imagesizes="100vw"
-        fetchpriority="high"
-        media="(max-width: 749px)"
-        data-lb-lcp-preload="mobile">
-      <link
-        rel="preload"
-        as="image"
-        href="{{ _img | image_url: width: 1600, format: 'webp' }}"
-        imagesrcset="{{ _img | image_url: width: 416, format: 'webp' }} 416w, {{ _img | image_url: width: 832, format: 'webp' }} 832w, {{ _img | image_url: width: 1200, format: 'webp' }} 1200w, {{ _img | image_url: width: 1600, format: 'webp' }} 1600w, {{ _img | image_url: width: 1920, format: 'webp' }} 1920w, {{ _img | image_url: width: 2560, format: 'webp' }} 2560w"
-        imagesizes="(min-width: 750px) 100vw, 100vw"
-        fetchpriority="high"
-        data-lb-lcp-preload="desktop">
-
-    {%- else -%}
-
-      {%- comment -%}
-        image_1 is the desktop image (CSS-hidden at ≤749px via
-        .hero__media-wrapper--desktop{display:none}). Gate to desktop only
-        so mobile doesn't waste bandwidth on a hidden image.
-        srcset mirrors hero section's desktop widths (CU-HEROPRE-024 v25).
-      {%- endcomment -%}
-      <link
-        rel="preload"
-        as="image"
-        href="{{ _img | image_url: width: 832, format: 'webp' }}"
-        imagesrcset="{{ _img | image_url: width: 832, format: 'webp' }} 832w, {{ _img | image_url: width: 1200, format: 'webp' }} 1200w, {{ _img | image_url: width: 1600, format: 'webp' }} 1600w, {{ _img | image_url: width: 1920, format: 'webp' }} 1920w, {{ _img | image_url: width: 2560, format: 'webp' }} 2560w"
-        imagesizes="100vw"
-        fetchpriority="high"
-        media="(min-width: 750px)"
-        data-lb-lcp-preload="desktop">
-      {%- if _img2_mob != blank -%}
-        {%- comment -%}
-          image_2_mobile is the actual mobile LCP element (rendered inside
-          .hero__media-wrapper--mobile, visible only at ≤749px). hero.liquid
-          renders it with mobile_widths: 416, 600, 800, 1200, 1600 and
-          sizes: 100vw. href at 800w = Chrome's pick on 412px DPR 1.75 device.
-        {%- endcomment -%}
-        <link
-          rel="preload"
-          as="image"
-          href="{{ _img2_mob | image_url: width: 800, format: 'webp' }}"
-          imagesrcset="{{ _img2_mob | image_url: width: 416, format: 'webp' }} 416w, {{ _img2_mob | image_url: width: 600, format: 'webp' }} 600w, {{ _img2_mob | image_url: width: 800, format: 'webp' }} 800w, {{ _img2_mob | image_url: width: 1200, format: 'webp' }} 1200w, {{ _img2_mob | image_url: width: 1600, format: 'webp' }} 1600w"
-          imagesizes="100vw"
-          fetchpriority="high"
-          media="(max-width: 749px)"
-          data-lb-lcp-preload="mobile">
-      {%- endif -%}
-
-    {%- endif -%}
-
-  {%- endif -%}
-
-  <script>
-    /* lb-hero-lcp-preload v3.0.0 diagnostic
-       Run: window.__lbHeroLcpPreload.check() */
-    window.__lbHeroLcpPreload = {
-      version: '3.0.0',
-      check: function() {
-        var isMobile = window.matchMedia('(max-width: 749px)').matches;
-        var attr = isMobile ? 'mobile' : 'desktop';
-        var preloadEl = document.querySelector('[data-lb-lcp-preload="' + attr + '"]');
-        var preloadHref = preloadEl ? preloadEl.getAttribute('href') : null;
-        var heroWrapper = isMobile
-          ? document.querySelector('.hero__media-wrapper--mobile img')
-          : document.querySelector('.hero__media-wrapper--desktop img, .hero__media-wrapper img');
-        var liveSrc = heroWrapper ? (heroWrapper.currentSrc || heroWrapper.src) : null;
-        if (preloadHref && liveSrc) {
-          var preloadBase = preloadHref.split('?')[0];
-          var liveBase = liveSrc.split('?')[0];
-          if (preloadBase !== liveBase) {
-            console.warn('[lb-hero-lcp-preload v3.0.0] Mismatch (' + attr + ') — preload:', preloadBase, '| live:', liveBase);
-          } else {
-            console.log('[lb-hero-lcp-preload v3.0.0] OK (' + attr + ') — preload matches live hero src.');
-          }
-        } else if (!preloadHref) {
-          console.warn('[lb-hero-lcp-preload v3.0.0] No preload element found for', attr, 'viewport. Check hero_MVUtj6 image settings.');
-        }
-        return { version: '3.0.0', viewport: attr, preloadHref: preloadHref, liveSrc: liveSrc };
-      }
-    };
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function() { window.__lbHeroLcpPreload.check(); });
-    } else {
-      window.__lbHeroLcpPreload.check();
-    }
-  </script>
-
-{%- endif -%}
