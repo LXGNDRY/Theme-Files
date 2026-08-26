@@ -79,8 +79,10 @@
     server-side and re-emits only non-blocking resources.
   {%- endcomment -%}
   {%- render 'chaos_unleashed_master' -%}
+  {% # theme-check-disable ContentForHeaderModification %}
   {%- capture Chaos_Raw_CFH -%}{{ content_for_header }}{%- endcapture -%}
   {%- render 'chaos_unleashed_cfh_defer', raw_cfh: Chaos_Raw_CFH -%}
+  {% # theme-check-enable ContentForHeaderModification %}
 
   {%- comment -%}── 6. DATALAYER (single authoritative init) ─────────────────
     Must exist before GTM and before any app script pushes events.

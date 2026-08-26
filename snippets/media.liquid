@@ -6,9 +6,20 @@
 
 {%- liquid
   assign bs = block.settings
-  assign show_image = bs.media_type == 'image'
-  assign show_video = bs.media_type == 'video'
-  assign has_contain = show_image and bs.image_position == 'contain' or show_video and bs.video_position == 'contain'
+  assign show_image = false
+  assign show_video = false
+  assign has_contain = false
+  if bs.media_type == 'image'
+    assign show_image = true
+    if bs.image_position == 'contain'
+      assign has_contain = true
+    endif
+  elsif bs.media_type == 'video'
+    assign show_video = true
+    if bs.video_position == 'contain'
+      assign has_contain = true
+    endif
+  endif
 -%}
 
 <div

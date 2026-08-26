@@ -1,6 +1,17 @@
 extends:
   - theme-check:recommended
 
+ignore:
+  # Licensed vendor script (Chaos Unleashed — "Unauthorized redistribution,
+  # derivative works, or removal of attribution is strictly prohibited").
+  # Its own code comments contain the literal text "<script>", which the
+  # LiquidHTMLSyntaxError parser misreads as a nested unclosed tag, and
+  # this is a hard parse failure (not a lint rule), so it can't be
+  # suppressed with an inline theme-check-disable comment either. Excluded
+  # at the file level since the license prohibits editing the file to work
+  # around it.
+  - snippets/chaos_unleashed_performance_deferrer.liquid
+
 # JSONMissingBlock cannot resolve app-provided theme blocks
 # (shopify://apps/... references, e.g. Judge.me Reviews) since they live in
 # the app's own Shopify-hosted extension, not in this repo. Every offense

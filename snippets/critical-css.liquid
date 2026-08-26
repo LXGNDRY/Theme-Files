@@ -138,11 +138,11 @@ main>.shopify-section:first-child .section:not(.disable-section-top-offset) .sti
 .section-wrapper{--section-height-offset:0px}
 body:has(>#header-group>.header-section>#header-component[transparent]):not(:has(>#header-group>.header-section+.shopify-section))>main>.section-wrapper:first-child{--section-height-offset:var(--header-group-height,0)}
 @media screen and (min-width:750px){.page-width-wide.page-width-wide,.page-width-normal.page-width-normal,.page-width-narrow.page-width-narrow,.page-width-content.page-width-content{--page-margin:40px}}
-/* === Consolidated from theme.liquid inline <style> (Apr 26 2026) ===
+/* === Consolidated from theme.liquid inline style block (Apr 26 2026) ===
    Rules previously embedded inline in theme.liquid lines 11-36 moved here
    to centralize critical CSS. Cascade behavior preserved: critical-css.liquid
    is rendered via stylesheets.liquid line 1, which is rendered from
-   theme.liquid line 56 — same <head> parsing phase as the inline block was. */
+   theme.liquid line 56 — same head-parsing phase as the inline block was. */
 #header-group{min-height:80px}
 @media (max-width:749px){#header-group{min-height:56px}}
 .header__columns{display:grid;grid-template-columns:1fr auto 1fr;grid-template-areas:'left center right';gap:var(--gap-xl,32px)}
