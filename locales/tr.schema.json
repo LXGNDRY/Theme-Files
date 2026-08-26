@@ -188,7 +188,8 @@
     "product_hotspots": "Ürün hotspot'ları",
     "hotspot_product": "Hotspot",
     "product_sku": "SKU",
-    "layered_slideshow": "Katmanlı slayt gösterisi"
+    "layered_slideshow": "Katmanlı slayt gösterisi",
+    "ai_assistant": "AI Assistant"
   },
   "settings": {
     "autoplay": "Otomatik oynatma",
@@ -578,7 +579,12 @@
     "y_position": "Dikey konum",
     "enable_sticky_add_to_cart": "Sabit sepete ekle çubuğu",
     "sticky_add_to_cart": "Sabit sepete ekle",
-    "actions_display_style": "Menü stili"
+    "actions_display_style": "Menü stili",
+    "ai_chat_enabled": "Enable AI assistant",
+    "ai_chat_backend_base": "Assistant backend URL",
+    "ai_chat_greeting": "Greeting message",
+    "ai_chat_position": "Launcher position",
+    "ai_chat_authenticated_features_enabled": "Enable order lookup (beta)"
   },
   "options": {
     "apple": "Apple",
@@ -1089,7 +1095,9 @@
     "hide_logo_on_home_page_help": "Yapışkan üstbilgi etkinken logo görünür kalır",
     "media_type_info": "Özellikler, menü bağlantılarınız kullanılarak oluşturulur",
     "logo_height": "Yalnızca üstbilgi logosunu etkiler",
-    "actions_display_style": "Mobilde her zaman simgeler kullanılır"
+    "actions_display_style": "Mobilde her zaman simgeler kullanılır",
+    "ai_chat_backend_base": "The base URL of the assistant backend service. Never enter an API key or secret here.",
+    "ai_chat_authenticated_features_enabled": "Lets signed-in customers ask about their own orders. Requires the backend to support authenticated order lookups."
   },
   "categories": {
     "product_list": "Öne çıkan koleksiyon",

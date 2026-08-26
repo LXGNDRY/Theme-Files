@@ -188,7 +188,8 @@
     "product_hotspots": "Pontos de interesse do produto",
     "hotspot_product": "Ponto de interesse",
     "product_sku": "SKU",
-    "layered_slideshow": "Apresentação em camadas"
+    "layered_slideshow": "Apresentação em camadas",
+    "ai_assistant": "AI Assistant"
   },
   "settings": {
     "alignment": "Alinhamento",
@@ -578,7 +579,12 @@
     "y_position": "Posição vertical",
     "enable_sticky_add_to_cart": "Barra fixa de adicionar ao carrinho",
     "sticky_add_to_cart": "Barra fixa de adicionar ao carrinho",
-    "actions_display_style": "Estilo do menu"
+    "actions_display_style": "Estilo do menu",
+    "ai_chat_enabled": "Enable AI assistant",
+    "ai_chat_backend_base": "Assistant backend URL",
+    "ai_chat_greeting": "Greeting message",
+    "ai_chat_position": "Launcher position",
+    "ai_chat_authenticated_features_enabled": "Enable order lookup (beta)"
   },
   "options": {
     "apple": "Maçã",
@@ -1089,7 +1095,9 @@
     "hide_logo_on_home_page_help": "O logótipo permanecerá visível quando o cabeçalho fixo estiver ativo",
     "media_type_info": "As funcionalidades são preenchidas a partir das ligações do menu",
     "logo_height": "Afeta apenas o logótipo do cabeçalho",
-    "actions_display_style": "Os ícones são sempre utilizados em telemóvel"
+    "actions_display_style": "Os ícones são sempre utilizados em telemóvel",
+    "ai_chat_backend_base": "The base URL of the assistant backend service. Never enter an API key or secret here.",
+    "ai_chat_authenticated_features_enabled": "Lets signed-in customers ask about their own orders. Requires the backend to support authenticated order lookups."
   },
   "categories": {
     "basic": "Básico",
