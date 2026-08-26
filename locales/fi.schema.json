@@ -188,7 +188,8 @@
     "product_hotspots": "Tuotteen hotspotit",
     "hotspot_product": "Hotspot",
     "product_sku": "SKU-koodi",
-    "layered_slideshow": "Kerroksittainen diaesitys"
+    "layered_slideshow": "Kerroksittainen diaesitys",
+    "ai_assistant": "AI Assistant"
   },
   "settings": {
     "alignment": "Tasaus",
@@ -578,7 +579,12 @@
     "y_position": "Pystysuuntainen sijainti",
     "enable_sticky_add_to_cart": "Kiinteä Lisää ostoskoriin -palkki",
     "sticky_add_to_cart": "Kiinteä Lisää ostoskoriin -toiminto",
-    "actions_display_style": "Valikkotyyli"
+    "actions_display_style": "Valikkotyyli",
+    "ai_chat_enabled": "Enable AI assistant",
+    "ai_chat_backend_base": "Assistant backend URL",
+    "ai_chat_greeting": "Greeting message",
+    "ai_chat_position": "Launcher position",
+    "ai_chat_authenticated_features_enabled": "Enable order lookup (beta)"
   },
   "options": {
     "apple": "Omena",
@@ -1089,7 +1095,9 @@
     "hide_logo_on_home_page_help": "Logo pysyy näkyvissä, kun kiinteä ylätunniste on aktiivinen",
     "media_type_info": "Ominaisuudet noudetaan valikkolinkeistäsi",
     "logo_height": "Vaikuttaa vain ylätunnisteen logoon",
-    "actions_display_style": "Kuvakkeet ovat aina käytössä mobiililaitteilla"
+    "actions_display_style": "Kuvakkeet ovat aina käytössä mobiililaitteilla",
+    "ai_chat_backend_base": "The base URL of the assistant backend service. Never enter an API key or secret here.",
+    "ai_chat_authenticated_features_enabled": "Lets signed-in customers ask about their own orders. Requires the backend to support authenticated order lookups."
   },
   "categories": {
     "basic": "Perusosat",

@@ -188,7 +188,8 @@
     "product_hotspots": "Produkthotspots",
     "hotspot_product": "Hotspot",
     "product_sku": "SKU",
-    "layered_slideshow": "Diasshow i lag"
+    "layered_slideshow": "Diasshow i lag",
+    "ai_assistant": "AI Assistant"
   },
   "settings": {
     "alignment": "Justering",
@@ -578,7 +579,12 @@
     "y_position": "Lodret position",
     "enable_sticky_add_to_cart": "Fastgjort bjælke med 'Læg i kurv'",
     "sticky_add_to_cart": "Fastgjort 'Læg i kurv'",
-    "actions_display_style": "Menustil"
+    "actions_display_style": "Menustil",
+    "ai_chat_enabled": "Enable AI assistant",
+    "ai_chat_backend_base": "Assistant backend URL",
+    "ai_chat_greeting": "Greeting message",
+    "ai_chat_position": "Launcher position",
+    "ai_chat_authenticated_features_enabled": "Enable order lookup (beta)"
   },
   "options": {
     "apple": "Apple",
@@ -1089,7 +1095,9 @@
     "hide_logo_on_home_page_help": "Logoet vil forblive synligt, når fastgjort sidehoved er aktivt",
     "media_type_info": "Funktioner hentes fra linksene i menuen",
     "logo_height": "Påvirker kun logoet i sidehovedet",
-    "actions_display_style": "Ikoner bruges altid på mobil"
+    "actions_display_style": "Ikoner bruges altid på mobil",
+    "ai_chat_backend_base": "The base URL of the assistant backend service. Never enter an API key or secret here.",
+    "ai_chat_authenticated_features_enabled": "Lets signed-in customers ask about their own orders. Requires the backend to support authenticated order lookups."
   },
   "categories": {
     "basic": "Grundlæggende",

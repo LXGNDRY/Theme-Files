@@ -188,7 +188,8 @@
     "product_hotspots": "Puntos interactivos del producto",
     "hotspot_product": "Punto interactivo",
     "product_sku": "SKU",
-    "layered_slideshow": "Presentación de diapositivas en capas"
+    "layered_slideshow": "Presentación de diapositivas en capas",
+    "ai_assistant": "AI Assistant"
   },
   "settings": {
     "alignment": "Alineación",
@@ -578,7 +579,12 @@
     "y_position": "Posición vertical",
     "enable_sticky_add_to_cart": "Barra fija de agregar al carrito",
     "sticky_add_to_cart": "Agregar al carrito fijo",
-    "actions_display_style": "Estilo del menú"
+    "actions_display_style": "Estilo del menú",
+    "ai_chat_enabled": "Enable AI assistant",
+    "ai_chat_backend_base": "Assistant backend URL",
+    "ai_chat_greeting": "Greeting message",
+    "ai_chat_position": "Launcher position",
+    "ai_chat_authenticated_features_enabled": "Enable order lookup (beta)"
   },
   "options": {
     "apple": "Apple",
@@ -1089,7 +1095,9 @@
     "hide_logo_on_home_page_help": "El logo seguirá visible cuando el encabezado fijo esté activo",
     "media_type_info": "Los destacados se completan con los enlaces del menú",
     "logo_height": "Solo afecta el logo del encabezado",
-    "actions_display_style": "Los íconos siempre se usan en la versión móvil"
+    "actions_display_style": "Los íconos siempre se usan en la versión móvil",
+    "ai_chat_backend_base": "The base URL of the assistant backend service. Never enter an API key or secret here.",
+    "ai_chat_authenticated_features_enabled": "Lets signed-in customers ask about their own orders. Requires the backend to support authenticated order lookups."
   },
   "categories": {
     "basic": "Básico",

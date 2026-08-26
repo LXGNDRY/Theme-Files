@@ -188,7 +188,8 @@
     "product_hotspots": "Hotspoty produktu",
     "hotspot_product": "Hotspot",
     "product_sku": "SKU",
-    "layered_slideshow": "Vrstvená prezentace"
+    "layered_slideshow": "Vrstvená prezentace",
+    "ai_assistant": "AI Assistant"
   },
   "settings": {
     "alignment": "Zarovnání",
@@ -578,7 +579,12 @@
     "y_position": "Vertikální umístění",
     "enable_sticky_add_to_cart": "Přilepený panel Přidat do košíku",
     "sticky_add_to_cart": "Přilepené tlačítko Přidat do košíku",
-    "actions_display_style": "Styl nabídky"
+    "actions_display_style": "Styl nabídky",
+    "ai_chat_enabled": "Enable AI assistant",
+    "ai_chat_backend_base": "Assistant backend URL",
+    "ai_chat_greeting": "Greeting message",
+    "ai_chat_position": "Launcher position",
+    "ai_chat_authenticated_features_enabled": "Enable order lookup (beta)"
   },
   "options": {
     "apple": "Apple",
@@ -1089,7 +1095,9 @@
     "hide_logo_on_home_page_help": "Logo zůstane viditelné, když je aktivní přilepené záhlaví",
     "media_type_info": "Funkce se načítají z odkazů v nabídce",
     "logo_height": "Týká se pouze loga v záhlaví",
-    "actions_display_style": "Na mobilních zařízeních se vždy používají ikony"
+    "actions_display_style": "Na mobilních zařízeních se vždy používají ikony",
+    "ai_chat_backend_base": "The base URL of the assistant backend service. Never enter an API key or secret here.",
+    "ai_chat_authenticated_features_enabled": "Lets signed-in customers ask about their own orders. Requires the backend to support authenticated order lookups."
   },
   "categories": {
     "product_list": "Propagovaná kolekce",

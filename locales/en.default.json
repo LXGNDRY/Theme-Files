@@ -64,7 +64,12 @@
     "find_country": "Find country",
     "view_pricing_info": "View pricing information",
     "price_filter_low": "Low price",
-    "price_filter_high": "High price"
+    "price_filter_high": "High price",
+    "trust_signals": "Trust signals",
+    "product_categories": "Product categories",
+    "collections": "Collections",
+    "shop_by_category": "Shop by category",
+    "product_list": "Product list"
   },
   "actions": {
     "add": "Add",
@@ -106,7 +111,8 @@
     "sign_up": "Sign up",
     "submit": "Submit",
     "view_store_information": "View store information",
-    "sort": "Sort"
+    "sort": "Sort",
+    "shop_all": "Shop All Drops"
   },
   "blocks": {
     "contact_form": {
@@ -219,6 +225,7 @@
     "pickup_not_available": "Pickup currently not available",
     "pickup_ready_in": "{{ pickup_time }}",
     "powered_by": "This shop will be powered by",
+    "store_owner_link_html": "Are you the store owner? <a href=\"{{ link }}\">Log in here</a>",
     "price": "Price",
     "price_compare_at": "Compare at price",
     "price_from": "From {{ price }}",
@@ -307,7 +314,9 @@
     "recipient_form_fields_visible": "Recipient form fields are now visible",
     "recipient_form_fields_hidden": "Recipient form fields are now hidden",
     "recipient_form_error": "There was an error with the form submission",
-    "product_custom_property_character_count": "{{ used_chars }}/{{ max_chars }} characters used"
+    "product_custom_property_character_count": "{{ used_chars }}/{{ max_chars }} characters used",
+    "page_not_found": "This page doesn't exist.",
+    "page_not_found_message": "The link may be broken, or the page may have been removed."
   },
   "fields": {
     "separator": "to"
@@ -372,5 +381,8 @@
         "pay_now": "Submit Payment"
       }
     }
+  },
+  "general": {
+    "email": "Email"
   }
 }

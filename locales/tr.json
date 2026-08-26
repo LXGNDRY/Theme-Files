@@ -73,7 +73,14 @@
     "show_product_details": "{{ product_name }} için ürün ayrıntılarını göster",
     "search_suggestions_available": "\"{{ query }}\" için kullanılabilir arama önerileri",
     "price_filter_low": "Düşük fiyat",
-    "price_filter_high": "Yüksek fiyat"
+    "price_filter_high": "Yüksek fiyat",
+    "ai_chat_launcher": "Chat with us",
+    "ai_chat_close": "Close chat",
+    "trust_signals": "Trust signals",
+    "product_categories": "Product categories",
+    "collections": "Collections",
+    "shop_by_category": "Shop by category",
+    "product_list": "Product list"
   },
   "actions": {
     "add_to_cart": "Sepete ekle",
@@ -115,7 +122,8 @@
     "show_all_options": "Tüm seçenekleri göster",
     "open": "Açık",
     "back_to": "Geri dön: {{ title }}",
-    "zoom_media": "Medyayı yakınlaştır: {{ index }}"
+    "zoom_media": "Medyayı yakınlaştır: {{ index }}",
+    "shop_all": "Shop All Drops"
   },
   "content": {
     "reviews": "değerlendirme",
@@ -272,7 +280,14 @@
       "other": "{{ count }} ürün sepete eklendi"
     },
     "item_count_cutoff": "{{ count }} adetten fazla ürün",
-    "quick_order_list": "Hızlı sipariş listesi"
+    "quick_order_list": "Hızlı sipariş listesi",
+    "razorpay_label": "Pay with Razorpay",
+    "ai_chat_greeting": "Hi! Ask me anything about Legendary Branding — products, sizing, shipping, or returns.",
+    "ai_chat_placeholder": "Type your question…",
+    "ai_chat_send": "Send",
+    "ai_chat_unavailable": "Our assistant is unavailable right now. Please visit our contact page for help.",
+    "page_not_found": "This page doesn't exist.",
+    "page_not_found_message": "The link may be broken, or the page may have been removed."
   },
   "gift_cards": {
     "issued": {
@@ -339,5 +354,8 @@
       "default_title": "Varsayılan Başlık",
       "sticky_add_to_cart": "Sepete hızlı ekle çubuğu"
     }
+  },
+  "general": {
+    "email": "Email"
   }
 }

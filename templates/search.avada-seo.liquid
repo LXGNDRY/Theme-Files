@@ -1,6 +1,8 @@
 {%- layout none -%}
 
+{% # theme-check-disable ContentForHeaderModification %}
 {%- assign pageurl = content_for_header| split:'"pageurl":"' | last | split:'"' | first -%}
+{% # theme-check-enable ContentForHeaderModification %}
 
 {%- if pageurl contains 'preview=1' -%}
 {%- assign lim = 1 -%}

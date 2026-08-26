@@ -961,8 +961,7 @@
     {"type": "logo"},
     {"type": "jumbo-text"},
     {"type": "spacer"},
-    {"type": "group"},
-    {"type": "_marquee"}
+    {"type": "group"}
   ],
   "disabled_on": {"groups": ["header"]},
   "settings": [
@@ -1023,17 +1022,6 @@
       },
       "block_order": ["text_1", "text_2", "button"],
       "settings": {"horizontal_alignment_flex_direction_column": "center", "gap": 16, "section_height": "large", "color_scheme": "scheme-5", "padding-block-start": 40, "padding-block-end": 40, "toggle_overlay": true, "overlay_style": "gradient"}
-    },
-    {
-      "name": "t:names.hero_marquee",
-      "category": "t:categories.banners",
-      "blocks": {
-        "spacer": {"type": "spacer", "settings": {"size": "pixel", "pixel_size": 24}},
-        "marquee": {"type": "_marquee", "blocks": {"text": {"type": "text", "settings": {"text": "t:html_defaults.explore_latest_products", "type_preset": "h1"}}}, "block_order": ["text"]},
-        "button": {"type": "button", "settings": {"label": "t:text_defaults.shop_now_button_label", "link": "shopify://collections/all"}}
-      },
-      "block_order": ["spacer", "marquee", "button"],
-      "settings": {"horizontal_alignment_flex_direction_column": "center", "vertical_alignment_flex_direction_column": "space-between", "gap": 32, "section_height": "large", "color_scheme": "scheme-5", "padding-block-start": 0, "padding-block-end": 40, "toggle_overlay": true, "overlay_style": "gradient"}
     }
   ]
 }

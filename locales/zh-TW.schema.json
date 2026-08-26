@@ -188,7 +188,8 @@
     "product_hotspots": "商品熱點",
     "hotspot_product": "熱點",
     "product_sku": "存貨單位 (SKU)",
-    "layered_slideshow": "分層輪播"
+    "layered_slideshow": "分層輪播",
+    "ai_assistant": "AI Assistant"
   },
   "settings": {
     "alignment": "對齊",
@@ -578,7 +579,12 @@
     "y_position": "垂直位置",
     "enable_sticky_add_to_cart": "固定加入購物車列",
     "sticky_add_to_cart": "固定加入購物車",
-    "actions_display_style": "選單樣式"
+    "actions_display_style": "選單樣式",
+    "ai_chat_enabled": "Enable AI assistant",
+    "ai_chat_backend_base": "Assistant backend URL",
+    "ai_chat_greeting": "Greeting message",
+    "ai_chat_position": "Launcher position",
+    "ai_chat_authenticated_features_enabled": "Enable order lookup (beta)"
   },
   "options": {
     "apple": "Apple",
@@ -1089,7 +1095,9 @@
     "hide_logo_on_home_page_help": "啟用固定頁首時，標誌仍會顯示",
     "media_type_info": "功能會根據您的選單連結自動帶入",
     "logo_height": "僅影響頁首標誌",
-    "actions_display_style": "在行動裝置上一律使用圖示"
+    "actions_display_style": "在行動裝置上一律使用圖示",
+    "ai_chat_backend_base": "The base URL of the assistant backend service. Never enter an API key or secret here.",
+    "ai_chat_authenticated_features_enabled": "Lets signed-in customers ask about their own orders. Requires the backend to support authenticated order lookups."
   },
   "categories": {
     "basic": "基本",

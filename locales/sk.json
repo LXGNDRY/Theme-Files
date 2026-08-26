@@ -75,7 +75,14 @@
     "featured_product": "Odporúčaný produkt",
     "search_suggestions_available": "Návrhy vyhľadávania dostupné pre „{{ query }}“",
     "price_filter_low": "Nízka cena",
-    "price_filter_high": "Vysoká cena"
+    "price_filter_high": "Vysoká cena",
+    "ai_chat_launcher": "Chat with us",
+    "ai_chat_close": "Close chat",
+    "trust_signals": "Trust signals",
+    "product_categories": "Product categories",
+    "collections": "Collections",
+    "shop_by_category": "Shop by category",
+    "product_list": "Product list"
   },
   "actions": {
     "add_to_cart": "Pridať do košíka",
@@ -119,7 +126,8 @@
     "show_all_options": "Zobraziť všetky možnosti",
     "open": "Otvoriť",
     "back_to": "Späť na: {{ title }}",
-    "zoom_media": "Nástroj na priblíženie {{ index }}"
+    "zoom_media": "Nástroj na priblíženie {{ index }}",
+    "shop_all": "Shop All Drops"
   },
   "content": {
     "reviews": "recenz.",
@@ -284,7 +292,14 @@
       "many": "Počet položiek pridaných do košíka: {{ count }}"
     },
     "item_count_cutoff": "Viac ako {{ count }} položky/položiek",
-    "quick_order_list": "Rýchly zoznam objednávok"
+    "quick_order_list": "Rýchly zoznam objednávok",
+    "razorpay_label": "Pay with Razorpay",
+    "ai_chat_greeting": "Hi! Ask me anything about Legendary Branding — products, sizing, shipping, or returns.",
+    "ai_chat_placeholder": "Type your question…",
+    "ai_chat_send": "Send",
+    "ai_chat_unavailable": "Our assistant is unavailable right now. Please visit our contact page for help.",
+    "page_not_found": "This page doesn't exist.",
+    "page_not_found_message": "The link may be broken, or the page may have been removed."
   },
   "gift_cards": {
     "issued": {
@@ -353,5 +368,8 @@
       "default_title": "Predvolený názov",
       "sticky_add_to_cart": "Panel rýchleho pridania do košíka"
     }
+  },
+  "general": {
+    "email": "Email"
   }
 }

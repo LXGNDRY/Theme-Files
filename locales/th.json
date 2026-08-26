@@ -73,7 +73,14 @@
     "featured_product": "สินค้าแนะนำ",
     "search_suggestions_available": "ค้นหาคำแนะนำสำหรับ \"{{ query }}\" ที่พร้อมใช้งาน",
     "price_filter_low": "ราคาประหยัด",
-    "price_filter_high": "ราคาแพง"
+    "price_filter_high": "ราคาแพง",
+    "ai_chat_launcher": "Chat with us",
+    "ai_chat_close": "Close chat",
+    "trust_signals": "Trust signals",
+    "product_categories": "Product categories",
+    "collections": "Collections",
+    "shop_by_category": "Shop by category",
+    "product_list": "Product list"
   },
   "actions": {
     "add_to_cart": "เพิ่มลงในตะกร้าสินค้า",
@@ -115,7 +122,8 @@
     "show_all_options": "แสดงตัวเลือกทั้งหมด",
     "open": "เปิด",
     "back_to": "กลับไปที่ {{ title }}",
-    "zoom_media": "ซูมสื่อ {{ index }}"
+    "zoom_media": "ซูมสื่อ {{ index }}",
+    "shop_all": "Shop All Drops"
   },
   "content": {
     "reviews": "รีวิว",
@@ -272,7 +280,14 @@
       "one": "เพิ่มสินค้า 1 รายการลงในตะกร้าแล้ว",
       "other": "เพิ่มสินค้า {{ count }} รายการลงในตะกร้า"
     },
-    "quick_order_list": "รายการคำสั่งซื้อด่วน"
+    "quick_order_list": "รายการคำสั่งซื้อด่วน",
+    "razorpay_label": "Pay with Razorpay",
+    "ai_chat_greeting": "Hi! Ask me anything about Legendary Branding — products, sizing, shipping, or returns.",
+    "ai_chat_placeholder": "Type your question…",
+    "ai_chat_send": "Send",
+    "ai_chat_unavailable": "Our assistant is unavailable right now. Please visit our contact page for help.",
+    "page_not_found": "This page doesn't exist.",
+    "page_not_found_message": "The link may be broken, or the page may have been removed."
   },
   "gift_cards": {
     "issued": {
@@ -339,5 +354,8 @@
       "success_moderated": "ความคิดเห็นถูกโพสต์แล้ว กำลังรอการตรวจสอบ",
       "success": "ความคิดเห็นถูกโพสต์แล้ว"
     }
+  },
+  "general": {
+    "email": "Email"
   }
 }

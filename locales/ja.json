@@ -73,7 +73,14 @@
     "active_filters": "アクティブな絞り込み：",
     "search_suggestions_available": "「{{ query }}」の検索候補が利用可能",
     "price_filter_low": "低価格",
-    "price_filter_high": "高価格"
+    "price_filter_high": "高価格",
+    "ai_chat_launcher": "Chat with us",
+    "ai_chat_close": "Close chat",
+    "trust_signals": "Trust signals",
+    "product_categories": "Product categories",
+    "collections": "Collections",
+    "shop_by_category": "Shop by category",
+    "product_list": "Product list"
   },
   "actions": {
     "add_to_cart": "カートに追加",
@@ -115,7 +122,8 @@
     "show_all_options": "すべてのオプションを表示する",
     "open": "オープン",
     "back_to": "{{ title }} に戻る",
-    "zoom_media": "ズームメディア {{ index }}"
+    "zoom_media": "ズームメディア {{ index }}",
+    "shop_all": "Shop All Drops"
   },
   "content": {
     "reviews": "レビュー",
@@ -272,7 +280,14 @@
       "one": "1個のアイテムがカートに追加されました",
       "other": "{{ count }}個のアイテムがカートに追加されました"
     },
-    "quick_order_list": "クイック注文リスト"
+    "quick_order_list": "クイック注文リスト",
+    "razorpay_label": "Pay with Razorpay",
+    "ai_chat_greeting": "Hi! Ask me anything about Legendary Branding — products, sizing, shipping, or returns.",
+    "ai_chat_placeholder": "Type your question…",
+    "ai_chat_send": "Send",
+    "ai_chat_unavailable": "Our assistant is unavailable right now. Please visit our contact page for help.",
+    "page_not_found": "This page doesn't exist.",
+    "page_not_found_message": "The link may be broken, or the page may have been removed."
   },
   "gift_cards": {
     "issued": {
@@ -339,5 +354,8 @@
       "success_moderated": "コメントを投稿しました。承認待ちです",
       "success": "コメントを投稿しました"
     }
+  },
+  "general": {
+    "email": "Email"
   }
 }

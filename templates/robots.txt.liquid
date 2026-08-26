@@ -1,8 +1,23 @@
 {%- comment -%}
   robots.txt.liquid
-  Version:      3.0.0
-  Last updated: 2026-07-24
+  Version:      3.1.0
+  Last updated: 2026-08-26
   Author:       Legendary Branding / Claude Code
+
+  Changes from v3.0.0:
+    — Removed /de, /fr, /es locale disallow rules from the wildcard group
+      and all 7 named AI bot blocks. /de and /fr are live, published
+      Shopify Markets locales — blocking them suppressed indexing of real
+      storefronts, not "phantom" pages as previously assumed. /es is
+      being opened ahead of upcoming LATAM sales via dlocal go.
+    — Removed /*/collections/all-products disallow. Confirmed via live
+      store data this is the "NEW DROPS" collection (126 products),
+      linked from the homepage, empty-cart CTA, 404 page, and product
+      recommendation blocks — not a low-value auto-generated page.
+    — Removed /*/collections/vendors and /*/collections/types disallow
+      rules. Confirmed neither collection exists on the store and
+      neither path is referenced anywhere in the theme; the rules were
+      inert dead weight.
 
   Changes from v2.0.0:
     — Added OAI-SearchBot (ChatGPT web search) and meta-externalagent (Meta AI)
@@ -57,17 +72,6 @@
 
     {%- comment -%} ── LOW-VALUE SHOPIFY PAGES ─────────────────────────────── {%- endcomment -%}
 {{ 'Disallow: /search?' }}
-{{ 'Disallow: /*/collections/vendors' }}
-{{ 'Disallow: /*/collections/types' }}
-
-    {%- comment -%} ── PHANTOM LOCALE PATHS (not published, already indexed) ─ {%- endcomment -%}
-{{ 'Disallow: /de/' }}
-{{ 'Disallow: /de' }}
-{{ 'Disallow: /fr/' }}
-{{ 'Disallow: /fr' }}
-{{ 'Disallow: /es/' }}
-{{ 'Disallow: /es' }}
-{{ 'Disallow: /*/collections/all-products' }}
 {{ 'Disallow: /*/pages/html-sitemap' }}
 
     {%- comment -%} ── CDN ASSET PATHS ─────────────────────────────────────── {%- endcomment -%}
@@ -81,19 +85,13 @@
 {%- comment -%} ─── AI AGENT CRAWLERS (allow content pages, block noise) ──── {%- endcomment -%}
 {%- comment -%}
   Each named AI block:
-    Allow: /           — full site access for product/content discovery
-    Disallow locale    — phantom /de /fr /es paths (with and without trailing slash)
+    Allow: /           — full site access for product/content discovery,
+                          including live locale storefronts (/de, /fr, /es)
     Disallow params    — UTM, currency, country query strings (query-anchored pattern)
     Sitemap            — explicit pointer so AI crawlers find the product catalog
 {%- endcomment -%}
 {{ 'User-agent: GPTBot' }}
 {{ 'Allow: /' }}
-{{ 'Disallow: /de/' }}
-{{ 'Disallow: /de' }}
-{{ 'Disallow: /fr/' }}
-{{ 'Disallow: /fr' }}
-{{ 'Disallow: /es/' }}
-{{ 'Disallow: /es' }}
 {{ 'Disallow: /*?*utm_source=' }}
 {{ 'Disallow: /*?*utm_medium=' }}
 {{ 'Disallow: /*?*utm_campaign=' }}
@@ -103,12 +101,6 @@
 {{ '' }}
 {{ 'User-agent: OAI-SearchBot' }}
 {{ 'Allow: /' }}
-{{ 'Disallow: /de/' }}
-{{ 'Disallow: /de' }}
-{{ 'Disallow: /fr/' }}
-{{ 'Disallow: /fr' }}
-{{ 'Disallow: /es/' }}
-{{ 'Disallow: /es' }}
 {{ 'Disallow: /*?*utm_source=' }}
 {{ 'Disallow: /*?*utm_medium=' }}
 {{ 'Disallow: /*?*utm_campaign=' }}
@@ -118,12 +110,6 @@
 {{ '' }}
 {{ 'User-agent: ClaudeBot' }}
 {{ 'Allow: /' }}
-{{ 'Disallow: /de/' }}
-{{ 'Disallow: /de' }}
-{{ 'Disallow: /fr/' }}
-{{ 'Disallow: /fr' }}
-{{ 'Disallow: /es/' }}
-{{ 'Disallow: /es' }}
 {{ 'Disallow: /*?*utm_source=' }}
 {{ 'Disallow: /*?*utm_medium=' }}
 {{ 'Disallow: /*?*utm_campaign=' }}
@@ -133,12 +119,6 @@
 {{ '' }}
 {{ 'User-agent: PerplexityBot' }}
 {{ 'Allow: /' }}
-{{ 'Disallow: /de/' }}
-{{ 'Disallow: /de' }}
-{{ 'Disallow: /fr/' }}
-{{ 'Disallow: /fr' }}
-{{ 'Disallow: /es/' }}
-{{ 'Disallow: /es' }}
 {{ 'Disallow: /*?*utm_source=' }}
 {{ 'Disallow: /*?*utm_medium=' }}
 {{ 'Disallow: /*?*utm_campaign=' }}
@@ -148,12 +128,6 @@
 {{ '' }}
 {{ 'User-agent: Google-Extended' }}
 {{ 'Allow: /' }}
-{{ 'Disallow: /de/' }}
-{{ 'Disallow: /de' }}
-{{ 'Disallow: /fr/' }}
-{{ 'Disallow: /fr' }}
-{{ 'Disallow: /es/' }}
-{{ 'Disallow: /es' }}
 {{ 'Disallow: /*?*utm_source=' }}
 {{ 'Disallow: /*?*utm_medium=' }}
 {{ 'Disallow: /*?*utm_campaign=' }}
@@ -163,12 +137,6 @@
 {{ '' }}
 {{ 'User-agent: meta-externalagent' }}
 {{ 'Allow: /' }}
-{{ 'Disallow: /de/' }}
-{{ 'Disallow: /de' }}
-{{ 'Disallow: /fr/' }}
-{{ 'Disallow: /fr' }}
-{{ 'Disallow: /es/' }}
-{{ 'Disallow: /es' }}
 {{ 'Disallow: /*?*utm_source=' }}
 {{ 'Disallow: /*?*utm_medium=' }}
 {{ 'Disallow: /*?*utm_campaign=' }}
@@ -178,12 +146,6 @@
 {{ '' }}
 {{ 'User-agent: Amazonbot' }}
 {{ 'Allow: /' }}
-{{ 'Disallow: /de/' }}
-{{ 'Disallow: /de' }}
-{{ 'Disallow: /fr/' }}
-{{ 'Disallow: /fr' }}
-{{ 'Disallow: /es/' }}
-{{ 'Disallow: /es' }}
 {{ 'Disallow: /*?*utm_source=' }}
 {{ 'Disallow: /*?*utm_medium=' }}
 {{ 'Disallow: /*?*utm_campaign=' }}
