@@ -273,14 +273,14 @@
   </div>
 {%- endunless -%}
 
-{%- comment -%} LB International Payment Notice — warns customers whose card-issuing country may differ from the store's home country that their bank could block the charge {%- endcomment -%}
+{%- comment -%} LB International Payment Notice — gives non-US customers clear guidance about local and international payment options {%- endcomment -%}
 {%- if settings.show_international_payment_notice and shop.address.country and localization.country and localization.country.iso_code != shop.address.country.iso_code -%}
   <div class="lb-international-notice" role="note">
     <span class="svg-wrapper" aria-hidden="true">
       {{- 'icon-info.svg' | inline_asset_content -}}
     </span>
     <p class="lb-international-notice__text">
-      Paying from {{ localization.country.name }}? Some banks block international card charges by default. If your payment doesn't go through, ask your bank to authorize international transactions, or use PayPal / Shop Pay as an alternative.
+      Paying from {{ localization.country.name }}? Continue to checkout to see the payment methods available for your country, including local payment options where supported. If your card is declined, make sure international transactions are enabled with your bank or choose another available payment method at checkout.
     </p>
   </div>
 {%- endif -%}
