@@ -273,14 +273,19 @@
   </div>
 {%- endunless -%}
 
-{%- comment -%} LB International Payment Notice — gives non-US customers clear guidance about local and international payment options {%- endcomment -%}
+{%- comment -%} LB International Payment Notice — routes supported dLocal Go countries to local payment guidance and keeps fallback guidance for all other international shoppers {%- endcomment -%}
 {%- if settings.show_international_payment_notice and shop.address.country and localization.country and localization.country.iso_code != shop.address.country.iso_code -%}
+  {%- assign dlocal_go_countries = 'AR,BO,BR,CL,CO,CR,EC,GT,MX,PY,PE,UY,ID,MY,KE,NG' | split: ',' -%}
   <div class="lb-international-notice" role="note">
     <span class="svg-wrapper" aria-hidden="true">
       {{- 'icon-info.svg' | inline_asset_content -}}
     </span>
     <p class="lb-international-notice__text">
-      Paying from {{ localization.country.name }}? Continue to checkout to see the payment methods available for your country, including local payment options where supported. If your card is declined, make sure international transactions are enabled with your bank or choose another available payment method at checkout.
+      {%- if dlocal_go_countries contains localization.country.iso_code -%}
+        Paying from {{ localization.country.name }}? Local payment options are available at checkout through dLocal Go. Continue to checkout and choose the payment method available for your country. You can also use PayPal or an internationally enabled card.
+      {%- else -%}
+        Paying from {{ localization.country.name }}? Some banks block international card charges by default. If your payment doesn't go through, ask your bank to authorize international transactions, or use PayPal / Shop Pay as an alternative.
+      {%- endif -%}
     </p>
   </div>
 {%- endif -%}
@@ -355,7 +360,7 @@
           <span class="lb-rzp-method-badge">EMI</span>
           <span class="lb-rzp-method-badge">Wallets</span>
         </div>
-        <p class="lb-razorpay-upi-badge">
+        <p class="lb-rzp-upi-badge">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2L4 6v6c0 5.25 3.5 10.15 8 11.35C16.5 22.15 20 17.25 20 12V6l-8-4z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Secured by Razorpay &nbsp;&middot;&nbsp; 18% IGST included at checkout
         </p>
