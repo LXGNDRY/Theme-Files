@@ -211,6 +211,7 @@ class ProductFormComponent extends Component {
     if (variantInput && !variantInput.value) {
       const urlVariantId = new URL(window.location.href).searchParams.get('variant');
       const serverVariantId = variantInput.getAttribute('value');
+      const componentVariantId = this.getAttribute('data-initial-variant-id');
       const variantJson = this.closest('.shopify-section, dialog, product-card')
         ?.querySelector('variant-picker script[type="application/json"]')
         ?.textContent;
@@ -224,7 +225,7 @@ class ProductFormComponent extends Component {
         }
       }
 
-      const initialVariantId = urlVariantId || serverVariantId || pickerVariantId;
+      const initialVariantId = urlVariantId || serverVariantId || componentVariantId || pickerVariantId;
       if (initialVariantId) variantInput.value = initialVariantId;
     }
 
