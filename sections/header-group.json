@@ -17,7 +17,7 @@
         "announcement_zprb7R": {
           "type": "_announcement",
           "settings": {
-            "text": "<strong>SUMMER SALES — Free Shipping U.S.A ($150) INTERNATIONAL ($100)</strong>",
+            "text": "<strong>SUMMER SALES — Free Shipping on orders $80+</strong>",
             "link": "",
             "font": "var(--font-body--family)",
             "font_size": "1rem",
