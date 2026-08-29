@@ -250,7 +250,7 @@
       </span>
     {% endif %}
     <div class="cart-totals__item cart-totals__tax-note cart-primary-typography">
-      <small>Taxes and duties calculated at checkout. Discounts applied at checkout.</small>
+      <small>International orders may be subject to import duties, taxes, or customs fees upon delivery. These charges are determined by the destination country and are the customer’s responsibility. Discounts applied at checkout.</small>
     </div>
   </div>
 </div>
@@ -378,6 +378,10 @@
         <span class="lb-cart-localization__label">
           {{ localization.country.name }}
           <span class="lb-cart-localization__currency">({{ localization.country.currency.iso_code }} {{ localization.country.currency.symbol }})</span>
+        </span>
+        <span class="svg-wrapper icon-caret lb-cart-localization__caret">
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </span>
         </span>
         <span class="svg-wrapper icon-caret lb-cart-localization__caret">
           {{- 'icon-caret.svg' | inline_asset_content -}}
