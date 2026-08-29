@@ -204,6 +204,30 @@ class ProductFormComponent extends Component {
   connectedCallback() {
     super.connectedCallback();
 
+    // The server-rendered value is the first line of defense. Some deferred
+    // storefront scripts can temporarily remove the value before the first
+    // customer interaction, so restore it from the URL or variant-picker JSON.
+    const variantInput = this.refs.variantId;
+    if (variantInput && !variantInput.value) {
+      const urlVariantId = new URL(window.location.href).searchParams.get('variant');
+      const serverVariantId = variantInput.getAttribute('value');
+      const variantJson = this.closest('.shopify-section, dialog, product-card')
+        ?.querySelector('variant-picker script[type="application/json"]')
+        ?.textContent;
+
+      let pickerVariantId;
+      if (variantJson) {
+        try {
+          pickerVariantId = JSON.parse(variantJson)?.id?.toString();
+        } catch (error) {
+          console.warn('Unable to parse initial product variant:', error);
+        }
+      }
+
+      const initialVariantId = urlVariantId || serverVariantId || pickerVariantId;
+      if (initialVariantId) variantInput.value = initialVariantId;
+    }
+
     const { signal } = this.#abortController;
     const target = this.closest('.shopify-section, dialog, product-card');
     target?.addEventListener(ThemeEvents.variantUpdate, this.#onVariantUpdate, { signal });
@@ -374,6 +398,22 @@ class ProductFormComponent extends Component {
     }
 
     const formData = new FormData(form);
+    const submittedVariantId =
+      overrideVariantId || this.refs.variantId?.value || this.#getIntendedVariantId();
+
+    // Never send an empty variant ID to Shopify. This prevents silent cart
+    // failures and gives the customer an actionable error.
+    if (!submittedVariantId) {
+      const errorMessage = 'Please select an available product option and try again.';
+      if (addToCartTextError) {
+        addToCartTextError.classList.remove('hidden');
+        addToCartTextError.textContent = errorMessage;
+      }
+      this.#setLiveRegionText(errorMessage);
+      return;
+    }
+
+    formData.set('id', submittedVariantId);
 
     if (overrideVariantId) {
       formData.set('id', overrideVariantId);
@@ -709,7 +749,17 @@ class ProductFormComponent extends Component {
     }
 
     const { variantId } = this.refs;
-    variantId.value = event.detail.resource?.id ?? '';
+    const nextVariantId = event.detail.resource?.id?.toString();
+
+    // Keep the last known valid ID when a transient section update does not
+    // include variant data. The button is still disabled for unavailable
+    // variants below, so an unavailable option cannot be added accidentally.
+    if (nextVariantId) {
+      variantId.value = nextVariantId;
+    } else if (!variantId.value) {
+      const fallbackVariantId = this.#getIntendedVariantId();
+      if (fallbackVariantId) variantId.value = fallbackVariantId;
+    }
 
     this.#variantChangeInProgress = false;
 
