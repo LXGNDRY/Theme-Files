@@ -1,4 +1,4 @@
-/* ==========================================================================
+/* ========================================================================== 
    lb-cart-ui.css
    Legendary Branding — Cart UI enhancements
    Covers: Trust Badge bar · Complete the Fit upsell row
@@ -135,6 +135,19 @@
   font-size: 0.8rem;
   line-height: 1.4;
   color: rgb(var(--color-foreground-rgb) / 0.75);
+}
+
+/* --------------------------------------------------------------------------
+   Cart Country / Currency Selector — compact spacing
+   -------------------------------------------------------------------------- */
+
+.lb-cart-localization {
+  margin-block: 0;
+}
+
+.lb-cart-localization__trigger {
+  min-height: 0;
+  padding-block: 8px;
 }
 
 /* --------------------------------------------------------------------------
