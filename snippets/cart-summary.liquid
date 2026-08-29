@@ -277,9 +277,12 @@
         {% endform %}
       </span>
     {% endif %}
-    <div class="cart-totals__item cart-totals__tax-note cart-primary-typography">
-      <small>International orders may be subject to import duties, taxes, or customs fees upon delivery. These charges are determined by the destination country and are the customer’s responsibility. Discounts applied at checkout.</small>
-    </div>
+    {%- comment -%} Only show import-duty/customs disclosure for international customers. {%- endcomment -%}
+    {%- if shop.address.country and localization.country and localization.country.iso_code != shop.address.country.iso_code -%}
+      <div class="cart-totals__item cart-totals__tax-note cart-primary-typography">
+        <small>International orders may be subject to import duties, taxes, or customs fees upon delivery. These charges are determined by the destination country and are the customer’s responsibility. Discounts applied at checkout.</small>
+      </div>
+    {%- endif -%}
   </div>
 </div>
 
