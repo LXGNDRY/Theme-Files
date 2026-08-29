@@ -73,6 +73,11 @@
     "empty_cart_button_link": "shopify://collections/all-products",
     "cart_thumbnail_border": "none",
     "cart_thumbnail_border_radius": 8,
+    "ai_chat_enabled": false,
+    "ai_chat_backend_base": "",
+    "ai_chat_greeting": "",
+    "ai_chat_position": "bottom-right",
+    "ai_chat_authenticated_features_enabled": false,
     "drawer_color_scheme": "scheme-2",
     "icon_stroke": "thin",
     "input_border_width": 0,
@@ -99,11 +104,6 @@
     "razorpay_badge_enabled": false,
     "razorpay_gcp_base": "https://lb-razorpay-backend-exy37drh4q-uc.a.run.app",
     "razorpay_key_id": "rzp_live_THxiCiKHbW3rMy",
-    "ai_chat_enabled": false,
-    "ai_chat_backend_base": "",
-    "ai_chat_greeting": "",
-    "ai_chat_position": "bottom-right",
-    "ai_chat_authenticated_features_enabled": false,
     "content_for_index": [],
     "blocks": {
       "14060646107696862457": {
@@ -147,6 +147,16 @@
       "9670189827046205946": {
         "type": "shopify://apps/hextom-translate-and-currency/blocks/app-block/b927a799-be04-4b97-9efb-5c8f0290a68e",
         "disabled": true,
+        "settings": {}
+      },
+      "2200952712151285029": {
+        "type": "shopify://apps/microsoft-clarity/blocks/brandAgents_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea",
+        "disabled": true,
+        "settings": {}
+      },
+      "2567389343055140935": {
+        "type": "shopify://apps/microsoft-clarity/blocks/clarity_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea",
+        "disabled": false,
         "settings": {}
       }
     },
