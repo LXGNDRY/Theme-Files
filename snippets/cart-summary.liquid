@@ -89,6 +89,34 @@
           %}
         </cart-note>
       {% endif %}
+
+      {%- comment -%} LB Cart Localization — country/currency selector directly below Special Instructions {%- endcomment -%}
+      {%- if localization.available_countries.size > 1 -%}
+        <div class="lb-cart-localization" aria-label="{{ 'accessibility.country_region' | t }}">
+          <details class="lb-cart-localization__disclosure">
+            <summary class="lb-cart-localization__trigger cart-primary-typography">
+              <span class="lb-cart-localization__flag" aria-hidden="true">🌍</span>
+              <span class="lb-cart-localization__label">
+                {{ localization.country.name }}
+                <span class="lb-cart-localization__currency">({{ localization.country.currency.iso_code }} {{ localization.country.currency.symbol }})</span>
+              </span>
+              <span class="svg-wrapper icon-caret lb-cart-localization__caret">
+                {{- 'icon-caret.svg' | inline_asset_content -}}
+              </span>
+            </summary>
+            <div class="lb-cart-localization__panel">
+              {%- render 'localization-form',
+                show_country: true,
+                show_language: false,
+                form_id: 'cart-localization',
+                localization_style: 'dropdown',
+                back: routes.cart_url
+              -%}
+            </div>
+          </details>
+        </div>
+      {%- endif -%}
+
       {% if settings.show_cart_note and settings.show_add_discount_code %}
         <div class="cart-actions__divider"></div>
       {% endif %}
@@ -368,30 +396,3 @@
     {%- endunless -%}
   {%- endif -%}
 </div>
-
-{%- comment -%} LB Cart Localization — country/currency selector (below checkout to avoid funnel friction) {%- endcomment -%}
-{%- if localization.available_countries.size > 1 -%}
-  <div class="lb-cart-localization" aria-label="{{ 'accessibility.country_region' | t }}">
-    <details class="lb-cart-localization__disclosure">
-      <summary class="lb-cart-localization__trigger cart-primary-typography">
-        <span class="lb-cart-localization__flag" aria-hidden="true">🌍</span>
-        <span class="lb-cart-localization__label">
-          {{ localization.country.name }}
-          <span class="lb-cart-localization__currency">({{ localization.country.currency.iso_code }} {{ localization.country.currency.symbol }})</span>
-        </span>
-        <span class="svg-wrapper icon-caret lb-cart-localization__caret">
-          {{- 'icon-caret.svg' | inline_asset_content -}}
-        </span>
-      </summary>
-      <div class="lb-cart-localization__panel">
-        {%- render 'localization-form',
-          show_country: true,
-          show_language: false,
-          form_id: 'cart-localization',
-          localization_style: 'dropdown',
-          back: routes.cart_url
-        -%}
-      </div>
-    </details>
-  </div>
-{%- endif -%}
