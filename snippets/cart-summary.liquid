@@ -277,12 +277,9 @@
         {% endform %}
       </span>
     {% endif %}
-    {%- comment -%} Only show import-duty/customs disclosure for international customers. {%- endcomment -%}
-    {%- if shop.address.country and localization.country and localization.country.iso_code != shop.address.country.iso_code -%}
-      <div class="cart-totals__item cart-totals__tax-note cart-primary-typography">
-        <small>International orders may be subject to import duties, taxes, or customs fees upon delivery. These charges are determined by the destination country and are the customer’s responsibility. Discounts applied at checkout.</small>
-      </div>
-    {%- endif -%}
+    <div class="cart-totals__item cart-totals__tax-note cart-primary-typography">
+      <small>Legendary Branding is an independently Black-owned small business built from the ground up with a vision to create premium streetwear for those who dare to stand apart. Be among the first to own Legendary pieces and grow with us as our brand, collections, and community continue to evolve. Every order supports our journey and helps us keep building something truly LEGENDARY.</small>
+    </div>
   </div>
 </div>
 
