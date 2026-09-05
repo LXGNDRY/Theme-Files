@@ -380,9 +380,6 @@
       "order_payment_collection": {
         "pay_now": "Submit Payment"
       }
-    },
-    "sentence": {
-      "words_connector": "."
     }
   },
   "general": {
