@@ -18,6 +18,7 @@
           "disabled": true,
           "settings": {
             "text": "<h1><strong>Legendary Branding</strong></h1>",
+            "bleed": false,
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
@@ -60,6 +61,7 @@
           "name": "t:names.heading",
           "settings": {
             "text": "<p><em><strong>235GSM+ tees | Made To Order | DTG prints</strong></em></p>",
+            "bleed": false,
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "center",
@@ -86,6 +88,7 @@
           "disabled": true,
           "settings": {
             "text": "<p><br/>Step into legendary.<br/><br/></p>",
+            "bleed": false,
             "width": "100%",
             "max_width": "none",
             "alignment": "center",
@@ -112,6 +115,7 @@
           "disabled": true,
           "settings": {
             "text": "<p><a href=\"/collections/shirts-tops\" title=\"T-SHIRTS\">Shop now</a></p>",
+            "bleed": false,
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
@@ -181,6 +185,7 @@
         "group_Xg944t": {
           "type": "group",
           "name": "t:names.column",
+          "disabled": true,
           "settings": {
             "content_direction": "column",
             "vertical_on_mobile": true,
@@ -223,6 +228,7 @@
               "name": "t:names.heading",
               "settings": {
                 "text": "<h2><strong>20% off (1 item)</strong></h2>",
+                "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
@@ -250,6 +256,7 @@
               "disabled": true,
               "settings": {
                 "text": "<p>We create with intention. Our products solve real problems with clean design and honest materials.</p>",
+                "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
@@ -322,6 +329,7 @@
               "name": "t:names.heading",
               "settings": {
                 "text": "<h2><strong>buy1 get1 50% off </strong></h2>",
+                "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
@@ -349,6 +357,7 @@
               "disabled": true,
               "settings": {
                 "text": "<p>We obsess over the details and strive to deliver the best products at the best prices, every time.</p>",
+                "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
@@ -421,6 +430,7 @@
               "name": "t:names.heading",
               "settings": {
                 "text": "<h2><strong>25% off outerwear</strong></h2>",
+                "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
@@ -448,6 +458,7 @@
               "disabled": true,
               "settings": {
                 "text": "<p>We're always on your side: keeping our loyal customers happy is our top priority and number one goal.</p>",
+                "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
@@ -1033,6 +1044,7 @@
           "name": "t:names.text",
           "settings": {
             "text": "<p><strong>NOT YOUR AVERAGE MERCH.</strong></p>",
+            "bleed": false,
             "width": "fit-content",
             "max_width": "narrow",
             "alignment": "left",
@@ -1139,6 +1151,7 @@
               "name": "t:names.heading",
               "settings": {
                 "text": "<p><a href=\"/collections\" title=\"All collections\"><span style=\"text-decoration:underline\"><em><strong>Shop by collection</strong></em></span></a></p>",
+                "bleed": false,
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -1466,6 +1479,7 @@
               "name": "t:names.heading",
               "settings": {
                 "text": "<p><em><strong>Beyond the Basics</strong></em></p>",
+                "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
@@ -1491,6 +1505,7 @@
               "type": "text",
               "settings": {
                 "text": "<p>Legendary Branding stands out through <strong>heavyweight materials </strong>and <strong>oversized streetwear fits</strong>. Every piece is made from premium fabrics and meant for long-lasting comfort. It's gear made for real life, real style, and real people who want more than just the average basics.<br/></p>",
+                "bleed": false,
                 "width": "100%",
                 "max_width": "none",
                 "alignment": "center",
