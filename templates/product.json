@@ -848,7 +848,7 @@
         "overlay_color": "#00000026",
         "overlay_style": "solid",
         "gradient_direction": "to top",
-        "padding-block-start": 8,
+        "padding-block-start": 0,
         "padding-block-end": 0
       }
     },
@@ -1616,11 +1616,11 @@
     "main",
     "section_kaLgdt",
     "lb_brand_story_pdp",
-    "section_LPjgbx",
+    "product_recommendations_qnzPkn",
     "section_pJjjiN",
     "section_n8MUft",
+    "section_LPjgbx",
     "lb_fit_check_pdp",
-    "product_recommendations_qnzPkn",
     "product_list_qjFJXe"
   ]
 }
