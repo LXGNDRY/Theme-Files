@@ -329,7 +329,7 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<h2><strong>buy1 get1 50% off </strong></h2>",
+                "text": "<h1><strong>buy1 get1 50% off </strong></h1>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
@@ -430,7 +430,7 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<h2><strong>25% off outerwear</strong></h2>",
+                "text": "<h1><strong>25% off outerwear</strong></h1>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
