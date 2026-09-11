@@ -147,7 +147,8 @@
       ],
       "name": "t:names.hero",
       "settings": {
-        "media_type_1": "video",
+        "media_type_1": "image",
+        "image_1": "shopify://shop_images/5958342654289094365_c7661e98-ff97-4ae6-987b-7ddf43b03564.jpg",
         "video_1": "shopify://files/videos/higgsfield-6c455260-7d2b-42fe-88c9-d8a05644bf20.mp4",
         "media_type_2": "image",
         "stack_media_on_mobile": false,
@@ -622,20 +623,18 @@
             "text_dExmfz"
           ]
         },
-        "video_3AeqXT": {
-          "type": "video",
-          "name": "t:names.video",
-          "disabled": true,
+        "image_UWGjKk": {
+          "type": "image",
+          "name": "t:names.image",
           "settings": {
-            "source": "uploaded",
-            "video": "shopify://files/videos/hf_20260505_154356_c220951d-9e0a-431f-b565-bfd43700fc9c.mp4",
-            "video_url": "",
-            "video_autoplay": true,
-            "video_loop": true,
-            "alt": "",
-            "custom_width": 70,
+            "image": "shopify://shop_images/3253714714606407534.jpg",
+            "link": "",
+            "image_ratio": "adapt",
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
             "custom_width_mobile": 100,
-            "aspect_ratio": "auto",
+            "height": "fit",
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,
@@ -650,7 +649,7 @@
       },
       "block_order": [
         "group_CQ8WpX",
-        "video_3AeqXT"
+        "image_UWGjKk"
       ],
       "name": "t:names.image_with_text",
       "settings": {
@@ -677,8 +676,8 @@
         "overlay_color": "#00000026",
         "overlay_style": "solid",
         "gradient_direction": "to top",
-        "padding-block-start": 8,
-        "padding-block-end": 16
+        "padding-block-start": 16,
+        "padding-block-end": 8
       }
     },
     "product_list_6dxjyz": {
@@ -1654,7 +1653,7 @@
                 "background": false,
                 "background_color": "#00000026",
                 "corner_radius": 0,
-                "padding-block-start": 8,
+                "padding-block-start": 12,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
