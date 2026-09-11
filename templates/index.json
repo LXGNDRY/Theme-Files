@@ -1186,7 +1186,7 @@
       "name": "t:names.featured_product_information",
       "settings": {
         "product": "the-legendary-heavyweight-oversized-t-shirt",
-        "content_width": "content-center-aligned",
+        "content_width": "content-full-width",
         "desktop_media_position": "right",
         "equal_columns": true,
         "limit_details_width": true,
@@ -1352,7 +1352,7 @@
         "horizontal_alignment_flex_direction_column": "flex-start",
         "vertical_alignment_flex_direction_column": "center",
         "gap": 32,
-        "section_width": "page-width",
+        "section_width": "full-width",
         "section_height": "",
         "section_height_custom": 50,
         "color_scheme": "scheme-2",
