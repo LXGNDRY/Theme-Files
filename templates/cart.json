@@ -105,7 +105,7 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<p><strong>Dont miss out !</strong></p>",
+                "text": "<p><strong>Check These Out</strong></p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
