@@ -298,7 +298,7 @@
     "page_not_found_message": "The link may be broken, or the page may have been removed.",
     "cart_ships_to_countries": "Ships to {{ count }}+ countries",
     "cart_review_summary": "{{ count }}+ reviews · {{ rating }}★",
-    "cart_international_reassurance": "Trusted by shoppers in {{ count }}+ countries — secure international checkout"
+    "cart_international_reassurance": "We ship to {{ count }}+ countries — secure international checkout"
   },
   "gift_cards": {
     "issued": {

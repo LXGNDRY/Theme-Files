@@ -290,18 +290,20 @@
     <span class="svg-wrapper" aria-hidden="true">
       {{- 'icon-info.svg' | inline_asset_content -}}
     </span>
-    <p class="lb-international-notice__text">
-      {%- if dlocal_go_countries contains localization.country.iso_code -%}
-        Paying from {{ localization.country.name }}? Local payment options are available at checkout through dLocal Go. Continue to checkout and choose the payment method available for your country. You can also use PayPal or an internationally enabled card.
-      {%- else -%}
-        Paying from {{ localization.country.name }}? Some banks block international card charges by default. If your payment doesn't go through, ask your bank to authorize international transactions, or use PayPal / Shop Pay as an alternative.
-      {%- endif -%}
-    </p>
-    {%- if settings.cart_ships_to_countries_count > 0 -%}
+    <div class="lb-international-notice__body">
       <p class="lb-international-notice__text">
-        {{ 'content.cart_international_reassurance' | t: count: settings.cart_ships_to_countries_count }}
+        {%- if dlocal_go_countries contains localization.country.iso_code -%}
+          Paying from {{ localization.country.name }}? Local payment options are available at checkout through dLocal Go. Continue to checkout and choose the payment method available for your country. You can also use PayPal or an internationally enabled card.
+        {%- else -%}
+          Paying from {{ localization.country.name }}? Some banks block international card charges by default. If your payment doesn't go through, ask your bank to authorize international transactions, or use PayPal / Shop Pay as an alternative.
+        {%- endif -%}
       </p>
-    {%- endif -%}
+      {%- if settings.cart_ships_to_countries_count > 0 -%}
+        <p class="lb-international-notice__text lb-international-notice__text--secondary">
+          {{ 'content.cart_international_reassurance' | t: count: settings.cart_ships_to_countries_count }}
+        </p>
+      {%- endif -%}
+    </div>
   </div>
 {%- endif -%}
 
