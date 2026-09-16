@@ -160,6 +160,7 @@
       INTERACTION_EVENTS.forEach(function(e){
         document.removeEventListener(e,onInteract,{passive:true,capture:true});
       });
+      document.removeEventListener('visibilitychange',onHide,{capture:true});
       var f=document.getElementsByTagName('script')[0];
       var j=document.createElement('script');
       j.async=true;
@@ -167,6 +168,14 @@
       f.parentNode.insertBefore(j,f);
     }
     function onInteract(){ loadGTM(); }
+    // Fast-bounce backstop: if a visitor leaves a non-conversion page before
+    // the idle/interaction/timeout triggers fire, load GTM immediately so at
+    // least one page_view is captured before the tab goes away. pagehide/
+    // visibilitychange are used (not beforeunload, which is unreliable on
+    // mobile Safari and disables the back/forward cache).
+    function onHide(){
+      if(document.visibilityState === 'hidden'){ loadGTM(); }
+    }
     window.dataLayer.push({'gtm.start':new Date().getTime(),event:'gtm.js'});
     // Conversion-critical page types — load GTM immediately on DOMContentLoaded
     // to ensure session context is captured before any funnel events fire.
@@ -183,6 +192,8 @@
       INTERACTION_EVENTS.forEach(function(e){
         document.addEventListener(e,onInteract,{passive:true,capture:true,once:true});
       });
+      document.addEventListener('visibilitychange',onHide,{capture:true});
+      window.addEventListener('pagehide',loadGTM,{once:true});
       if('requestIdleCallback' in window){
         requestIdleCallback(loadGTM,{timeout:4000});
       } else {
