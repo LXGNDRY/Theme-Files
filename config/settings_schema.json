@@ -1770,6 +1770,27 @@
         "default": true
       },
       {
+        "type": "number",
+        "id": "cart_ships_to_countries_count",
+        "label": "Cart: countries shipped to",
+        "info": "Powers the \"ships to X countries\" trust badge and international reassurance line in the cart. Set to 0 to hide both.",
+        "default": 237
+      },
+      {
+        "type": "number",
+        "id": "cart_review_count",
+        "label": "Cart: total review count",
+        "info": "Powers the review-count trust badge in the cart. Set to 0 to hide it.",
+        "default": 3000
+      },
+      {
+        "type": "text",
+        "id": "cart_review_rating",
+        "label": "Cart: average review rating",
+        "info": "Displayed alongside the review count trust badge, e.g. \"4.7\".",
+        "default": "4.7"
+      },
+      {
         "type": "url",
         "id": "empty_cart_button_link",
         "label": "t:settings.empty_cart_button_link",

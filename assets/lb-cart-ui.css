@@ -130,11 +130,22 @@
   opacity: 0.7;
 }
 
+.lb-international-notice__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
 .lb-international-notice__text {
   margin: 0;
   font-size: 0.8rem;
   line-height: 1.4;
   color: rgb(var(--color-foreground-rgb) / 0.75);
+}
+
+.lb-international-notice__text--secondary {
+  opacity: 0.85;
 }
 
 /* --------------------------------------------------------------------------

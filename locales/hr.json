@@ -81,7 +81,9 @@
     "product_categories": "Product categories",
     "collections": "Collections",
     "shop_by_category": "Shop by category",
-    "product_list": "Product list"
+    "product_list": "Product list",
+    "trust_ships_worldwide": "Ships worldwide",
+    "trust_reviews": "Customer reviews"
   },
   "actions": {
     "add_to_cart": "Dodaj u košaricu",
@@ -293,7 +295,10 @@
     "ai_chat_send": "Send",
     "ai_chat_unavailable": "Our assistant is unavailable right now. Please visit our contact page for help.",
     "page_not_found": "This page doesn't exist.",
-    "page_not_found_message": "The link may be broken, or the page may have been removed."
+    "page_not_found_message": "The link may be broken, or the page may have been removed.",
+    "cart_ships_to_countries": "Ships to {{ count }}+ countries",
+    "cart_review_summary": "{{ count }}+ reviews · {{ rating }}★",
+    "cart_international_reassurance": "We ship to {{ count }}+ countries — secure international checkout"
   },
   "gift_cards": {
     "issued": {
