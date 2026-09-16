@@ -567,6 +567,7 @@
             "text_jBYizf": {
               "type": "text",
               "name": "t:names.heading",
+              "disabled": true,
               "settings": {
                 "text": "<h2><span style=\"text-decoration:underline\"><em><strong>Legendary Branding?</strong></em></span></h2>",
                 "bleed": false,
