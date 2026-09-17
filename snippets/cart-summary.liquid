@@ -293,9 +293,9 @@
     <div class="lb-international-notice__body">
       <p class="lb-international-notice__text">
         {%- if dlocal_go_countries contains localization.country.iso_code -%}
-          Paying from {{ localization.country.name }}? Local payment options are available at checkout through dLocal Go. Continue to checkout and choose the payment method available for your country. You can also use PayPal or an internationally enabled card.
+          Paying from {{ localization.country.name }}? Local payment options are available at checkout through dLocal Go. Continue to checkout and choose the payment method available for your country. You can also use PayPal or an internationally enabled card. Any applicable import duties (DDP) are collected securely at checkout based on your region — Legendary Branding covers all international tax costs ourselves, as a thank-you to our global community.
         {%- else -%}
-          Paying from {{ localization.country.name }}? Some banks block international card charges by default. If your payment doesn't go through, ask your bank to authorize international transactions, or use PayPal / Shop Pay as an alternative.
+          Paying from {{ localization.country.name }}? Some banks block international card charges by default. If your payment doesn't go through, ask your bank to authorize international transactions, or use PayPal / Shop Pay as an alternative. Any applicable import duties (DDP) are collected securely at checkout based on your region — Legendary Branding covers all international tax costs ourselves, as a thank-you to our global community.
         {%- endif -%}
       </p>
       {%- if settings.cart_ships_to_countries_count > 0 -%}
