@@ -109,7 +109,7 @@
     Tier 2 — 4s hard fallback: guarantees GTM loads on slow devices
     Tier 3 — user interaction backstop: loads on first intent
 
-    The noscript <iframe> fallback is still in <body> (required by
+    The noscript iframe fallback is still in the body (required by
     Google). The preconnect at step 2 warms the GTM origin.
   {%- endcomment -%}
   {%- comment -%}
@@ -148,7 +148,7 @@
         var qs = window.location.search;
         if(!qs) return false;
         var NOISE = ['preview_theme_id','_ab','_fd','_sc','_ssvprev','webPixelDebug','webPixelsManagerSandbox','_bt','pb=0'];
-        for(var i=0;i<NOISE.length;i++){ if(qs.indexOf(NOISE[i]) !== -1) return true; }
+        for (var i = 0; i < NOISE.length; i++) { if (qs.indexOf(NOISE[i]) !== -1) return true; }
       }catch(e){ return true; } // cross-origin access throw → we're framed → suppress
       return false;
     }
@@ -237,8 +237,8 @@
   {%- render 'lb-bebas-neue' -%}
 
   {%- comment -%}── 12. THEME FLASH PREVENTION ────────────────────────────────
-    Reads localStorage('lb-theme') and sets data-theme on <html> before
-    first paint so dark/light mode never flashes the wrong theme.
+    Reads localStorage('lb-theme') and sets data-theme on the html element
+    before first paint so dark/light mode never flashes the wrong theme.
     Zero network cost — pure JS with a try/catch for private browsing.
   {%- endcomment -%}
   <script>
@@ -326,17 +326,17 @@
   {%- endif -%}
 
   {%- comment -%}── 15. VIEW TRANSITIONS (guarded) ───────────────────────────
-    <link rel="expect" href="#MainContent"> explicitly gates rendering
+    A link rel=expect tag targeting #MainContent explicitly gates rendering
     until #MainContent is parsed. Only inject when transitions are active
     in theme settings — do not leave it in unconditionally.
   {%- endcomment -%}
   {%- comment -%}── 15. VIEW TRANSITIONS ─────────────────────────────────────
-    blocking="render" and <link rel="expect"> removed — both prevented first
-    paint until the script executed / <main> was parsed, causing severe LCP
-    regression on mobile. view-transitions.js now loads with defer, which
-    allows the page to render immediately while the script downloads.
-    Cross-document transitions still work; the initial page load is no longer
-    gated on the transition script.
+    blocking=render and the link rel=expect tag were removed — both prevented
+    first paint until the script executed / the main element was parsed,
+    causing severe LCP regression on mobile. view-transitions.js now loads
+    with defer, which allows the page to render immediately while the script
+    downloads. Cross-document transitions still work; the initial page load
+    is no longer gated on the transition script.
   {%- endcomment -%}
 
   {%- comment -%}── 16. THEME EDITOR (design mode only) ──────────────────────{%- endcomment -%}
@@ -344,14 +344,14 @@
 
   {%- comment -%}── 17. MODULE IMPORTMAP + MODULEPRELOAD HINTS ────────────────
     scripts.liquid emits:
-      - <script type="importmap"> for all theme ES modules
-      - <link rel="modulepreload"> for hot-path modules (utilities, component,
+      - an importmap script tag for all theme ES modules
+      - modulepreload link tags for hot-path modules (utilities, component,
         section-renderer, section-hydration, morph)
-      - <script type="module"> lazy loads at fetchpriority=low for all
+      - module script tags lazy load at fetchpriority=low for all
         non-critical modules (product-card, variant-picker, media-gallery…)
       - Template-conditional preloads (collection/search: paginated-list)
       - idleScripts array loaded via requestIdleCallback (accordion, slideshow…)
-    All module scripts have fetchpriority="low" — they never compete with
+    All module script tags have fetchpriority=low — they never compete with
     the LCP image or critical CSS.
   {%- endcomment -%}
   {%- render 'scripts' -%}
@@ -359,7 +359,7 @@
   {%- comment -%}── 18–21. PERFORMANCE SAFETY NETS ───────────────────────────
     lb-app-css-defer:     MutationObserver catches runtime-injected app CSS
                           (Klaviyo popups) and defers via print swap.
-                          Runs inline in <head> — must be here, not in <body>.
+                          Runs inline in the document head — must be here, not in the body.
     lb-ghost-code-auditor: Dev-mode only — logs unused Shopify app scripts.
     lb-speculation-rules: Speculation Rules API — prefetch/prerender product
                           and collection pages on link hover (Chrome 109+).
@@ -383,7 +383,7 @@
   {%- endcomment -%}
   <div class="lb-scroll-progress" aria-hidden="true"></div>
 
-  {%- comment -%}── GTM NOSCRIPT (required by Google, must be first in <body>) ─
+  {%- comment -%}── GTM NOSCRIPT (required by Google, must be first in the body) ─
     Gated out of theme editor / visual preview so editor renders never log a
     GTM noscript hit. Customer renders are unaffected.
   {%- endcomment -%}
@@ -423,7 +423,7 @@
 
     // ── Header group height (announcement bars above the header) ──
     var groupH = 0;
-    for(var i=0,c=hg.children;i<c.length;i++){
+    for (var i = 0, c = hg.children; i < c.length; i++) {
       var el=c[i];
       if(el===hc||el.contains(hc)||!(el instanceof HTMLElement))continue;
       groupH+=el.offsetHeight;
@@ -479,16 +479,16 @@
     {%- render 'quick-add-modal' -%}
   {%- endif -%}
 
-  {%- comment -%}── LB CUSTOM SCRIPTS (just before </body>) ──────────────────
-    Moved from <head defer> to end of <body> to eliminate parse cost
-    during initial load. Script only activates after DOMContentLoaded
+  {%- comment -%}── LB CUSTOM SCRIPTS (just before the closing body tag) ─────
+    Moved from head-with-defer to the end of the body to eliminate parse
+    cost during initial load. Script only activates after DOMContentLoaded
     so placement here is functionally identical to defer — with the bonus
     that it doesn't add to TBT during HTML head parse.
       lb-product-card-tap.js — iOS single-tap flash via touchstart
     NOTE: lb-theme-toggle.js removed 2026-05-22 — file never existed in
     assets/, causing a 404 + MIME-type console error on every page load.
-    Dark/light mode is handled by <meta name="theme-color"> in <head>;
-    header scroll is handled by HeaderComponent in header.js;
+    Dark/light mode is handled by the meta theme-color tags in the document
+    head; header scroll is handled by HeaderComponent in header.js;
     scroll reveal is handled by lb-idle-defer [data-lb-defer="visible"].
   {%- endcomment -%}
   <script src="{{ 'lb-product-card-tap.js' | asset_url }}" defer></script>
@@ -514,7 +514,7 @@
     lb-idle-defer runs after all content is in the DOM. It uses
     requestIdleCallback to load lb-video-optimizer, lb-cart-animations,
     lb-image-optimizer and to activate [data-lb-defer] elements.
-    Must be last in <body> — placing it earlier reduces the pool of
+    Must be last in the body — placing it earlier reduces the pool of
     elements it can observe on first run.
   {%- endcomment -%}
   {%- render 'lb-idle-defer' -%}

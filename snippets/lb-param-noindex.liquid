@@ -2,7 +2,7 @@
   lb-param-noindex.liquid
   Version:      1.0.0
   Last updated: 2026-06-02
-  Purpose:      Adds <meta name="robots" content="noindex,follow"> ONLY when the
+  Purpose:      Adds a robots meta tag (noindex,follow) ONLY when the
                 current URL carries clearly-noisy duplicate/tracking params, so
                 parameterized variants of a page are not indexed as separate
                 URLs. The clean canonical (seo-meta.liquid) is the primary
@@ -18,8 +18,8 @@
                 string; the param check therefore happens in JS at parse time
                 (before the page is fully rendered, so it is in the initial DOM
                 Google's renderer sees).
-  Usage:        Rendered in <head> by layout/theme.liquid, after seo-meta.
-  Cost:         <1KB inline, no network, runs once synchronously.
+  Usage:        Rendered in the document head by layout/theme.liquid, after seo-meta.
+  Cost:         Under 1KB inline, no network, runs once synchronously.
 {%- endcomment -%}
 <script>
 (function(){
@@ -38,7 +38,7 @@
     ];
     var params = new URLSearchParams(qs);
     var hit = false;
-    for(var i=0;i<NOISE.length;i++){ if(params.has(NOISE[i])){ hit = true; break; } }
+    for (var i = 0; i < NOISE.length; i++) { if (params.has(NOISE[i])) { hit = true; break; } }
     if(!hit) return;
     // Do not duplicate or downgrade an existing robots meta.
     if(document.querySelector('meta[name="robots"]')) return;
