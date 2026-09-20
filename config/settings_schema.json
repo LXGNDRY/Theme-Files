@@ -1765,8 +1765,8 @@
       {
         "type": "checkbox",
         "id": "show_international_payment_notice",
-        "label": "International card notice",
-        "info": "Shown in the cart when the customer's country differs from your store's home country, so they can pre-authorize international charges with their bank before checkout.",
+        "label": "International cart reassurance",
+        "info": "Shown in the cart when the customer's country differs from your store's home country, reinforcing secure checkout, worldwide delivery, and Legendary Branding's international-customer commitment.",
         "default": true
       },
       {
