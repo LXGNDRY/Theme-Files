@@ -283,20 +283,15 @@
   </div>
 {%- endunless -%}
 
-{%- comment -%} LB International Payment Notice — routes supported dLocal Go countries to local payment guidance and keeps fallback guidance for all other international shoppers {%- endcomment -%}
+{%- comment -%} LB International Checkout Notice {%- endcomment -%}
 {%- if settings.show_international_payment_notice and shop.address.country and localization.country and localization.country.iso_code != shop.address.country.iso_code -%}
-  {%- assign dlocal_go_countries = 'AR,BO,BR,CL,CO,CR,EC,GT,MX,PY,PE,UY,ID,MY,KE,NG' | split: ',' -%}
   <div class="lb-international-notice" role="note">
     <span class="svg-wrapper" aria-hidden="true">
       {{- 'icon-info.svg' | inline_asset_content -}}
     </span>
     <div class="lb-international-notice__body">
       <p class="lb-international-notice__text">
-        {%- if dlocal_go_countries contains localization.country.iso_code -%}
-          Be among the first to wear Legendary Branding as we continue to build the next chapter of our journey. Worldwide delivery, legendary moments, and GOATED family. Thank you for believing in what we’re building.
-        {%- else -%}
-          Be among the first to wear Legendary Branding as we continue to build the next chapter of our journey. Worldwide delivery, legendary moments, and GOATED family. Thank you for believing in what we’re building.
-        {%- endif -%}
+        Wherever you are in the world, your Legendary Branding order is securely processed and prepared with care. International delivery options, tracking, and available local payment methods are shown at checkout, so you can review everything before placing your order. Thank you for supporting the movement and becoming part of the GOATED family.
       </p>
       {%- if settings.cart_ships_to_countries_count > 0 -%}
         <p class="lb-international-notice__text lb-international-notice__text--secondary">
