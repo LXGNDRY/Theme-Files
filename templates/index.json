@@ -861,7 +861,7 @@
       },
       "name": "t:names.products_carousel",
       "settings": {
-        "collection": "all-products",
+        "collection": "accessories-more",
         "layout_type": "grid",
         "carousel_on_mobile": false,
         "max_products": 4,
@@ -1183,6 +1183,7 @@
           ]
         }
       },
+      "disabled": true,
       "name": "t:names.featured_product_information",
       "settings": {
         "product": "the-legendary-heavyweight-oversized-t-shirt",
@@ -1551,7 +1552,7 @@
       },
       "name": "t:names.products_carousel",
       "settings": {
-        "collection": "shirts-tops",
+        "collection": "marque-legendaire-luxury-streetwear",
         "layout_type": "grid",
         "carousel_on_mobile": false,
         "max_products": 4,
@@ -1907,7 +1908,7 @@
       },
       "name": "t:names.products_carousel",
       "settings": {
-        "collection": "hoodies-jackets",
+        "collection": "shirts-tops",
         "layout_type": "grid",
         "carousel_on_mobile": false,
         "max_products": 4,
@@ -2259,6 +2260,7 @@
           ]
         }
       },
+      "disabled": true,
       "name": "t:names.featured_product_information",
       "settings": {
         "product": "marque-legendaire-knitted-oversize-sweatshirt",
