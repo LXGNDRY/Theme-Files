@@ -99,28 +99,6 @@
               },
               "blocks": {}
             },
-            "price_a7krng": {
-              "type": "price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "custom",
-                "width": "100%",
-                "alignment": "center",
-                "font": "var(--font-body--family)",
-                "font_size": "1.25rem",
-                "line_height": "tight",
-                "letter_spacing": "normal",
-                "case": "uppercase",
-                "color": "var(--color-foreground-heading)",
-                "padding-block-start": 25,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
             "text_enejcM": {
               "type": "text",
               "name": "t:names.text",
@@ -158,6 +136,28 @@
                 "alignment": "center",
                 "padding-block-start": 12,
                 "padding-block-end": 24,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "price_a7krng": {
+              "type": "price",
+              "settings": {
+                "show_sale_price_first": true,
+                "show_installments": false,
+                "show_tax_info": false,
+                "type_preset": "custom",
+                "width": "100%",
+                "alignment": "center",
+                "font": "var(--font-body--family)",
+                "font_size": "1.25rem",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "uppercase",
+                "color": "var(--color-foreground-heading)",
+                "padding-block-start": 16,
+                "padding-block-end": 16,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
@@ -491,9 +491,9 @@
           "block_order": [
             "judge_me_reviews_preview_badge_3VhJnX",
             "text_9WaLn7",
-            "price_a7krng",
             "text_enejcM",
             "variant_picker_R3rGDr",
+            "price_a7krng",
             "buy_buttons_eYQEYi",
             "text_DpkCnt",
             "image_wUdQUh",
