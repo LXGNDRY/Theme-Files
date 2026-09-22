@@ -486,54 +486,6 @@
                 "accordion_row_GUNjLB",
                 "accordion_row_XdEepH"
               ]
-            },
-            "image_L97JKV": {
-              "type": "image",
-              "name": "t:names.image",
-              "disabled": true,
-              "settings": {
-                "image": "shopify://shop_images/Hat_s_-_Logo_White_1200x301_26e34206-d511-4c76-b931-ffdc325d268d.png",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "custom",
-                "custom_width_mobile": 100,
-                "height": "fill",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 8,
-                "padding-block-end": 8,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "image_6AGLCV": {
-              "type": "image",
-              "name": "t:names.image",
-              "disabled": true,
-              "settings": {
-                "image": "shopify://shop_images/Hat_s_-_Artboard_3_1.png",
-                "link": "",
-                "image_ratio": "adapt",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "custom",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
             }
           },
           "block_order": [
@@ -549,9 +501,7 @@
             "lb_size_guide_pdp",
             "lb_low_stock_pdp",
             "lb_stat_strip_pdp",
-            "accordion_NKWPiW",
-            "image_L97JKV",
-            "image_6AGLCV"
+            "accordion_NKWPiW"
           ]
         }
       },
@@ -562,7 +512,7 @@
         "limit_details_width": true,
         "gap": 0,
         "enable_sticky_add_to_cart": true,
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-5",
         "padding-block-start": 0,
         "padding-block-end": 0
       }
@@ -664,7 +614,7 @@
         "section_width": "page-width",
         "section_height": "small",
         "section_height_custom": 50,
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-5",
         "background_media": "none",
         "video_position": "cover",
         "background_image_position": "cover",
@@ -678,6 +628,295 @@
         "gradient_direction": "to top",
         "padding-block-start": 0,
         "padding-block-end": 0
+      }
+    },
+    "section_LPjgbx": {
+      "type": "section",
+      "blocks": {
+        "video_RXLxAn": {
+          "type": "video",
+          "name": "t:names.video",
+          "settings": {
+            "source": "uploaded",
+            "video": "shopify://files/videos/hf_20260505_154356_c220951d-9e0a-431f-b565-bfd43700fc9c.mp4",
+            "video_url": "",
+            "video_autoplay": true,
+            "video_loop": true,
+            "alt": "",
+            "custom_width": 100,
+            "custom_width_mobile": 100,
+            "aspect_ratio": "auto",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 39,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "group_JeECGJ": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "width": "custom",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "background_media": "none",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "link": "",
+            "open_in_new_tab": false,
+            "placeholder": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "text_qcXJzG": {
+              "type": "text",
+              "name": "t:names.heading",
+              "disabled": true,
+              "settings": {
+                "text": "<h2><span style=\"text-decoration:underline\"><em><strong>Legendary Branding?</strong></em></span></h2>",
+                "bleed": false,
+                "width": "100%",
+                "max_width": "none",
+                "alignment": "center",
+                "type_preset": "h2",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_QHhKhY": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Legendary Branding was built on a simple belief that greatness isn’t a moment, it’s a mindset you wear every day. Forged through years of trial, iteration, and obsession with the details, the brand exists to create pieces that <strong>outlast trends and fragile blanks</strong>. </p><p>Every <strong>heavyweight tee and hoodie</strong> is designed to feel substantial in your hands and on your shoulders, with <strong>durable fabrics</strong> and prints that hold up to real life, not just a photoshoot. </p><p>Legendary Branding is <em><strong>more than a logo</strong></em>, it’s a commitment to building something that reflects the grind, resilience, and the \"<strong>bigger picture</strong>\" thinking of a persons intent to becoming <strong>legendary</strong> in whatever they do.</p>",
+                "bleed": false,
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "center",
+                "type_preset": "custom",
+                "font": "var(--font-accent--family)",
+                "font_size": "1.25rem",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "uppercase",
+                "wrap": "pretty",
+                "color": "var(--color-foreground-heading)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "text_qcXJzG",
+            "text_QHhKhY"
+          ]
+        }
+      },
+      "block_order": [
+        "video_RXLxAn",
+        "group_JeECGJ"
+      ],
+      "name": "t:names.image_with_text",
+      "settings": {
+        "content_direction": "row",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "center",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 32,
+        "section_width": "page-width",
+        "section_height": "small",
+        "section_height_custom": 50,
+        "color_scheme": "scheme-5",
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "section_n8MUft": {
+      "type": "section",
+      "blocks": {
+        "group_QBYJq3": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "width": "custom",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "background_media": "none",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "link": "",
+            "open_in_new_tab": false,
+            "placeholder": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "text_XzTpDK": {
+              "type": "text",
+              "settings": {
+                "text": "<p><strong>Quality</strong> you can feel from the moment you open it up. We source premium, <strong>high-GSM fabrics</strong> to ensure every piece delivers a flawless, <strong>oversized fit </strong>that holds its shape. </p><p>Built from <strong>heavy-duty cotton</strong> and rich blends, our gear offers maximum comfort that stands up to the daily grind.</p>",
+                "bleed": false,
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "center",
+                "type_preset": "custom",
+                "font": "var(--font-heading--family)",
+                "font_size": "1.25rem",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "uppercase",
+                "wrap": "pretty",
+                "color": "var(--color-foreground-heading)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "text_XzTpDK"
+          ]
+        },
+        "image_JkYQnM": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/428400131525806299.jpg",
+            "link": "",
+            "image_ratio": "square",
+            "width": "custom",
+            "custom_width": 70,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fill",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 25,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "group_QBYJq3",
+        "image_JkYQnM"
+      ],
+      "name": "t:names.image_with_text",
+      "settings": {
+        "content_direction": "row",
+        "vertical_on_mobile": false,
+        "horizontal_alignment": "center",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "center",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 32,
+        "section_width": "full-width",
+        "section_height": "small",
+        "section_height_custom": 50,
+        "color_scheme": "scheme-5",
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 9,
+        "padding-block-end": 12
       }
     },
     "lb_brand_story_pdp": {
@@ -996,7 +1235,7 @@
         "icons_shape": "none",
         "section_width": "full-width",
         "gap": 28,
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-5",
         "padding-block-start": 9,
         "padding-block-end": 12
       }
@@ -1114,7 +1353,7 @@
         "section_width": "full-width",
         "section_height": "small",
         "section_height_custom": 50,
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-5",
         "background_media": "none",
         "video_position": "cover",
         "background_image_position": "cover",
@@ -1128,294 +1367,6 @@
         "gradient_direction": "to top",
         "padding-block-start": 18,
         "padding-block-end": 9
-      }
-    },
-    "section_n8MUft": {
-      "type": "section",
-      "blocks": {
-        "group_QBYJq3": {
-          "type": "group",
-          "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "custom",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "text_XzTpDK": {
-              "type": "text",
-              "settings": {
-                "text": "<p><strong>Quality</strong> you can feel from the moment you open it up. We source premium, <strong>high-GSM fabrics</strong> to ensure every piece delivers a flawless, <strong>oversized fit </strong>that holds its shape. </p><p>Built from <strong>heavy-duty cotton</strong> and rich blends, our gear offers maximum comfort that stands up to the daily grind.</p>",
-                "bleed": false,
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "center",
-                "type_preset": "custom",
-                "font": "var(--font-heading--family)",
-                "font_size": "1.25rem",
-                "line_height": "tight",
-                "letter_spacing": "normal",
-                "case": "uppercase",
-                "wrap": "pretty",
-                "color": "var(--color-foreground-heading)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "text_XzTpDK"
-          ]
-        },
-        "image_JkYQnM": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/428400131525806299.jpg",
-            "link": "",
-            "image_ratio": "square",
-            "width": "custom",
-            "custom_width": 70,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fill",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 25,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "group_QBYJq3",
-        "image_JkYQnM"
-      ],
-      "name": "t:names.image_with_text",
-      "settings": {
-        "content_direction": "row",
-        "vertical_on_mobile": false,
-        "horizontal_alignment": "center",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 32,
-        "section_width": "full-width",
-        "section_height": "small",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-2",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 9,
-        "padding-block-end": 12
-      }
-    },
-    "section_LPjgbx": {
-      "type": "section",
-      "blocks": {
-        "video_RXLxAn": {
-          "type": "video",
-          "name": "t:names.video",
-          "settings": {
-            "source": "uploaded",
-            "video": "shopify://files/videos/hf_20260505_154356_c220951d-9e0a-431f-b565-bfd43700fc9c.mp4",
-            "video_url": "",
-            "video_autoplay": true,
-            "video_loop": true,
-            "alt": "",
-            "custom_width": 70,
-            "custom_width_mobile": 65,
-            "aspect_ratio": "auto",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 100,
-            "padding-block-start": 32,
-            "padding-block-end": 8,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "group_JeECGJ": {
-          "type": "group",
-          "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "custom",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "text_qcXJzG": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h2><span style=\"text-decoration:underline\"><em><strong>Legendary Branding?</strong></em></span></h2>",
-                "bleed": false,
-                "width": "100%",
-                "max_width": "none",
-                "alignment": "center",
-                "type_preset": "h2",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_QHhKhY": {
-              "type": "text",
-              "settings": {
-                "text": "<p>Legendary Branding was built on a simple belief that greatness isn’t a moment, it’s a mindset you wear every day. Forged through years of trial, iteration, and obsession with the details, the brand exists to create pieces that <strong>outlast trends and fragile blanks</strong>. </p><p>Every <strong>heavyweight tee and hoodie</strong> is designed to feel substantial in your hands and on your shoulders, with <strong>durable fabrics</strong> and prints that hold up to real life, not just a photoshoot. </p><p>Legendary Branding is <em><strong>more than a logo</strong></em>, it’s a commitment to building something that reflects the grind, resilience, and the \"<strong>bigger picture</strong>\" thinking of a persons intent to becoming <strong>legendary</strong> in whatever they do.</p>",
-                "bleed": false,
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "center",
-                "type_preset": "custom",
-                "font": "var(--font-accent--family)",
-                "font_size": "1.25rem",
-                "line_height": "tight",
-                "letter_spacing": "normal",
-                "case": "uppercase",
-                "wrap": "pretty",
-                "color": "var(--color-foreground-heading)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "text_qcXJzG",
-            "text_QHhKhY"
-          ]
-        }
-      },
-      "block_order": [
-        "video_RXLxAn",
-        "group_JeECGJ"
-      ],
-      "name": "t:names.image_with_text",
-      "settings": {
-        "content_direction": "row",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "center",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 32,
-        "section_width": "page-width",
-        "section_height": "small",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-2",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 0,
-        "padding-block-end": 0
       }
     },
     "lb_fit_check_pdp": {
@@ -1615,11 +1566,11 @@
   "order": [
     "main",
     "section_kaLgdt",
+    "section_LPjgbx",
+    "section_n8MUft",
     "lb_brand_story_pdp",
     "product_recommendations_qnzPkn",
     "section_pJjjiN",
-    "section_n8MUft",
-    "section_LPjgbx",
     "lb_fit_check_pdp",
     "product_list_qjFJXe"
   ]
