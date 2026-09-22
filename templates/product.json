@@ -80,7 +80,7 @@
                 "bleed": false,
                 "width": "100%",
                 "max_width": "none",
-                "alignment": "left",
+                "alignment": "center",
                 "type_preset": "h3",
                 "font": "var(--font-accent--family)",
                 "font_size": "1.5rem",
