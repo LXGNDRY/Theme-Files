@@ -172,6 +172,7 @@
     "cart_ships_to_countries": "Ships to {{ count }}+ countries",
     "cart_review_summary": "{{ count }}+ reviews · {{ rating }}★",
     "cart_international_reassurance": "We ship to {{ count }}+ countries — secure international checkout",
+    "cart_international_support_html": "Having trouble at checkout? Email us at <a href=\"mailto:{{ email }}\">{{ email }}</a> and we'll help sort it out.",
     "checkout": "CHECKOUT ->",
     "razorpay_label": "Pay with Razorpay",
     "ai_chat_greeting": "Hi! Ask me anything about Legendary Branding — products, sizing, shipping, or returns.",

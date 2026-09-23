@@ -312,6 +312,11 @@
           {{ 'content.cart_international_reassurance' | t: count: settings.cart_ships_to_countries_count }}
         </p>
       {%- endif -%}
+      {%- if shop.email != blank -%}
+        <p class="lb-international-notice__text lb-international-notice__text--secondary">
+          {{ 'content.cart_international_support_html' | t: email: shop.email }}
+        </p>
+      {%- endif -%}
     </div>
   </div>
 {%- endif -%}

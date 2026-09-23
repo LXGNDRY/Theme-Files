@@ -301,7 +301,8 @@
     "page_not_found_message": "The link may be broken, or the page may have been removed.",
     "cart_ships_to_countries": "Ships to {{ count }}+ countries",
     "cart_review_summary": "{{ count }}+ reviews · {{ rating }}★",
-    "cart_international_reassurance": "We ship to {{ count }}+ countries — secure international checkout"
+    "cart_international_reassurance": "We ship to {{ count }}+ countries — secure international checkout",
+    "cart_international_support_html": "Having trouble at checkout? Email us at <a href=\"mailto:{{ email }}\">{{ email }}</a> and we'll help sort it out."
   },
   "gift_cards": {
     "issued": {
