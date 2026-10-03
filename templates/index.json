@@ -562,7 +562,7 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<h2><a href=\"/collections/hoodies-jackets\" title=\"OUTERWEAR\"><span style=\"text-decoration:underline\"><em><strong>{{ closest.collection.title }}</strong></em></span></a></h2>",
+                "text": "<h2><a href=\"/collections/hoodies-jackets\" title=\"OUTERWEAR\"><em><strong>{{ closest.collection.title }}</strong></em></a></h2>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -840,7 +840,7 @@
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "center",
-                    "type_preset": "h3",
+                    "type_preset": "h2",
                     "font": "var(--font-heading--family)",
                     "font_size": "3.5rem",
                     "line_height": "tight",
@@ -1145,7 +1145,7 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<h2><a href=\"/collections/shirts-tops\" title=\"T-SHIRTS\"><span style=\"text-decoration:underline\"><em><strong>{{ closest.collection.title }}</strong></em></span></a></h2>",
+                "text": "<h2><a href=\"/collections/shirts-tops\" title=\"T-SHIRTS\"><em><strong>{{ closest.collection.title }}</strong></em></a></h2>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
