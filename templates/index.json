@@ -683,8 +683,8 @@
                 "letter_spacing": "loose",
                 "case": "none",
                 "color": "var(--color-foreground)",
-                "padding-block-start": 6,
-                "padding-block-end": 0,
+                "padding-block-start": 4,
+                "padding-block-end": 4,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
@@ -1266,8 +1266,8 @@
                 "letter_spacing": "loose",
                 "case": "none",
                 "color": "var(--color-foreground)",
-                "padding-block-start": 6,
-                "padding-block-end": 0,
+                "padding-block-start": 4,
+                "padding-block-end": 4,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
               },
