@@ -68,6 +68,10 @@
             "padding-inline-end": 0
           },
           "blocks": {
+            "judge_me_reviews_preview_badge_3VhJnX": {
+              "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+              "settings": {}
+            },
             "text_9WaLn7": {
               "type": "text",
               "name": "t:names.title",
@@ -75,9 +79,9 @@
                 "text": "<h1><strong>{{ closest.product.title }}</strong></h1>",
                 "bleed": false,
                 "width": "100%",
-                "max_width": "none",
+                "max_width": "normal",
                 "alignment": "center",
-                "type_preset": "h3",
+                "type_preset": "h2",
                 "font": "var(--font-accent--family)",
                 "font_size": "1.5rem",
                 "line_height": "tight",
@@ -95,10 +99,6 @@
               },
               "blocks": {}
             },
-            "judge_me_reviews_preview_badge_3VhJnX": {
-              "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-              "settings": {}
-            },
             "price_a7krng": {
               "type": "price",
               "settings": {
@@ -108,8 +108,8 @@
                 "type_preset": "custom",
                 "width": "100%",
                 "alignment": "center",
-                "font": "var(--font-body--family)",
-                "font_size": "1.25rem",
+                "font": "var(--font-accent--family)",
+                "font_size": "2.5rem",
                 "line_height": "tight",
                 "letter_spacing": "normal",
                 "case": "uppercase",
@@ -203,14 +203,14 @@
               "type": "text",
               "name": "t:names.text",
               "settings": {
-                "text": "<p>Merch is <strong>unisex</strong> & <strong>true to size</strong>. So, feel free to order your normal fit. We work closely with our vendors to ensure quality and premium textures. </p>",
+                "text": "<p>Merch is <strong>unisex</strong> & <strong>true to size</strong>. So, feel free to order your normal fit. We work closely with our vendors to ensure quality and premium textures.&nbsp;</p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
                 "type_preset": "custom",
                 "font": "var(--font-accent--family)",
-                "font_size": "1.25rem",
+                "font_size": "1.5rem",
                 "line_height": "tight",
                 "letter_spacing": "normal",
                 "case": "none",
@@ -489,8 +489,8 @@
             }
           },
           "block_order": [
-            "text_9WaLn7",
             "judge_me_reviews_preview_badge_3VhJnX",
+            "text_9WaLn7",
             "price_a7krng",
             "text_enejcM",
             "variant_picker_R3rGDr",
@@ -510,7 +510,7 @@
         "desktop_media_position": "right",
         "equal_columns": true,
         "limit_details_width": true,
-        "gap": 0,
+        "gap": 16,
         "enable_sticky_add_to_cart": true,
         "color_scheme": "scheme-1",
         "padding-block-start": 0,
