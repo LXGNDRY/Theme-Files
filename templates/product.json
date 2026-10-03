@@ -825,7 +825,7 @@
                         "width": "100%",
                         "alignment": "center",
                         "font": "var(--font-body--family)",
-                        "font_size": "1rem",
+                        "font_size": "1.25rem",
                         "line_height": "tight",
                         "letter_spacing": "loose",
                         "case": "none",
