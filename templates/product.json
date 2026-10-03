@@ -1005,14 +1005,14 @@
             "text_XzTpDK": {
               "type": "text",
               "settings": {
-                "text": "<p><strong>Quality</strong> you can feel from the moment you open it up. We source premium, <strong>high-GSM fabrics</strong> to ensure every piece delivers a flawless, <strong>oversized fit </strong>that holds its shape. </p><p>Built from <strong>heavy-duty cotton</strong> and rich blends, our gear offers maximum comfort that stands up to the daily grind.</p>",
+                "text": "<p><strong>Quality</strong> you can feel from the moment you open it.</p><p>We source premium, <strong>high-GSM fabrics</strong> to give every piece substantial weight, structure, and a refined <strong>oversized fit</strong> that holds its shape wear after wear.</p><p>Crafted from <strong>heavyweight cotton and premium fabric blends</strong>, each garment balances durability with all-day comfort, built to feel substantial, wear effortlessly, and stand up to your daily grind.</p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
                 "type_preset": "custom",
                 "font": "var(--font-heading--family)",
-                "font_size": "1.25rem",
+                "font_size": "1.5rem",
                 "line_height": "tight",
                 "letter_spacing": "normal",
                 "case": "uppercase",
@@ -1307,14 +1307,14 @@
             "text_QHhKhY": {
               "type": "text",
               "settings": {
-                "text": "<p>Legendary Branding was built on a simple belief that greatness isn’t a moment, it’s a mindset you wear every day. Forged through years of trial, iteration, and obsession with the details, the brand exists to create pieces that <strong>outlast trends and fragile blanks</strong>. </p><p>Every <strong>heavyweight tee and hoodie</strong> is designed to feel substantial in your hands and on your shoulders, with <strong>durable fabrics</strong> and prints that hold up to real life, not just a photoshoot. </p><p>Legendary Branding is <em><strong>more than a logo</strong></em>, it’s a commitment to building something that reflects the grind, resilience, and the \"<strong>bigger picture</strong>\" thinking of a persons intent to becoming <strong>legendary</strong> in whatever they do.</p>",
+                "text": "<p>Legendary Branding was built on a simple belief:&nbsp;</p><p><strong>greatness isn’t a moment, it’s a mindset.</strong></p><p>Driven by years of refinement and attention to detail, we create premium streetwear designed to <strong>outlast trends and disposable fashion</strong>. Every piece combines <strong>heavyweight fabrics, durable construction, and lasting prints</strong> for a substantial feel made for everyday wear.</p><p><em><strong>More than a logo</strong></em>, The GOAT represents <strong>GREATEST OF ALL TRENDS </strong>and the pursuit of something greater, a mindset for those determined to become legendary in whatever they do.</p><p><strong>Built with purpose. Worn with intent.</strong></p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
                 "type_preset": "custom",
                 "font": "var(--font-accent--family)",
-                "font_size": "1.25rem",
+                "font_size": "1.5rem",
                 "line_height": "tight",
                 "letter_spacing": "normal",
                 "case": "uppercase",
