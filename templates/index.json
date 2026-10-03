@@ -429,7 +429,7 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<h1><strong>Outerwear</strong></h1><h1><strong>25% Off&nbsp;</strong></h1>",
+                "text": "<h1><strong>Outerwear</strong></h1><h1><strong>15% Off&nbsp;</strong></h1>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
