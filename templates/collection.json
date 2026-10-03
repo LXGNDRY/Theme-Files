@@ -362,7 +362,7 @@
                         "letter_spacing": "tight",
                         "case": "uppercase",
                         "color": "var(--color-foreground)",
-                        "padding-block-start": 0,
+                        "padding-block-start": 4,
                         "padding-block-end": 4,
                         "padding-inline-start": 0,
                         "padding-inline-end": 0
