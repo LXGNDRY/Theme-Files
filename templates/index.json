@@ -1025,7 +1025,7 @@
       },
       "name": "t:names.featured_product_information",
       "settings": {
-        "product": "goat-sh-t-only-oversized-cropped-t-shirt280gsm",
+        "product": "land-of-the-goated-oversized-t-shirt190-gsm",
         "content_width": "content-full-width",
         "desktop_media_position": "left",
         "equal_columns": true,
@@ -1078,7 +1078,7 @@
         "stack_media_on_mobile": false,
         "custom_mobile_media": true,
         "media_type_1_mobile": "image",
-        "image_1_mobile": "shopify://shop_images/8779917854595609281.jpg",
+        "image_1_mobile": "shopify://shop_images/17040145833392807163.jpg",
         "media_type_2_mobile": "image",
         "link": "",
         "open_in_new_tab": false,
@@ -1417,7 +1417,7 @@
         "image_9W6eJx": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/12010835417515382124_fde076a3-ff7c-4fdf-9afb-8519aeadac34.jpg",
+            "image": "shopify://shop_images/16869373024359237147.jpg",
             "link": "",
             "image_ratio": "square",
             "width": "fill",
@@ -1505,7 +1505,7 @@
             "text_xBGymm": {
               "type": "text",
               "settings": {
-                "text": "<p>Legendary Branding stands out through <strong>heavyweight materials </strong>and <strong>oversized streetwear fits</strong>. Every piece is made from premium fabrics and meant for long-lasting comfort. It's gear made for real life, real style, and real people who want more than just the average basics.<br/></p>",
+                "text": "<p><strong>Heavyweight materials &</strong> <strong>oversized streetwear fits</strong>. Gear made for real life, real style, and real people who want more than just the average basics.<br/></p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "none",
@@ -1641,7 +1641,7 @@
             "text_dExmfz": {
               "type": "text",
               "settings": {
-                "text": "<p>Legendary Branding was built on a simple belief that greatness isn’t a moment, it’s a mindset you wear every day. Forged through years of trial, iteration, and obsession with the details, the brand exists to create pieces that <strong>outlast trends and fragile blanks</strong>. </p><p>Every <strong>heavyweight tee and hoodie</strong> is designed to feel substantial in your hands and on your shoulders, with <strong>durable fabrics</strong> and prints that hold up to real life, not just a photoshoot. </p><p>Legendary Branding is <em><strong>more than a logo</strong></em>, it’s a commitment to building something that reflects the grind, resilience, and the \"<strong>bigger picture</strong>\" thinking of a persons intent to becoming <strong>legendary</strong> in whatever they do.</p>",
+                "text": "<p>Legendary Branding was built on a simple belief that greatness isn’t a moment. Forged through years of trial, iteration, and obsession with the quality, the brand exists to create pieces that <strong>outlast trends and fragile blanks</strong>.&nbsp;</p><p><strong>Heavyweight Tees and Hoodies </strong>designed to feel substantial in your hands and on your shoulders, with <strong>durable fabrics</strong> and <strong>DTG prints</strong> that hold up to real life.</p><p>The GOAT is <em><strong>more than a logo, </strong></em>what does it mean to you?</p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
@@ -1674,7 +1674,7 @@
           "type": "image",
           "name": "t:names.image",
           "settings": {
-            "image": "shopify://shop_images/3253714714606407534.jpg",
+            "image": "shopify://shop_images/ChatGPTImageSep30_2026_08_13_10PM.png",
             "link": "",
             "image_ratio": "adapt",
             "width": "fill",
