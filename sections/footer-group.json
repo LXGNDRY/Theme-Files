@@ -37,6 +37,7 @@
         },
         "judge_me_reviews_featured_carousel_eeJRPb": {
           "type": "shopify://apps/judge-me-reviews/blocks/featured_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "disabled": true,
           "settings": {
             "maxwidth": 1400
           }
@@ -149,7 +150,6 @@
         "menu_Cj74UT": {
           "type": "menu",
           "name": "t:names.menu",
-          "disabled": true,
           "settings": {
             "menu": "main-menu",
             "heading": "Menu",
