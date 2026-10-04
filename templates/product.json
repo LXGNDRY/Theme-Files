@@ -544,7 +544,7 @@
             "arrows_color": "#000000",
             "show_border": false,
             "border_color": "#108474",
-            "show_drop_shadow": false,
+            "show_drop_shadow": true,
             "transition_speed": 5,
             "header_text": "Customers are saying",
             "show_average_rating": true
@@ -883,11 +883,11 @@
         "rows_gap": 0,
         "icons_style": "arrow",
         "icons_shape": "none",
-        "section_width": "page-width",
+        "section_width": "full-width",
         "gap": 50,
         "color_scheme": "scheme-5",
         "padding-block-start": 8,
-        "padding-block-end": 8
+        "padding-block-end": 16
       }
     },
     "section_n8MUft": {
@@ -1015,8 +1015,8 @@
         "overlay_color": "#00000026",
         "overlay_style": "solid",
         "gradient_direction": "to top",
-        "padding-block-start": 9,
-        "padding-block-end": 12
+        "padding-block-start": 16,
+        "padding-block-end": 16
       }
     },
     "lb_brand_story_pdp": {
@@ -1199,7 +1199,7 @@
             "align_baseline": false,
             "horizontal_alignment_flex_direction_column": "flex-start",
             "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
+            "gap": 16,
             "width": "custom",
             "custom_width": 100,
             "width_mobile": "fill",
@@ -1302,7 +1302,7 @@
         "align_baseline": false,
         "horizontal_alignment_flex_direction_column": "flex-start",
         "vertical_alignment_flex_direction_column": "center",
-        "gap": 60,
+        "gap": 100,
         "section_width": "page-width",
         "section_height": "small",
         "section_height_custom": 50,
@@ -1318,7 +1318,7 @@
         "overlay_color": "#00000026",
         "overlay_style": "solid",
         "gradient_direction": "to top",
-        "padding-block-start": 16,
+        "padding-block-start": 8,
         "padding-block-end": 0
       }
     },
