@@ -135,7 +135,7 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<p><strong>Check These Out</strong></p>",
+                "text": "<p><strong>RECOMMENDED</strong></p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
