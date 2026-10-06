@@ -361,6 +361,7 @@
                 },
                 "accordion_row_7PAkUx": {
                   "type": "_accordion-row",
+                  "disabled": true,
                   "settings": {
                     "heading": "Shipping Policy",
                     "open_by_default": false,
