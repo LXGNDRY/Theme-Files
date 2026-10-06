@@ -167,7 +167,7 @@
               "type": "text",
               "name": "t:names.text",
               "settings": {
-                "text": "<p>Merch is <strong>unisex</strong> & <strong>true to size</strong>. So, feel free to order your normal fit. We work closely with our vendors to ensure quality and premium textures.&nbsp;</p>",
+                "text": "<p>Merch is <strong>true to size & unisex</strong>. Feel free to order your normal fit. We work closely with our manufacturers to ensure quality and premium textures.&nbsp;</p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
