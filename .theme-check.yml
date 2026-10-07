@@ -11,6 +11,11 @@ ignore:
   # at the file level since the license prohibits editing the file to work
   # around it.
   - snippets/chaos_unleashed_performance_deferrer.liquid
+  # Same licensed vendor (Chaos Unleashed) and same failure: its header
+  # comments contain literal link and script tag text that the parser reads
+  # as real markup, producing a hard parse error. Excluded at file level
+  # because the license prohibits editing the file.
+  - snippets/chaos_unleashed_font_priority.liquid
 
 # JSONMissingBlock cannot resolve app-provided theme blocks
 # (shopify://apps/... references, e.g. Judge.me Reviews) since they live in
