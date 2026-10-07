@@ -23,7 +23,7 @@ jobs:
       matrix:
         target: [production, staging]
     env:
-      STORE_ORIGIN: 'https://legendary-branding.com'
+      STORE_ORIGIN: 'https://www.legendary-branding.com'
       PREVIEW_THEME_ID: '151147413657'
       LH_VERSION: '13.4.1'
     steps:
@@ -59,7 +59,7 @@ jobs:
           declare -A URLS=(
             [home]="${STORE_ORIGIN}/${suffix}"
             [collection]="${STORE_ORIGIN}/collections/shirts-tops${suffix}"
-            [product]="${STORE_ORIGIN}/products/unisex-boxy-t-shirt-280gsm${suffix}"
+            [product]="${STORE_ORIGIN}/products/heavyweight-oversized-hoodie-460gsm${suffix}"
             [cart]="${STORE_ORIGIN}/cart${suffix}"
           )
 
