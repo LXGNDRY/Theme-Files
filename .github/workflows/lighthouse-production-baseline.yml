@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      STORE_ORIGIN: 'https://legendary-branding.com'
+      STORE_ORIGIN: 'https://www.legendary-branding.com'
       LH_VERSION: '13.4.1'
     steps:
       - name: Checkout
@@ -45,7 +45,7 @@ jobs:
           declare -A URLS=(
             [home]="${STORE_ORIGIN}/"
             [collection]="${STORE_ORIGIN}/collections/shirts-tops"
-            [product]="${STORE_ORIGIN}/products/unisex-boxy-t-shirt-280gsm"
+            [product]="${STORE_ORIGIN}/products/heavyweight-oversized-hoodie-460gsm"
             [cart]="${STORE_ORIGIN}/cart"
           )
 
