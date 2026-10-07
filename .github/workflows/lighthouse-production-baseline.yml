@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      STORE_ORIGIN: 'https://legendary-branding.com'
+      STORE_ORIGIN: 'https://www.legendary-branding.com'
       LH_VERSION: '13.4.1'
     steps:
       - name: Checkout

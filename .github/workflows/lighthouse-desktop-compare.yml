@@ -23,7 +23,7 @@ jobs:
       matrix:
         target: [production, staging]
     env:
-      STORE_ORIGIN: 'https://legendary-branding.com'
+      STORE_ORIGIN: 'https://www.legendary-branding.com'
       PREVIEW_THEME_ID: '151147413657'
       LH_VERSION: '13.4.1'
     steps:

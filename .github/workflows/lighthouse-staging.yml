@@ -35,7 +35,7 @@ jobs:
     timeout-minutes: 30
     env:
       PREVIEW_THEME_ID: '151147413657'
-      STORE_ORIGIN: 'https://legendary-branding.com'
+      STORE_ORIGIN: 'https://www.legendary-branding.com'
       LH_VERSION: '13.4.1'
     steps:
       - name: Checkout
