@@ -148,7 +148,7 @@
         var qs = window.location.search;
         if(!qs) return false;
         var NOISE = ['preview_theme_id','_ab','_fd','_sc','_ssvprev','webPixelDebug','webPixelsManagerSandbox','_bt','pb=0'];
-        for(var i=0;i<NOISE.length;i++){ if(qs.indexOf(NOISE[i]) !== -1) return true; }
+        for(var i=0; i < NOISE.length; i++){ if(qs.indexOf(NOISE[i]) !== -1) return true; }
       }catch(e){ return true; } // cross-origin access throw → we're framed → suppress
       return false;
     }
