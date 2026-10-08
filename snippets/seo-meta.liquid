@@ -46,23 +46,6 @@
     assign canonical_url = request.origin | append: request.path
   endif
 
-  # Locale canonicals. Only languages with real server-side translations in
-  # Shopify keep their own canonical URL (lb_canonical_locales). Every other
-  # language serves English markup (the translation app applies text in the
-  # browser), so its canonical points at the English URL instead of competing
-  # with it as a duplicate. Add a language code to the list below once its
-  # translations are stored in Shopify.
-  assign lb_canonical_locales = 'en,fr' | split: ','
-  if request.locale.root_url != blank and request.locale.root_url != '/'
-    unless lb_canonical_locales contains request.locale.iso_code
-      assign lb_locale_prefix = request.origin | append: request.locale.root_url
-      assign canonical_url = canonical_url | replace_first: lb_locale_prefix, request.origin
-      if canonical_url == request.origin
-        assign canonical_url = canonical_url | append: '/'
-      endif
-    endunless
-  endif
-
   # Resolve OG image — fallback chain covers all template types including homepage and blog
   assign og_image = page.image | default: product.featured_media.preview_image | default: collection.image | default: article.image | default: settings.share_image
 -%}
