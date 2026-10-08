@@ -214,7 +214,7 @@
   {%- endif -%}
   {%- render 'seo-meta' -%}
   {%- render 'lb-param-noindex' -%}
-  {%- comment -%}hreflang is emitted natively by Shopify Markets. A former custom hreflang snippet duplicated it and output a 404 URL for pt-BR, so it was removed.{%- endcomment -%}
+  {%- render 'lb-hreflang' -%}
   {%- render 'seo-schema' -%}
 
   {%- comment -%}── 9. CRITICAL CSS (inline) ──────────────────────────────────
