@@ -148,7 +148,7 @@
         var qs = window.location.search;
         if(!qs) return false;
         var NOISE = ['preview_theme_id','_ab','_fd','_sc','_ssvprev','webPixelDebug','webPixelsManagerSandbox','_bt','pb=0'];
-        for(var i=0; i < NOISE.length; i++){ if(qs.indexOf(NOISE[i]) !== -1) return true; }
+        for(var i=0;i<NOISE.length;i++){ if(qs.indexOf(NOISE[i]) !== -1) return true; }
       }catch(e){ return true; } // cross-origin access throw → we're framed → suppress
       return false;
     }
@@ -203,7 +203,7 @@
   {%- endif -%}
   {%- render 'seo-meta' -%}
   {%- render 'lb-param-noindex' -%}
-  {%- comment -%}hreflang is emitted natively by Shopify Markets. A former custom hreflang snippet duplicated it and output a 404 URL for pt-BR, so it was removed.{%- endcomment -%}
+  {%- render 'lb-hreflang' -%}
   {%- render 'seo-schema' -%}
 
   {%- comment -%}── 9. CRITICAL CSS (inline) ──────────────────────────────────

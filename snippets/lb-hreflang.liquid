@@ -1,0 +1,36 @@
+{%- comment -%}
+  lb-hreflang.liquid
+  Version:      1.0.0
+  Last updated: 2026-05-18
+  Purpose:      Emits <link rel="alternate" hreflang="..."> tags for every
+                published locale on the store, plus an x-default to the
+                primary domain. Tells Google which URL serves which language
+                so /de/ and /fr/ paths aren't treated as duplicate content
+                of the English homepage.
+  Usage:        Rendered inside <head> in layout/theme.liquid, after seo-meta.
+  Dependencies: Shopify shop.published_locales, request.path, shop.primary_locale.
+{%- endcomment -%}
+{%- if shop.published_locales.size > 1 -%}
+  {%- liquid
+    # Build a relative path that strips any locale prefix already present.
+    # request.path is e.g. "/de/products/foo"; strip "/de" if it matches a locale code.
+    assign clean_path = request.path
+    for loc in shop.published_locales
+      assign loc_prefix = '/' | append: loc.iso_code
+      assign loc_prefix_slash = loc_prefix | append: '/'
+      if clean_path == loc_prefix
+        assign clean_path = '/'
+      elsif clean_path contains loc_prefix_slash
+        assign clean_path = clean_path | remove_first: loc_prefix
+      endif
+    endfor
+  -%}
+  {%- for loc in shop.published_locales -%}
+    {%- if loc.primary -%}
+      <link rel="alternate" hreflang="{{ loc.iso_code }}" href="{{ shop.url }}{{ clean_path }}">
+    {%- else -%}
+      <link rel="alternate" hreflang="{{ loc.iso_code }}" href="{{ shop.url }}/{{ loc.iso_code }}{{ clean_path }}">
+    {%- endif -%}
+  {%- endfor -%}
+  <link rel="alternate" hreflang="x-default" href="{{ shop.url }}{{ clean_path }}">
+{%- endif -%}
