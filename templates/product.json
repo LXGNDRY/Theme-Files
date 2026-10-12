@@ -167,7 +167,7 @@
               "type": "text",
               "name": "t:names.text",
               "settings": {
-                "text": "<p>Merch is <strong>true to size & unisex</strong>. Feel free to order your normal fit. We work closely with our manufacturers to ensure quality and premium textures.&nbsp;</p>",
+                "text": "<p>Legendary Branding apparel is <strong>true to size & unisex</strong>. Ordering in your regular letter size will allow a clean oversized look, while sizing up will allow for a baggy look. We work closely with our manufacturers to ensure quality fit and premium textures.&nbsp;</p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
