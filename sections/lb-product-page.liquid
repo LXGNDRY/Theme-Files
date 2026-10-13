@@ -404,10 +404,16 @@
             {%- if section.settings.shipping_text != blank -%}
               {{ section.settings.shipping_text }}
             {%- else -%}
-              <p>We ship worldwide — for free. Orders are processed within 1–2 business days. Domestic delivery takes 5–8 business days; international orders typically arrive within 10–20 business days depending on destination.</p>
-              <p>Returns are accepted within 30 days of delivery. Items must be unworn, unwashed, and in original condition. <a href="/pages/return-and-refund-policy" style="color:inherit;">Full return policy →</a></p>
+              {%- if shop.shipping_policy.body != blank -%}
+                <p><a href="{{ shop.shipping_policy.url }}">{{ 'content.view_shipping_policy' | t }}</a></p>
+              {%- endif -%}
+              {%- if shop.refund_policy.body != blank -%}
+                <p><a href="{{ shop.refund_policy.url }}">{{ 'content.view_return_policy' | t }}</a></p>
+              {%- endif -%}
             {%- endif -%}
-            <a class="lb-pdp__shipping-calc" href="{{ routes.root_url }}policies/shipping-policy">View shipping policy</a>
+            {%- if section.settings.shipping_text != blank and shop.shipping_policy.body != blank -%}
+              <a class="lb-pdp__shipping-calc" href="{{ shop.shipping_policy.url }}">{{ 'content.view_shipping_policy' | t }}</a>
+            {%- endif -%}
           </div>
         </details>
 
@@ -435,7 +441,7 @@
 </script>
 
 <script id="lb-pdp-config" type="application/json">
-  { "moneyFormat": {{ shop.money_format | json }}, "atcLabel": {{ section.settings.atc_label | default: 'Add to Cart' | json }} }
+  { "moneyFormat": {{ shop.money_format | json }}, "soldOutLabel": {{ 'products.product.sold_out' | t | json }}, "unavailableLabel": {{ 'products.product.unavailable' | t | json }}, "atcLabel": {{ section.settings.atc_label | default: 'Add to Cart' | json }} }
 </script>
 <script src="{{ 'lb-product-page.js' | asset_url }}" defer></script>
 
@@ -561,3 +567,4 @@
   ]
 }
 {% endschema %}
+
