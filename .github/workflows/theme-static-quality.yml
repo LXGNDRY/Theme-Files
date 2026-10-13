@@ -48,10 +48,14 @@ jobs:
             node --input-type=module --check < "$file"
           done
 
+      - name: Install pinned Liquid test renderer
+        run: npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund liquidjs@10.21.1
+
       - name: Purchase and cart regression checks
         run: |
           node tests/purchase-path.cjs
           node tests/cart-recovery.cjs
+          node tests/size-guide.cjs
 
   json:
     name: Shopify JSON/JSONC syntax
