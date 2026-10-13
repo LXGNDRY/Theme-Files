@@ -39,21 +39,14 @@
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 
   {%- comment -%}── 2. PRECONNECTS ────────────────────────────────────────────
-    Order matters: most latency-critical origins first.
-    GTM is first because it injects GA4 + ad pixels — warming it early
-    saves ~80ms on the first GTM payload. Shopify CDN second because
-    it serves every asset (JS, CSS, fonts, images).
-    Third-party pixels (FB, Pinterest, Snapchat) last — they load after
-    idle so their preconnects are advisory, not critical-path.
+    Reserve the early connection budget for Shopify's CDN. It serves the
+    storefront's LCP image, CSS, JavaScript and fonts. Marketing vendors load
+    after interaction or window load, so opening their connections here makes
+    them compete with the customer-visible critical path.
   {%- endcomment -%}
-  <link rel="preconnect" href="https://www.googletagmanager.com">
   <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
-  <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
-  <link rel="preconnect" href="https://s.pinimg.com" crossorigin>
-  <link rel="preconnect" href="https://sc-static.net" crossorigin>
-  <link rel="preconnect" href="https://checkout.shopify.com" crossorigin>
-  <link rel="preconnect" href="https://static.klaviyo.com" crossorigin>
+  <link rel="dns-prefetch" href="//www.googletagmanager.com">
   <link rel="dns-prefetch" href="//connect.facebook.net">
   <link rel="dns-prefetch" href="//s.pinimg.com">
   <link rel="dns-prefetch" href="//sc-static.net">
@@ -179,27 +172,19 @@
       if(document.visibilityState === 'hidden'){ loadGTM(); }
     }
     window.dataLayer.push({'gtm.start':new Date().getTime(),event:'gtm.js'});
-    // Conversion-critical page types — load GTM immediately on DOMContentLoaded
-    // to ensure session context is captured before any funnel events fire.
-    var pageType = {{ request.page_type | json }};
-    var CONVERSION_PAGES = ['product','collection','cart','index'];
-    var isConversionPage = CONVERSION_PAGES.indexOf(pageType) !== -1;
     function scheduleGTM(){
-      if(isConversionPage){
-        // Load immediately — do not defer on conversion-critical pages
-        loadGTM();
-        return;
-      }
-      // Non-conversion pages: 3-tier idle strategy
+      // dataLayer queues funnel events until GTM is ready. Load on the first
+      // customer interaction, after the page's load event, or on exit. This
+      // keeps analytics complete without making tag vendors compete with LCP.
       INTERACTION_EVENTS.forEach(function(e){
         document.addEventListener(e,onInteract,{passive:true,capture:true,once:true});
       });
       document.addEventListener('visibilitychange',onHide,{capture:true});
       window.addEventListener('pagehide',loadGTM,{once:true});
-      if('requestIdleCallback' in window){
-        requestIdleCallback(loadGTM,{timeout:4000});
+      if(document.readyState === 'complete'){
+        loadGTM();
       } else {
-        setTimeout(loadGTM,4000);
+        window.addEventListener('load',loadGTM,{once:true});
       }
     }
     if(document.readyState==='loading'){
