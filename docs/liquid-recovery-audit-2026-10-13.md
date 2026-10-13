@@ -12,7 +12,7 @@
 2. `layout/theme.liquid` implements GTM bootstrapping, delayed loading, and analytics suppression for preview-like contexts. Verify that real shoppers with legitimate URL parameters are not inadvertently suppressed.
 3. `snippets/lb-consent-mode-v2.liquid` sets conservative consent defaults and updates from Shopify's customerPrivacy API. Verify actual consent behavior without bypassing user choice.
 4. `templates/product.json` includes Judge.me review preview, product price, variant picker, and buy buttons. A disabled product text block mentions free shipping; verify all visible shipping claims against actual Shopify checkout settings.
-5. `robots.txt.liquid` was not found at the repository root. Shopify custom robots template convention is `templates/robots.txt.liquid`; check that location before concluding a file is absent.
+5. `templates/robots.txt.liquid` **is present** on `edits-here-2` (159 lines; header identifies v3.1.0 dated 2026-08-26). Its comments describe locale and crawler directives; inspect rendered robots output and Search Console evidence before modifying it.
 6. Repository default branch is `edits-here`, but user explicitly requires `edits-here-2`. Do not confuse default branch with published Shopify theme.
 
 ## Next engineering tasks
