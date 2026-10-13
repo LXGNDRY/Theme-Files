@@ -17,7 +17,7 @@
         "announcement_zprb7R": {
           "type": "_announcement",
           "settings": {
-            "text": "<strong>SUMMER SALES — Free Shipping U.S.A ($150) INTERNATIONAL ($100)</strong>",
+            "text": "<strong>FALL SEASON SALES — Free Shipping On All Orders</strong>",
             "link": "",
             "font": "var(--font-body--family)",
             "font_size": "1rem",
@@ -59,7 +59,7 @@
           "static": true,
           "settings": {
             "menu": "main-menu-copy1",
-            "color_scheme": "scheme-2",
+            "color_scheme": "scheme-1",
             "type_font_primary_size": "1.125rem",
             "menu_font_style": "inverse_large",
             "type_font_primary_link": "body",
@@ -78,16 +78,16 @@
         }
       },
       "settings": {
-        "logo_position": "left",
+        "logo_position": "center",
         "menu_position": "center",
         "menu_row": "bottom",
         "customer_account_menu": "main-menu-copy1",
         "show_search": true,
         "search_position": "right",
         "search_row": "top",
-        "show_country": true,
+        "show_country": false,
         "country_selector_style": true,
-        "show_language": true,
+        "show_language": false,
         "localization_font": "body",
         "localization_font_size": "0.875rem",
         "localization_position": "right",
@@ -102,8 +102,8 @@
         "actions_font_size": "0.875rem",
         "actions_font": "body",
         "actions_text_case": "none",
-        "color_scheme_top": "scheme-2",
-        "color_scheme_bottom": "scheme-2",
+        "color_scheme_top": "scheme-1",
+        "color_scheme_bottom": "scheme-1",
         "color_scheme_transparent": "scheme-5",
         "enable_transparent_header_home": true,
         "home_color_scheme": "inverse",

@@ -17,6 +17,7 @@
           "name": "Title",
           "settings": {
             "text": "<h1><em><strong>{{ closest.page.title }}</strong></em></h1>",
+            "bleed": false,
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",
@@ -51,7 +52,7 @@
       "settings": {
         "content_direction": "column",
         "gap": 32,
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-5",
         "padding-block-start": 40,
         "padding-block-end": 80
       }

@@ -185,6 +185,18 @@ Before finishing, Claude should:
 - Prefer reusable components over duplicated templates.
 - Prefer maintainability over novelty.
 
+## Established conventions (from real changes)
+
+These are patterns already in use in this repo, captured here so future changes follow one standard instead of reinventing it per PR (standardized work).
+
+- **Locale key namespaces**: visible customer-facing copy goes under `content.*` in `locales/en.default.json`; aria-labels and other assistive-tech-only text go under `accessibility.*`. New keys must be propagated to every other locale file (English placeholder text is fine — non-English merchants translate it later) so Theme Check's `MatchingTranslations` check stays green.
+- **Merchant-editable claims**: any customer-facing number or claim that could go stale (review counts, countries shipped to, ratings, etc.) must be a theme setting with a default sourced from real, verified data (pulled live via the Shopify Admin API, never guessed or estimated), not a hardcoded string. Wording must describe only what the underlying data actually measures — e.g. a ship-to-country count is a shipping-availability fact, not evidence of customer trust in every one of those countries.
+- **Cart trust badges**: follow the `.lb-cart-trust__item` (icon SVG + text span) pattern already used in `snippets/cart-summary.liquid` / `assets/lb-cart-ui.css` — reuse it for new badges rather than inventing new markup or styling.
+- **Comment hygiene (Theme Check safety)**: never write literal tag-shaped text (`<script>`, `<link>`, `<head>`, `<body>`, `<html>`, etc.) inside a `{% comment %}` body — Theme Check's HTML-aware parser tokenizes it as real markup and corrupts parsing of the real tags that follow. Describe tags in prose instead (e.g. "a script tag" rather than `<script>`). Inside real `<script>` blocks, always put a space around comparison operators (`i < NOISE.length`, not `i<NOISE.length`) for the same reason.
+- **Liquid string literals**: Liquid does not support backslash-escaping inside quoted strings. If a string needs an apostrophe, wrap it in double quotes (`"You're in"`) rather than escaping a single-quoted string.
+- **Pull requests**: use `.github/pull_request_template.md`. Run `shopify theme check` locally before pushing. A CI failure unrelated to the diff gets one documented standing-down comment on the PR (naming the failure and confirming it's pre-existing against the base branch) rather than being silently ignored or worked around.
+- **Dead-code removal**: before deleting a section, snippet, or asset, grep-verify zero references across the repo (JSON `"type"`/`"name"` fields in `templates/`/`sections/config`, `render`/`section` calls, and comments that might name it) and document that verification in the PR description. Per the workflow rules above, deletions still need the user's go-ahead — treat a documented, approved plan as that go-ahead.
+
 ## Final rule
 
 If a change makes the theme harder to understand, harder to edit, or harder to deploy safely, simplify it.

@@ -66,6 +66,8 @@
     "price_filter_low": "Low price",
     "price_filter_high": "High price",
     "trust_signals": "Trust signals",
+    "trust_ships_worldwide": "Ships worldwide",
+    "trust_reviews": "Customer reviews",
     "product_categories": "Product categories",
     "collections": "Collections",
     "shop_by_category": "Shop by category",
@@ -167,6 +169,10 @@
     "cart_title": "Cart",
     "cart_subtotal": "Subtotal",
     "cart_total": "Cart total",
+    "cart_ships_to_countries": "Ships to {{ count }}+ countries",
+    "cart_review_summary": "{{ count }}+ reviews · {{ rating }}★",
+    "cart_international_reassurance": "We ship to {{ count }}+ countries — secure international checkout",
+    "cart_international_support_html": "Having trouble at checkout? Email us at <a href=\"mailto:{{ email }}\">{{ email }}</a> and we'll help sort it out.",
     "checkout": "CHECKOUT ->",
     "razorpay_label": "Pay with Razorpay",
     "ai_chat_greeting": "Hi! Ask me anything about Legendary Branding — products, sizing, shipping, or returns.",
@@ -375,7 +381,8 @@
       },
       "general": {
         "cart": "Bag",
-        "back_to_cart": "Return to bag"
+        "back_to_cart": "Return to bag",
+        "pay_now_button_label": "Place My Order"
       },
       "order_payment_collection": {
         "pay_now": "Submit Payment"

@@ -9,11 +9,11 @@
  */
 {
   "current": {
-    "logo": "shopify://shop_images/Hype_-_illustration.svg",
-    "logo_inverse": "shopify://shop_images/Hype_-_illustration_1.svg",
-    "logo_height": 63,
-    "logo_height_mobile": 48,
-    "favicon": "shopify://shop_images/Hype_-_illustration.svg",
+    "logo": "shopify://shop_images/Timeless_Style_-_Artboard_22_4.png",
+    "logo_inverse": "shopify://shop_images/Timeless_Style_-_Artboard_22_3.png",
+    "logo_height": 75,
+    "logo_height_mobile": 60,
+    "favicon": "shopify://shop_images/Timeless_Style_-_Artboard_22_2.png",
     "type_body_font": "ovo_n4",
     "type_subheading_font": "bebas_neue_n4",
     "type_heading_font": "bebas_neue_n4",
@@ -21,11 +21,11 @@
     "type_size_paragraph": "14",
     "type_line_height_paragraph": "body-tight",
     "type_font_h1": "heading",
-    "type_size_h1": "120",
+    "type_size_h1": "88",
     "type_line_height_h1": "display-tight",
     "type_case_h1": "uppercase",
     "type_font_h2": "heading",
-    "type_size_h2": "88",
+    "type_size_h2": "120",
     "type_line_height_h2": "display-tight",
     "type_letter_spacing_h2": "heading-tight",
     "type_font_h3": "heading",
@@ -48,10 +48,12 @@
     "type_letter_spacing_h6": "heading-tight",
     "type_case_h6": "uppercase",
     "page_width": "narrow",
-    "page_transition_enabled": true,
+    "page_transition_enabled": false,
     "transition_to_main_product": true,
     "card_hover_effect": "subtle-zoom",
     "badge_corner_radius": 0,
+    "badge_sale_color_scheme": "scheme-2",
+    "badge_sold_out_color_scheme": "scheme-2",
     "badge_text_transform": "uppercase",
     "primary_button_border_width": 0,
     "button_border_radius_primary": 0,
@@ -63,18 +65,24 @@
     "button_text_case_secondary": "uppercase",
     "pills_border_radius": 40,
     "cart_type": "drawer",
-    "product_title_case": "uppercase",
+    "product_title_case": "default",
     "cart_price_font": "body",
     "auto_open_cart_drawer": false,
-    "show_cart_note": true,
-    "show_add_discount_code": false,
-    "show_installments": true,
+    "show_cart_note": false,
+    "show_add_discount_code": true,
+    "show_installments": false,
     "show_accelerated_checkout_buttons": true,
+    "cart_review_count": 4000,
     "empty_cart_button_link": "shopify://collections/all-products",
     "cart_thumbnail_border": "none",
     "cart_thumbnail_border_radius": 8,
-    "drawer_color_scheme": "scheme-2",
-    "icon_stroke": "thin",
+    "ai_chat_enabled": false,
+    "ai_chat_backend_base": "",
+    "ai_chat_greeting": "",
+    "ai_chat_position": "bottom-right",
+    "ai_chat_authenticated_features_enabled": false,
+    "drawer_color_scheme": "scheme-5",
+    "icon_stroke": "default",
     "input_border_width": 0,
     "inputs_border_radius": 8,
     "type_preset": "h6",
@@ -83,9 +91,9 @@
     "popover_border": "none",
     "popover_drop_shadow": false,
     "currency_code_enabled_product_pages": true,
-    "currency_code_enabled_product_cards": false,
+    "currency_code_enabled_product_cards": true,
     "currency_code_enabled_cart_items": true,
-    "quick_add_color_scheme": "scheme-2",
+    "quick_add_color_scheme": "scheme-5",
     "show_second_image_on_hover": true,
     "product_card_carousel": true,
     "product_corner_radius": 0,
@@ -99,11 +107,6 @@
     "razorpay_badge_enabled": false,
     "razorpay_gcp_base": "https://lb-razorpay-backend-exy37drh4q-uc.a.run.app",
     "razorpay_key_id": "rzp_live_THxiCiKHbW3rMy",
-    "ai_chat_enabled": false,
-    "ai_chat_backend_base": "",
-    "ai_chat_greeting": "",
-    "ai_chat_position": "bottom-right",
-    "ai_chat_authenticated_features_enabled": false,
     "content_for_index": [],
     "blocks": {
       "14060646107696862457": {
@@ -111,33 +114,10 @@
         "disabled": false,
         "settings": {}
       },
-      "6159598353363395418": {
-        "type": "shopify://apps/google-youtube/blocks/store_widget/14ec7bd0-ac77-49a9-9417-90752398bdff",
-        "disabled": false,
-        "settings": {
-          "widget_position": "LEFT_BOTTOM",
-          "side_margin": 36,
-          "bottom_margin": 36,
-          "mobile_side_margin": 16,
-          "mobile_bottom_margin": 46
-        }
-      },
       "855628211100114053": {
         "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507",
         "disabled": false,
         "settings": {}
-      },
-      "17127118858292894184": {
-        "type": "shopify://apps/aftership-tracking/blocks/protection/019a0a96-1a0c-71ad-8ce2-ce2d49c2d945",
-        "disabled": false,
-        "settings": {
-          "logo-display": true,
-          "title-text": "Checkout plus",
-          "title-color": "#232933",
-          "title-font-size": 14,
-          "desc-color": "#6C717A",
-          "desc-font-size": 12
-        }
       },
       "8419966592507824873": {
         "type": "shopify://apps/seolab-seo-optimizer/blocks/app_embed/faf700f6-3b71-45c3-86d4-83ea9f7d9216",
@@ -146,7 +126,7 @@
       },
       "9670189827046205946": {
         "type": "shopify://apps/hextom-translate-and-currency/blocks/app-block/b927a799-be04-4b97-9efb-5c8f0290a68e",
-        "disabled": true,
+        "disabled": false,
         "settings": {}
       }
     },

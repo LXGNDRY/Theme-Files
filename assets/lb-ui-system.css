@@ -613,88 +613,11 @@ html[data-theme="dark"] .lb-icon-sun  { display: block; }
   border: 0;
 }
 
-/* ─── 18. CART ──────────────────────────────────────────────────────────────────────────── */
-
-/* Cart localization selector */
-.lb-cart-localization {
-  margin-top: 16px;
-  border-top: 1px solid var(--lb-border);
-  padding-top: 12px;
-}
-
-.lb-cart-localization__disclosure {
-  width: 100%;
-}
-
-.lb-cart-localization__trigger {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  list-style: none;
-  padding: 8px 0;
-  font-size: 0.8rem;
-  opacity: 0.7;
-  transition: opacity var(--lb-dur-fast) var(--lb-ease);
-}
-.lb-cart-localization__trigger::-webkit-details-marker { display: none; }
-.lb-cart-localization__trigger:hover { opacity: 1; }
-
-.lb-cart-localization__flag { font-size: 1rem; }
-
-.lb-cart-localization__label {
-  flex: 1;
-  font-size: 0.78rem;
-}
-
-.lb-cart-localization__currency {
-  opacity: 0.6;
-  font-size: 0.72rem;
-}
-
-.lb-cart-localization__caret {
-  width: 12px;
-  height: 12px;
-  transition: transform var(--lb-dur-fast) var(--lb-ease);
-}
-details[open] .lb-cart-localization__caret { transform: rotate(180deg); }
-
-.lb-cart-localization__panel {
-  padding: 8px 0 4px;
-}
-
 /* ─── 19. PICKUP AVAILABILITY — hide site-wide ──────────────────────────────── */
 pickup-availability,
 [class*="pickup-availability"],
 [data-pickup-availability] {
   display: none !important;
-}
-
-/* ─── 20. CART LOCALIZATION DROPDOWN PANEL ──────────────────────────────── */
-
-.lb-cart-localization .localization-form__select-wrapper,
-.lb-cart-localization .localization-form .disclosure {
-  width: 100%;
-}
-
-.lb-cart-localization .localization-form select,
-.lb-cart-localization .localization-form .disclosure__button {
-  width: 100%;
-  font-size: 0.8rem;
-  padding: 8px 10px;
-  border: 1px solid var(--lb-border);
-  border-radius: var(--lb-radius);
-  background: var(--lb-bg);
-  color: var(--lb-fg);
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-.lb-cart-localization .localization-form select:focus,
-.lb-cart-localization .localization-form .disclosure__button:focus {
-  outline: 2px solid var(--lb-accent);
-  outline-offset: 2px;
 }
 
 /* ─── 21. BODY SCROLL LOCK (cart drawer open) ─────────────────────────── */
