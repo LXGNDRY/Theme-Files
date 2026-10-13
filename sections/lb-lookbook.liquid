@@ -32,6 +32,10 @@
               assign lb_slot = '67vw'
             endif
         endcase
+        assign lb_tablet = '100vw'
+        if section.blocks.size >= 2 and section.blocks.size <= 6 and forloop.index > 1
+          assign lb_tablet = '50vw'
+        endif
       -%}
       <div class="lb-lookbook__cell lb-lookbook__cell--{{ forloop.index }}" {{ block.shopify_attributes }}>
         {%- if block.settings.image != blank -%}
@@ -41,7 +45,7 @@
             <img
               src="{{ block.settings.image | image_url: width: 800, format: 'webp'}}"
               srcset="{{ block.settings.image | image_url: width: 400, format: 'webp'}} 400w, {{ block.settings.image | image_url: width: 800, format: 'webp'}} 800w, {{ block.settings.image | image_url: width: 1200, format: 'webp'}} 1200w, {{ block.settings.image | image_url: width: 1600, format: 'webp'}} 1600w"
-              sizes="(max-width: 749px) 100vw, {{ lb_slot }}"
+              sizes="(max-width: 499px) 100vw, (max-width: 749px) {{ lb_tablet }}, {{ lb_slot }}"
               alt="{{ block.settings.image.alt | escape }}"
               width="{{ block.settings.image.width }}"
               height="{{ block.settings.image.height }}"
@@ -157,10 +161,12 @@
   .lb-lookbook__media-wrap:hover .lb-lookbook__img {
     transform: scale(1.04);
   }
-  .lb-lookbook__media-wrap:hover .lb-lookbook__overlay {
+  .lb-lookbook__media-wrap:hover .lb-lookbook__overlay,
+  .lb-lookbook__link:focus-visible .lb-lookbook__overlay {
     opacity: 1;
   }
-  .lb-lookbook__media-wrap:hover .lb-lookbook__caption {
+  .lb-lookbook__media-wrap:hover .lb-lookbook__caption,
+  .lb-lookbook__link:focus-visible .lb-lookbook__caption {
     opacity: 1;
   }
 }
