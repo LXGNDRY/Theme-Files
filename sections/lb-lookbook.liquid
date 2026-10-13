@@ -9,6 +9,30 @@
 
   <div class="lb-lookbook__grid lb-lookbook__grid--{{ section.blocks.size }}">
     {%- for block in section.blocks -%}
+      {%- liquid
+        assign lb_slot = '100vw'
+        case section.blocks.size
+          when 2
+            assign lb_slot = '50vw'
+          when 3
+            assign lb_slot = '67vw'
+            if forloop.index == 2
+              assign lb_slot = '34vw'
+            endif
+          when 4
+            assign lb_slot = '34vw'
+          when 5
+            assign lb_slot = '34vw'
+            if forloop.index == 1
+              assign lb_slot = '67vw'
+            endif
+          when 6
+            assign lb_slot = '34vw'
+            if forloop.index == 1 or forloop.index == 4
+              assign lb_slot = '67vw'
+            endif
+        endcase
+      -%}
       <div class="lb-lookbook__cell lb-lookbook__cell--{{ forloop.index }}" {{ block.shopify_attributes }}>
         {%- if block.settings.image != blank -%}
           {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}" class="lb-lookbook__link">{%- endif -%}
@@ -16,8 +40,8 @@
           <figure class="lb-lookbook__media-wrap">
             <img
               src="{{ block.settings.image | image_url: width: 800, format: 'webp'}}"
-              srcset="{{ block.settings.image | image_url: width: 400, format: 'webp'}} 400w, {{ block.settings.image | image_url: width: 800, format: 'webp'}} 800w, {{ block.settings.image | image_url: width: 1200, format: 'webp'}} 1200w"
-              sizes="(max-width: 749px) 100vw, 50vw"
+              srcset="{{ block.settings.image | image_url: width: 400, format: 'webp'}} 400w, {{ block.settings.image | image_url: width: 800, format: 'webp'}} 800w, {{ block.settings.image | image_url: width: 1200, format: 'webp'}} 1200w, {{ block.settings.image | image_url: width: 1600, format: 'webp'}} 1600w"
+              sizes="(max-width: 749px) 100vw, {{ lb_slot }}"
               alt="{{ block.settings.image.alt | escape }}"
               width="{{ block.settings.image.width }}"
               height="{{ block.settings.image.height }}"
