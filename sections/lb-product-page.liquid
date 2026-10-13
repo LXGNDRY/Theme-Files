@@ -405,14 +405,14 @@
               {{ section.settings.shipping_text }}
             {%- else -%}
               {%- if shop.shipping_policy.body != blank -%}
-                <p><a href="{{ shop.shipping_policy.url }}">{{ 'content.view_shipping_policy' | t }}</a></p>
+                <p><a href="{{ shop.shipping_policy.url }}">{{ shop.shipping_policy.title | escape }}</a></p>
               {%- endif -%}
               {%- if shop.refund_policy.body != blank -%}
-                <p><a href="{{ shop.refund_policy.url }}">{{ 'content.view_return_policy' | t }}</a></p>
+                <p><a href="{{ shop.refund_policy.url }}">{{ shop.refund_policy.title | escape }}</a></p>
               {%- endif -%}
             {%- endif -%}
             {%- if section.settings.shipping_text != blank and shop.shipping_policy.body != blank -%}
-              <a class="lb-pdp__shipping-calc" href="{{ shop.shipping_policy.url }}">{{ 'content.view_shipping_policy' | t }}</a>
+              <a class="lb-pdp__shipping-calc" href="{{ shop.shipping_policy.url }}">{{ shop.shipping_policy.title | escape }}</a>
             {%- endif -%}
           </div>
         </details>
