@@ -19,7 +19,7 @@
                 (before the page is fully rendered, so it is in the initial DOM
                 Google's renderer sees).
   Usage:        Rendered in the document head by layout/theme.liquid, after seo-meta.
-  Cost:         Under 1KB inline, no network, runs once synchronously.
+  Cost:         under 1KB inline, no network, runs once synchronously.
 {%- endcomment -%}
 <script>
 (function(){
@@ -38,7 +38,7 @@
     ];
     var params = new URLSearchParams(qs);
     var hit = false;
-    for (var i = 0; i < NOISE.length; i++) { if (params.has(NOISE[i])) { hit = true; break; } }
+    for(var i=0; i < NOISE.length; i++){ if(params.has(NOISE[i])){ hit = true; break; } }
     if(!hit) return;
     // Do not duplicate or downgrade an existing robots meta.
     if(document.querySelector('meta[name="robots"]')) return;

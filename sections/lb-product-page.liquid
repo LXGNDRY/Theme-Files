@@ -14,9 +14,17 @@
   if current_variant.compare_at_price > current_variant.price
     assign on_sale = true
   endif
-  assign show_size_guide  = false
+  assign size_guide_html = product.metafields.custom.size_guide.value
+  if size_guide_html == blank and product.description contains '<table'
+    assign size_guide_parts = product.description | split: '<table'
+    for size_guide_part in size_guide_parts offset: 1
+      assign size_guide_table = '<table' | append: size_guide_part | split: '</table>' | first | append: '</table>'
+      assign size_guide_html = size_guide_html | append: size_guide_table
+    endfor
+  endif
+  assign show_size_guide = false
   for option in product.options
-    if option == 'Size'
+    if option == 'Size' and size_guide_html != blank
       assign show_size_guide = true
     endif
   endfor
@@ -55,34 +63,18 @@
 </div>
 
 {%- comment -%} ── Size guide modal ── {%- endcomment -%}
+{%- if show_size_guide -%}
 <div class="lb-pdp-sg-overlay" id="lb-pdp-sg-overlay" role="dialog" aria-modal="true" aria-label="Size guide">
   <div class="lb-pdp-sg-modal">
     <div class="lb-pdp-sg-modal__header">
       <span class="lb-pdp-sg-modal__title">Size Guide</span>
       <button class="lb-pdp-sg-modal__close" id="lb-pdp-sg-close" aria-label="Close size guide">&#215;</button>
     </div>
-    {%- if product.metafields.custom.size_guide != blank -%}
-      <div>{{ product.metafields.custom.size_guide.value }}</div>
-    {%- else -%}
-      <p style="font-size:.75rem;color:rgba(10,10,10,.5);margin-bottom:1rem;">All measurements in inches (in) — measure over a flat surface.</p>
-      <table class="lb-pdp-sg-table">
-        <thead>
-          <tr>
-            <th>Size</th><th>Chest</th><th>Length</th><th>Sleeve</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>S</td><td>38–40</td><td>27</td><td>33</td></tr>
-          <tr><td>M</td><td>40–42</td><td>28</td><td>34</td></tr>
-          <tr><td>L</td><td>42–44</td><td>29</td><td>35</td></tr>
-          <tr><td>XL</td><td>44–46</td><td>30</td><td>36</td></tr>
-          <tr><td>2XL</td><td>46–48</td><td>31</td><td>37</td></tr>
-        </tbody>
-      </table>
-      <p class="lb-pdp-sg-hint">Our pieces run true to size. For an oversized fit, size up one. If you're between sizes, size down for a cleaner shoulder line.</p>
-    {%- endif -%}
+    <div>{{ size_guide_html }}</div>
   </div>
 </div>
+
+{%- endif -%}
 
 {%- comment -%} ── Main product section ── {%- endcomment -%}
 <section class="lb-pdp" id="lb-pdp-section">
@@ -404,10 +396,16 @@
             {%- if section.settings.shipping_text != blank -%}
               {{ section.settings.shipping_text }}
             {%- else -%}
-              <p>We ship worldwide — for free. Orders are processed within 1–2 business days. Domestic delivery takes 5–8 business days; international orders typically arrive within 10–20 business days depending on destination.</p>
-              <p>Returns are accepted within 30 days of delivery. Items must be unworn, unwashed, and in original condition. <a href="/pages/return-and-refund-policy" style="color:inherit;">Full return policy →</a></p>
+              {%- if shop.shipping_policy.body != blank -%}
+                <p><a href="{{ shop.shipping_policy.url }}">{{ shop.shipping_policy.title | escape }}</a></p>
+              {%- endif -%}
+              {%- if shop.refund_policy.body != blank -%}
+                <p><a href="{{ shop.refund_policy.url }}">{{ shop.refund_policy.title | escape }}</a></p>
+              {%- endif -%}
             {%- endif -%}
-            <a class="lb-pdp__shipping-calc" href="{{ routes.root_url }}policies/shipping-policy">View shipping policy</a>
+            {%- if section.settings.shipping_text != blank and shop.shipping_policy.body != blank -%}
+              <a class="lb-pdp__shipping-calc" href="{{ shop.shipping_policy.url }}">{{ shop.shipping_policy.title | escape }}</a>
+            {%- endif -%}
           </div>
         </details>
 
@@ -435,7 +433,7 @@
 </script>
 
 <script id="lb-pdp-config" type="application/json">
-  { "moneyFormat": {{ shop.money_format | json }}, "atcLabel": {{ section.settings.atc_label | default: 'Add to Cart' | json }} }
+  { "moneyFormat": {{ shop.money_format | json }}, "soldOutLabel": {{ 'products.product.sold_out' | t | json }}, "unavailableLabel": {{ 'products.product.unavailable' | t | json }}, "atcLabel": {{ section.settings.atc_label | default: 'Add to Cart' | json }} }
 </script>
 <script src="{{ 'lb-product-page.js' | asset_url }}" defer></script>
 
@@ -561,3 +559,4 @@
   ]
 }
 {% endschema %}
+

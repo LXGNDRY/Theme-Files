@@ -277,7 +277,7 @@ class ProductFormComponent extends Component {
     if (!variantIdInput?.value) return null;
 
     try {
-      const response = await fetch('/cart.js');
+      const response = await fetch(`${Theme.routes.cart_url}.js`);
       const cart = await response.json();
 
       this.#updateCartQuantityFromData(cart);

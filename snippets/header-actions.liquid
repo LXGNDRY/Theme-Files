@@ -85,31 +85,21 @@
     <div
       class="account-button header-actions__action{% if display_style == 'text' %} account-button--text{% endif %} color-{{ settings.popover_color_scheme }}"
     >
-      <shopify-account
-        menu="{{ customer_account_menu }}"
+      <a
+        href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+        class="account-button__link"
+        aria-label="{{ 'content.account_title' | t }}"
         {% if account_actions_style != blank %}
           style="{{ account_actions_style }}"
         {% endif %}
       >
-        {% if customer %}
-          <div class="account-button__fallback"></div>
-        {% else %}
-          <span
-            slot="signed-out-avatar"
-            class="account-button__text header-actions__text-style {% if display_style == 'icon' %}hidden{% else %}mobile:hidden{% endif %}"
-          >
-            {{ 'content.account_title' | t }}
-          </span>
-
-          <span
-            slot="signed-out-avatar"
-            class="{% if display_style != 'icon' %}desktop:hidden{% endif %}"
-            aria-hidden="true"
-          >
-            {{ account_icon }}
-          </span>
-        {% endif %}
-      </shopify-account>
+        <span class="account-button__text header-actions__text-style {% if display_style == 'icon' %}hidden{% else %}mobile:hidden{% endif %}">
+          {{ 'content.account_title' | t }}
+        </span>
+        <span class="{% if display_style != 'icon' %}desktop:hidden{% endif %}" aria-hidden="true">
+          {{ account_icon }}
+        </span>
+      </a>
     </div>
   {% endif %}
 
@@ -265,3 +255,17 @@
   fetchpriority="low"
 ></script>
 
+
+{% stylesheet %}
+  .account-button__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    color: inherit;
+    text-decoration: none;
+    font-family: var(--header-actions-font-family, inherit);
+    font-weight: var(--header-actions-font-weight, inherit);
+  }
+{% endstylesheet %}

@@ -65,7 +65,7 @@ jobs:
           declare -A URLS=(
             [home]="${STORE_ORIGIN}/?preview_theme_id=${PREVIEW_THEME_ID}"
             [collection]="${STORE_ORIGIN}/collections/shirts-tops?preview_theme_id=${PREVIEW_THEME_ID}"
-            [product]="${STORE_ORIGIN}/products/unisex-boxy-t-shirt-280gsm?preview_theme_id=${PREVIEW_THEME_ID}"
+            [product]="${STORE_ORIGIN}/products/heavyweight-oversized-hoodie-460gsm?preview_theme_id=${PREVIEW_THEME_ID}"
             [cart]="${STORE_ORIGIN}/cart?preview_theme_id=${PREVIEW_THEME_ID}"
           )
 

@@ -2,10 +2,7 @@ import { Component } from '@theme/component';
 import {
   fetchConfig,
   debounce,
-  onAnimationEnd,
-  prefersReducedMotion,
   resetShimmer,
-  startViewTransition,
 } from '@theme/utilities';
 import { morphSection, sectionRenderer } from '@theme/section-renderer';
 import {
@@ -82,47 +79,10 @@ class CartItemsComponent extends Component {
    * @param {number} line - The line item index.
    */
   onLineItemRemove(line) {
-    this.updateQuantity({
+    return this.updateQuantity({
       line,
       quantity: 0,
       action: 'clear',
-    });
-
-    const cartItemRowToRemove = this.refs.cartItemRows[line - 1];
-
-    if (!cartItemRowToRemove) return;
-
-    const rowsToRemove = [
-      cartItemRowToRemove,
-      // Get all nested lines of the row to remove
-      ...this.refs.cartItemRows.filter((row) => row.dataset.parentKey === cartItemRowToRemove.dataset.key),
-    ];
-
-    // If the cart item row is the last row, optimistically trigger the cart empty state
-    const isEmptyCart = rowsToRemove.length == this.refs.cartItemRows.length;
-
-    const template = document.getElementById('empty-cart-template');
-    if (isEmptyCart && template instanceof HTMLTemplateElement) {
-      const clone = document.importNode(template.content, true);
-
-      startViewTransition(() => {
-        this.replaceChildren(clone);
-      }, [this.isDrawer ? 'empty-cart-drawer' : 'empty-cart-page']);
-
-      return;
-    }
-
-    // Add class to the row to trigger the animation
-    rowsToRemove.forEach((row) => {
-      const remove = () => row.remove();
-
-      if (prefersReducedMotion()) return remove();
-
-      row.style.setProperty('--row-height', `${row.clientHeight}px`);
-      row.classList.add('removing');
-
-      // Remove the row after the animation ends
-      onAnimationEnd(row, remove);
     });
   }
 
@@ -145,7 +105,8 @@ class CartItemsComponent extends Component {
     // what the user typed without waiting for the round-trip.
     const quantitySelector = this.refs.quantitySelectors?.[line - 1];
     const quantityInput = quantitySelector?.querySelector('input');
-    const previousValue = quantityInput?.value;
+    const previousValue = quantityInput?.defaultValue;
+    let mutationConfirmed = false;
     if (quantityInput) quantityInput.value = String(quantity);
 
     const cartItemsComponents = document.querySelectorAll('cart-items-component');
@@ -165,12 +126,15 @@ class CartItemsComponent extends Component {
 
     cartTotal?.shimmer();
 
-    fetch(`${Theme.routes.cart_change_url}`, fetchConfig('json', { body }))
-      .then((response) => {
-        return response.text();
+    return fetch(`${Theme.routes.cart_change_url}`, fetchConfig('json', { body }))
+      .then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) {
+          data.errors = data.description || data.message || Theme.translations.cart_update_error;
+        }
+        return data;
       })
-      .then((responseText) => {
-        const parsedResponseText = JSON.parse(responseText);
+      .then((parsedResponseText) => {
 
         resetShimmer(this);
 
@@ -179,14 +143,9 @@ class CartItemsComponent extends Component {
           return;
         }
 
-        const newSectionHTML = new DOMParser().parseFromString(
-          parsedResponseText.sections[this.sectionId],
-          'text/html'
-        );
-
-        // Grab the new cart item count from a hidden element
-        const newCartHiddenItemCount = newSectionHTML.querySelector('[ref="cartItemCount"]')?.textContent;
-        const newCartItemCount = newCartHiddenItemCount ? parseInt(newCartHiddenItemCount, 10) : 0;
+        mutationConfirmed = true;
+        const sectionHTML = parsedResponseText.sections?.[this.sectionId];
+        const newCartItemCount = parsedResponseText.item_count;
 
         // Update data-cart-quantity for all matching variants
         this.#updateQuantitySelectors(parsedResponseText);
@@ -199,14 +158,22 @@ class CartItemsComponent extends Component {
           })
         );
 
-        morphSection(this.sectionId, parsedResponseText.sections[this.sectionId], { mode: this.isDrawer ? 'hydration' : 'full' });
+        if (typeof sectionHTML !== 'string') {
+          return sectionRenderer.renderSection(this.sectionId, { cache: false });
+        }
+        morphSection(this.sectionId, sectionHTML, { mode: this.isDrawer ? 'hydration' : 'full' });
 
         this.#updateCartQuantitySelectorButtonStates();
       })
       .catch((error) => {
         console.error(error);
-        // Roll back optimistic quantity update on network failure
-        if (quantityInput && previousValue !== undefined) quantityInput.value = previousValue;
+        if (!mutationConfirmed && quantityInput && previousValue !== undefined) quantityInput.value = previousValue;
+        const errorText = this.refs[`cartItemError-${line}`];
+        const errorContainer = this.refs[`cartItemErrorContainer-${line}`];
+        if (errorText && errorContainer) {
+          errorText.textContent = Theme.translations.cart_update_error;
+          errorContainer.classList.remove('hidden');
+        }
         resetShimmer(this);
       })
       .finally(() => {
