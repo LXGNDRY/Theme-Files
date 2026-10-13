@@ -56,6 +56,7 @@ jobs:
           node tests/purchase-path.cjs
           node tests/cart-recovery.cjs
           node tests/size-guide.cjs
+          node tests/account-link.cjs
 
   json:
     name: Shopify JSON/JSONC syntax
