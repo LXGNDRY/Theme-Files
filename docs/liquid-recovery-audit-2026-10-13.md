@@ -24,3 +24,12 @@
 
 ## Release gate / rollback
 Changes remain on this audit branch and must target `edits-here-2` in a draft PR. Revert the PR or delete the working branch to roll back code-only audit additions. Production changes require a verified theme ID, backup, smoke-test results and owner approval.
+
+## Additional read-only findings (2026-10-13)
+- `snippets/cart-summary.liquid` displays a **30-day returns** trust claim. Confirm against the current published returns policy before treating it as verified.
+- The same snippet tells international customers import duties, taxes or customs fees are their responsibility. Compare this against actual Shopify duties/tax configuration and brand messaging; a contradiction may undermine checkout trust.
+- `templates/product.json` sets `show_tax_info: false` for the price block. Assess whether the product page adequately discloses taxes and shipping expectations.
+- The GTM suppression function uses substring matching against the entire query string (`qs.indexOf(NOISE[i])`). This may be broader than exact query-parameter matching. Prepare isolated tests before any code change.
+- `snippets/chaos_unleashed_cfh_defer.liquid` performs several string rewrites of captured Shopify header markup. Verify app-script restoration and consent dependencies before altering.
+
+These are **review findings, not confirmed causes of lost sales**. No storefront behavior has been changed.
