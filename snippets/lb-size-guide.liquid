@@ -1,21 +1,20 @@
 {%- doc -%}
   Size guide disclosure for the PDP variant picker.
   Zero JS — uses <details> for show/hide.
-  Falls back to hardcoded measurements; accepts custom.size_guide metafield (JSON) for per-product override.
+  Uses product-specific size-guide content or tables from the product description.
 
   @param {object} product - The product object.
 {%- enddoc -%}
 
 {%- liquid
   assign sg_custom = product.metafields.custom.size_guide.value
-  assign sg_unit = 'in'
 
   # Extract size guide table(s) from product description if no metafield override
   assign sg_from_description = false
   assign sg_desc_html = ''
-  if sg_custom == blank and product.body_html contains '<table'
+  if sg_custom == blank and product.description contains '<table'
     assign sg_from_description = true
-    assign _split = product.body_html | split: '<table'
+    assign _split = product.description | split: '<table'
     for _part in _split offset: 1
       assign _table = '<table' | append: _part | split: '</table>' | first | append: '</table>'
       assign sg_desc_html = sg_desc_html | append: _table
@@ -23,6 +22,7 @@
   endif
 -%}
 
+{%- if sg_custom != blank or sg_from_description -%}
 <div class="lb-size-guide">
   <details class="lb-size-guide__details" id="lb-sg-details-{{ product.id }}">
     <summary class="lb-size-guide__trigger" aria-label="Open size guide">
@@ -38,70 +38,13 @@
         <div class="lb-size-guide__from-description">
           {{- sg_desc_html -}}
         </div>
-      {%- else -%}
-        {%- comment -%} CSS-only tabs using hidden radio inputs {%- endcomment -%}
-        <div class="lb-size-guide__tabs">
-          <input class="lb-sgt__radio" type="radio" name="lb-sg-{{ product.id }}" id="lb-sg-tee-{{ product.id }}" checked>
-          <input class="lb-sgt__radio" type="radio" name="lb-sg-{{ product.id }}" id="lb-sg-hoodie-{{ product.id }}">
-
-          <div class="lb-size-guide__tab-labels">
-            <label class="lb-size-guide__tab-label" for="lb-sg-tee-{{ product.id }}">Tees</label>
-            <label class="lb-size-guide__tab-label" for="lb-sg-hoodie-{{ product.id }}">Hoodies</label>
-          </div>
-
-          <div class="lb-size-guide__tab-panels">
-            <div class="lb-size-guide__tab-panel lb-size-guide__tab-panel--tees">
-              <table class="lb-size-guide__table">
-                <thead>
-                  <tr>
-                    <th>Size</th>
-                    <th>Chest (in)</th>
-                    <th>Length (in)</th>
-                    <th>Shoulder (in)</th>
-                    <th>Chest (cm)</th>
-                    <th>Length (cm)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>S</td><td>19.5</td><td>28</td><td>17.5</td><td>49.5</td><td>71</td></tr>
-                  <tr><td>M</td><td>21</td><td>29.5</td><td>18.5</td><td>53.5</td><td>75</td></tr>
-                  <tr><td>L</td><td>22.5</td><td>31</td><td>19.5</td><td>57</td><td>78.5</td></tr>
-                  <tr><td>XL</td><td>24</td><td>32.5</td><td>21</td><td>61</td><td>82.5</td></tr>
-                  <tr><td>2XL</td><td>25.5</td><td>34</td><td>22.5</td><td>64.5</td><td>86.5</td></tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div class="lb-size-guide__tab-panel lb-size-guide__tab-panel--hoodies">
-              <table class="lb-size-guide__table">
-                <thead>
-                  <tr>
-                    <th>Size</th>
-                    <th>Chest (in)</th>
-                    <th>Length (in)</th>
-                    <th>Shoulder (in)</th>
-                    <th>Chest (cm)</th>
-                    <th>Length (cm)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>S</td><td>20.5</td><td>26.5</td><td>18</td><td>52</td><td>67.5</td></tr>
-                  <tr><td>M</td><td>22</td><td>28</td><td>19</td><td>56</td><td>71</td></tr>
-                  <tr><td>L</td><td>23.5</td><td>29.5</td><td>20</td><td>59.5</td><td>75</td></tr>
-                  <tr><td>XL</td><td>25</td><td>31</td><td>21.5</td><td>63.5</td><td>78.5</td></tr>
-                  <tr><td>2XL</td><td>26.5</td><td>32.5</td><td>23</td><td>67.5</td><td>82.5</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <p class="lb-size-guide__note">Measurements are in inches. Model wears size M.</p>
       {%- endif -%}
 
     </div>
   </details>
 </div>
+
+{%- endif -%}
 
 <script>
 (function(){
