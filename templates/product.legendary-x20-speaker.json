@@ -125,7 +125,7 @@
               "name": "t:names.text",
               "disabled": true,
               "settings": {
-                "text": "<p>Free Shipping </p><p>Easy Returns</p><p>Premium-grade fabrics </p>",
+                "text": "<p>Free Standard Shipping $100+</p><p>Easy Returns</p><p>Premium-grade fabrics</p>",
                 "width": "100%",
                 "max_width": "narrow",
                 "alignment": "left",
