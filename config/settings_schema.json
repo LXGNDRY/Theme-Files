@@ -1773,8 +1773,8 @@
         "type": "number",
         "id": "cart_ships_to_countries_count",
         "label": "Cart: countries shipped to",
-        "info": "Powers the \"ships to X countries\" trust badge and international reassurance line in the cart. Set to 0 to hide both.",
-        "default": 237
+        "info": "Powers the \"ships to X countries\" trust badge and international reassurance line in the cart. Set to 0 to hide both. Off by default; only enter a count you can verify.",
+        "default": 0
       },
       {
         "type": "number",
