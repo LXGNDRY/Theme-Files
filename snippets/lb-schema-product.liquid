@@ -34,19 +34,17 @@
 
     # Shipping / return policy from theme settings
     assign schema_ship_country = settings.schema_shipping_country | default: 'US'
-    assign schema_ship_free = settings.schema_shipping_free
     assign schema_handling_min = settings.schema_handling_min | default: 1
     assign schema_handling_max = settings.schema_handling_max | default: 2
-    assign schema_transit_min = settings.schema_transit_min | default: 3
-    assign schema_transit_max = settings.schema_transit_max | default: 7
+    assign schema_transit_min = settings.schema_transit_min | default: 7
+    assign schema_transit_max = settings.schema_transit_max | default: 10
     assign schema_return_country = settings.schema_return_country | default: 'US'
     assign schema_return_days = settings.schema_return_days | default: 30
     assign schema_return_free = settings.schema_return_free
-    if schema_ship_free
-      assign schema_ship_rate = '0.00'
-    else
-      assign schema_ship_rate = nil
-    endif
+    # Matches checkout (USD): standard is $5 under the threshold and free at or above it.
+    # Both tiers are emitted with order-value conditions so no single variant or currency decides the rate.
+    assign schema_ship_free_min = settings.schema_shipping_free_min | default: 100
+    assign schema_ship_rate = settings.schema_shipping_rate | default: '5.00'
     if schema_return_free
       assign schema_return_fees = 'https://schema.org/FreeReturn'
     else
@@ -91,33 +89,56 @@
         "@type": "Organization",
         "name": {{ shop.name | json }}
       },
-      "shippingDetails": {
-        "@type": "OfferShippingDetails",
-        "shippingRate": {
-          "@type": "MonetaryAmount",
-          "value": {{ schema_ship_rate | default: '0.00' | json }},
-          "currency": {{ currency_code | json }}
-        },
-        "shippingDestination": {
-          "@type": "DefinedRegion",
-          "addressCountry": {{ schema_ship_country | json }}
-        },
-        "deliveryTime": {
-          "@type": "ShippingDeliveryTime",
-          "handlingTime": {
-            "@type": "QuantitativeValue",
-            "minValue": {{ schema_handling_min }},
-            "maxValue": {{ schema_handling_max }},
-            "unitCode": "DAY"
+      "shippingDetails": [
+        {
+          "@type": "OfferShippingDetails",
+          "shippingRate": { "@type": "MonetaryAmount", "value": {{ schema_ship_rate | json }}, "currency": "USD" },
+          "shippingConditions": { "@type": "ShippingConditions", "orderValue": { "@type": "MonetaryAmount", "maxValue": {{ schema_ship_free_min | minus: 0.01 | json }}, "currency": "USD" } },
+          "shippingDestination": {
+            "@type": "DefinedRegion",
+            "addressCountry": {{ schema_ship_country | json }}
           },
-          "transitTime": {
-            "@type": "QuantitativeValue",
-            "minValue": {{ schema_transit_min }},
-            "maxValue": {{ schema_transit_max }},
-            "unitCode": "DAY"
+          "deliveryTime": {
+            "@type": "ShippingDeliveryTime",
+            "handlingTime": {
+              "@type": "QuantitativeValue",
+              "minValue": {{ schema_handling_min }},
+              "maxValue": {{ schema_handling_max }},
+              "unitCode": "DAY"
+            },
+            "transitTime": {
+              "@type": "QuantitativeValue",
+              "minValue": {{ schema_transit_min }},
+              "maxValue": {{ schema_transit_max }},
+              "unitCode": "DAY"
+            }
+          }
+        },
+        {
+          "@type": "OfferShippingDetails",
+          "shippingRate": { "@type": "MonetaryAmount", "value": "0.00", "currency": "USD" },
+          "shippingConditions": { "@type": "ShippingConditions", "orderValue": { "@type": "MonetaryAmount", "minValue": {{ schema_ship_free_min | json }}, "currency": "USD" } },
+          "shippingDestination": {
+            "@type": "DefinedRegion",
+            "addressCountry": {{ schema_ship_country | json }}
+          },
+          "deliveryTime": {
+            "@type": "ShippingDeliveryTime",
+            "handlingTime": {
+              "@type": "QuantitativeValue",
+              "minValue": {{ schema_handling_min }},
+              "maxValue": {{ schema_handling_max }},
+              "unitCode": "DAY"
+            },
+            "transitTime": {
+              "@type": "QuantitativeValue",
+              "minValue": {{ schema_transit_min }},
+              "maxValue": {{ schema_transit_max }},
+              "unitCode": "DAY"
+            }
           }
         }
-      },
+      ],
       "hasMerchantReturnPolicy": {
         "@type": "MerchantReturnPolicy",
         "applicableCountry": {{ schema_return_country | json }},
@@ -139,33 +160,56 @@
         "@type": "Organization",
         "name": {{ shop.name | json }}
       },
-      "shippingDetails": {
-        "@type": "OfferShippingDetails",
-        "shippingRate": {
-          "@type": "MonetaryAmount",
-          "value": {{ schema_ship_rate | default: '0.00' | json }},
-          "currency": {{ currency_code | json }}
-        },
-        "shippingDestination": {
-          "@type": "DefinedRegion",
-          "addressCountry": {{ schema_ship_country | json }}
-        },
-        "deliveryTime": {
-          "@type": "ShippingDeliveryTime",
-          "handlingTime": {
-            "@type": "QuantitativeValue",
-            "minValue": {{ schema_handling_min }},
-            "maxValue": {{ schema_handling_max }},
-            "unitCode": "DAY"
+      "shippingDetails": [
+        {
+          "@type": "OfferShippingDetails",
+          "shippingRate": { "@type": "MonetaryAmount", "value": {{ schema_ship_rate | json }}, "currency": "USD" },
+          "shippingConditions": { "@type": "ShippingConditions", "orderValue": { "@type": "MonetaryAmount", "maxValue": {{ schema_ship_free_min | minus: 0.01 | json }}, "currency": "USD" } },
+          "shippingDestination": {
+            "@type": "DefinedRegion",
+            "addressCountry": {{ schema_ship_country | json }}
           },
-          "transitTime": {
-            "@type": "QuantitativeValue",
-            "minValue": {{ schema_transit_min }},
-            "maxValue": {{ schema_transit_max }},
-            "unitCode": "DAY"
+          "deliveryTime": {
+            "@type": "ShippingDeliveryTime",
+            "handlingTime": {
+              "@type": "QuantitativeValue",
+              "minValue": {{ schema_handling_min }},
+              "maxValue": {{ schema_handling_max }},
+              "unitCode": "DAY"
+            },
+            "transitTime": {
+              "@type": "QuantitativeValue",
+              "minValue": {{ schema_transit_min }},
+              "maxValue": {{ schema_transit_max }},
+              "unitCode": "DAY"
+            }
+          }
+        },
+        {
+          "@type": "OfferShippingDetails",
+          "shippingRate": { "@type": "MonetaryAmount", "value": "0.00", "currency": "USD" },
+          "shippingConditions": { "@type": "ShippingConditions", "orderValue": { "@type": "MonetaryAmount", "minValue": {{ schema_ship_free_min | json }}, "currency": "USD" } },
+          "shippingDestination": {
+            "@type": "DefinedRegion",
+            "addressCountry": {{ schema_ship_country | json }}
+          },
+          "deliveryTime": {
+            "@type": "ShippingDeliveryTime",
+            "handlingTime": {
+              "@type": "QuantitativeValue",
+              "minValue": {{ schema_handling_min }},
+              "maxValue": {{ schema_handling_max }},
+              "unitCode": "DAY"
+            },
+            "transitTime": {
+              "@type": "QuantitativeValue",
+              "minValue": {{ schema_transit_min }},
+              "maxValue": {{ schema_transit_max }},
+              "unitCode": "DAY"
+            }
           }
         }
-      },
+      ],
       "hasMerchantReturnPolicy": {
         "@type": "MerchantReturnPolicy",
         "applicableCountry": {{ schema_return_country | json }},
