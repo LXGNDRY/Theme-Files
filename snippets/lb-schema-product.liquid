@@ -37,15 +37,18 @@
     assign schema_ship_free = settings.schema_shipping_free
     assign schema_handling_min = settings.schema_handling_min | default: 1
     assign schema_handling_max = settings.schema_handling_max | default: 2
-    assign schema_transit_min = settings.schema_transit_min | default: 3
-    assign schema_transit_max = settings.schema_transit_max | default: 7
+    assign schema_transit_min = settings.schema_transit_min | default: 7
+    assign schema_transit_max = settings.schema_transit_max | default: 10
     assign schema_return_country = settings.schema_return_country | default: 'US'
     assign schema_return_days = settings.schema_return_days | default: 30
     assign schema_return_free = settings.schema_return_free
-    if schema_ship_free
+    # Matches checkout: standard shipping is $5 under $100 and free at $100+
+    assign schema_ship_free_min = settings.schema_shipping_free_min | default: 100 | times: 100
+    assign schema_ship_variant_price = product.selected_or_first_available_variant.price
+    if schema_ship_free or schema_ship_variant_price >= schema_ship_free_min
       assign schema_ship_rate = '0.00'
     else
-      assign schema_ship_rate = nil
+      assign schema_ship_rate = settings.schema_shipping_rate | default: '5.00'
     endif
     if schema_return_free
       assign schema_return_fees = 'https://schema.org/FreeReturn'

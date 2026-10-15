@@ -28,8 +28,8 @@
       assign show_size_guide = true
     endif
   endfor
-  assign trust_1_label = section.settings.trust_1_label | default: 'Free Returns'
-  assign trust_1_sub   = section.settings.trust_1_sub   | default: '30-day hassle-free'
+  assign trust_1_label = section.settings.trust_1_label | default: '30-Day Returns'
+  assign trust_1_sub   = section.settings.trust_1_sub   | default: 'Easy returns and exchanges'
   assign trust_2_label = section.settings.trust_2_label | default: 'Premium Fabric'
   assign trust_2_sub   = section.settings.trust_2_sub   | default: 'Heavyweight quality'
   assign trust_3_label = section.settings.trust_3_label | default: 'Free Standard Shipping $100+'
@@ -495,7 +495,7 @@
       "type": "text",
       "id": "trust_1_label",
       "label": "Trust 1 — label",
-      "default": "Free Returns"
+      "default": "30-Day Returns"
     },
     {
       "type": "text",
