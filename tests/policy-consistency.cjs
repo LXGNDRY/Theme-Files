@@ -9,12 +9,7 @@ const files = [
   'sections/lb-stat-strip.liquid',
   'templates/index.json',
   'templates/product.json',
-  'templates/product.clear-pvc-stadium-travel.json',
-  'templates/product.clear-pvc-travel-bag.json',
-  'templates/product.featured-productss.json',
   'templates/product.lb-product-page.json',
-  'templates/product.legendary-d20-speaker.json',
-  'templates/product.legendary-x20-speaker.json',
 ];
 
 const storefrontCopy = files

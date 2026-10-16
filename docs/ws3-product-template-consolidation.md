@@ -1,7 +1,7 @@
 # WS-3: Product Template Consolidation — Analysis
 
-**Status:** Research complete. Admin action required before implementation.
-**Target end-state:** 2 product templates (from 6).
+**Status:** COMPLETE (2026-10-16). The five variant templates were deleted after verifying via the Admin API that all 126 products use the default template (templateSuffix null or empty), so no reassignment was needed. product.json and product.lb-product-page.json remain.
+**Target end-state:** 2 product templates (from 6) — reached.
 
 ---
 
@@ -74,11 +74,11 @@ In Shopify admin:
 ## Implementation Sequence
 
 ```
-[ ] 1. Add visibility toggles to product.json (brand-story, fit-check, slideshow)
-[ ] 2. Export product template assignment record from admin
-[ ] 3. Reassign products from simplest templates first (clear-pvc-travel-bag, featured-productss, legendary-d20-speaker)
-[ ] 4. Delete the 3 simple templates
-[ ] 5. Reassign products from slideshow templates (stadium-travel, x20-speaker)
-[ ] 6. Delete the 2 slideshow templates
-[ ] 7. Final visual QA on all 6 original product layouts
+[-] 1. Add visibility toggles to product.json (not applicable: no product used a variant template)
+[x] 2. Export product template assignment record (done via Admin API: 126 of 126 products on the default template)
+[-] 3. Reassign products from simplest templates (not applicable: zero products assigned)
+[x] 4. Delete the 3 simple templates
+[-] 5. Reassign products from slideshow templates (not applicable: zero products assigned)
+[x] 6. Delete the 2 slideshow templates
+[-] 7. Final visual QA on all 6 original layouts (not applicable: only product.json and product.lb-product-page.json were ever in use)
 ```
