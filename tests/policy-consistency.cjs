@@ -27,6 +27,7 @@ assert.doesNotMatch(storefrontCopy, /responsibility of the customer unless other
 assert.doesNotMatch(storefrontCopy, /all orders are processed within <strong>2 business days/i);
 assert.doesNotMatch(storefrontCopy, /2[–-][35] business days/i);
 assert.match(storefrontCopy, /1–3 business days/);
+assert.match(storefrontCopy, /5–7 business days/);
 assert.match(storefrontCopy, /about (<strong>)?2 business days/);
 assert.match(storefrontCopy, /Standard shipping is \$5 USD on orders under \$100 USD/);
 assert.match(storefrontCopy, /Express shipping is available for \$12 USD/);
