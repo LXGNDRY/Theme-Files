@@ -211,6 +211,11 @@ admin product assignment, do not assume.
 
 Target end state: 2 product templates (product.json, product.lb-product-page.json).
 
+STATUS (2026-10-16): DONE. Admin API check: all 126 products use the default template, so no
+reassignment was required. The five variant templates (clear-pvc-stadium-travel, clear-pvc-travel-bag,
+featured-productss, legendary-d20-speaker, legendary-x20-speaker) were deleted; featured-productss was
+confirmed orphaned. The DoD items below are satisfied or not applicable (no layouts were consolidated).
+
 DoD:
   [ ] Written record of pre-change product-to-template assignments
   [ ] Zero products assigned to a deleted template
