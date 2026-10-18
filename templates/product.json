@@ -194,7 +194,7 @@
               "type": "text",
               "name": "t:names.text",
               "settings": {
-                "text": "<p>Legendary Branding apparel is <strong>true to size & unisex</strong>. Ordering in your regular letter size will allow a clean oversized look, while sizing up will allow for a baggy look. We work closely with our manufacturers to ensure quality fit and premium textures.&nbsp;</p>",
+                "text": "<p>Legendary Branding apparel is designed to fit <em><strong>true to size</strong></em>. Choose your regular size for a structured, oversized silhouette, or size up for a more relaxed, baggy fit. We work closely with our manufacturing partners to deliver consistent sizing, premium fabric textures, and exceptional quality in every piece.</p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
@@ -561,7 +561,7 @@
             "product_name_text_size": "small",
             "verified_badge_style": "icon",
             "card_height": "medium",
-            "text_size": "small",
+            "text_size": "medium",
             "stars_size": "medium",
             "arrows_position": "bottom",
             "max_width": 1100,
