@@ -190,33 +190,6 @@
               },
               "blocks": {}
             },
-            "text_DpkCnt": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>Legendary Branding apparel is designed to fit <em><strong>true to size</strong></em>. Choose your regular size for a structured, oversized silhouette, or size up for a more relaxed, baggy fit. We work closely with our manufacturing partners to deliver consistent sizing, premium fabric textures, and exceptional quality in every piece.</p>",
-                "bleed": false,
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "center",
-                "type_preset": "custom",
-                "font": "var(--font-accent--family)",
-                "font_size": "1.125rem",
-                "line_height": "tight",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "balance",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 16,
-                "padding-block-end": 16,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
             "buy_buttons_eYQEYi": {
               "type": "buy-buttons",
               "settings": {
@@ -252,6 +225,33 @@
                 }
               },
               "block_order": []
+            },
+            "text_DpkCnt": {
+              "type": "text",
+              "name": "t:names.text",
+              "settings": {
+                "text": "<p>Legendary Branding apparel is designed to fit <em><strong>true to size</strong></em>. Choose your regular size for a structured, oversized silhouette, or size up for a more relaxed, baggy fit. We work closely with our manufacturing partners to deliver consistent sizing, premium fabric textures, and exceptional quality in every piece.</p>",
+                "bleed": false,
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "center",
+                "type_preset": "custom",
+                "font": "var(--font-accent--family)",
+                "font_size": "1.125rem",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "balance",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 16,
+                "padding-block-end": 16,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
             },
             "image_wUdQUh": {
               "type": "image",
@@ -523,8 +523,8 @@
             "price_a7krng",
             "text_enejcM",
             "variant_picker_R3rGDr",
-            "text_DpkCnt",
             "buy_buttons_eYQEYi",
+            "text_DpkCnt",
             "image_wUdQUh",
             "image_WpKDGh",
             "lb_size_guide_pdp",
