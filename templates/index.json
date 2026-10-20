@@ -493,6 +493,7 @@
         "group_wirWBb",
         "group_AQhqCP"
       ],
+      "disabled": true,
       "name": "t:names.multicolumn",
       "settings": {
         "content_direction": "row",
@@ -716,7 +717,7 @@
         "section_width": "full-width",
         "horizontal_alignment": "center",
         "gap": 25,
-        "color_scheme": "scheme-5",
+        "color_scheme": "scheme-2",
         "padding-block-start": 16,
         "padding-block-end": 16
       }
@@ -1080,7 +1081,7 @@
         "equal_columns": true,
         "limit_details_width": true,
         "gap": 28,
-        "color_scheme": "scheme-5",
+        "color_scheme": "scheme-2",
         "padding-block-start": 0,
         "padding-block-end": 25
       }
@@ -1347,7 +1348,7 @@
         "section_width": "full-width",
         "horizontal_alignment": "center",
         "gap": 25,
-        "color_scheme": "scheme-5",
+        "color_scheme": "scheme-2",
         "padding-block-start": 50,
         "padding-block-end": 50
       }
@@ -1601,7 +1602,7 @@
         "section_width": "full-width",
         "section_height": "medium",
         "section_height_custom": 50,
-        "color_scheme": "scheme-5",
+        "color_scheme": "scheme-2",
         "background_media": "none",
         "video_position": "cover",
         "background_image_position": "cover",
@@ -1760,7 +1761,7 @@
         "section_width": "full-width",
         "section_height": "medium",
         "section_height_custom": 50,
-        "color_scheme": "scheme-5",
+        "color_scheme": "scheme-2",
         "background_media": "none",
         "video_position": "cover",
         "background_image_position": "cover",

@@ -68,33 +68,6 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "text_nMDQWP": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>Product imagery is AI-enhanced using Google Gemini and actual product references.</p>",
-                "bleed": false,
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "custom",
-                "font": "var(--font-accent--family)",
-                "font_size": "0.625rem",
-                "line_height": "tight",
-                "letter_spacing": "tight",
-                "case": "none",
-                "wrap": "balance",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 16,
-                "padding-block-end": 16,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
             "judge_me_reviews_preview_badge_3VhJnX": {
               "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
               "settings": {}
@@ -237,11 +210,11 @@
                 "alignment": "center",
                 "type_preset": "custom",
                 "font": "var(--font-accent--family)",
-                "font_size": "1.125rem",
+                "font_size": "1rem",
                 "line_height": "tight",
                 "letter_spacing": "normal",
                 "case": "none",
-                "wrap": "balance",
+                "wrap": "pretty",
                 "color": "var(--color-foreground)",
                 "background": false,
                 "background_color": "#00000026",
@@ -514,10 +487,36 @@
                 "accordion_row_GUNjLB",
                 "accordion_row_XdEepH"
               ]
+            },
+            "text_nMDQWP": {
+              "type": "text",
+              "name": "t:names.text",
+              "settings": {
+                "text": "<p>Product imagery is AI-enhanced using Google Gemini and actual product references.</p>",
+                "bleed": false,
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "center",
+                "type_preset": "custom",
+                "font": "var(--font-accent--family)",
+                "font_size": "0.75rem",
+                "line_height": "tight",
+                "letter_spacing": "tight",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 8,
+                "padding-block-end": 8,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
             }
           },
           "block_order": [
-            "text_nMDQWP",
             "judge_me_reviews_preview_badge_3VhJnX",
             "text_9WaLn7",
             "price_a7krng",
@@ -530,18 +529,19 @@
             "lb_size_guide_pdp",
             "lb_low_stock_pdp",
             "lb_stat_strip_pdp",
-            "accordion_NKWPiW"
+            "accordion_NKWPiW",
+            "text_nMDQWP"
           ]
         }
       },
       "settings": {
         "content_width": "content-full-width",
-        "desktop_media_position": "right",
+        "desktop_media_position": "left",
         "equal_columns": true,
         "limit_details_width": true,
-        "gap": 28,
+        "gap": 48,
         "enable_sticky_add_to_cart": true,
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-2",
         "padding-block-start": 0,
         "padding-block-end": 0
       }
@@ -621,7 +621,7 @@
         "body": "<p>We build for those who know the difference. <strong>360+ GSM hoodies. 235+ GSM tees.</strong> Heavyweight fabrics engineered to hold their shape, paired with <strong>DTG prints made for lasting detail</strong> through repeated wear and washing.</p><p>And if you don’t know the difference yet, <strong>here’s your chance to feel it.</strong></p><p><strong>Legendary Branding isn’t just a brand. It’s a standard.</strong></p>",
         "button_label": "",
         "button_url": "",
-        "color_scheme": "scheme-5"
+        "color_scheme": "scheme-2"
       }
     },
     "section_n8MUft": {
@@ -737,7 +737,7 @@
         "section_width": "full-width",
         "section_height": "small",
         "section_height_custom": 50,
-        "color_scheme": "scheme-5",
+        "color_scheme": "scheme-2",
         "background_media": "none",
         "video_position": "cover",
         "background_image_position": "cover",
@@ -897,7 +897,7 @@
         "section_width": "page-width",
         "section_height": "",
         "section_height_custom": 50,
-        "color_scheme": "scheme-5",
+        "color_scheme": "scheme-2",
         "background_media": "none",
         "video_position": "cover",
         "background_image_position": "cover",
@@ -1216,7 +1216,7 @@
         "icons_shape": "none",
         "section_width": "full-width",
         "gap": 50,
-        "color_scheme": "scheme-5",
+        "color_scheme": "scheme-2",
         "padding-block-start": 8,
         "padding-block-end": 16
       }
