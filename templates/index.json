@@ -15,6 +15,7 @@
         "text_YEVGA3": {
           "type": "text",
           "name": "t:names.heading",
+          "disabled": true,
           "settings": {
             "text": "<h1><strong>Legendary Branding</strong></h1>",
             "bleed": false,
@@ -42,6 +43,7 @@
         "button_WDQJKU": {
           "type": "button",
           "name": "t:names.button",
+          "disabled": true,
           "settings": {
             "label": "Shop Heavyweight Essentials",
             "link": "shopify://collections/all-products",
