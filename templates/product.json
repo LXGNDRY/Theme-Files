@@ -620,6 +620,7 @@
           "settings": {
             "source": "uploaded",
             "video": "shopify://files/videos/copy_B744C801-BB0B-493E-B690-11F171D8719C.mp4",
+            "video_url": "",
             "video_autoplay": true,
             "video_loop": true,
             "alt": "",
@@ -743,7 +744,7 @@
         "vertical_alignment_flex_direction_column": "center",
         "gap": 16,
         "section_width": "page-width",
-        "section_height": "",
+        "section_height": "full-screen",
         "section_height_custom": 50,
         "color_scheme": "scheme-2",
         "background_media": "none",
@@ -1308,7 +1309,7 @@
             "text_QHhKhY": {
               "type": "text",
               "settings": {
-                "text": "<p>Driven by years of refinement and attention to detail, we create premium streetwear built to <strong>outlast trends and disposable fashion</strong>. Every piece combines <strong>heavyweight fabrics, durable construction, and lasting prints</strong> for a substantial feel designed for everyday wear.</p><p><em><strong>More than a logo,</strong></em> The GOAT stands for <strong>GREATEST OF ALL TRENDS</strong>—a symbol of individuality, ambition, and the pursuit of becoming legendary in whatever you do.</p><p><strong>Built with purpose. Worn with intent. Made to be legendary.</strong></p>",
+                "text": "<p>Driven by years of refinement and attention to detail, we create premium streetwear built to <strong>outlast trends and disposable fashion</strong>. Every piece combines <strong>heavyweight fabrics, durable construction, and lasting prints</strong> for a substantial feel designed for everyday wear.</p><p><em><strong>More than a logo,</strong></em> The GOAT stands for <strong>GREATEST OF ALL TRENDS, </strong>a symbol of individuality, ambition, and the pursuit of becoming legendary in whatever you do.</p><p><strong>Built with purpose. Worn with intent. Made to be legendary.</strong></p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
