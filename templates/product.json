@@ -553,7 +553,7 @@
           "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
             "review_data": "real_data",
-            "max_width": 1100,
+            "max_width": 850,
             "show_shop_reviews": false,
             "empty_state": "empty_widget"
           }
@@ -593,30 +593,6 @@
     "section_dPzBDF": {
       "type": "section",
       "blocks": {
-        "video_Rb9ni4": {
-          "type": "video",
-          "name": "t:names.video",
-          "settings": {
-            "source": "uploaded",
-            "video": "shopify://files/videos/660de12a53e02a4e84d503417bb4f6dd.mp4",
-            "video_url": "",
-            "video_autoplay": true,
-            "video_loop": true,
-            "alt": "",
-            "custom_width": 100,
-            "custom_width_mobile": 100,
-            "aspect_ratio": "16/9",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 8,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
         "group_YHtTVM": {
           "type": "group",
           "name": "t:names.caption",
@@ -660,14 +636,13 @@
             "text_W39ngD": {
               "type": "text",
               "name": "t:names.text",
-              "disabled": true,
               "settings": {
-                "text": "<p>Take a look behind the scenes of our latest product launch.</p>",
+                "text": "<p><strong>HOW IT'S MADE:</strong></p>",
                 "bleed": false,
-                "width": "fit-content",
+                "width": "100%",
                 "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
+                "alignment": "center",
+                "type_preset": "h2",
                 "font": "var(--font-body--family)",
                 "font_size": "",
                 "line_height": "normal",
@@ -706,11 +681,35 @@
             "text_W39ngD",
             "button_maYmnE"
           ]
+        },
+        "video_Rb9ni4": {
+          "type": "video",
+          "name": "t:names.video",
+          "settings": {
+            "source": "uploaded",
+            "video": "shopify://files/videos/660de12a53e02a4e84d503417bb4f6dd.mp4",
+            "video_url": "",
+            "video_autoplay": true,
+            "video_loop": true,
+            "alt": "",
+            "custom_width": 100,
+            "custom_width_mobile": 100,
+            "aspect_ratio": "16/9",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 8,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         }
       },
       "block_order": [
-        "video_Rb9ni4",
-        "group_YHtTVM"
+        "group_YHtTVM",
+        "video_Rb9ni4"
       ],
       "name": "t:names.video_section",
       "settings": {
