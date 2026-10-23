@@ -377,14 +377,14 @@
             "text_xBGymm": {
               "type": "text",
               "settings": {
-                "text": "<p><strong>Heavyweight materials &</strong> <strong>oversized streetwear fits</strong>. Gear made for real life, real style, and real people who want more than just the average basics.<br/></p>",
+                "text": "<p><strong>Legendary Branding sources & uses only the best heavyweight materials that support our premium</strong> <strong>oversized fits</strong>. It's<strong> </strong>gear made for real life, real style, and real people who want more than just the average basics.<br/></p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "none",
                 "alignment": "center",
                 "type_preset": "custom",
                 "font": "var(--font-body--family)",
-                "font_size": "1.5rem",
+                "font_size": "1.25rem",
                 "line_height": "tight",
                 "letter_spacing": "normal",
                 "case": "none",
@@ -581,14 +581,14 @@
             "text_dExmfz": {
               "type": "text",
               "settings": {
-                "text": "<p>Legendary Branding was built on a simple belief that greatness isn’t a moment. Forged through years of trial, iteration, and obsession with the quality, the brand exists to create pieces that <strong>outlast trends and fragile blanks</strong>.&nbsp;</p><p><strong>Heavyweight Tees and Hoodies </strong>designed to feel substantial in your hands and on your shoulders, with <strong>durable fabrics</strong> and <strong>DTG prints</strong> that hold up to real life.</p>",
+                "text": "<p><strong>Legendary Branding</strong> was built on a simple belief: greatness isn’t just a single moment.&nbsp;</p><p>Forged through years of trial, iteration, and obsession with quality, the brand creates pieces that outlast trends and fragile, average blanks.&nbsp;</p><p>Our heavyweight Tees and Hoodies are designed to feel substantial in your hands and on your shoulders, with durable fabrics and fresh <strong>Direct-to-Garment</strong> prints that hold up to real life.</p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
                 "type_preset": "custom",
                 "font": "var(--font-body--family)",
-                "font_size": "1.5rem",
+                "font_size": "1.25rem",
                 "line_height": "tight",
                 "letter_spacing": "normal",
                 "case": "none",
