@@ -127,6 +127,7 @@
         },
         "image_Uh4RUq": {
           "type": "image",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Hat_s_-_Artboard_6_3.png",
             "link": "",
