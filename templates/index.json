@@ -81,7 +81,7 @@
             "text_T8WmiU": {
               "type": "text",
               "settings": {
-                "text": "<p>HEAVYWEIGHT APPAREL CO.</p><p>HOME OF THE <strong>G.O.A.T</strong></p><p><strong>GREATEST OF ALL TRENDS</strong></p>",
+                "text": "<p>HEAVYWEIGHT APPAREL CO.</p><p>HOME OF THE <strong>G.O.A.T</strong></p>",
                 "bleed": false,
                 "width": "fit-content",
                 "max_width": "normal",
