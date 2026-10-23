@@ -127,7 +127,6 @@
         },
         "image_Uh4RUq": {
           "type": "image",
-          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Hat_s_-_Artboard_6_3.png",
             "link": "",
@@ -147,35 +146,11 @@
             "padding-inline-end": 0
           },
           "blocks": {}
-        },
-        "video_qNGahW": {
-          "type": "video",
-          "name": "t:names.video",
-          "settings": {
-            "source": "uploaded",
-            "video": "shopify://files/videos/higgsfield-02596657-63b0-489b-850c-599311c28a62.mp4",
-            "video_autoplay": true,
-            "video_loop": true,
-            "alt": "",
-            "custom_width": 100,
-            "custom_width_mobile": 100,
-            "aspect_ratio": "auto",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
         }
       },
       "block_order": [
         "group_FR39yd",
-        "image_Uh4RUq",
-        "video_qNGahW"
+        "image_Uh4RUq"
       ],
       "name": "t:names.image_with_text",
       "settings": {
@@ -314,7 +289,7 @@
         "image_9W6eJx": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/1668730135561581768_ce12f993-9535-4813-97ab-18279731a6ab.jpg",
+            "image": "shopify://shop_images/4407041560379891123.jpg",
             "link": "",
             "image_ratio": "square",
             "width": "fill",
