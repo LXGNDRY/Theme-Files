@@ -240,7 +240,7 @@
               "name": "t:names.payment_icons",
               "settings": {
                 "horizontal_alignment": "center",
-                "gap": 10,
+                "gap": 8,
                 "filter_by_market": false,
                 "domestic_only_payment_types": "",
                 "padding-block-start": 0,
@@ -265,10 +265,10 @@
       ],
       "name": "t:names.footer",
       "settings": {
-        "section_width": "full-width",
+        "section_width": "page-width",
         "gap": 60,
         "color_scheme": "scheme-2",
-        "padding-block-start": 16,
+        "padding-block-start": 0,
         "padding-block-end": 0
       }
     },
