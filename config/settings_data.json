@@ -11,8 +11,8 @@
   "current": {
     "logo": "shopify://shop_images/Timeless_Style_-_Artboard_22_4.png",
     "logo_inverse": "shopify://shop_images/Timeless_Style_-_Artboard_22_3.png",
-    "logo_height": 75,
-    "logo_height_mobile": 60,
+    "logo_height": 60,
+    "logo_height_mobile": 55,
     "favicon": "shopify://shop_images/Timeless_Style_-_Artboard_22_2.png",
     "type_body_font": "ovo_n4",
     "type_subheading_font": "bebas_neue_n4",
@@ -126,6 +126,11 @@
       },
       "9670189827046205946": {
         "type": "shopify://apps/hextom-translate-and-currency/blocks/app-block/b927a799-be04-4b97-9efb-5c8f0290a68e",
+        "disabled": false,
+        "settings": {}
+      },
+      "14327677521557774844": {
+        "type": "shopify://apps/simprosys-google-shopping-feed/blocks/core_settings_block/1f0b859e-9fa6-4007-97e8-4513aff5ff3b",
         "disabled": false,
         "settings": {}
       }
