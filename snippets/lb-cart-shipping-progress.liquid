@@ -1,0 +1,59 @@
+{% doc %}
+  Renders the free standard shipping progress indicator.
+
+  @param {cart} cart - The cart object used to calculate threshold progress.
+  @param {boolean} [compact] - Enables compact presentation when used in constrained layouts.
+
+  @example
+  {% render 'lb-cart-shipping-progress', cart: cart %}
+{% enddoc %}
+
+{% liquid
+  assign shipping_progress_enabled = settings.cart_free_shipping_enabled
+  assign threshold_dollars = settings.cart_free_shipping_threshold | default: 100
+  assign threshold_cents = threshold_dollars | times: 100
+  assign show_progress = false
+
+  if shipping_progress_enabled and cart.requires_shipping and cart.currency.iso_code == shop.currency and threshold_cents > 0
+    assign show_progress = true
+  endif
+
+  if show_progress
+    assign qualified_total = cart.total_price
+    assign remaining = threshold_cents | minus: qualified_total
+    assign progress = qualified_total | times: 100 | divided_by: threshold_cents
+
+    if progress > 100
+      assign progress = 100
+    endif
+  endif
+%}
+
+{% if show_progress %}
+  <section
+    class="lb-cart-shipping-progress{% if compact %} lb-cart-shipping-progress--compact{% endif %}"
+    aria-label="{{ 'accessibility.cart_shipping_progress' | t }}"
+    role="status"
+    aria-live="polite"
+  >
+    <div class="lb-cart-shipping-progress__copy">
+      {% if remaining > 0 %}
+        <span>{{ 'content.cart_free_shipping_remaining' | t: amount: remaining | money }}</span>
+      {% else %}
+        <span>{{ 'content.cart_free_shipping_unlocked' | t }}</span>
+      {% endif %}
+    </div>
+    <div
+      class="lb-cart-shipping-progress__track"
+      role="progressbar"
+      aria-valuemin="0"
+      aria-valuemax="{{ threshold_cents }}"
+      aria-valuenow="{{ qualified_total | at_most: threshold_cents }}"
+    >
+      <span class="lb-cart-shipping-progress__fill" style="--lb-cart-shipping-progress: {{ progress }}%;"></span>
+    </div>
+    {% if remaining <= 0 %}
+      <p class="lb-cart-shipping-progress__note">{{ 'content.cart_free_shipping_note' | t }}</p>
+    {% endif %}
+  </section>
+{% endif %}
