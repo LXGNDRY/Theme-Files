@@ -91,15 +91,15 @@
         "s2": {
           "type": "stat",
           "settings": {
-            "number": "$100",
-            "label": "Free shipping over"
+            "number": "$100+",
+            "label": "Free shipping"
           }
         },
         "s3": {
           "type": "stat",
           "settings": {
             "number": "DTG",
-            "label": "DTG printed to last"
+            "label": "Printed to last"
           }
         }
       },
