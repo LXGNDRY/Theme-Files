@@ -194,6 +194,7 @@
                   {{ 'content.cart_title' | t }}
                   {% render 'cart-bubble' %}
                 </h2>
+                {% render 'lb-cart-shipping-progress', cart: cart, compact: true %}
 
                 <button
                   ref="closeButton"
