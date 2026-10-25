@@ -462,9 +462,9 @@
             "text_enejcM",
             "variant_picker_R3rGDr",
             "lb_size_guide_pdp",
-            "text_DpkCnt",
             "lb_low_stock_pdp",
             "buy_buttons_eYQEYi",
+            "text_DpkCnt",
             "accordion_NKWPiW"
           ]
         }
@@ -966,6 +966,18 @@
         "anchor": "",
         "color_scheme": "scheme-5"
       }
+    },
+    "pdp_styles": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<style>.product-details .variant-option__button-label{min-height:42px;padding:9px 16px;font-size:14px;border-radius:6px;line-height:1}.product-details .variant-option__button-label__text{font-size:14px}.product-details .variant-option{gap:8px;row-gap:8px;margin-block:6px}.product-details p{text-transform:none;letter-spacing:normal;line-height:1.5}.product-details .product-price,.product-details [class*=\"price\"]{letter-spacing:normal}@media (max-width:749px){.product-details .variant-option__button-label{min-height:40px;padding:8px 13px;font-size:13px}.product-details .variant-option__button-label__text{font-size:13px}}</style>",
+        "color_scheme": "",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      },
+      "blocks": {},
+      "block_order": []
     }
   },
   "order": [
@@ -975,6 +987,7 @@
     "lb_feature_pdp",
     "reviews_pdp",
     "faq_pdp",
-    "product_recommendations_qnzPkn"
+    "product_recommendations_qnzPkn",
+    "pdp_styles"
   ]
 }
