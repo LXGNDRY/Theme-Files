@@ -37,6 +37,27 @@
   }
 }
 
+/* ─── 1A. MOBILE PDP VERTICAL FLOW ───────────────────────────────────────────
+   Prevent the media/details grid from reserving the height of a stretched row
+   after the accordion. The following keeps the next PDP section directly
+   beneath the actual product-details content on mobile.
+   ─────────────────────────────────────────────────────────────────────────── */
+@media screen and (max-width: 749px) {
+  .product-information,
+  .product-information__grid,
+  .product-information__media,
+  .product-details,
+  .product-details > .group-block {
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  .product-information__grid {
+    align-items: start !important;
+    grid-auto-rows: max-content !important;
+  }
+}
+
 /* ─── 2. PRODUCT FORM BUTTONS CONTAINER ──────────────────────────────────────
    The buy-buttons group that wraps both ATC + accelerated checkout.
    Tighten spacing, ensure full-width stack, clean gap.
