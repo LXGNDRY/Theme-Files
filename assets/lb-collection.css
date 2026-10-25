@@ -207,3 +207,108 @@
     padding-inline: 16px;
   }
 }
+
+
+/* Collection discovery polish: keeps the grid easy to scan at every viewport. */
+.product-grid-container .collection-wrapper {
+  background: #050505;
+}
+
+.product-grid-container .product-grid__item {
+  display: flex;
+}
+
+.product-grid-container product-card {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
+.product-grid-container .product-card__content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
+.product-grid-container .product-card__media,
+.product-grid-container .product-card__media-wrapper,
+.product-grid-container [class*='product-card-gallery'] {
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.product-grid-container .product-card__content > :last-child {
+  margin-block-end: 0;
+}
+
+.product-grid-container [class*='product-title'] {
+  display: -webkit-box;
+  min-height: 2em;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.product-grid-container [class*='price'] {
+  margin-top: 5px;
+}
+
+.product-grid-container .pagination {
+  display: flex;
+  justify-content: center;
+  margin: 8px 20px 0;
+  padding: 28px 0 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.product-grid-container .pagination__list {
+  gap: 8px;
+}
+
+.product-grid-container .pagination__item {
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 2px;
+  background: transparent;
+}
+
+.product-grid-container .pagination__item[aria-current='page'],
+.product-grid-container .pagination__item:hover {
+  color: #050505;
+  border-color: #fff;
+  background: #fff;
+}
+
+@media screen and (max-width: 749px) {
+  .product-grid-container .collection-wrapper {
+    gap: 0;
+  }
+
+  .product-grid-container .product-grid {
+    padding-block-start: 16px;
+  }
+
+  .product-grid-container .product-grid__item {
+    min-width: 0;
+  }
+
+  .product-grid-container [class*='product-title'],
+  .product-grid-container [class*='product-title'] a {
+    font-size: 0.9375rem !important;
+    line-height: 0.98;
+  }
+
+  .product-grid-container [class*='price'] {
+    margin-top: 4px;
+    font-size: 0.625rem !important;
+  }
+
+  .product-grid-container .pagination {
+    margin-inline: 12px;
+    padding-block: 24px 4px;
+  }
+
+  .product-grid-container .pagination__item {
+    min-width: 40px !important;
+    min-height: 40px !important;
+  }
+}
