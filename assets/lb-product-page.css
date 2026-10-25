@@ -643,22 +643,26 @@
    ========================================================================== */
 
 .lb-spec {
-  --lb-spec-rule: rgb(from currentColor r g b / 0.16);
+  --lb-spec-rule: rgba(255, 255, 255, 0.16);
 
-  margin-block-start: var(--padding-xl, 2rem);
-  padding-block-start: var(--padding-lg, 1.5rem);
-  border-block-start: 1px solid var(--lb-spec-rule);
-  color: var(--color-foreground);
+  margin-block-start: 0;
+  padding: 1.5rem 0 0;
+  background: #000;
+  color: #fff;
 }
 
 .lb-spec__title {
-  margin: 0 0 var(--padding-md, 1rem);
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.lb-spec__title {
+  margin: 0 0 0.75rem;
   font-family: var(--font-heading--family);
   font-size: 0.8125rem;
   font-weight: 400;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  opacity: 0.6;
+  color: rgba(255, 255, 255, 0.62);
 }
 
 .lb-spec__list {
@@ -673,7 +677,7 @@
   grid-template-columns: minmax(5.5rem, 8rem) 1fr;
   gap: var(--gap-sm, 0.75rem);
   align-items: baseline;
-  padding-block: 0.7rem;
+  padding-block: 0.85rem;
   border-block-end: 1px solid var(--lb-spec-rule);
 }
 
@@ -694,11 +698,12 @@
   margin: 0;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  opacity: 0.5;
+  color: rgba(255, 255, 255, 0.58);
 }
 
 .lb-spec__value {
   margin: 0;
+  color: #fff;
   letter-spacing: 0.01em;
 }
 
