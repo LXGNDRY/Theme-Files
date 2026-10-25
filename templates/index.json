@@ -17,7 +17,7 @@
           "name": "t:names.heading",
           "disabled": true,
           "settings": {
-            "text": "<h1><strong>Legendary Branding</strong></h1>",
+            "text": "<h1><strong>BUY 1, GET 1 50% OFF</strong></h1>",
             "bleed": false,
             "width": "100%",
             "max_width": "normal",
@@ -45,8 +45,8 @@
           "name": "t:names.button",
           "disabled": true,
           "settings": {
-            "label": "Shop Heavyweight Essentials",
-            "link": "shopify://collections/all-products",
+            "label": "Shop BOGO \u2014 Tees & Tops",
+            "link": "shopify://collections/shirts-tops",
             "open_in_new_tab": false,
             "style_class": "button",
             "width": "fit-content",
@@ -60,7 +60,7 @@
           "type": "text",
           "name": "t:names.heading",
           "settings": {
-            "text": "<p><em><strong>225+ GSM tees | DTG prints | FREE SHIPPING</strong></em></p>",
+            "text": "<p><em><strong>Heavyweight cotton tees \u00b7 DTG printed \u00b7 Free shipping over $100</strong></em></p>",
             "bleed": false,
             "width": "fit-content",
             "max_width": "normal",
@@ -87,7 +87,7 @@
           "type": "text",
           "disabled": true,
           "settings": {
-            "text": "<p><br/>Step into legendary.<br/><br/></p>",
+            "text": "<p>On shirts &amp; tops \u2014 discount applies automatically in your cart.</p>",
             "bleed": false,
             "width": "100%",
             "max_width": "none",
@@ -110,40 +110,29 @@
           },
           "blocks": {}
         },
-        "text_hzq6cM": {
-          "type": "text",
+        "button_LBout": {
+          "type": "button",
+          "name": "t:names.button",
           "disabled": true,
           "settings": {
-            "text": "<p><a href=\"/collections/shirts-tops\" title=\"T-SHIRTS\">Shop now</a></p>",
-            "bleed": false,
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "h5",
-            "font": "var(--font-secondary--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "uppercase",
-            "wrap": "nowrap",
-            "color": "var(--color-primary)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "label": "Outerwear \u2014 10% Off",
+            "link": "shopify://collections/hoodies-jackets",
+            "open_in_new_tab": false,
+            "style_class": "button-secondary",
+            "width": "fit-content",
+            "custom_width": 100,
+            "width_mobile": "fit-content",
+            "custom_width_mobile": 100
           },
           "blocks": {}
         }
       },
       "block_order": [
         "text_YEVGA3",
-        "button_WDQJKU",
         "text_YQmLbG",
         "text_69C6UJ",
-        "text_hzq6cM"
+        "button_WDQJKU",
+        "button_LBout"
       ],
       "name": "t:names.hero",
       "settings": {
@@ -228,7 +217,7 @@
               "name": "t:names.heading",
               "disabled": true,
               "settings": {
-                "text": "<h2><strong>20% off (1 item)</strong></h2>",
+                "text": "<h2><strong>FREE SHIPPING</strong></h2>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
@@ -255,7 +244,7 @@
               "type": "text",
               "name": "t:names.description",
               "settings": {
-                "text": "<p><strong>- DISCOUNTS AUTO APPLIED AT CHECKOUT -</strong></p>",
+                "text": "<p><strong>On every order over $100 \u2014 worldwide.</strong></p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
@@ -356,7 +345,7 @@
               "name": "t:names.description",
               "disabled": true,
               "settings": {
-                "text": "<p>We obsess over the details and strive to deliver the best products at the best prices, every time.</p>",
+                "text": "<p>On shirts &amp; tops. Discount applies automatically in your cart.</p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
@@ -457,7 +446,7 @@
               "name": "t:names.description",
               "disabled": true,
               "settings": {
-                "text": "<p>We're always on your side: keeping our loyal customers happy is our top priority and number one goal.</p>",
+                "text": "<p>Applied automatically to every outerwear piece \u2014 no code needed.</p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
@@ -488,9 +477,9 @@
         }
       },
       "block_order": [
-        "group_Xg944t",
         "group_wirWBb",
-        "group_AQhqCP"
+        "group_AQhqCP",
+        "group_Xg944t"
       ],
       "name": "t:names.multicolumn",
       "settings": {
@@ -1689,7 +1678,7 @@
             "text_dExmfz": {
               "type": "text",
               "settings": {
-                "text": "<p>Legendary Branding was built on a simple belief that greatness isn’t a moment. Forged through years of trial, iteration, and obsession with the quality, the brand exists to create pieces that <strong>outlast trends and fragile blanks</strong>.&nbsp;</p><p><strong>Heavyweight Tees and Hoodies </strong>designed to feel substantial in your hands and on your shoulders, with <strong>durable fabrics</strong> and <strong>DTG prints</strong> that hold up to real life.</p>",
+                "text": "<p>Legendary Branding was built on a simple belief that greatness isn\u2019t a moment. Forged through years of trial, iteration, and obsession with the quality, the brand exists to create pieces that <strong>outlast trends and fragile blanks</strong>.&nbsp;</p><p><strong>Heavyweight Tees and Hoodies </strong>designed to feel substantial in your hands and on your shoulders, with <strong>durable fabrics</strong> and <strong>DTG prints</strong> that hold up to real life.</p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
