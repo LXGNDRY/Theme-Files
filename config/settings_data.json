@@ -374,7 +374,9 @@
           "selected_variant_hover_border_color": "#1a1a1a"
         }
       }
-    }
+    },
+    "cart_free_shipping_enabled": true,
+    "cart_free_shipping_threshold": 100
   },
   "presets": {
     "Atelier": {
