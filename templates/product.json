@@ -26,7 +26,7 @@
             "thumbnail_position": "bottom",
             "thumbnail_width": 60,
             "thumbnail_radius": 8,
-            "aspect_ratio": "adapt",
+            "aspect_ratio": "1",
             "constrain_to_viewport": true,
             "media_fit": "cover",
             "media_radius": 8,
@@ -481,6 +481,21 @@
         "padding-block-end": 0
       }
     },
+    "lb_fit_pdp": {
+      "type": "lb-fit-guide",
+      "settings": {
+        "eyebrow": "Your fit",
+        "heading": "OVERSIZED, ON YOUR TERMS.",
+        "body": "<p>Your usual letter size gives you the intended, structured oversized look. Go one size up for a baggier silhouette. Product measurements take priority — compare with a piece you already own.</p>",
+        "sizes": "S,M,L,XL,2XL",
+        "default_size": "M",
+        "button_label": "View size guide",
+        "button_url": "/pages/size-guide",
+        "disclaimer": "A starting point, not a body-measurement tool. Always compare the specific garment measurements with a piece you already love.",
+        "anchor": "fit",
+        "color_scheme": "scheme-5"
+      }
+    },
     "reviews_pdp": {
       "type": "lb-edit-reviews",
       "blocks": {
@@ -580,21 +595,6 @@
         "heading": "BUILT ON WEIGHT.",
         "body": "<p>GSM is the weight of the fabric in grams per square metre. The higher the number, the more structure, drape, and physical presence the garment has.</p>",
         "anchor": "weight",
-        "color_scheme": "scheme-5"
-      }
-    },
-    "lb_fit_pdp": {
-      "type": "lb-fit-guide",
-      "settings": {
-        "eyebrow": "Your fit",
-        "heading": "OVERSIZED, ON YOUR TERMS.",
-        "body": "<p>Your usual letter size gives you the intended, structured oversized look. Go one size up for a baggier silhouette. Product measurements take priority — compare with a piece you already own.</p>",
-        "sizes": "S,M,L,XL,2XL",
-        "default_size": "M",
-        "button_label": "View size guide",
-        "button_url": "/pages/size-guide",
-        "disclaimer": "A starting point, not a body-measurement tool. Always compare the specific garment measurements with a piece you already love.",
-        "anchor": "fit",
         "color_scheme": "scheme-5"
       }
     },
@@ -987,9 +987,7 @@
         "section_width": "full-width",
         "padding-block-start": 0,
         "padding-block-end": 0
-      },
-      "blocks": {},
-      "block_order": []
+      }
     }
   },
   "order": [
