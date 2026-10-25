@@ -116,7 +116,7 @@
     "ed_edit_grid": {
       "type": "lb-edit-grid",
       "settings": {
-        "eyebrow": "01 / Heavyweight tees & tops",
+        "eyebrow": "04 / Heavyweight tees & tops",
         "heading": "FIND YOUR NEXT STAPLE.",
         "collection": "shirts-tops",
         "products_to_show": 4,
@@ -169,7 +169,7 @@
         "w3"
       ],
       "settings": {
-        "eyebrow": "02 / Fabric & weight",
+        "eyebrow": "01 / Know the weight",
         "heading": "THE DIFFERENCE IS IN THE WEIGHT.",
         "body": "<p>GSM is the weight of the fabric in grams per square metre. The higher the number, the more structure, drape, and physical presence the garment has.</p>",
         "anchor": "weight",
@@ -179,7 +179,7 @@
     "ed_outer_grid": {
       "type": "lb-edit-grid",
       "settings": {
-        "eyebrow": "03 / Heavyweight outerwear",
+        "eyebrow": "05 / Heavyweight outerwear",
         "heading": "HOODIES & JACKETS.",
         "collection": "hoodies-jackets",
         "products_to_show": 4,
@@ -203,7 +203,7 @@
     "ed_fit": {
       "type": "lb-fit-guide",
       "settings": {
-        "eyebrow": "05 / Confidence in the fit",
+        "eyebrow": "03 / Find your fit",
         "heading": "OVERSIZED, ON YOUR TERMS.",
         "body": "<p>Your usual letter size gives you the intended, structured oversized look. Go one size up for a baggier silhouette.</p>",
         "sizes": "S,M,L,XL,2XL",
@@ -398,7 +398,7 @@
         "st3"
       ],
       "settings": {
-        "eyebrow": "04 / Shop with clarity",
+        "eyebrow": "02 / Shop with clarity",
         "heading": "CHOOSE WITH INTENTION.",
         "body": "<p>Use fabric weight, silhouette, and delivery expectations to choose with confidence before you open a product page.</p>",
         "color_scheme": "scheme-5"
@@ -409,14 +409,14 @@
     "ed_hero",
     "ed_marquee",
     "ed_trust",
-    "ed_entry_cards",
-    "ed_edit_grid",
-    "ed_gsm",
-    "ed_outer_grid",
     "ed_statement",
+    "ed_gsm",
+    "ed_reviews",
     "ed_steps",
     "ed_fit",
-    "ed_reviews",
+    "ed_entry_cards",
+    "ed_edit_grid",
+    "ed_outer_grid",
     "ed_faq",
     "ed_close",
     "ed_sticky"
