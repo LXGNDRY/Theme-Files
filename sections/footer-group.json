@@ -16,6 +16,7 @@
       "blocks": {
         "judge_me_reviews_featured_carousel_h84p6a": {
           "type": "shopify://apps/judge-me-reviews/blocks/featured_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "disabled": true,
           "settings": {
             "maxwidth": 1080
           }
@@ -24,6 +25,7 @@
       "block_order": [
         "judge_me_reviews_featured_carousel_h84p6a"
       ],
+      "disabled": true,
       "settings": {
         "content_direction": "column",
         "vertical_on_mobile": true,
@@ -142,6 +144,7 @@
         "text_fd3y79",
         "email_signup_jdQCA3"
       ],
+      "disabled": true,
       "name": "t:names.email_signup",
       "settings": {
         "content_direction": "column",
@@ -200,7 +203,7 @@
             "accordion_dividers": false,
             "inherit_color_scheme": true,
             "color_scheme": "",
-            "heading_preset": "h2",
+            "heading_preset": "h3",
             "link_preset": "paragraph",
             "padding-block-start": 0,
             "padding-block-end": 0,
@@ -221,7 +224,7 @@
             "accordion_dividers": false,
             "inherit_color_scheme": true,
             "color_scheme": "",
-            "heading_preset": "h2",
+            "heading_preset": "h3",
             "link_preset": "paragraph",
             "padding-block-start": 0,
             "padding-block-end": 0,

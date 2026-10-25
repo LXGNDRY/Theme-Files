@@ -13,7 +13,7 @@
       "type": "lb-edit-hero",
       "settings": {
         "image": "shopify://shop_images/5958342654289094365_0f2d35ea-8d96-4d70-ba9d-513592aeddf9.jpg",
-        "eyebrow": "Marque L\u00e9gendaire \u00b7 Heavyweight Streetwear",
+        "eyebrow": "Marque Légendaire · Heavyweight Streetwear",
         "heading": "WEAR THE WEIGHT.",
         "subheading": "Heavyweight oversized tees and outerwear in premium cotton, DTG printed to outlast. Deliberate proportion, graphic intent, and a presence of its own.",
         "cta1_label": "Shop heavyweight tees",
@@ -56,7 +56,7 @@
         "m4": {
           "type": "item",
           "settings": {
-            "text": "BUY 1 GET 1 50% OFF \u2014 TEES & TOPS"
+            "text": "BUY 1 GET 1 50% OFF — TEES & TOPS"
           }
         }
       },
@@ -122,8 +122,8 @@
         "products_to_show": 4,
         "ribbon_text": "BOGO 50%",
         "link_label": "Shop all tees & tops",
-        "color_scheme": "scheme-5",
-        "anchor": "tees"
+        "anchor": "tees",
+        "color_scheme": "scheme-5"
       }
     },
     "ed_gsm": {
@@ -172,8 +172,8 @@
         "eyebrow": "02 / Fabric & weight",
         "heading": "THE DIFFERENCE IS IN THE WEIGHT.",
         "body": "<p>GSM is the weight of the fabric in grams per square metre. The higher the number, the more structure, drape, and physical presence the garment has.</p>",
-        "color_scheme": "scheme-5",
-        "anchor": "weight"
+        "anchor": "weight",
+        "color_scheme": "scheme-5"
       }
     },
     "ed_outer_grid": {
@@ -191,12 +191,12 @@
     "ed_statement": {
       "type": "lb-brand-story",
       "settings": {
+        "image_side": "left",
         "eyebrow": "More than a logo",
         "heading": "A DAILY MINDSET.",
-        "body": "<p>Legendary Branding. Marque L\u00e9gendaire. Heavyweight fabrics, deliberate proportions, and graphic intent \u2014 built for repeat wear, season after season.</p>",
+        "body": "<p>Legendary Branding. Marque Légendaire. Heavyweight fabrics, deliberate proportions, and graphic intent — built for repeat wear, season after season.</p>",
         "button_label": "Shop the collection",
         "button_url": "shopify://collections/shirts-tops",
-        "image_side": "left",
         "color_scheme": "scheme-5"
       }
     },
@@ -210,8 +210,8 @@
         "default_size": "M",
         "button_label": "Shop your fit",
         "button_url": "shopify://collections/shirts-tops",
-        "color_scheme": "scheme-5",
-        "anchor": "fit"
+        "anchor": "fit",
+        "color_scheme": "scheme-5"
       }
     },
     "ed_reviews": {
@@ -300,9 +300,7 @@
         "section_width": "full-width",
         "padding-block-start": 0,
         "padding-block-end": 0
-      },
-      "blocks": {},
-      "block_order": []
+      }
     },
     "ed_entry_cards": {
       "type": "lb-collection-cards",
@@ -330,8 +328,8 @@
           "settings": {
             "collection": "marque-legendaire-luxury-streetwear",
             "overlay_label": "The signature line",
-            "title": "Marque L\u00e9gendaire",
-            "link_label": "Shop Marque L\u00e9gendaire"
+            "title": "Marque Légendaire",
+            "link_label": "Shop Marque Légendaire"
           }
         }
       },
@@ -368,7 +366,7 @@
           "settings": {
             "number": "01",
             "title": "Start with the weight",
-            "body": "Choose 300GSM for substantial everyday wear, 380\u2013400GSM for stronger structure, or 460GSM for maximum presence.",
+            "body": "Choose 300GSM for substantial everyday wear, 380–400GSM for stronger structure, or 460GSM for maximum presence.",
             "link_label": "Compare the weights",
             "link_url": "#weight"
           }
