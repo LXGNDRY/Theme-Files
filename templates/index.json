@@ -35,10 +35,17 @@
           "settings": {
             "text": "HOME OF THE G.O.A.T"
           }
+        },
+        "i4": {
+          "type": "item",
+          "settings": {
+            "text": "FREE SHIPPING OVER $100"
+          }
         }
       },
       "block_order": [
         "i0",
+        "i4",
         "i1",
         "i2",
         "i3"
@@ -95,7 +102,7 @@
               "name": "t:names.heading",
               "disabled": true,
               "settings": {
-                "text": "<h2><strong>20% off (1 item)</strong></h2>",
+                "text": "<h2><strong>FREE SHIPPING</strong></h2>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
@@ -122,7 +129,7 @@
               "type": "text",
               "name": "t:names.description",
               "settings": {
-                "text": "<p><strong>- DISCOUNTS AUTO APPLIED AT CHECKOUT -</strong></p>",
+                "text": "<p><strong>On every order over $100 \u2014 worldwide.</strong></p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
@@ -223,7 +230,7 @@
               "name": "t:names.description",
               "disabled": true,
               "settings": {
-                "text": "<p>We obsess over the details and strive to deliver the best products at the best prices, every time.</p>",
+                "text": "<p>On shirts &amp; tops. Discount applies automatically in your cart.</p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
@@ -324,7 +331,7 @@
               "name": "t:names.description",
               "disabled": true,
               "settings": {
-                "text": "<p>We're always on your side: keeping our loyal customers happy is our top priority and number one goal.</p>",
+                "text": "<p>Applied automatically to every outerwear piece \u2014 no code needed.</p>",
                 "bleed": false,
                 "width": "100%",
                 "max_width": "normal",
@@ -355,9 +362,9 @@
         }
       },
       "block_order": [
-        "group_Xg944t",
         "group_wirWBb",
-        "group_AQhqCP"
+        "group_AQhqCP",
+        "group_Xg944t"
       ],
       "disabled": true,
       "name": "t:names.multicolumn",
@@ -435,14 +442,14 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<h2>LEGENDARY BRANDING</h2>",
+                "text": "<h1><strong>BUY 1, GET 1 50% OFF</strong></h1>",
                 "bleed": false,
                 "width": "100%",
-                "max_width": "narrow",
+                "max_width": "normal",
                 "alignment": "center",
-                "type_preset": "h2",
+                "type_preset": "h1",
                 "font": "var(--font-body--family)",
-                "font_size": "1rem",
+                "font_size": "",
                 "line_height": "normal",
                 "letter_spacing": "normal",
                 "case": "none",
@@ -461,11 +468,11 @@
             "text_T8WmiU": {
               "type": "text",
               "settings": {
-                "text": "<p>HEAVYWEIGHT APPAREL CO.</p><p>HOME OF THE <strong>G.O.A.T</strong></p>",
+                "text": "<p>Heavyweight 235GSM+ tees, built to outlast. BOGO applies to shirts &amp; tops \u2014 discount auto-applied in your cart.</p>",
                 "bleed": false,
                 "width": "fit-content",
                 "max_width": "normal",
-                "alignment": "left",
+                "alignment": "center",
                 "type_preset": "rte",
                 "font": "var(--font-body--family)",
                 "font_size": "1rem",
@@ -487,10 +494,24 @@
             "button_MFVgix": {
               "type": "button",
               "settings": {
-                "label": "Shop now",
+                "label": "Shop BOGO \u2014 Tees & Tops",
                 "link": "shopify://collections/shirts-tops",
                 "open_in_new_tab": false,
                 "style_class": "button",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
+            },
+            "button_LBout1": {
+              "type": "button",
+              "settings": {
+                "label": "Outerwear \u2014 10% Off",
+                "link": "shopify://collections/hoodies-jackets",
+                "open_in_new_tab": false,
+                "style_class": "button-secondary",
                 "width": "fit-content",
                 "custom_width": 100,
                 "width_mobile": "fit-content",
@@ -502,7 +523,8 @@
           "block_order": [
             "text_r9bNry",
             "text_T8WmiU",
-            "button_MFVgix"
+            "button_MFVgix",
+            "button_LBout1"
           ]
         },
         "image_Uh4RUq": {
@@ -543,7 +565,7 @@
         "vertical_alignment_flex_direction_column": "center",
         "gap": 0,
         "section_width": "full-width",
-        "section_height": "full-screen",
+        "section_height": "large",
         "section_height_custom": 50,
         "color_scheme": "",
         "background_media": "none",
@@ -1256,8 +1278,8 @@
   },
   "order": [
     "lb_ticker",
-    "offers",
     "intro",
+    "offers",
     "lb_stats",
     "best_sellers",
     "lb_story",
