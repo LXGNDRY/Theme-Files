@@ -33,7 +33,7 @@
                   class="lb-egrid__img"
                   src="{{ product.featured_image | image_url: width: 800, format: 'webp' }}"
                   srcset="{{ product.featured_image | image_url: width: 500, format: 'webp' }} 500w, {{ product.featured_image | image_url: width: 800, format: 'webp' }} 800w, {{ product.featured_image | image_url: width: 1100, format: 'webp' }} 1100w"
-                  sizes="(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw"
+                  sizes="(min-width: 990px) 25vw, 50vw"
                   alt="{{ product.featured_image.alt | default: product.title | escape }}"
                   width="800"
                   height="800"
@@ -128,7 +128,7 @@
   gap: 16px;
 }
 
-@media (min-width: 750px) {
+@media (min-width: 990px) {
   .lb-egrid__grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
