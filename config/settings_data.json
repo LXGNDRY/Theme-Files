@@ -106,6 +106,8 @@
     "variant_button_border_width": 0,
     "variant_button_radius": 0,
     "variant_button_width": "equal-width-buttons",
+    "cart_free_shipping_enabled": true,
+    "cart_free_shipping_threshold": 100,
     "razorpay_badge_enabled": false,
     "razorpay_gcp_base": "https://lb-razorpay-backend-exy37drh4q-uc.a.run.app",
     "razorpay_key_id": "rzp_live_THxiCiKHbW3rMy",
@@ -133,7 +135,7 @@
       },
       "13047258039897440615": {
         "type": "shopify://apps/judge-me-reviews/blocks/cart_drawer_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-        "disabled": false,
+        "disabled": true,
         "settings": {
           "widget_type": "review-widget"
         }
@@ -374,9 +376,7 @@
           "selected_variant_hover_border_color": "#1a1a1a"
         }
       }
-    },
-    "cart_free_shipping_enabled": true,
-    "cart_free_shipping_threshold": 100
+    }
   },
   "presets": {
     "Atelier": {
