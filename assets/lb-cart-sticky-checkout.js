@@ -28,6 +28,12 @@
       return;
     }
 
+    if (!('IntersectionObserver' in window)) {
+      sticky.classList.add('lb-cart-sticky-cta--visible');
+      sticky.setAttribute('aria-hidden', 'false');
+      return;
+    }
+
     observer = new IntersectionObserver((entries) => {
       const summaryVisible = entries[0].isIntersecting;
       sticky.classList.toggle('lb-cart-sticky-cta--visible', !summaryVisible);
