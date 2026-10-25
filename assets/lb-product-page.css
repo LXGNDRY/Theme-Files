@@ -652,10 +652,6 @@
 }
 
 .lb-spec__title {
-  color: rgba(255, 255, 255, 0.62);
-}
-
-.lb-spec__title {
   margin: 0 0 0.75rem;
   font-family: var(--font-heading--family);
   font-size: 0.8125rem;
