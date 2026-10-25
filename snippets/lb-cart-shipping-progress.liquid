@@ -22,7 +22,7 @@
     assign qualified_total = cart.total_price
     assign remaining = threshold_cents | minus: qualified_total
     assign progress = qualified_total | times: 100 | divided_by: threshold_cents
-    assign remaining_money = remaining | money
+    assign remaining_money = remaining | money | strip_html | strip
 
     if progress > 100
       assign progress = 100
