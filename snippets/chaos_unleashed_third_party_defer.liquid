@@ -188,7 +188,9 @@
 
   if (typeof document === 'undefined' || !document.head) return;
 
-  let Handled_Script_Patterns = ['judgeme'];
+  // Judge.me must initialize with the product page so product-specific stars and
+  // reviews render reliably. Do not defer review-platform scripts here.
+  let Handled_Script_Patterns = [];
 
   const RESTORE_FALLBACK_MS = 5000;
   var Auto_Restore_Fallback_Ms = RESTORE_FALLBACK_MS;
