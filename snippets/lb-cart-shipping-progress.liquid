@@ -9,12 +9,12 @@
 {% enddoc %}
 
 {% liquid
-  assign shipping_progress_enabled = settings.cart_free_shipping_enabled
+  assign shipping_progress_enabled = settings.cart_free_shipping_enabled | default: true
   assign threshold_dollars = settings.cart_free_shipping_threshold | default: 100
   assign threshold_cents = threshold_dollars | times: 100
   assign show_progress = false
 
-  if shipping_progress_enabled and cart.requires_shipping and cart.currency == shop.currency and threshold_cents > 0
+  if shipping_progress_enabled and cart.requires_shipping and threshold_cents > 0
     assign show_progress = true
   endif
 
