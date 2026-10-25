@@ -204,7 +204,7 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<p><strong>RECOMMENDED</strong></p>",
+                "text": "<p><strong>MORE FROM THE COLLECTION</strong></p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
