@@ -7,13 +7,15 @@
     <div class="lb-ehero__bg" aria-hidden="true">
       <img
         class="lb-ehero__bg-img"
-        src="{{ img | image_url: width: 1600, format: 'webp' }}"
-        srcset="{{ img | image_url: width: 900, format: 'webp' }} 900w, {{ img | image_url: width: 1600, format: 'webp' }} 1600w, {{ img | image_url: width: 2400, format: 'webp' }} 2400w"
+        src="{{ img | image_url: width: 1200, format: 'webp' }}"
+        srcset="{{ img | image_url: width: 480, format: 'webp' }} 480w, {{ img | image_url: width: 750, format: 'webp' }} 750w, {{ img | image_url: width: 1200, format: 'webp' }} 1200w, {{ img | image_url: width: 1600, format: 'webp' }} 1600w, {{ img | image_url: width: 2400, format: 'webp' }} 2400w"
         sizes="100vw"
         alt=""
         width="{{ img.width }}"
         height="{{ img.height }}"
+        loading="eager"
         fetchpriority="high"
+        decoding="async"
       >
     </div>
   {%- endif -%}
