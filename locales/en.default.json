@@ -71,7 +71,8 @@
     "product_categories": "Product categories",
     "collections": "Collections",
     "shop_by_category": "Shop by category",
-    "product_list": "Product list"
+    "product_list": "Product list",
+    "cart_shipping_progress": "Free standard shipping progress"
   },
   "actions": {
     "add": "Add",
@@ -322,7 +323,14 @@
     "recipient_form_error": "There was an error with the form submission",
     "product_custom_property_character_count": "{{ used_chars }}/{{ max_chars }} characters used",
     "page_not_found": "This page doesn't exist.",
-    "page_not_found_message": "The link may be broken, or the page may have been removed."
+    "page_not_found_message": "The link may be broken, or the page may have been removed.",
+    "cart_free_shipping_remaining": "You're {{ amount }} away from free standard shipping.",
+    "cart_free_shipping_unlocked": "Free standard shipping unlocked.",
+    "cart_free_shipping_note": "Express options are shown at checkout.",
+    "cart_total_savings": "Total savings",
+    "cart_secure_checkout": "Secure checkout",
+    "cart_easy_returns": "Easy 30-day returns",
+    "cart_processing_time": "2–3 business-day processing"
   },
   "fields": {
     "separator": "to"
@@ -393,4 +401,3 @@
     "email": "Email"
   }
 }
-
