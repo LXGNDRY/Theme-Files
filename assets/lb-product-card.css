@@ -472,3 +472,30 @@ product-card.product-card .jdgm-prev-badge {
     font-size: 0.625rem !important;
   }
 }
+
+product-recommendations product-card.product-card .text-block:has(> h4) {
+  display: block;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0;
+  margin: 0 auto;
+  text-align: center !important;
+}
+
+product-recommendations product-card.product-card .text-block > h4 {
+  width: 100%;
+  margin: 0;
+  color: var(--color-foreground) !important;
+  font-family: 'Bebas Neue', 'Arial Narrow', sans-serif !important;
+  font-size: var(--lb-card-title-size) !important;
+  font-weight: 400 !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0.045em !important;
+  text-align: center !important;
+  text-transform: uppercase;
+  white-space: normal !important;
+  overflow: visible !important;
+  overflow-wrap: anywhere;
+  text-overflow: clip !important;
+  -webkit-line-clamp: unset !important;
+}
