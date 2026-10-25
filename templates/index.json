@@ -13,10 +13,10 @@
       "type": "lb-edit-hero",
       "settings": {
         "image": "shopify://shop_images/5958342654289094365_0f2d35ea-8d96-4d70-ba9d-513592aeddf9.jpg",
-        "eyebrow": "Marque L\u00e9gendaire / The Heavyweight Edit",
+        "eyebrow": "Marque L\u00e9gendaire \u00b7 Heavyweight Streetwear",
         "heading": "WEAR THE WEIGHT.",
-        "subheading": "Heavyweight streetwear with deliberate proportion, graphic intent, and a presence of its own.",
-        "cta1_label": "Enter the edit",
+        "subheading": "Heavyweight oversized tees and outerwear in premium cotton, DTG printed to outlast. Deliberate proportion, graphic intent, and a presence of its own.",
+        "cta1_label": "Shop heavyweight tees",
         "cta1_url": "shopify://collections/shirts-tops",
         "cta2_label": "Know your GSM",
         "cta2_url": "#weight",
@@ -78,28 +78,28 @@
           "type": "stat",
           "settings": {
             "number": "460",
-            "label": "GSM max weight"
+            "label": "Max GSM weight"
           }
         },
         "s1": {
           "type": "stat",
           "settings": {
             "number": "30",
-            "label": "Day return requests"
+            "label": "Day returns"
           }
         },
         "s2": {
           "type": "stat",
           "settings": {
             "number": "$100",
-            "label": "Free standard shipping over"
+            "label": "Free shipping over"
           }
         },
         "s3": {
           "type": "stat",
           "settings": {
             "number": "DTG",
-            "label": "Printed to last"
+            "label": "DTG printed to last"
           }
         }
       },
@@ -116,14 +116,14 @@
     "ed_edit_grid": {
       "type": "lb-edit-grid",
       "settings": {
-        "eyebrow": "01 / The curated rotation",
+        "eyebrow": "01 / Heavyweight tees & tops",
         "heading": "FIND YOUR NEXT STAPLE.",
         "collection": "shirts-tops",
         "products_to_show": 4,
         "ribbon_text": "BOGO 50%",
-        "link_label": "Explore all tees & tops",
+        "link_label": "Shop all tees & tops",
         "color_scheme": "scheme-5",
-        "anchor": "edit"
+        "anchor": "tees"
       }
     },
     "ed_gsm": {
@@ -169,9 +169,9 @@
         "w3"
       ],
       "settings": {
-        "eyebrow": "02 / Fabric system",
+        "eyebrow": "02 / Fabric & weight",
         "heading": "THE DIFFERENCE IS IN THE WEIGHT.",
-        "body": "<p>GSM measures fabric weight in grams per square metre. Higher weight changes structure, drape, and the physical presence of the garment.</p>",
+        "body": "<p>GSM is the weight of the fabric in grams per square metre. The higher the number, the more structure, drape, and physical presence the garment has.</p>",
         "color_scheme": "scheme-5",
         "anchor": "weight"
       }
@@ -179,12 +179,12 @@
     "ed_outer_grid": {
       "type": "lb-edit-grid",
       "settings": {
-        "eyebrow": "The finishing layer",
-        "heading": "OUTERWEAR.",
+        "eyebrow": "03 / Heavyweight outerwear",
+        "heading": "HOODIES & JACKETS.",
         "collection": "hoodies-jackets",
         "products_to_show": 4,
         "ribbon_text": "10% OFF",
-        "link_label": "Explore all outerwear",
+        "link_label": "Shop all outerwear",
         "color_scheme": "scheme-5"
       }
     },
@@ -193,8 +193,8 @@
       "settings": {
         "eyebrow": "More than a logo",
         "heading": "A DAILY MINDSET.",
-        "body": "<p>Legendary Branding / Marque L\u00e9gendaire. Heavyweight fabrics, deliberate proportions, graphic intent. Built for repeat wear.</p>",
-        "button_label": "Enter the edit",
+        "body": "<p>Legendary Branding. Marque L\u00e9gendaire. Heavyweight fabrics, deliberate proportions, and graphic intent \u2014 built for repeat wear, season after season.</p>",
+        "button_label": "Shop the collection",
         "button_url": "shopify://collections/shirts-tops",
         "image_side": "left",
         "color_scheme": "scheme-5"
@@ -203,12 +203,12 @@
     "ed_fit": {
       "type": "lb-fit-guide",
       "settings": {
-        "eyebrow": "04 / Confidence in the fit",
-        "heading": "OVERSIZED. ON YOUR TERMS.",
+        "eyebrow": "05 / Confidence in the fit",
+        "heading": "OVERSIZED, ON YOUR TERMS.",
         "body": "<p>Your usual letter size gives you the intended, structured oversized look. Go one size up for a baggier silhouette.</p>",
         "sizes": "S,M,L,XL,2XL",
         "default_size": "M",
-        "button_label": "Find a piece in your fit",
+        "button_label": "Shop your fit",
         "button_url": "shopify://collections/shirts-tops",
         "color_scheme": "scheme-5",
         "anchor": "fit"
@@ -308,8 +308,8 @@
         "q4"
       ],
       "settings": {
-        "eyebrow": "06 / Before it becomes yours",
-        "heading": "GOOD TO KNOW. EASY TO CHOOSE.",
+        "eyebrow": "06 / Good to know",
+        "heading": "GOOD TO KNOW, BEFORE YOU COMMIT.",
         "support_email": "lb@legendary-branding.com",
         "anchor": "good-to-know",
         "color_scheme": "scheme-5"
@@ -336,7 +336,7 @@
             "collection": "shirts-tops",
             "overlay_label": "The foundation",
             "title": "Shirts & Tops",
-            "link_label": "Explore featured tees"
+            "link_label": "Shop tees & tops"
           }
         },
         "c1": {
@@ -345,7 +345,7 @@
             "collection": "hoodies-jackets",
             "overlay_label": "The finishing layer",
             "title": "Outerwear",
-            "link_label": "Explore featured layers"
+            "link_label": "Shop outerwear"
           }
         },
         "c2": {
@@ -354,7 +354,7 @@
             "collection": "marque-legendaire-luxury-streetwear",
             "overlay_label": "The signature line",
             "title": "Marque L\u00e9gendaire",
-            "link_label": "Meet the signature"
+            "link_label": "Shop Marque L\u00e9gendaire"
           }
         }
       },
@@ -364,8 +364,8 @@
         "c2"
       ],
       "settings": {
-        "eyebrow": "Choose your entry point / 01\u201403",
-        "heading": "START WITH YOUR DIRECTION.",
+        "eyebrow": "Shop by collection",
+        "heading": "FIND YOUR LANE.",
         "color_scheme": "scheme-5"
       }
     },
@@ -374,10 +374,10 @@
       "settings": {
         "eyebrow": "Your next chapter starts here",
         "heading": "MAKE ROOM FOR SOMETHING LEGENDARY.",
-        "cta_label": "Find your next piece",
+        "cta_label": "Shop the collection",
         "cta_url": "shopify://collections/shirts-tops",
         "show_signup": true,
-        "signup_text": "Join the list for new drops and first access.",
+        "signup_text": "Join the list for early access to new drops and members-only offers.",
         "placeholder": "Email address",
         "button_label": "Join",
         "color_scheme": "scheme-5"
@@ -392,7 +392,7 @@
             "number": "01",
             "title": "Start with the weight",
             "body": "Choose 300GSM for substantial everyday wear, 380\u2013400GSM for stronger structure, or 460GSM for maximum presence.",
-            "link_label": "Compare the edit",
+            "link_label": "Compare the weights",
             "link_url": "#weight"
           }
         },
@@ -423,9 +423,9 @@
         "st3"
       ],
       "settings": {
-        "eyebrow": "Shop with clarity / Three moves",
+        "eyebrow": "04 / Shop with clarity",
         "heading": "CHOOSE WITH INTENTION.",
-        "body": "<p>Use fabric weight, silhouette, and delivery expectations to narrow the edit before you open a product page.</p>",
+        "body": "<p>Use fabric weight, silhouette, and delivery expectations to choose with confidence before you open a product page.</p>",
         "color_scheme": "scheme-5"
       }
     }
