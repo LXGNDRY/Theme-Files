@@ -72,6 +72,7 @@ class StickyAddToCartComponent extends Component {
     document.addEventListener(ThemeEvents.cartUpdate, this.#handleCartAddComplete, { signal });
     document.addEventListener(ThemeEvents.cartError, this.#handleCartAddComplete, { signal });
     document.addEventListener(ThemeEvents.quantitySelectorUpdate, this.#handleQuantityUpdate, { signal });
+    this.refs.stickyBar.addEventListener('click', this.#handleStickyBarClick, { signal });
 
     this.#getInitialQuantity();
   }
@@ -114,6 +115,17 @@ class StickyAddToCartComponent extends Component {
 
     updateVisibility();
   }
+
+  /**
+   * Returns to the product controls when the sticky summary is selected.
+   * Interactive controls, including the add-to-cart button, keep their own action.
+   * @param {MouseEvent} event
+   */
+  #handleStickyBarClick = (event) => {
+    if (event.target.closest('button, a, input, select, textarea, label')) return;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Public action handlers
   /**
