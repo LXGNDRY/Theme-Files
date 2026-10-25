@@ -6,6 +6,7 @@
 {%- enddoc -%}
 
 <div class="cart-totals">
+  {% render 'lb-cart-shipping-progress', cart: cart %}
   {% # We need to keep this node in place to allow morphing to work properly # %}
   <div class="cart-totals__original-container cart-primary-typography">
     {%- if cart.cart_level_discount_applications.size > 0 -%}
@@ -37,6 +38,13 @@
       </ul>
     {%- endif -%}
   </div>
+
+  {% if cart.total_discount > 0 %}
+    <div class="lb-cart-savings" role="status">
+      <span>{{ 'content.cart_total_savings' | t }}</span>
+      <strong>-{{ cart.total_discount | money }}</strong>
+    </div>
+  {% endif %}
 
   {% if settings.show_cart_note or settings.show_add_discount_code %}
     <div class="cart-actions">
@@ -256,33 +264,20 @@
   </div>
 </div>
 
-{%- comment -%} LB Trust Badges — visual trust signals above checkout {%- endcomment -%}
 {%- unless cart.empty? -%}
-  <div class="lb-cart-trust" aria-label="{{ 'accessibility.trust_signals' | t | default: 'Trust signals' }}">
+  <div class="lb-cart-trust" aria-label="{{ 'accessibility.trust_signals' | t }}">
     <span class="lb-cart-trust__item">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2L4 6v6c0 5.25 3.5 10.15 8 11.35C16.5 22.15 20 17.25 20 12V6l-8-4z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Secure checkout
+      {{ 'content.cart_secure_checkout' | t }}
     </span>
     <span class="lb-cart-trust__item">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 3H8v4h8V3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      Made to order
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 12a9 9 0 1 0 18 0 0 0-18 0z" stroke="currentColor" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2"/></svg>
+      {{ 'content.cart_easy_returns' | t }}
     </span>
     <span class="lb-cart-trust__item">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0z" stroke="currentColor" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      30-day returns
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v9l6 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
+      {{ 'content.cart_processing_time' | t }}
     </span>
-    {%- if settings.cart_ships_to_countries_count > 0 -%}
-      <span class="lb-cart-trust__item" aria-label="{{ 'accessibility.trust_ships_worldwide' | t }}">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z" stroke="currentColor" stroke-width="2"/></svg>
-        {{ 'content.cart_ships_to_countries' | t: count: settings.cart_ships_to_countries_count }}
-      </span>
-    {%- endif -%}
-    {%- if settings.cart_review_count > 0 -%}
-      <span class="lb-cart-trust__item" aria-label="{{ 'accessibility.trust_reviews' | t }}">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l2.9 6.26 6.9.6-5.2 4.53 1.57 6.76L12 16.9l-6.17 3.25L7.4 13.4 2.2 8.86l6.9-.6L12 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        {{ 'content.cart_review_summary' | t: count: settings.cart_review_count, rating: settings.cart_review_rating }}
-      </span>
-    {%- endif -%}
   </div>
 {%- endunless -%}
 
