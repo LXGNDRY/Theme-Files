@@ -551,7 +551,7 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<h2><a href=\"/collections/hoodies-jackets\" title=\"OUTERWEAR\"><em><strong>{{ closest.collection.title }}</strong></em></a></h2>",
+                "text": "<h2><a href=\"/collections/shirts-tops\" title=\"Shirts &amp; Tops\">BUY 1 GET 1 50% OFF \u2014 TEES &amp; TOPS</a></h2>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -690,7 +690,7 @@
       },
       "name": "t:names.products_carousel",
       "settings": {
-        "collection": "all-products",
+        "collection": "shirts-tops",
         "layout_type": "grid",
         "carousel_on_mobile": false,
         "max_products": 4,
