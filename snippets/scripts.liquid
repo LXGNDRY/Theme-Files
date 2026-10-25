@@ -127,7 +127,6 @@
   render slideshow sections.
 {%- endcomment -%}
 {%- unless template.name == 'cart' or template.name == '404' or template.name == 'password' -%}
-<script src="{{ 'slideshow.js' | asset_url }}" type="module" fetchpriority="low"></script>
 {%- endunless -%}
 {% if template == 'product' or template.name == 'product' or request.page_type == 'product' %}
 <script src="{{ 'media.js' | asset_url }}" type="module" fetchpriority="low"></script>
@@ -227,7 +226,6 @@
     {{ 'accordion-custom.js' | asset_url | json }},
     {{ 'video-background.js' | asset_url | json }},
     {{ 'rte-formatter.js' | asset_url | json }},
-    {{ 'recently-viewed-products.js' | asset_url | json }},
 
     // Collection + search filter UI only
     {%- if template.name == 'collection' or template.name == 'search' -%}
