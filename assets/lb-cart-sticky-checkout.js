@@ -4,6 +4,8 @@
   if (!sticky) return;
 
   const total = sticky.querySelector('[data-cart-sticky-total]');
+  let observer;
+
   const getSummary = () => document.querySelector('.cart-page__summary');
   const getMainTotal = () => document.querySelector('.cart-page__summary [data-cart-subtotal]');
 
@@ -16,6 +18,8 @@
   };
 
   const setVisibility = () => {
+    observer?.disconnect();
+
     const summary = getSummary();
 
     if (!summary) {
@@ -24,7 +28,7 @@
       return;
     }
 
-    const observer = new IntersectionObserver((entries) => {
+    observer = new IntersectionObserver((entries) => {
       const summaryVisible = entries[0].isIntersecting;
       sticky.classList.toggle('lb-cart-sticky-cta--visible', !summaryVisible);
       sticky.setAttribute('aria-hidden', summaryVisible ? 'true' : 'false');
