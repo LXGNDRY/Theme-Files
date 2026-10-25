@@ -49,16 +49,6 @@
   <link rel="preconnect" href="https://www.googletagmanager.com">
   <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
-  <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
-  <link rel="preconnect" href="https://s.pinimg.com" crossorigin>
-  <link rel="preconnect" href="https://sc-static.net" crossorigin>
-  <link rel="preconnect" href="https://checkout.shopify.com" crossorigin>
-  <link rel="preconnect" href="https://static.klaviyo.com" crossorigin>
-  <link rel="dns-prefetch" href="//connect.facebook.net">
-  <link rel="dns-prefetch" href="//s.pinimg.com">
-  <link rel="dns-prefetch" href="//sc-static.net">
-  <link rel="dns-prefetch" href="//checkout.shopify.com">
-  <link rel="dns-prefetch" href="//static.klaviyo.com">
 
   {%- comment -%}── 3. LCP PRELOAD ────────────────────────────────────────────
     seo-preconnect runs here to warm the CDN before the preload resolves.
@@ -275,24 +265,24 @@
       3. lb-pdp-buttons.css      — ATC + dynamic checkout (product + homepage)
       4. lb-variant-selectors.css — variant pills (product + homepage)
   {%- endcomment -%}
-  <link rel="preload" href="{{ 'chaos-theme-styles.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
+  <link rel="preload" href="{{ 'chaos-theme-styles.css' | asset_url }}" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet';">
   <noscript><link rel="stylesheet" href="{{ 'chaos-theme-styles.css' | asset_url }}"></noscript>
 
-  <link rel="preload" href="{{ 'lb-cart-ui.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
+  <link rel="preload" href="{{ 'lb-cart-ui.css' | asset_url }}" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet';">
   <noscript><link rel="stylesheet" href="{{ 'lb-cart-ui.css' | asset_url }}"></noscript>
 
   {%- if template.name == 'product' or template.name == 'index' -%}
-  <link rel="preload" href="{{ 'lb-pdp-buttons.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
+  <link rel="preload" href="{{ 'lb-pdp-buttons.css' | asset_url }}" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet';">
   <noscript><link rel="stylesheet" href="{{ 'lb-pdp-buttons.css' | asset_url }}"></noscript>
   {%- endif -%}
 
   {%- if template.name == 'product' or template.name == 'index' -%}
-  <link rel="preload" href="{{ 'lb-variant-selectors.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
+  <link rel="preload" href="{{ 'lb-variant-selectors.css' | asset_url }}" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet';">
   <noscript><link rel="stylesheet" href="{{ 'lb-variant-selectors.css' | asset_url }}"></noscript>
   {%- endif -%}
 
   {%- if template.name == 'collection' or template.name == 'search' -%}
-  <link rel="preload" href="{{ 'lb-collection.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
+  <link rel="preload" href="{{ 'lb-collection.css' | asset_url }}" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet';">
   <noscript><link rel="stylesheet" href="{{ 'lb-collection.css' | asset_url }}"></noscript>
   {%- endif -%}
 
@@ -316,14 +306,14 @@
     versioned with the theme, and no ?v= cache-buster that changes on re-upload.
   {%- endcomment -%}
   <style>:root{--lb-goat-mark:url({{ 'goat-mark.svg' | asset_url }});}</style>
-  <link rel="preload" href="{{ 'lb-goat-system.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
+  <link rel="preload" href="{{ 'lb-goat-system.css' | asset_url }}" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet';">
   <noscript><link rel="stylesheet" href="{{ 'lb-goat-system.css' | asset_url }}"></noscript>
 
-  <link rel="preload" href="{{ 'lb-editorial.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
+  <link rel="preload" href="{{ 'lb-editorial.css' | asset_url }}" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet';">
   <noscript><link rel="stylesheet" href="{{ 'lb-editorial.css' | asset_url }}"></noscript>
 
   {%- if template.name == 'product' -%}
-  <link rel="preload" href="{{ 'lb-product-page.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet';">
+  <link rel="preload" href="{{ 'lb-product-page.css' | asset_url }}" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet';">
   <noscript><link rel="stylesheet" href="{{ 'lb-product-page.css' | asset_url }}"></noscript>
   {%- endif -%}
 
