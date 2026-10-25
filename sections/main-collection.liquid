@@ -73,11 +73,6 @@
 
   {%- endpaginate -%}
 
-  {%- if section.settings.collection_description_position == 'bottom' -%}
-    {%- render 'lb-collection-description', collection: collection, section: section, position: 'bottom' -%}
-  {%- endif -%}
-
-  {%- render 'lb-internal-links', context: 'collection', collection: collection -%}
 
 </results-list>
 
