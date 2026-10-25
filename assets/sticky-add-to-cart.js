@@ -96,7 +96,7 @@ class StickyAddToCartComponent extends Component {
   }
 
   /**
-   * Sets up the IntersectionObserver to watch the buy buttons visibility
+   * Initializes the persistent sticky add-to-cart bar and links it to the PDP form
    */
   #setupIntersectionObserver() {
     const productForm = this.#getProductForm();
