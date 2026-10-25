@@ -62,19 +62,12 @@
     endif
   endif
 
-  # ─── CU-COLPRI-070: detect priority cards on collection pages ───
+  # Only the first collection card can be the grid LCP candidate.
+  # Other cards remain lazy/auto so they do not compete for bandwidth.
   assign is_priority_card = false
-  if request.page_type == 'collection' and product != blank
-    assign priority_ids = ''
-    for p in collection.products limit: 4
-      assign priority_ids = priority_ids | append: ',' | append: p.id | append: ','
-    endfor
-    assign needle = ',' | append: product.id | append: ','
-    if priority_ids contains needle
-      assign is_priority_card = true
-    endif
+  if request.page_type == 'collection' and product != blank and collection.products.first.id == product.id
+    assign is_priority_card = true
   endif
-  # ─── end CU-COLPRI-070 ───
 
   # if the card-gallery has a section.settings.product_card_size:
   # assume grid-template autofill(card-size, 1fr) and calculate the sizes attribute based on the minimum card size
