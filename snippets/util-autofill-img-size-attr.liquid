@@ -3,6 +3,7 @@
 
   @param {number} card_size - The minimum pixel-width of the product card.
   @param {number} [card_gap] - The pixel-width of the gap between product cards.
+  @param {string} [mobile_card_size] - 'large' for one column; all other values use two columns.
 
   @example
   {% capture size_attribute %}
@@ -60,13 +61,17 @@
     assign sizes_attr = sizes_attr | append: '(min-width: ' | append: min_width_needed | append: 'px) ' | append: percentage | append: 'vw'
   endfor
 
-  # Add tablet size (50vw) and mobile size (100vw) fallbacks
+  # Add tablet and mobile fallbacks that match the actual product grid.
   if sizes_attr != ''
     assign sizes_attr = sizes_attr | append: ', '
   endif
   assign sizes_attr = sizes_attr | append: '(min-width: ' | append: min_breakpoint | append: 'px) 50vw'
 
-  assign sizes_attr = sizes_attr | append: ', 100vw'
+  if mobile_card_size == 'large'
+    assign sizes_attr = sizes_attr | append: ', 100vw'
+  else
+    assign sizes_attr = sizes_attr | append: ', 50vw'
+  endif
 
   # Echo the sizes attribute
   echo sizes_attr
