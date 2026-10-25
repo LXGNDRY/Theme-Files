@@ -22,6 +22,7 @@
     assign qualified_total = cart.total_price
     assign remaining = threshold_cents | minus: qualified_total
     assign progress = qualified_total | times: 100 | divided_by: threshold_cents
+    assign remaining_money = remaining | money
 
     if progress > 100
       assign progress = 100
@@ -38,7 +39,7 @@
   >
     <div class="lb-cart-shipping-progress__copy">
       {% if remaining > 0 %}
-        <span>{{ 'content.cart_free_shipping_remaining' | t: amount: remaining | money }}</span>
+        <span>{{ 'content.cart_free_shipping_remaining' | t: amount: remaining_money }}</span>
       {% else %}
         <span>{{ 'content.cart_free_shipping_unlocked' | t }}</span>
       {% endif %}
