@@ -1,0 +1,226 @@
+{%- liquid
+  assign scheme = section.settings.color_scheme | default: 'scheme-1'
+-%}
+{%- if section.blocks.size > 0 -%}
+<section class="lb-cards color-{{ scheme }}">
+  <div class="lb-cards__inner">
+    {%- if section.settings.eyebrow != blank or section.settings.heading != blank -%}
+      <header class="lb-cards__head">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="lb-cards__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="lb-cards__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    <div class="lb-cards__grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign col = block.settings.collection
+          assign img = col.featured_image
+          unless img
+            assign img = col.products.first.featured_image
+          endunless
+          assign url = col.url | default: '#'
+        -%}
+        <a class="lb-cards__card" href="{{ url }}" {{ block.shopify_attributes }}>
+          <div class="lb-cards__media">
+            {%- if img -%}
+              <img
+                class="lb-cards__img"
+                src="{{ img | image_url: width: 800, format: 'webp' }}"
+                srcset="{{ img | image_url: width: 600, format: 'webp' }} 600w, {{ img | image_url: width: 900, format: 'webp' }} 900w, {{ img | image_url: width: 1200, format: 'webp' }} 1200w"
+                sizes="(min-width: 750px) 33vw, 100vw"
+                alt="{{ col.title | escape }}"
+                width="900"
+                height="1100"
+                loading="lazy"
+              >
+            {%- endif -%}
+          </div>
+          <div class="lb-cards__meta">
+            {%- if block.settings.overlay_label != blank -%}
+              <span class="lb-cards__label">{{ block.settings.overlay_label }}</span>
+            {%- endif -%}
+            <span class="lb-cards__title">{{ block.settings.title | default: col.title }}</span>
+            <span class="lb-cards__cta">{{ block.settings.link_label | default: 'Explore' }} <span aria-hidden="true">&rarr;</span></span>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% stylesheet %}
+.lb-cards {
+  padding: var(--lb-sp-2xl, 80px) 0;
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+.lb-cards__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-inline: var(--lb-sp-md, 22px);
+}
+
+.lb-cards__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.55);
+  margin: 0 0 14px;
+}
+
+.lb-cards__heading {
+  font-size: clamp(28px, 5vw, 56px);
+  line-height: 1.02;
+  text-transform: uppercase;
+  margin: 0 0 40px;
+}
+
+.lb-cards__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+@media (min-width: 750px) {
+  .lb-cards__grid {
+    grid-template-columns: repeat(var(--lb-cards-cols, 3), 1fr);
+    gap: 24px;
+  }
+}
+
+.lb-cards__card {
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid rgba(var(--color-foreground-rgb, 238, 238, 231), 0.14);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.lb-cards__card:hover {
+  border-color: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.5);
+  transform: translateY(-2px);
+}
+
+.lb-cards__media {
+  aspect-ratio: 4 / 5;
+  background: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.06);
+  overflow: hidden;
+}
+
+.lb-cards__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.lb-cards__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px;
+}
+
+.lb-cards__label {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.55);
+}
+
+.lb-cards__title {
+  font-size: clamp(20px, 3vw, 30px);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+
+.lb-cards__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection Cards",
+  "tag": "section",
+  "class": "lb-cards-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "Choose your entry point / 01—03"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "START WITH YOUR DIRECTION."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Collection card",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "overlay_label",
+          "label": "Eyebrow label"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Card title",
+          "info": "Defaults to the collection title."
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label",
+          "default": "Explore the edit"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Collection Cards",
+      "blocks": [
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" }
+      ]
+    }
+  ]
+}
+{% endschema %}
