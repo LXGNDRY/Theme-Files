@@ -994,9 +994,9 @@
   },
   "order": [
     "main",
+    "lb_fit_pdp",
     "reviews_pdp",
     "lb_gsm_pdp",
-    "lb_fit_pdp",
     "lb_feature_pdp",
     "faq_pdp",
     "product_recommendations_qnzPkn",
