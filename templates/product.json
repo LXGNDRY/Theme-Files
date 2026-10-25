@@ -518,179 +518,6 @@
         "padding-block-end": 0
       }
     },
-    "lb_brand_story_pdp": {
-      "type": "lb-brand-story",
-      "settings": {
-        "image": "shopify://shop_images/16578578615016701551.jpg",
-        "image_side": "right",
-        "eyebrow": "LEGENDARY BRANDING | Marque  Légendaire",
-        "heading": "QUALITY OVER QUANTITY",
-        "body": "<p>We build for those who know the difference. <strong>360+ GSM hoodies. 235+ GSM tees.</strong> Heavyweight fabrics engineered to hold their shape, paired with <strong>DTG prints made for lasting detail</strong> through repeated wear and washing.</p><p>And if you don’t know the difference yet, <strong>here’s your chance to feel it.</strong></p><p><strong>Legendary Branding isn’t just a brand. It’s a standard.</strong></p>",
-        "button_label": "",
-        "button_url": "",
-        "color_scheme": "scheme-5"
-      }
-    },
-    "section_LPjgbx": {
-      "type": "section",
-      "blocks": {
-        "video_RXLxAn": {
-          "type": "video",
-          "name": "t:names.video",
-          "settings": {
-            "source": "uploaded",
-            "video": "shopify://files/videos/hf_20260505_154356_c220951d-9e0a-431f-b565-bfd43700fc9c.mp4",
-            "video_url": "",
-            "video_autoplay": true,
-            "video_loop": true,
-            "alt": "",
-            "custom_width": 100,
-            "custom_width_mobile": 100,
-            "aspect_ratio": "auto",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 39,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "group_JeECGJ": {
-          "type": "group",
-          "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 16,
-            "width": "custom",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "text_qcXJzG": {
-              "type": "text",
-              "name": "t:names.heading",
-              "disabled": true,
-              "settings": {
-                "text": "<h2><span style=\"text-decoration:underline\"><em><strong>Legendary Branding?</strong></em></span></h2>",
-                "bleed": false,
-                "width": "100%",
-                "max_width": "none",
-                "alignment": "center",
-                "type_preset": "h2",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_QHhKhY": {
-              "type": "text",
-              "settings": {
-                "text": "<p>Driven by years of refinement and attention to detail, we create premium streetwear built to <strong>outlast trends and disposable fashion</strong>. Every piece combines <strong>heavyweight fabrics, durable construction, and lasting prints</strong> for a substantial feel designed for everyday wear.</p><p><em><strong>More than a logo,</strong></em> The GOAT stands for <strong>GREATEST OF ALL TRENDS</strong>—a symbol of individuality, ambition, and the pursuit of becoming legendary in whatever you do.</p><p><strong>Built with purpose. Worn with intent. Made to be legendary.</strong></p>",
-                "bleed": false,
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "center",
-                "type_preset": "custom",
-                "font": "var(--font-body--family)",
-                "font_size": "1.25rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "uppercase",
-                "wrap": "pretty",
-                "color": "var(--color-foreground-heading)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "text_qcXJzG",
-            "text_QHhKhY"
-          ]
-        }
-      },
-      "block_order": [
-        "video_RXLxAn",
-        "group_JeECGJ"
-      ],
-      "name": "t:names.image_with_text",
-      "settings": {
-        "content_direction": "row",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "center",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 100,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-5",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 8,
-        "padding-block-end": 0
-      }
-    },
     "product_recommendations_qnzPkn": {
       "type": "product-recommendations",
       "blocks": {
@@ -1103,15 +930,88 @@
         "heading": "WHAT THEY'RE SAYING.",
         "color_scheme": "scheme-5"
       }
+    },
+    "lb_feature_pdp": {
+      "type": "lb-edit-feature",
+      "settings": {
+        "media_type": "video",
+        "video": "shopify://files/videos/hf_20260505_154356_c220951d-9e0a-431f-b565-bfd43700fc9c.mp4",
+        "media_side": "left",
+        "eyebrow": "Made with intent",
+        "heading": "BUILT TO OUTLAST.",
+        "body": "<p>Every piece is DTG printed on heavyweight, ring-spun cotton and built for repeat wear — the prints hold, the shape holds, season after season.</p>",
+        "cta_label": "Explore the collection",
+        "cta_url": "shopify://collections/all-products",
+        "color_scheme": "scheme-5"
+      }
+    },
+    "faq_pdp": {
+      "type": "lb-edit-faq",
+      "blocks": {
+        "q0": {
+          "type": "faq",
+          "settings": {
+            "question": "What will shipping cost?",
+            "answer": "<p>Standard shipping is $5. Orders over $100 get free standard shipping. Express is $12 where available. Taxes and duties are shown at checkout.</p>",
+            "open": true
+          }
+        },
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>Request a return within 30 days of delivery. Items must be unworn, unwashed and in original condition. Contact support for approval before sending anything back. For a size change or change of mind, return shipping is your responsibility. Final sale and other exclusions apply.</p>",
+            "open": false
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I choose my size?",
+            "answer": "<p>Start with your usual size for the intended oversized look, or size up for a baggier fit. Product measurements take priority: compare chest width and length with a garment you already wear.</p>",
+            "open": false
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "question": "How should I care for it?",
+            "answer": "<p>Machine wash cold, inside out, with like colors. Hang or lay flat to dry to preserve the fit and the print. Avoid high heat.</p>",
+            "open": false
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "question": "What payment methods can I use?",
+            "answer": "<p>Visa, Mastercard, American Express, Shop Pay and Apple Pay. Available methods are confirmed at checkout for your destination.</p>",
+            "open": false
+          }
+        }
+      },
+      "block_order": [
+        "q0",
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "settings": {
+        "eyebrow": "Good to know",
+        "heading": "BEFORE YOU COMMIT.",
+        "support_email": "lb@legendary-branding.com",
+        "anchor": "",
+        "color_scheme": "scheme-5"
+      }
     }
   },
   "order": [
     "main",
     "lb_gsm_pdp",
     "lb_fit_pdp",
-    "section_LPjgbx",
-    "lb_brand_story_pdp",
+    "lb_feature_pdp",
     "reviews_pdp",
+    "faq_pdp",
     "product_recommendations_qnzPkn"
   ]
 }
