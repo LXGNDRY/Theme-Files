@@ -2483,6 +2483,18 @@
         "padding-block-start": 40,
         "padding-block-end": 40
       }
+    },
+    "lb_sticky_cta": {
+      "type": "custom-liquid",
+      "settings": {
+        "custom_liquid": "<a class=\"lb-sticky-bogo\" href=\"/collections/shirts-tops\" aria-label=\"Shop Buy 1 Get 1 50 percent off tees and tops\"><span class=\"lb-sticky-bogo__deal\">BUY 1 GET 1 50% OFF</span><span class=\"lb-sticky-bogo__cta\">Shop Tees &amp; Tops &rarr;</span></a><style>.lb-sticky-bogo{display:none}@media (max-width:749px){.lb-sticky-bogo{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:50;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;min-height:52px;background:var(--color-foreground,#111);color:var(--color-background,#fff);text-decoration:none;font-weight:700;letter-spacing:.02em;font-size:.9rem;box-shadow:0 -2px 12px rgba(0,0,0,.25)}.lb-sticky-bogo__cta{white-space:nowrap}}</style>",
+        "color_scheme": "",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      },
+      "blocks": {},
+      "block_order": []
     }
   },
   "order": [
@@ -2499,6 +2511,7 @@
     "1775528473b337bdc9",
     "featured_product_information_F7nKaf",
     "lb_faq",
-    "1775308406c0b1727c"
+    "1775308406c0b1727c",
+    "lb_sticky_cta"
   ]
 }
