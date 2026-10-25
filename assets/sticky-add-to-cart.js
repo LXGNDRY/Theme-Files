@@ -34,18 +34,12 @@ import { onAnimationEnd } from '@theme/utilities';
 
 /**
  * A custom element that manages a sticky add-to-cart bar.
- * Shows when the main buy buttons scroll out of view.
+ * Shows after the shopper starts scrolling and hides at the top of the PDP.
  *
  * @extends {Component<StickyAddToCartRefs>}
  */
 class StickyAddToCartComponent extends Component {
   requiredRefs = ['stickyBar', 'addToCartButton', 'quantityDisplay', 'quantityNumber'];
-
-  /** @type {IntersectionObserver | null} */
-  #buyButtonsIntersectionObserver = null;
-
-  /** @type {IntersectionObserver | null} */
-  #mainBottomObserver = null;
 
   /** @type {number | undefined} */
   #resetTimeout;
@@ -54,7 +48,7 @@ class StickyAddToCartComponent extends Component {
   #isStuck = false;
 
   /** @type {number | null} */
-  #animationTimeout = null;
+  #scrollAnimationFrame = null;
 
   /** @type {AbortController} */
   #abortController = new AbortController();
@@ -65,13 +59,10 @@ class StickyAddToCartComponent extends Component {
   /** @type {number} */
   #currentQuantity = 1;
 
-  /** @type {boolean} */
-  #hiddenByBottom = false;
-
   connectedCallback() {
     super.connectedCallback();
 
-    this.#setupIntersectionObserver();
+    this.#setupScrollVisibility();
 
     const { signal } = this.#abortController;
     const target = this.closest('.shopify-section');
@@ -87,29 +78,41 @@ class StickyAddToCartComponent extends Component {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.#buyButtonsIntersectionObserver?.disconnect();
-    this.#mainBottomObserver?.disconnect();
     this.#abortController.abort();
-    if (this.#animationTimeout) {
-      clearTimeout(this.#animationTimeout);
+    if (this.#scrollAnimationFrame !== null) {
+      cancelAnimationFrame(this.#scrollAnimationFrame);
     }
   }
 
   /**
-   * Initializes the persistent sticky add-to-cart bar and links it to the PDP form
+   * Links the sticky bar to the PDP form and reveals it only after the customer
+   * has deliberately started scrolling. Returning to the page top hides it again.
    */
-  #setupIntersectionObserver() {
+  #setupScrollVisibility() {
     const productForm = this.#getProductForm();
     if (!productForm) return;
 
-    const buyButtonsBlock = productForm.closest('.buy-buttons-block');
-    if (!buyButtonsBlock) return;
-
-    // Keep the sticky add-to-cart bar available from the moment the PDP loads.
-    // It is intentionally persistent throughout the product page, including near
-    // the footer, so the purchase action is always within reach.
-    this.#showStickyBar();
     this.#targetAddToCartButton = productForm.querySelector('[ref="addToCartButton"]');
+
+    const updateVisibility = () => {
+      if (this.#scrollAnimationFrame !== null) return;
+
+      this.#scrollAnimationFrame = requestAnimationFrame(() => {
+        this.#scrollAnimationFrame = null;
+
+        if (window.scrollY > 24) {
+          this.#showStickyBar();
+        } else {
+          this.#hideStickyBar();
+        }
+      });
+    };
+
+    const { signal } = this.#abortController;
+    window.addEventListener('scroll', updateVisibility, { passive: true, signal });
+    window.addEventListener('pageshow', updateVisibility, { signal });
+
+    updateVisibility();
   }
 
   // Public action handlers
