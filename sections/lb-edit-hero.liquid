@@ -1,0 +1,300 @@
+{%- liquid
+  assign scheme = section.settings.color_scheme | default: 'scheme-5'
+  assign img = section.settings.image
+-%}
+<section class="lb-ehero color-{{ scheme }}{% if img %} lb-ehero--media{% endif %}" data-lb-ehero>
+  {%- if img -%}
+    <div class="lb-ehero__bg" aria-hidden="true">
+      <img
+        class="lb-ehero__bg-img"
+        src="{{ img | image_url: width: 1600, format: 'webp' }}"
+        srcset="{{ img | image_url: width: 900, format: 'webp' }} 900w, {{ img | image_url: width: 1600, format: 'webp' }} 1600w, {{ img | image_url: width: 2400, format: 'webp' }} 2400w"
+        sizes="100vw"
+        alt=""
+        width="{{ img.width }}"
+        height="{{ img.height }}"
+        fetchpriority="high"
+      >
+    </div>
+  {%- endif -%}
+
+  <div class="lb-ehero__inner">
+    <div class="lb-ehero__copy">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="lb-ehero__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h1 class="lb-ehero__heading">{{ section.settings.heading }}</h1>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="lb-ehero__sub">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+      <div class="lb-ehero__actions">
+        {%- if section.settings.cta1_label != blank and section.settings.cta1_url != blank -%}
+          <a class="lb-ehero__btn lb-ehero__btn--primary" href="{{ section.settings.cta1_url }}">
+            {{ section.settings.cta1_label }} <span aria-hidden="true">&#8599;</span>
+          </a>
+        {%- endif -%}
+        {%- if section.settings.cta2_label != blank and section.settings.cta2_url != blank -%}
+          <a class="lb-ehero__btn lb-ehero__btn--ghost" href="{{ section.settings.cta2_url }}">
+            {{ section.settings.cta2_label }} <span aria-hidden="true">&#8595;</span>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if section.settings.stat_number != blank -%}
+      <div class="lb-ehero__stat">
+        <span class="lb-ehero__stat-num">{{ section.settings.stat_number }}</span>
+        <span class="lb-ehero__stat-unit">{{ section.settings.stat_unit }}</span>
+        {%- if section.settings.stat_lines != blank -%}
+          <span class="lb-ehero__stat-lines">{{ section.settings.stat_lines }}</span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+.lb-ehero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 86vh;
+  padding: var(--lb-sp-2xl, 80px) 0 var(--lb-sp-xl, 56px);
+  background: var(--color-background);
+  color: var(--color-foreground);
+  overflow: hidden;
+}
+
+.lb-ehero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.lb-ehero__bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.lb-ehero--media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(8, 9, 7, 0.35) 0%, rgba(8, 9, 7, 0.8) 100%);
+}
+
+.lb-ehero__inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-inline: var(--lb-sp-md, 22px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.lb-ehero__copy {
+  max-width: 760px;
+}
+
+.lb-ehero__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.7);
+  margin: 0 0 20px;
+}
+
+.lb-ehero__heading {
+  font-size: clamp(48px, 11vw, 148px);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0 0 20px;
+}
+
+.lb-ehero__sub {
+  font-size: clamp(15px, 2vw, 19px);
+  line-height: 1.5;
+  max-width: 52ch;
+  color: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.82);
+  margin: 0 0 32px;
+}
+
+.lb-ehero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.lb-ehero__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 14px 26px;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: opacity 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.lb-ehero__btn--primary {
+  background: var(--color-foreground);
+  color: var(--color-background);
+}
+
+.lb-ehero__btn--primary:hover {
+  opacity: 0.85;
+}
+
+.lb-ehero__btn--ghost {
+  color: inherit;
+  border: 1px solid rgba(var(--color-foreground-rgb, 238, 238, 231), 0.45);
+}
+
+.lb-ehero__btn--ghost:hover {
+  border-color: var(--color-foreground);
+}
+
+.lb-ehero__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px 28px;
+  border: 1px solid rgba(var(--color-foreground-rgb, 238, 238, 231), 0.3);
+  border-radius: 6px;
+  backdrop-filter: blur(2px);
+}
+
+.lb-ehero__stat-num {
+  font-size: clamp(44px, 7vw, 76px);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.lb-ehero__stat-unit {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.lb-ehero__stat-lines {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-top: 12px;
+  white-space: pre-line;
+}
+
+@media (max-width: 749px) {
+  .lb-ehero {
+    min-height: 78vh;
+  }
+  .lb-ehero__stat {
+    display: none;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Editorial Hero",
+  "tag": "section",
+  "class": "lb-ehero-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "Marque Légendaire / The Heavyweight Edit"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "WEAR THE WEIGHT."
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Heavyweight streetwear with deliberate proportion, graphic intent, and a presence of its own."
+    },
+    {
+      "type": "text",
+      "id": "cta1_label",
+      "label": "Primary button label",
+      "default": "Enter the edit"
+    },
+    {
+      "type": "url",
+      "id": "cta1_url",
+      "label": "Primary button URL"
+    },
+    {
+      "type": "text",
+      "id": "cta2_label",
+      "label": "Secondary button label",
+      "default": "Know your GSM"
+    },
+    {
+      "type": "url",
+      "id": "cta2_url",
+      "label": "Secondary button URL"
+    },
+    {
+      "type": "header",
+      "content": "Weight callout"
+    },
+    {
+      "type": "text",
+      "id": "stat_number",
+      "label": "Stat number",
+      "default": "460"
+    },
+    {
+      "type": "text",
+      "id": "stat_unit",
+      "label": "Stat unit",
+      "default": "GSM"
+    },
+    {
+      "type": "textarea",
+      "id": "stat_lines",
+      "label": "Stat detail lines",
+      "default": "Maximum weight\nOversized silhouette"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-5"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial Hero"
+    }
+  ]
+}
+{% endschema %}

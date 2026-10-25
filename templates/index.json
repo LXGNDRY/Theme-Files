@@ -10,163 +10,20 @@
 {
   "sections": {
     "ed_hero": {
-      "type": "hero",
-      "blocks": {
-        "text_YEVGA3": {
-          "type": "text",
-          "name": "t:names.heading",
-          "disabled": true,
-          "settings": {
-            "text": "<h1><strong>WEAR THE WEIGHT.</strong></h1>",
-            "bleed": false,
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "custom",
-            "font": "var(--font-heading--family)",
-            "font_size": "9.5rem",
-            "line_height": "tight",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "balance",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#000000",
-            "corner_radius": 8,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "button_WDQJKU": {
-          "type": "button",
-          "name": "t:names.button",
-          "disabled": true,
-          "settings": {
-            "label": "Enter the edit",
-            "link": "shopify://collections/shirts-tops",
-            "open_in_new_tab": false,
-            "style_class": "button",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
-          },
-          "blocks": {}
-        },
-        "text_YQmLbG": {
-          "type": "text",
-          "name": "t:names.heading",
-          "settings": {
-            "text": "<p><em><strong>MARQUE L\u00c9GENDAIRE / THE HEAVYWEIGHT EDIT</strong></em></p>",
-            "bleed": false,
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "custom",
-            "font": "var(--font-heading--family)",
-            "font_size": "1.5rem",
-            "line_height": "tight",
-            "letter_spacing": "normal",
-            "case": "uppercase",
-            "wrap": "nowrap",
-            "color": "var(--color-foreground)",
-            "background": true,
-            "background_color": "#101214",
-            "corner_radius": 8,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "text_69C6UJ": {
-          "type": "text",
-          "disabled": true,
-          "settings": {
-            "text": "<p>Heavyweight streetwear with deliberate proportion, graphic intent, and a presence of its own.</p>",
-            "bleed": false,
-            "width": "100%",
-            "max_width": "none",
-            "alignment": "center",
-            "type_preset": "h3",
-            "font": "var(--font-primary--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "button_LBout": {
-          "type": "button",
-          "name": "t:names.button",
-          "disabled": true,
-          "settings": {
-            "label": "Know your GSM",
-            "link": "shopify://collections/hoodies-jackets",
-            "open_in_new_tab": false,
-            "style_class": "button-secondary",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "text_YEVGA3",
-        "text_YQmLbG",
-        "text_69C6UJ",
-        "button_WDQJKU",
-        "button_LBout"
-      ],
-      "name": "t:names.hero",
+      "type": "lb-edit-hero",
       "settings": {
-        "media_type_1": "image",
-        "image_1": "shopify://shop_images/5958342654289094365_0f2d35ea-8d96-4d70-ba9d-513592aeddf9.jpg",
-        "video_1": "shopify://files/videos/higgsfield-6c455260-7d2b-42fe-88c9-d8a05644bf20.mp4",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": true,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "image_2_mobile": "shopify://shop_images/5172273770446280037_49e1981f-88ed-49ee-b0c8-b861cb9c575f.jpg",
-        "link": "shopify://collections/all-products",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "center",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "flex-end",
-        "gap": 8,
-        "section_width": "full-width",
-        "section_height": "custom",
-        "section_height_custom": 85,
-        "color_scheme": "scheme-5",
-        "toggle_overlay": false,
-        "overlay_color": "#00000075",
-        "overlay_style": "gradient",
-        "gradient_direction": "to top",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 0,
-        "padding-block-end": 0
+        "image": "shopify://shop_images/5958342654289094365_0f2d35ea-8d96-4d70-ba9d-513592aeddf9.jpg",
+        "eyebrow": "Marque L\u00e9gendaire / The Heavyweight Edit",
+        "heading": "WEAR THE WEIGHT.",
+        "subheading": "Heavyweight streetwear with deliberate proportion, graphic intent, and a presence of its own.",
+        "cta1_label": "Enter the edit",
+        "cta1_url": "shopify://collections/shirts-tops",
+        "cta2_label": "Shop outerwear",
+        "cta2_url": "shopify://collections/hoodies-jackets",
+        "stat_number": "460",
+        "stat_unit": "GSM",
+        "stat_lines": "Maximum weight\nOversized silhouette",
+        "color_scheme": "scheme-5"
       }
     },
     "ed_marquee": {
@@ -257,202 +114,15 @@
       }
     },
     "ed_edit_grid": {
-      "type": "product-list",
-      "blocks": {
-        "static-header": {
-          "type": "_product-list-content",
-          "name": "t:names.header",
-          "static": true,
-          "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "center",
-            "align_baseline": true,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_list_text_8YWR6f": {
-              "type": "_product-list-text",
-              "name": "t:names.collection_title",
-              "settings": {
-                "text": "<h2><a href=\"/collections/shirts-tops\" title=\"Shirts &amp; Tops\">BUY 1 GET 1 50% OFF \u2014 TEES &amp; TOPS</a></h2>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h1",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_list_button_GLpFfN": {
-              "type": "_product-list-button",
-              "name": "t:names.product_list_button",
-              "settings": {
-                "label": "View all",
-                "open_in_new_tab": false,
-                "style_class": "link",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_list_text_8YWR6f",
-            "product_list_button_GLpFfN"
-          ]
-        },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "t:names.product_card",
-          "static": true,
-          "settings": {
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_gallery_GkQq9R": {
-              "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
-              "settings": {
-                "image_ratio": "square",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 8,
-                "padding-block-start": 0,
-                "padding-block-end": 4,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "judge_me_reviews_preview_badge_QrNxhc": {
-              "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-              "settings": {}
-            },
-            "product_title_bRVLN3": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "center",
-                "type_preset": "custom",
-                "font": "var(--font-body--family)",
-                "font_size": "1.125rem",
-                "line_height": "tight",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "price_3Y3aLh": {
-              "type": "price",
-              "name": "t:names.product_price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "custom",
-                "width": "100%",
-                "alignment": "center",
-                "font": "var(--font-accent--family)",
-                "font_size": "1.5rem",
-                "line_height": "tight",
-                "letter_spacing": "loose",
-                "case": "none",
-                "color": "var(--color-foreground)",
-                "padding-block-start": 4,
-                "padding-block-end": 4,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_card_gallery_GkQq9R",
-            "judge_me_reviews_preview_badge_QrNxhc",
-            "product_title_bRVLN3",
-            "price_3Y3aLh"
-          ]
-        }
-      },
-      "name": "t:names.products_carousel",
+      "type": "lb-edit-grid",
       "settings": {
+        "eyebrow": "01 / The curated rotation",
+        "heading": "FIND YOUR NEXT STAPLE.",
         "collection": "shirts-tops",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 4,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 25,
-        "rows_gap": 25,
-        "icons_style": "arrow",
-        "icons_shape": "circle",
-        "section_width": "full-width",
-        "horizontal_alignment": "center",
-        "gap": 25,
-        "color_scheme": "scheme-5",
-        "padding-block-start": 16,
-        "padding-block-end": 16
+        "products_to_show": 4,
+        "ribbon_text": "BOGO 50%",
+        "link_label": "Explore all tees & tops",
+        "color_scheme": "scheme-5"
       }
     },
     "ed_gsm": {
@@ -504,212 +174,16 @@
         "color_scheme": "scheme-5"
       }
     },
-    "ed_coll_intro": {
-      "type": "lb-collection-editorial",
-      "settings": {
-        "eyebrow": "03 / Your rotation, your rules",
-        "headline": "BUILD AROUND YOUR STYLE.",
-        "descriptor": "Discover by collection \u2014 the foundation tees and the finishing layers.",
-        "color_scheme": "scheme-5"
-      }
-    },
     "ed_outer_grid": {
-      "type": "product-list",
-      "blocks": {
-        "static-header": {
-          "type": "_product-list-content",
-          "name": "t:names.header",
-          "static": true,
-          "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "center",
-            "align_baseline": true,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_list_text_kwcC9x": {
-              "type": "_product-list-text",
-              "name": "t:names.collection_title",
-              "settings": {
-                "text": "<h2><a href=\"/collections/hoodies-jackets\" title=\"Outerwear\">THE FINISHING LAYER \u2014 OUTERWEAR</a></h2>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h1",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_list_button_VknE3Q": {
-              "type": "_product-list-button",
-              "name": "t:names.product_list_button",
-              "settings": {
-                "label": "View all",
-                "open_in_new_tab": false,
-                "style_class": "link",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_list_text_kwcC9x",
-            "product_list_button_VknE3Q"
-          ]
-        },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "t:names.product_card",
-          "static": true,
-          "settings": {
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_gallery_69PDQ7": {
-              "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
-              "settings": {
-                "image_ratio": "square",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 8,
-                "padding-block-start": 0,
-                "padding-block-end": 4,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "judge_me_reviews_preview_badge_xdWk7n": {
-              "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-              "settings": {}
-            },
-            "product_title_c8HCNt": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "center",
-                "type_preset": "custom",
-                "font": "var(--font-body--family)",
-                "font_size": "1.125rem",
-                "line_height": "tight",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "price_xYYQe7": {
-              "type": "price",
-              "name": "t:names.product_price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "custom",
-                "width": "100%",
-                "alignment": "center",
-                "font": "var(--font-accent--family)",
-                "font_size": "1.5rem",
-                "line_height": "tight",
-                "letter_spacing": "loose",
-                "case": "none",
-                "color": "var(--color-foreground)",
-                "padding-block-start": 4,
-                "padding-block-end": 4,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_card_gallery_69PDQ7",
-            "judge_me_reviews_preview_badge_xdWk7n",
-            "product_title_c8HCNt",
-            "price_xYYQe7"
-          ]
-        }
-      },
-      "name": "t:names.products_carousel",
+      "type": "lb-edit-grid",
       "settings": {
+        "eyebrow": "The finishing layer",
+        "heading": "OUTERWEAR.",
         "collection": "hoodies-jackets",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 4,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 25,
-        "rows_gap": 25,
-        "icons_style": "arrow",
-        "icons_shape": "circle",
-        "section_width": "full-width",
-        "horizontal_alignment": "center",
-        "gap": 25,
-        "color_scheme": "scheme-5",
-        "padding-block-start": 50,
-        "padding-block-end": 50
+        "products_to_show": 4,
+        "ribbon_text": "10% OFF",
+        "link_label": "Explore all outerwear",
+        "color_scheme": "scheme-5"
       }
     },
     "ed_statement": {
@@ -1079,89 +553,6 @@
         "padding-block-end": 40
       }
     },
-    "ed_email": {
-      "type": "_blocks",
-      "blocks": {
-        "ai_gen_block_04acd56_afpiix": {
-          "type": "ai_gen_block_04acd56",
-          "disabled": true,
-          "settings": {
-            "featured_image": "shopify://shop_images/10869363556657274641.jpg",
-            "featured_category": "LEGENDARY BRANDING",
-            "featured_title": "The New Standard of Street",
-            "featured_excerpt": "Legendary Branding is redefining what it means to dress with intention. Built for the bold, designed for the culture, our heavyweight fits move with you from the block to wherever life takes you next.",
-            "featured_author": "",
-            "featured_date": "April 4, 2026",
-            "sidebar_image_1": "shopify://shop_images/5.2.jpg",
-            "sidebar_category_1": "Culture",
-            "sidebar_title_1": "Built for the Culture",
-            "sidebar_excerpt_1": "Where the streets meet style, every piece we carry is rooted in the moments that matter most to your generation.",
-            "sidebar_link_1": "",
-            "sidebar_image_2": "shopify://shop_images/E5_B1_95_E7_A4_BA_E5_9B_BE.jpg",
-            "sidebar_category_2": "Comfort",
-            "sidebar_title_2": "Street-Ready Essentials",
-            "sidebar_excerpt_2": "Oversized, heavyweight, and made to feel as good as it looks, because real comfort never goes out of style.",
-            "sidebar_link_2": "",
-            "sidebar_image_3": "shopify://shop_images/2.1.jpg",
-            "sidebar_category_3": "Legacy",
-            "sidebar_title_3": "Dressed in Purpose",
-            "sidebar_excerpt_3": "This isn't just clothing, it's a statement. Wear what defines you and leave your mark on every room you walk into.",
-            "sidebar_link_3": "",
-            "desktop_width_percent": 80,
-            "section_padding": 40,
-            "grid_gap": 40,
-            "sidebar_gap": 30,
-            "mobile_gap": 30,
-            "caption_spacing": 20,
-            "featured_title_size": 72,
-            "sidebar_title_size": 24,
-            "category_size": 14,
-            "excerpt_size": 16,
-            "sidebar_excerpt_size": 15,
-            "meta_size": 10,
-            "text_color": "#000000",
-            "category_color": "#666666",
-            "meta_color": "#666666",
-            "link_color": "#000000",
-            "divider_color": "#e6e6e6"
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "ai_gen_block_04acd56_afpiix"
-      ],
-      "custom_css": [
-        "img {border-radius: 15px;}"
-      ],
-      "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 12,
-        "section_width": "full-width",
-        "section_height": "custom",
-        "section_height_custom": 0,
-        "color_scheme": "scheme-5",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 0,
-        "padding-block-end": 0
-      }
-    },
     "ed_sticky": {
       "type": "custom-liquid",
       "settings": {
@@ -1215,6 +606,20 @@
         "heading": "START WITH YOUR DIRECTION.",
         "color_scheme": "scheme-5"
       }
+    },
+    "ed_close": {
+      "type": "lb-edit-closing",
+      "settings": {
+        "eyebrow": "Your next chapter starts here",
+        "heading": "MAKE ROOM FOR SOMETHING LEGENDARY.",
+        "cta_label": "Find your next piece",
+        "cta_url": "shopify://collections/shirts-tops",
+        "show_signup": true,
+        "signup_text": "Join the list for new drops and first access.",
+        "placeholder": "Email address",
+        "button_label": "Join",
+        "color_scheme": "scheme-5"
+      }
     }
   },
   "order": [
@@ -1224,14 +629,13 @@
     "ed_entry_cards",
     "ed_edit_grid",
     "ed_gsm",
-    "ed_coll_intro",
     "ed_outer_grid",
     "ed_statement",
     "ed_fit",
     "ed_reviews",
     "ed_ship",
     "ed_faq",
-    "ed_email",
+    "ed_close",
     "ed_sticky"
   ]
 }

@@ -1,0 +1,249 @@
+{%- liquid
+  assign scheme = section.settings.color_scheme | default: 'scheme-5'
+-%}
+<section class="lb-eclose color-{{ scheme }}">
+  <div class="lb-eclose__inner">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="lb-eclose__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="lb-eclose__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}
+      <a class="lb-eclose__btn" href="{{ section.settings.cta_url }}">
+        {{ section.settings.cta_label }} <span aria-hidden="true">&#8599;</span>
+      </a>
+    {%- endif -%}
+
+    {%- if section.settings.show_signup -%}
+      <div class="lb-eclose__signup">
+        {%- if section.settings.signup_text != blank -%}
+          <p class="lb-eclose__signup-text">{{ section.settings.signup_text }}</p>
+        {%- endif -%}
+        {%- form 'customer', class: 'lb-eclose__form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          {%- if form.posted_successfully? -%}
+            <p class="lb-eclose__success">{{ section.settings.success_text | default: "You're in. Watch your inbox." }}</p>
+          {%- else -%}
+            <label class="visually-hidden" for="lb-eclose-email">Email</label>
+            <input
+              class="lb-eclose__email"
+              id="lb-eclose-email"
+              type="email"
+              name="contact[email]"
+              placeholder="{{ section.settings.placeholder | default: 'Email address' }}"
+              autocomplete="email"
+              required
+            >
+            <button class="lb-eclose__submit" type="submit">
+              {{ section.settings.button_label | default: 'Join' }}
+            </button>
+          {%- endif -%}
+        {%- endform -%}
+        {%- if section.settings.signup_note != blank -%}
+          <p class="lb-eclose__note">{{ section.settings.signup_note }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+.lb-eclose {
+  padding: var(--lb-sp-2xl, 112px) 0;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  text-align: center;
+}
+
+.lb-eclose__inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-inline: var(--lb-sp-md, 22px);
+}
+
+.lb-eclose__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.55);
+  margin: 0 0 20px;
+}
+
+.lb-eclose__heading {
+  font-size: clamp(36px, 8vw, 92px);
+  line-height: 0.96;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+  margin: 0 0 36px;
+}
+
+.lb-eclose__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 16px 32px;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: var(--color-foreground);
+  color: var(--color-background);
+  border-radius: 2px;
+  transition: opacity 0.18s ease;
+}
+
+.lb-eclose__btn:hover {
+  opacity: 0.85;
+}
+
+.lb-eclose__signup {
+  margin-top: 56px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(var(--color-foreground-rgb, 238, 238, 231), 0.15);
+}
+
+.lb-eclose__signup-text {
+  font-size: 15px;
+  color: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.82);
+  margin: 0 0 18px;
+}
+
+.lb-eclose__form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+.lb-eclose__email {
+  flex: 1 1 220px;
+  min-height: 52px;
+  padding: 12px 16px;
+  font-size: 16px;
+  color: var(--color-foreground);
+  background: transparent;
+  border: 1px solid rgba(var(--color-foreground-rgb, 238, 238, 231), 0.35);
+  border-radius: 2px;
+}
+
+.lb-eclose__submit {
+  min-height: 52px;
+  padding: 12px 26px;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: var(--color-foreground);
+  color: var(--color-background);
+  border: 0;
+  border-radius: 2px;
+}
+
+.lb-eclose__success {
+  font-size: 16px;
+  margin: 0;
+}
+
+.lb-eclose__note {
+  font-size: 12px;
+  color: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.5);
+  margin: 16px 0 0;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Editorial Closing",
+  "tag": "section",
+  "class": "lb-eclose-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "Your next chapter starts here"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "MAKE ROOM FOR SOMETHING LEGENDARY."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Find your next piece"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Email signup"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_signup",
+      "label": "Show email signup",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "signup_text",
+      "label": "Signup prompt",
+      "default": "Join the list for new drops and first access."
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Input placeholder",
+      "default": "Email address"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Submit button label",
+      "default": "Join"
+    },
+    {
+      "type": "text",
+      "id": "success_text",
+      "label": "Success message",
+      "default": "You're in. Watch your inbox."
+    },
+    {
+      "type": "text",
+      "id": "signup_note",
+      "label": "Fine print"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-5"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial Closing"
+    }
+  ]
+}
+{% endschema %}
