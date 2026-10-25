@@ -1,8 +1,9 @@
 {%- liquid
   assign scheme = section.settings.color_scheme | default: 'scheme-1'
+  assign anchor = section.settings.anchor | handle
 -%}
 {%- if section.blocks.size > 0 -%}
-<section class="lb-gsm color-{{ scheme }}" data-lb-gsm>
+<section class="lb-gsm color-{{ scheme }}" data-lb-gsm{% if anchor != blank %} id="{{ anchor }}"{% endif %}>
   <div class="lb-gsm__inner">
     <header class="lb-gsm__head">
       {%- if section.settings.eyebrow != blank -%}
@@ -220,6 +221,13 @@
       "id": "body",
       "label": "Body",
       "default": "<p>GSM measures fabric weight in grams per square metre. Higher weight changes structure, drape, and the physical presence of the garment.</p>"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor id",
+      "info": "Lets links jump here, e.g. weight",
+      "default": "weight"
     },
     {
       "type": "color_scheme",

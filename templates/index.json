@@ -18,8 +18,8 @@
         "subheading": "Heavyweight streetwear with deliberate proportion, graphic intent, and a presence of its own.",
         "cta1_label": "Enter the edit",
         "cta1_url": "shopify://collections/shirts-tops",
-        "cta2_label": "Shop outerwear",
-        "cta2_url": "shopify://collections/hoodies-jackets",
+        "cta2_label": "Know your GSM",
+        "cta2_url": "#weight",
         "stat_number": "460",
         "stat_unit": "GSM",
         "stat_lines": "Maximum weight\nOversized silhouette",
@@ -122,7 +122,8 @@
         "products_to_show": 4,
         "ribbon_text": "BOGO 50%",
         "link_label": "Explore all tees & tops",
-        "color_scheme": "scheme-5"
+        "color_scheme": "scheme-5",
+        "anchor": "edit"
       }
     },
     "ed_gsm": {
@@ -171,7 +172,8 @@
         "eyebrow": "02 / Fabric system",
         "heading": "THE DIFFERENCE IS IN THE WEIGHT.",
         "body": "<p>GSM measures fabric weight in grams per square metre. Higher weight changes structure, drape, and the physical presence of the garment.</p>",
-        "color_scheme": "scheme-5"
+        "color_scheme": "scheme-5",
+        "anchor": "weight"
       }
     },
     "ed_outer_grid": {
@@ -208,7 +210,8 @@
         "default_size": "M",
         "button_label": "Find a piece in your fit",
         "button_url": "shopify://collections/shirts-tops",
-        "color_scheme": "scheme-5"
+        "color_scheme": "scheme-5",
+        "anchor": "fit"
       }
     },
     "ed_reviews": {
@@ -253,304 +256,63 @@
         "padding-block-end": 0
       }
     },
-    "ed_ship": {
-      "type": "lb-shipping-estimator",
-      "settings": {
-        "eyebrow": "06 / Before it becomes yours",
-        "heading": "GOOD TO KNOW. EASY TO CHOOSE.",
-        "color_scheme": "scheme-5",
-        "note": "Delivery options, taxes and duties are confirmed at checkout for your destination.",
-        "cost_line": "Standard shipping is $5. Orders over $100 get free standard shipping. Express is $12 where available."
-      }
-    },
     "ed_faq": {
-      "type": "section",
+      "type": "lb-edit-faq",
       "blocks": {
-        "faq_heading": {
-          "type": "text",
+        "q0": {
+          "type": "faq",
           "settings": {
-            "text": "<h2><strong>FAQ</strong></h2>",
-            "bleed": false,
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "h2",
-            "font": "var(--font-heading--family)",
-            "font_size": "9.5rem",
-            "line_height": "tight",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "balance",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#000000",
-            "corner_radius": 8,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "question": "What will shipping cost?",
+            "answer": "<p>Standard shipping is $5. Orders over $100 get free standard shipping. Express is $12 where available. Taxes and duties are shown at checkout.</p>",
+            "open": true
+          }
         },
-        "faq_accordion": {
-          "type": "accordion",
+        "q1": {
+          "type": "faq",
           "settings": {
-            "icon": "plus",
-            "dividers": true,
-            "type_preset": "h5",
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "faq_row_0": {
-              "type": "_accordion-row",
-              "settings": {
-                "heading": "How does Buy 1 Get 1 50% off work?",
-                "open_by_default": true,
-                "icon": "none",
-                "width": 100
-              },
-              "blocks": {
-                "faq_ans_0": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>Add any two items from Shirts &amp; Tops to your cart and the lower-priced item is automatically 50% off \u2014 no code needed. The discount shows in your cart and at checkout.</p>",
-                    "bleed": false,
-                    "width": "100%",
-                    "max_width": "normal",
-                    "alignment": "left",
-                    "type_preset": "rte",
-                    "font": "var(--font-heading--family)",
-                    "font_size": "9.5rem",
-                    "line_height": "tight",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "balance",
-                    "color": "var(--color-foreground)",
-                    "background": false,
-                    "background_color": "#000000",
-                    "corner_radius": 8,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "faq_ans_0"
-              ]
-            },
-            "faq_row_1": {
-              "type": "_accordion-row",
-              "settings": {
-                "heading": "How much is shipping?",
-                "open_by_default": false,
-                "icon": "none",
-                "width": 100
-              },
-              "blocks": {
-                "faq_ans_1": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>Standard shipping is $5, and <strong>free on orders over $100</strong>. Express is $12. Rates are the same worldwide.</p>",
-                    "bleed": false,
-                    "width": "100%",
-                    "max_width": "normal",
-                    "alignment": "left",
-                    "type_preset": "rte",
-                    "font": "var(--font-heading--family)",
-                    "font_size": "9.5rem",
-                    "line_height": "tight",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "balance",
-                    "color": "var(--color-foreground)",
-                    "background": false,
-                    "background_color": "#000000",
-                    "corner_radius": 8,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "faq_ans_1"
-              ]
-            },
-            "faq_row_2": {
-              "type": "_accordion-row",
-              "settings": {
-                "heading": "Where do you ship?",
-                "open_by_default": false,
-                "icon": "none",
-                "width": 100
-              },
-              "blocks": {
-                "faq_ans_2": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>Worldwide. Available delivery options and any local duties are shown at checkout before you pay.</p>",
-                    "bleed": false,
-                    "width": "100%",
-                    "max_width": "normal",
-                    "alignment": "left",
-                    "type_preset": "rte",
-                    "font": "var(--font-heading--family)",
-                    "font_size": "9.5rem",
-                    "line_height": "tight",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "balance",
-                    "color": "var(--color-foreground)",
-                    "background": false,
-                    "background_color": "#000000",
-                    "corner_radius": 8,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "faq_ans_2"
-              ]
-            },
-            "faq_row_3": {
-              "type": "_accordion-row",
-              "settings": {
-                "heading": "What are the tees made of?",
-                "open_by_default": false,
-                "icon": "none",
-                "width": 100
-              },
-              "blocks": {
-                "faq_ans_3": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>Heavyweight cotton, DTG printed so the artwork lasts wash after wash.</p>",
-                    "bleed": false,
-                    "width": "100%",
-                    "max_width": "normal",
-                    "alignment": "left",
-                    "type_preset": "rte",
-                    "font": "var(--font-heading--family)",
-                    "font_size": "9.5rem",
-                    "line_height": "tight",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "balance",
-                    "color": "var(--color-foreground)",
-                    "background": false,
-                    "background_color": "#000000",
-                    "corner_radius": 8,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "faq_ans_3"
-              ]
-            },
-            "faq_row_4": {
-              "type": "_accordion-row",
-              "settings": {
-                "heading": "What's your return policy?",
-                "open_by_default": false,
-                "icon": "none",
-                "width": 100
-              },
-              "blocks": {
-                "faq_ans_4": {
-                  "type": "text",
-                  "settings": {
-                    "text": "<p>Full return and exchange details are on our <a href=\"/policies/refund-policy\">Refund Policy</a> page.</p>",
-                    "bleed": false,
-                    "width": "100%",
-                    "max_width": "normal",
-                    "alignment": "left",
-                    "type_preset": "rte",
-                    "font": "var(--font-heading--family)",
-                    "font_size": "9.5rem",
-                    "line_height": "tight",
-                    "letter_spacing": "normal",
-                    "case": "none",
-                    "wrap": "balance",
-                    "color": "var(--color-foreground)",
-                    "background": false,
-                    "background_color": "#000000",
-                    "corner_radius": 8,
-                    "padding-block-start": 0,
-                    "padding-block-end": 0,
-                    "padding-inline-start": 0,
-                    "padding-inline-end": 0
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "faq_ans_4"
-              ]
-            }
-          },
-          "block_order": [
-            "faq_row_0",
-            "faq_row_1",
-            "faq_row_2",
-            "faq_row_3",
-            "faq_row_4"
-          ]
+            "question": "Can I return my order?",
+            "answer": "<p>Request a return within 30 days of delivery. Items must be unworn, unwashed and in original condition. Contact support for approval before sending anything back. For a size change or change of mind, return shipping is your responsibility. Final sale and other exclusions apply.</p>",
+            "open": false
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I choose my size?",
+            "answer": "<p>Start with your usual size for the intended oversized look, or size up for a baggier fit. Product measurements take priority: compare chest width and length with a garment you already wear.</p>",
+            "open": false
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "question": "What payment methods can I use?",
+            "answer": "<p>Visa, Mastercard, American Express, Shop Pay and Apple Pay. Available methods are confirmed at checkout for your destination.</p>",
+            "open": false
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "question": "Where are the customer reviews?",
+            "answer": "<p>Review content appears on the product pages. You can also follow the brand on Instagram for the latest.</p>",
+            "open": false
+          }
         }
       },
       "block_order": [
-        "faq_heading",
-        "faq_accordion"
+        "q0",
+        "q1",
+        "q2",
+        "q3",
+        "q4"
       ],
-      "name": "FAQ",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "center",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 16,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-5",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "solid",
-        "border_width": 0,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 40,
-        "padding-block-end": 40
+        "eyebrow": "06 / Before it becomes yours",
+        "heading": "GOOD TO KNOW. EASY TO CHOOSE.",
+        "support_email": "lb@legendary-branding.com",
+        "anchor": "good-to-know",
+        "color_scheme": "scheme-5"
       }
     },
     "ed_sticky": {
@@ -620,6 +382,52 @@
         "button_label": "Join",
         "color_scheme": "scheme-5"
       }
+    },
+    "ed_steps": {
+      "type": "lb-edit-steps",
+      "blocks": {
+        "st1": {
+          "type": "step",
+          "settings": {
+            "number": "01",
+            "title": "Start with the weight",
+            "body": "Choose 300GSM for substantial everyday wear, 380\u2013400GSM for stronger structure, or 460GSM for maximum presence.",
+            "link_label": "Compare the edit",
+            "link_url": "#weight"
+          }
+        },
+        "st2": {
+          "type": "step",
+          "settings": {
+            "number": "02",
+            "title": "Confirm the silhouette",
+            "body": "Your usual size is the starting point for the intended oversized shape. Size up when you want more room and volume.",
+            "link_label": "Use the fit guide",
+            "link_url": "#fit"
+          }
+        },
+        "st3": {
+          "type": "step",
+          "settings": {
+            "number": "03",
+            "title": "Know the journey",
+            "body": "Standard shipping is $5, free over $100, $12 express. Taxes, duties and delivery options are confirmed at checkout.",
+            "link_label": "See delivery details",
+            "link_url": "#good-to-know"
+          }
+        }
+      },
+      "block_order": [
+        "st1",
+        "st2",
+        "st3"
+      ],
+      "settings": {
+        "eyebrow": "Shop with clarity / Three moves",
+        "heading": "CHOOSE WITH INTENTION.",
+        "body": "<p>Use fabric weight, silhouette, and delivery expectations to narrow the edit before you open a product page.</p>",
+        "color_scheme": "scheme-5"
+      }
     }
   },
   "order": [
@@ -631,9 +439,9 @@
     "ed_gsm",
     "ed_outer_grid",
     "ed_statement",
+    "ed_steps",
     "ed_fit",
     "ed_reviews",
-    "ed_ship",
     "ed_faq",
     "ed_close",
     "ed_sticky"

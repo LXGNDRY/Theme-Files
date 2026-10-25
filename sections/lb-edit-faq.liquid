@@ -1,0 +1,221 @@
+{%- liquid
+  assign scheme = section.settings.color_scheme | default: 'scheme-5'
+  assign anchor = section.settings.anchor | handle
+-%}
+<section class="lb-efaq color-{{ scheme }}"{% if anchor != blank %} id="{{ anchor }}"{% endif %}>
+  <div class="lb-efaq__inner">
+    <div class="lb-efaq__intro">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="lb-efaq__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="lb-efaq__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.support_email != blank -%}
+        <p class="lb-efaq__support">
+          <span class="lb-efaq__support-label">Direct support</span>
+          <a href="mailto:{{ section.settings.support_email }}">{{ section.settings.support_email }}</a>
+        </p>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="lb-efaq__list">
+        {%- for block in section.blocks -%}
+          <details class="lb-efaq__item"{% if block.settings.open %} open{% endif %} {{ block.shopify_attributes }}>
+            <summary class="lb-efaq__q">
+              <span>{{ block.settings.question }}</span>
+              <span class="lb-efaq__icon" aria-hidden="true"></span>
+            </summary>
+            <div class="lb-efaq__a">{{ block.settings.answer }}</div>
+          </details>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+.lb-efaq {
+  padding: var(--lb-sp-2xl, 80px) 0;
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+.lb-efaq__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-inline: var(--lb-sp-md, 22px);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 750px) {
+  .lb-efaq__inner {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+    gap: 56px;
+    align-items: start;
+  }
+}
+
+.lb-efaq__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.55);
+  margin: 0 0 14px;
+}
+
+.lb-efaq__heading {
+  font-size: clamp(26px, 4vw, 44px);
+  line-height: 1.05;
+  text-transform: uppercase;
+  margin: 0 0 24px;
+}
+
+.lb-efaq__support-label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.5);
+  margin-bottom: 6px;
+}
+
+.lb-efaq__support a {
+  color: inherit;
+}
+
+.lb-efaq__item {
+  border-top: 1px solid rgba(var(--color-foreground-rgb, 238, 238, 231), 0.16);
+}
+
+.lb-efaq__item:last-child {
+  border-bottom: 1px solid rgba(var(--color-foreground-rgb, 238, 238, 231), 0.16);
+}
+
+.lb-efaq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 0;
+  cursor: pointer;
+  list-style: none;
+  font-size: clamp(16px, 2vw, 19px);
+  font-weight: 600;
+}
+
+.lb-efaq__q::-webkit-details-marker {
+  display: none;
+}
+
+.lb-efaq__icon {
+  position: relative;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+}
+
+.lb-efaq__icon::before,
+.lb-efaq__icon::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+  transition: transform 0.2s ease;
+}
+
+.lb-efaq__icon::before {
+  top: 7px;
+  left: 0;
+  width: 16px;
+  height: 2px;
+}
+
+.lb-efaq__icon::after {
+  top: 0;
+  left: 7px;
+  width: 2px;
+  height: 16px;
+}
+
+.lb-efaq__item[open] .lb-efaq__icon::after {
+  transform: scaleY(0);
+}
+
+.lb-efaq__a {
+  padding: 0 0 24px;
+  max-width: 60ch;
+  color: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.8);
+}
+
+.lb-efaq__a a {
+  color: inherit;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Editorial FAQ",
+  "tag": "section",
+  "class": "lb-efaq-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "06 / Before it becomes yours"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "GOOD TO KNOW. EASY TO CHOOSE."
+    },
+    {
+      "type": "text",
+      "id": "support_email",
+      "label": "Support email",
+      "default": "lb@legendary-branding.com"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor id",
+      "info": "Lets links jump here, e.g. good-to-know",
+      "default": "good-to-know"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-5"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "What will shipping cost?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Standard shipping is $5. Orders over $100 get free standard shipping. Express is $12 where available. Taxes and duties are shown at checkout.</p>" },
+        { "type": "checkbox", "id": "open", "label": "Open by default", "default": false }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Editorial FAQ",
+      "blocks": [
+        { "type": "faq", "settings": { "question": "What will shipping cost?", "answer": "<p>Standard shipping is $5. Orders over $100 get free standard shipping. Express is $12 where available. Taxes and duties are shown at checkout.</p>", "open": true } },
+        { "type": "faq", "settings": { "question": "Can I return my order?", "answer": "<p>Request a return within 30 days of delivery. Items must be unworn, unwashed and in original condition. Contact support for approval before sending anything back. For a size change or change of mind, return shipping is your responsibility. Final sale and other exclusions apply.</p>" } },
+        { "type": "faq", "settings": { "question": "How do I choose my size?", "answer": "<p>Start with your usual size for the intended oversized look, or size up for a baggier fit. Product measurements take priority: compare chest width and length with a garment you already wear.</p>" } },
+        { "type": "faq", "settings": { "question": "What payment methods can I use?", "answer": "<p>Visa, Mastercard, American Express, Shop Pay and Apple Pay. Available methods are confirmed at checkout for your destination.</p>" } },
+        { "type": "faq", "settings": { "question": "Where are the customer reviews?", "answer": "<p>Review content appears on the product pages. You can also follow the brand on Instagram for the latest.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

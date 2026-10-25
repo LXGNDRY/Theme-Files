@@ -2,8 +2,9 @@
   assign scheme = section.settings.color_scheme | default: 'scheme-1'
   assign sizes = section.settings.sizes | default: 'S,M,L,XL,2XL' | split: ','
   assign default_size = section.settings.default_size | default: 'M'
+  assign anchor = section.settings.anchor | handle
 -%}
-<section class="lb-fit color-{{ scheme }}" data-lb-fit>
+<section class="lb-fit color-{{ scheme }}" data-lb-fit{% if anchor != blank %} id="{{ anchor }}"{% endif %}>
   <div class="lb-fit__inner">
     <header class="lb-fit__head">
       {%- if section.settings.eyebrow != blank -%}
@@ -280,6 +281,13 @@
       "id": "disclaimer",
       "label": "Disclaimer",
       "default": "A starting point, not a body-measurement tool. Always compare the specific garment measurements with a piece you already love."
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor id",
+      "info": "Lets links jump here, e.g. fit",
+      "default": "fit"
     },
     {
       "type": "color_scheme",

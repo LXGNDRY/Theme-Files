@@ -2,8 +2,9 @@
   assign scheme = section.settings.color_scheme | default: 'scheme-5'
   assign col = section.settings.collection
   assign limit = section.settings.products_to_show | default: 4
+  assign anchor = section.settings.anchor | handle
 -%}
-<section class="lb-egrid color-{{ scheme }}">
+<section class="lb-egrid color-{{ scheme }}"{% if anchor != blank %} id="{{ anchor }}"{% endif %}>
   <div class="lb-egrid__inner">
     <header class="lb-egrid__head">
       <div>
@@ -292,6 +293,12 @@
       "type": "textarea",
       "id": "disclaimer",
       "label": "Disclaimer"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor id",
+      "info": "Lets links jump here, e.g. edit"
     },
     {
       "type": "color_scheme",
