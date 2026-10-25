@@ -451,7 +451,7 @@
 
 .cart-drawer__header .lb-cart-shipping-progress__copy {
   max-width: 100%;
-  font-size: 0.68rem;
+  font-size: 0.8rem;
   line-height: 1.35;
   text-align: left;
   overflow-wrap: anywhere;
@@ -581,7 +581,7 @@
 }
 
 .lb-cart-shipping-progress__copy {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   line-height: 1.35;
 }
 
