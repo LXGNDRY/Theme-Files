@@ -241,6 +241,7 @@
             "text_DpkCnt": {
               "type": "text",
               "name": "t:names.text",
+              "disabled": true,
               "settings": {
                 "text": "<p>Legendary Branding apparel is <strong>true to size & unisex</strong>. Ordering in your regular letter size will allow a clean oversized look, while sizing up will allow for a baggy look. We work closely with our manufacturers to ensure quality fit and premium textures.&nbsp;</p>",
                 "bleed": false,
