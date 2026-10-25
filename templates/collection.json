@@ -9,6 +9,14 @@
  */
 {
   "sections": {
+    "lb_collection_landing": {
+      "type": "lb-collection-landing",
+      "settings": {
+        "eyebrow": "Legendary Branding / The Edit",
+        "promise": "Heavyweight pieces. Built to be worn on repeat.",
+        "color_scheme": "scheme-5"
+      }
+    },
     "section": {
       "type": "section",
       "blocks": {
@@ -466,8 +474,7 @@
     }
   },
   "order": [
-    "section",
-    "section_CDe6Eq",
+    "lb_collection_landing",
     "main"
   ]
 }
