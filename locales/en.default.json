@@ -330,7 +330,9 @@
     "cart_total_savings": "Total savings",
     "cart_secure_checkout": "Secure checkout",
     "cart_easy_returns": "Easy 30-day returns",
-    "cart_processing_time": "2–3 business-day processing"
+    "cart_processing_time": "2–3 business-day processing",
+    "cart_international_notice": "International delivery, duties, taxes, and available payment options are confirmed before payment.",
+    "cart_empty_reassurance": "Secure checkout · Easy 30-day returns"
   },
   "fields": {
     "separator": "to"
