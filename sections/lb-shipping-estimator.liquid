@@ -1,0 +1,237 @@
+{%- liquid
+  assign scheme = section.settings.color_scheme | default: 'scheme-1'
+-%}
+<section class="lb-ship color-{{ scheme }}" data-lb-ship>
+  <div class="lb-ship__inner">
+    <header class="lb-ship__head">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="lb-ship__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="lb-ship__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.body != blank -%}
+        <div class="lb-ship__body">{{ section.settings.body }}</div>
+      {%- endif -%}
+    </header>
+
+    {%- if section.settings.cost_line != blank -%}
+      <p class="lb-ship__cost">{{ section.settings.cost_line }}</p>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="lb-ship__tool">
+        <label class="lb-ship__label" for="lb-ship-select-{{ section.id }}">
+          {{ section.settings.select_label | default: 'See estimated carrier transit' }}
+        </label>
+        <select class="lb-ship__select" id="lb-ship-select-{{ section.id }}" data-ship-select>
+          {%- for block in section.blocks -%}
+            <option data-transit="{{ block.settings.transit | escape }}" {{ block.shopify_attributes }}>
+              {{ block.settings.destination }}
+            </option>
+          {%- endfor -%}
+        </select>
+        <p class="lb-ship__out" data-ship-out aria-live="polite"></p>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.note != blank -%}
+      <p class="lb-ship__note">{{ section.settings.note }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.policy_label != blank and section.settings.policy_url != blank -%}
+      <a class="lb-ship__policy" href="{{ section.settings.policy_url }}">
+        {{ section.settings.policy_label }} <span aria-hidden="true">&rarr;</span>
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+<script src="{{ 'lb-shipping-estimator.js' | asset_url }}" defer></script>
+
+{% stylesheet %}
+.lb-ship {
+  padding: var(--lb-sp-2xl, 80px) 0;
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+.lb-ship__inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding-inline: var(--lb-sp-md, 22px);
+}
+
+.lb-ship__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.55);
+  margin: 0 0 14px;
+}
+
+.lb-ship__heading {
+  font-size: clamp(24px, 4vw, 44px);
+  line-height: 1.05;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+}
+
+.lb-ship__body {
+  color: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.72);
+  margin: 0 0 24px;
+}
+
+.lb-ship__cost {
+  font-size: 15px;
+  margin: 0 0 28px;
+  padding: 16px 20px;
+  border: 1px solid rgba(var(--color-foreground-rgb, 238, 238, 231), 0.2);
+  border-radius: 8px;
+}
+
+.lb-ship__label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.6);
+  margin: 0 0 10px;
+}
+
+.lb-ship__select {
+  width: 100%;
+  min-height: 52px;
+  padding: 12px 16px;
+  font-size: 16px;
+  color: var(--color-foreground);
+  background: transparent;
+  border: 1px solid rgba(var(--color-foreground-rgb, 238, 238, 231), 0.3);
+  border-radius: 6px;
+}
+
+.lb-ship__out {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 18px 0 0;
+  min-height: 1.4em;
+}
+
+.lb-ship__note {
+  font-size: 12px;
+  color: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.5);
+  margin: 24px 0 0;
+}
+
+.lb-ship__policy {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 3px;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Shipping Estimator",
+  "tag": "section",
+  "class": "lb-ship-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "06 / Before it becomes yours"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "WHAT WILL SHIPPING COST?"
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body"
+    },
+    {
+      "type": "text",
+      "id": "cost_line",
+      "label": "Shipping cost line",
+      "info": "Verified against your delivery profiles — update if rates change.",
+      "default": "Standard shipping is $5 USD below $100. Eligible orders of $100 USD or more get free standard shipping. Express is $12 where available."
+    },
+    {
+      "type": "text",
+      "id": "select_label",
+      "label": "Selector label",
+      "default": "See estimated carrier transit"
+    },
+    {
+      "type": "textarea",
+      "id": "note",
+      "label": "Note",
+      "info": "Confirm transit estimates are accurate before publishing.",
+      "default": "Made to order: production time comes before transit. Estimates vary; confirm destination eligibility and current details on the store."
+    },
+    {
+      "type": "text",
+      "id": "policy_label",
+      "label": "Policy link label",
+      "default": "Read the current shipping policy"
+    },
+    {
+      "type": "url",
+      "id": "policy_url",
+      "label": "Policy link URL"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "destination",
+      "name": "Destination",
+      "settings": [
+        {
+          "type": "text",
+          "id": "destination",
+          "label": "Destination",
+          "default": "United States"
+        },
+        {
+          "type": "text",
+          "id": "transit",
+          "label": "Estimated transit",
+          "info": "Verify before publishing.",
+          "default": "5–7 business days after dispatch"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Shipping Estimator",
+      "blocks": [
+        { "type": "destination", "settings": { "destination": "United States", "transit": "5–7 business days after dispatch" } },
+        { "type": "destination", "settings": { "destination": "Canada", "transit": "7–14 business days after dispatch" } },
+        { "type": "destination", "settings": { "destination": "UK & Europe", "transit": "10–15 business days after dispatch" } },
+        { "type": "destination", "settings": { "destination": "Australia & New Zealand", "transit": "12–20 business days after dispatch" } },
+        { "type": "destination", "settings": { "destination": "Other supported destinations", "transit": "10–20 business days after dispatch" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
