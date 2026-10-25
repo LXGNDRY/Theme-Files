@@ -62,66 +62,14 @@
 {%- unless cart.empty? -%}
   <div class="lb-cart-sticky-cta" id="lb-cart-sticky-cta" aria-hidden="true">
     <div class="lb-cart-sticky-cta__inner">
-      <span class="lb-cart-sticky-cta__total">{{ cart.total_price | money }}</span>
-      <a href="/checkout" class="button button--primary lb-cart-sticky-cta__btn">
+      <span class="lb-cart-sticky-cta__total" data-cart-sticky-total>{{ cart.total_price | money }}</span>
+      <button type="submit" form="cart-form" name="checkout" class="button button--primary lb-cart-sticky-cta__btn">
         {{ 'content.checkout' | t }}
-      </a>
+      </button>
     </div>
   </div>
-
-  <style>
-    .lb-cart-sticky-cta {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 200;
-      background: rgb(var(--color-background));
-      border-top: 1px solid rgb(var(--color-border));
-      padding: 0.75rem 1rem env(safe-area-inset-bottom, 0);
-      transform: translateY(100%);
-      transition: transform 0.25s ease;
-      will-change: transform;
-    }
-    .lb-cart-sticky-cta.lb-cart-sticky-cta--visible {
-      transform: translateY(0);
-    }
-    .lb-cart-sticky-cta__inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    .lb-cart-sticky-cta__total {
-      font-size: 1rem;
-      font-weight: 600;
-    }
-    .lb-cart-sticky-cta__btn {
-      flex-shrink: 0;
-    }
-    @media (min-width: 750px) {
-      .lb-cart-sticky-cta { display: none; }
-    }
-  </style>
-
-  <script>
-  (function () {
-    var cta = document.getElementById('lb-cart-sticky-cta');
-    if (!cta) return;
-    var sentinel = document.querySelector('.cart-page__summary');
-    if (!sentinel || typeof IntersectionObserver === 'undefined') return;
-    var io = new IntersectionObserver(function (entries) {
-      var visible = entries[0].isIntersecting;
-      cta.classList.toggle('lb-cart-sticky-cta--visible', !visible);
-      cta.setAttribute('aria-hidden', visible ? 'true' : 'false');
-    }, { threshold: 0 });
-    io.observe(sentinel);
-  })();
-  </script>
+  <script src="{{ 'lb-cart-sticky-checkout.js' | asset_url }}" defer></script>
 {%- endunless -%}
-
 
 {% schema %}
 {
