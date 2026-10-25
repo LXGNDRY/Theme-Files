@@ -487,3 +487,196 @@ html[data-theme="dark"] a.shopify-payment-button__more-options {
     display: inline-flex;
   }
 }
+
+
+/* ─── 8. RESPONSIVE PDP SYSTEM ───────────────────────────────────────────────
+   Keeps the native product grid and each editorial PDP section legible from
+   narrow phones through tablets, without changing the wide desktop layout.
+   ─────────────────────────────────────────────────────────────────────────── */
+.product-information,
+.product-information__grid,
+.product-information__media,
+.product-details,
+.product-details > *,
+.lb-fit,
+.lb-gsm,
+.lb-efeat,
+.lb-efaq,
+.lb-ereviews {
+  min-width: 0;
+}
+
+.product-information img,
+.product-information video,
+.lb-fit img,
+.lb-gsm img,
+.lb-efeat img,
+.lb-ereviews img {
+  max-width: 100%;
+}
+
+.product-information :is(p, h1, h2, h3, h4, h5, h6, a, span),
+.lb-fit :is(p, h2, h3, a, span),
+.lb-gsm :is(p, h2, h3, a, span),
+.lb-efeat :is(p, h2, h3, a, span),
+.lb-efaq :is(p, h2, h3, a, span),
+.lb-ereviews :is(p, h2, h3, a, span) {
+  overflow-wrap: anywhere;
+}
+
+/* Tablet: preserve the two-column PDP where it fits, but don't trap the
+   product controls inside a short scrollable column. */
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .product-information__grid {
+    grid-template-columns: minmax(0, 1.05fr) minmax(18rem, 0.95fr) !important;
+    align-items: start !important;
+    gap: clamp(20px, 3vw, 32px) !important;
+  }
+
+  .product-details.sticky-content--desktop {
+    position: static !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .lb-fit,
+  .lb-gsm,
+  .lb-efeat,
+  .lb-efaq,
+  .lb-ereviews {
+    padding-block: clamp(48px, 7vw, 72px) !important;
+  }
+
+  .lb-ereviews__inner,
+  .lb-fit__inner,
+  .lb-gsm__inner,
+  .lb-efeat__inner,
+  .lb-efaq__inner {
+    padding-inline: clamp(24px, 4vw, 40px);
+  }
+}
+
+/* Phones: one fluid column, readable editorial sections, and 44px-plus tap
+   targets for variant choices and PDP controls. */
+@media screen and (max-width: 749px) {
+  main.content-for-layout {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+
+  .product-information {
+    overflow-x: clip;
+  }
+
+  .product-information__grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 0 !important;
+  }
+
+  .product-information__media {
+    width: 100%;
+  }
+
+  .product-details {
+    width: 100%;
+    padding-inline: 16px;
+  }
+
+  .product-details.sticky-content--desktop {
+    position: static !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .product-details .group-block,
+  .product-details [class*='group-block'] {
+    min-width: 0;
+  }
+
+  .product-details .variant-option--buttons {
+    grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+    gap: 8px;
+  }
+
+  .product-details .variant-option__button-label {
+    min-height: 44px !important;
+    padding: 9px 10px !important;
+    touch-action: manipulation;
+  }
+
+  .product-details :is(button, input, select, summary) {
+    min-height: 44px;
+  }
+
+  .product-details details,
+  .product-details [class*='accordion'] {
+    scroll-margin-top: 16px;
+  }
+
+  .lb-fit,
+  .lb-gsm,
+  .lb-efeat,
+  .lb-efaq,
+  .lb-ereviews {
+    padding-block: 44px !important;
+  }
+
+  .lb-fit__inner,
+  .lb-gsm__inner,
+  .lb-efeat__inner,
+  .lb-efaq__inner,
+  .lb-ereviews__inner {
+    padding-inline: 16px !important;
+  }
+
+  .lb-fit__head,
+  .lb-gsm__head,
+  .lb-efeat__copy,
+  .lb-efaq__intro,
+  .lb-ereviews__head {
+    margin-bottom: 28px !important;
+  }
+
+  .lb-ereviews .jdgm-carousel-wrapper,
+  .lb-ereviews .jdgm-rev-widg {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .lb-ereviews .jdgm-carousel-item,
+  .lb-ereviews .jdgm-rev {
+    min-width: 0 !important;
+  }
+
+  .lb-spec {
+    padding: 1.25rem 16px 0;
+  }
+
+  .lb-spec__row {
+    padding-block: 0.75rem;
+  }
+}
+
+/* Compact phones: retain hierarchy without forcing text, price, or controls
+   into a horizontal overflow state. */
+@media screen and (max-width: 389px) {
+  .product-details {
+    padding-inline: 12px;
+  }
+
+  .product-details .variant-option--buttons {
+    gap: 6px;
+  }
+
+  .product-details .variant-option__button-label {
+    font-size: 12px !important;
+    padding-inline: 8px !important;
+  }
+
+  .lb-fit__inner,
+  .lb-gsm__inner,
+  .lb-efeat__inner,
+  .lb-efaq__inner,
+  .lb-ereviews__inner {
+    padding-inline: 12px !important;
+  }
+}
