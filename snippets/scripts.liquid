@@ -119,16 +119,6 @@
 {% if template == 'product' or template.name == 'product' or request.page_type == 'product' %}
 <script src="{{ 'fly-to-cart.js' | asset_url }}" type="module" fetchpriority="low"></script>
 {% endif %}
-{%- comment -%}
-  slideshow.js: eager module load, gated to templates that render slideshow sections (2026-05-21).
-  Cannot go in idleScripts[] — defines <slideshow-component> custom element.
-  Deferring 5s causes unstyled layout (image shrinks) and broken slide interaction
-  until JS upgrades the element. Gated away from cart, 404, password which never
-  render slideshow sections.
-{%- endcomment -%}
-{%- unless template.name == 'cart' or template.name == '404' or template.name == 'password' -%}
-<script src="{{ 'slideshow.js' | asset_url }}" type="module" fetchpriority="low"></script>
-{%- endunless -%}
 {% if template == 'product' or template.name == 'product' or request.page_type == 'product' %}
 <script src="{{ 'media.js' | asset_url }}" type="module" fetchpriority="low"></script>
 {% endif %}
@@ -227,7 +217,6 @@
     {{ 'accordion-custom.js' | asset_url | json }},
     {{ 'video-background.js' | asset_url | json }},
     {{ 'rte-formatter.js' | asset_url | json }},
-    {{ 'recently-viewed-products.js' | asset_url | json }},
 
     // Collection + search filter UI only
     {%- if template.name == 'collection' or template.name == 'search' -%}
