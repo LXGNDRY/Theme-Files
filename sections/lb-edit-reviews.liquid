@@ -74,6 +74,15 @@
   color: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.5);
 }
 
+/* Keep the Judge.me mount from reserving a large empty block while it loads. */
+.lb-ereviews__app,
+.lb-ereviews__app > div,
+.lb-ereviews__app .jdgm-carousel-wrapper,
+.lb-ereviews__app .jdgm-carousel {
+  min-height: 0 !important;
+  height: auto !important;
+}
+
 /* Judge.me overrides to match the editorial theme */
 .lb-ereviews .jdgm-rev,
 .lb-ereviews .jdgm-rev-widg,
