@@ -36,7 +36,7 @@
                   sizes="(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw"
                   alt="{{ product.featured_image.alt | default: product.title | escape }}"
                   width="800"
-                  height="1000"
+                  height="800"
                   loading="lazy"
                 >
               {%- endif -%}
@@ -143,9 +143,9 @@
 .lb-egrid__media {
   position: relative;
   display: block;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
-  border-radius: 6px;
+  border-radius: 8px;
   background: rgba(var(--color-foreground-rgb, 238, 238, 231), 0.06);
 }
 
