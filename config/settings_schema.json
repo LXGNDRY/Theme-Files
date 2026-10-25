@@ -2357,5 +2357,27 @@
         "default": "equal-width-buttons"
       }
     ]
+  },
+  {
+    "name": "Cart conversion",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "cart_free_shipping_enabled",
+        "label": "Show free standard shipping progress",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "cart_free_shipping_threshold",
+        "label": "Free standard shipping threshold",
+        "min": 25,
+        "max": 500,
+        "step": 5,
+        "unit": "$",
+        "default": 100,
+        "visible_if": "{{ settings.cart_free_shipping_enabled }}"
+      }
+    ]
   }
 ]
