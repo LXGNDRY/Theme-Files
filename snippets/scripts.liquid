@@ -129,6 +129,7 @@
 {%- unless template.name == 'cart' or template.name == '404' or template.name == 'password' -%}
 {%- endunless -%}
 {% if template == 'product' or template.name == 'product' or request.page_type == 'product' %}
+<script src="{{ 'slideshow.js' | asset_url }}" type="module" fetchpriority="low"></script>
 <script src="{{ 'media.js' | asset_url }}" type="module" fetchpriority="low"></script>
 {% endif %}
 <script src="{{ 'product-price.js' | asset_url }}" type="module" fetchpriority="low"></script>
