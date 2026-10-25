@@ -68,9 +68,33 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "judge_me_reviews_preview_badge_3VhJnX": {
-              "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-              "settings": {}
+            "eyebrow_pdp": {
+              "type": "text",
+              "name": "t:names.text",
+              "disabled": true,
+              "settings": {
+                "text": "<p>LEGENDARY BRANDING · HEAVYWEIGHT STREETWEAR</p>",
+                "bleed": false,
+                "width": "100%",
+                "max_width": "narrow",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 10,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
             },
             "text_9WaLn7": {
               "type": "text",
@@ -98,6 +122,10 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "judge_me_reviews_preview_badge_3VhJnX": {
+              "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+              "settings": {}
             },
             "price_a7krng": {
               "type": "price",
@@ -163,31 +191,15 @@
               },
               "blocks": {}
             },
-            "text_DpkCnt": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p>Legendary Branding apparel is <strong>true to size & unisex</strong>. Ordering in your regular letter size will allow a clean oversized look, while sizing up will allow for a baggy look. We work closely with our manufacturers to ensure quality fit and premium textures.&nbsp;</p>",
-                "bleed": false,
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "center",
-                "type_preset": "custom",
-                "font": "var(--font-accent--family)",
-                "font_size": "1.125rem",
-                "line_height": "tight",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "balance",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 16,
-                "padding-block-end": 16,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
+            "lb_size_guide_pdp": {
+              "type": "lb-size-guide",
+              "settings": {},
+              "blocks": {}
+            },
+            "lb_low_stock_pdp": {
+              "type": "lb-low-stock",
+              "disabled": true,
+              "settings": {},
               "blocks": {}
             },
             "buy_buttons_eYQEYi": {
@@ -226,15 +238,31 @@
               },
               "block_order": []
             },
-            "lb_size_guide_pdp": {
-              "type": "lb-size-guide",
-              "settings": {},
-              "blocks": {}
-            },
-            "lb_low_stock_pdp": {
-              "type": "lb-low-stock",
-              "disabled": true,
-              "settings": {},
+            "text_DpkCnt": {
+              "type": "text",
+              "name": "t:names.text",
+              "settings": {
+                "text": "<p>Legendary Branding apparel is <strong>true to size & unisex</strong>. Ordering in your regular letter size will allow a clean oversized look, while sizing up will allow for a baggy look. We work closely with our manufacturers to ensure quality fit and premium textures.&nbsp;</p>",
+                "bleed": false,
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "center",
+                "type_preset": "custom",
+                "font": "var(--font-accent--family)",
+                "font_size": "1.125rem",
+                "line_height": "tight",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "balance",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 16,
+                "padding-block-end": 16,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
               "blocks": {}
             },
             "accordion_NKWPiW": {
@@ -424,34 +452,6 @@
                 "accordion_row_GUNjLB",
                 "accordion_row_XdEepH"
               ]
-            },
-            "eyebrow_pdp": {
-              "type": "text",
-              "name": "t:names.text",
-              "disabled": true,
-              "settings": {
-                "text": "<p>LEGENDARY BRANDING · HEAVYWEIGHT STREETWEAR</p>",
-                "bleed": false,
-                "width": "100%",
-                "max_width": "narrow",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 10,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
             }
           },
           "block_order": [
@@ -479,6 +479,196 @@
         "color_scheme": "scheme-5",
         "padding-block-start": 0,
         "padding-block-end": 0
+      }
+    },
+    "reviews_pdp": {
+      "type": "lb-edit-reviews",
+      "blocks": {
+        "judge_me_reviews_testimonials_carousel_product_Xah9K6": {
+          "type": "shopify://apps/judge-me-reviews/blocks/testimonials_carousel_product/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "show_sample_reviews": true,
+            "reviews_selection": "current_product",
+            "products": [],
+            "star_rating": "all",
+            "max_reviews": 20,
+            "quote_marks_size": "small",
+            "product_name_text_size": "small",
+            "verified_badge_style": "icon",
+            "card_height": "medium",
+            "text_size": "small",
+            "stars_size": "medium",
+            "arrows_position": "bottom",
+            "max_width": 1100,
+            "corner_styling": "soft",
+            "quote_marks_style": "serif",
+            "card_color": "#f9f9f9",
+            "stars_and_quote_marks_color": "#ffd700",
+            "text_color": "#000000",
+            "arrows_color": "#000000",
+            "show_border": false,
+            "border_color": "#108474",
+            "show_drop_shadow": true,
+            "transition_speed": 5,
+            "header_text": "Customers are saying",
+            "show_average_rating": true
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_testimonials_carousel_product_Xah9K6"
+      ],
+      "settings": {
+        "eyebrow": "From the community",
+        "heading": "WHAT THEY'RE SAYING.",
+        "subheading": "",
+        "color_scheme": "scheme-5"
+      }
+    },
+    "lb_gsm_pdp": {
+      "type": "lb-gsm-selector",
+      "blocks": {
+        "w0": {
+          "type": "weight",
+          "settings": {
+            "number": "300",
+            "name": "Substantial everyday weight",
+            "description": "Everyday wear with real body and drape, without heat or bulk.",
+            "product_url": "",
+            "button_label": "Explore this weight"
+          }
+        },
+        "w1": {
+          "type": "weight",
+          "settings": {
+            "number": "380",
+            "name": "Stronger structure",
+            "description": "A heavier hand that holds its shape and sits with intent.",
+            "product_url": "",
+            "button_label": "Explore this weight"
+          }
+        },
+        "w2": {
+          "type": "weight",
+          "settings": {
+            "number": "400",
+            "name": "Heavyweight presence",
+            "description": "Exceptional weight and a wide, structured silhouette.",
+            "product_url": "",
+            "button_label": "Explore this weight"
+          }
+        },
+        "w3": {
+          "type": "weight",
+          "settings": {
+            "number": "460",
+            "name": "Maximum weight",
+            "description": "Dense, substantial, made for a presence of its own.",
+            "product_url": "",
+            "button_label": "Explore this weight"
+          }
+        }
+      },
+      "block_order": [
+        "w0",
+        "w1",
+        "w2",
+        "w3"
+      ],
+      "settings": {
+        "eyebrow": "The fabric",
+        "heading": "BUILT ON WEIGHT.",
+        "body": "<p>GSM is the weight of the fabric in grams per square metre. The higher the number, the more structure, drape, and physical presence the garment has.</p>",
+        "anchor": "weight",
+        "color_scheme": "scheme-5"
+      }
+    },
+    "lb_fit_pdp": {
+      "type": "lb-fit-guide",
+      "settings": {
+        "eyebrow": "Your fit",
+        "heading": "OVERSIZED, ON YOUR TERMS.",
+        "body": "<p>Your usual letter size gives you the intended, structured oversized look. Go one size up for a baggier silhouette. Product measurements take priority — compare with a piece you already own.</p>",
+        "sizes": "S,M,L,XL,2XL",
+        "default_size": "M",
+        "button_label": "View size guide",
+        "button_url": "/pages/size-guide",
+        "disclaimer": "A starting point, not a body-measurement tool. Always compare the specific garment measurements with a piece you already love.",
+        "anchor": "fit",
+        "color_scheme": "scheme-5"
+      }
+    },
+    "lb_feature_pdp": {
+      "type": "lb-edit-feature",
+      "settings": {
+        "media_type": "video",
+        "video": "shopify://files/videos/hf_20260505_154356_c220951d-9e0a-431f-b565-bfd43700fc9c.mp4",
+        "media_side": "left",
+        "eyebrow": "Made with intent",
+        "heading": "BUILT TO OUTLAST.",
+        "body": "<p>Every piece is DTG printed on heavyweight, ring-spun cotton and built for repeat wear — the prints hold, the shape holds, season after season.</p>",
+        "cta_label": "Explore the collection",
+        "cta_url": "shopify://collections/all-products",
+        "color_scheme": "scheme-5"
+      }
+    },
+    "faq_pdp": {
+      "type": "lb-edit-faq",
+      "blocks": {
+        "q0": {
+          "type": "faq",
+          "settings": {
+            "question": "What will shipping cost?",
+            "answer": "<p>Standard shipping is $5. Orders over $100 get free standard shipping. Express is $12 where available. Taxes and duties are shown at checkout.</p>",
+            "open": true
+          }
+        },
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>Request a return within 30 days of delivery. Items must be unworn, unwashed and in original condition. Contact support for approval before sending anything back. For a size change or change of mind, return shipping is your responsibility. Final sale and other exclusions apply.</p>",
+            "open": false
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I choose my size?",
+            "answer": "<p>Start with your usual size for the intended oversized look, or size up for a baggier fit. Product measurements take priority: compare chest width and length with a garment you already wear.</p>",
+            "open": false
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "question": "How should I care for it?",
+            "answer": "<p>Machine wash cold, inside out, with like colors. Hang or lay flat to dry to preserve the fit and the print. Avoid high heat.</p>",
+            "open": false
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "question": "What payment methods can I use?",
+            "answer": "<p>Visa, Mastercard, American Express, Shop Pay and Apple Pay. Available methods are confirmed at checkout for your destination.</p>",
+            "open": false
+          }
+        }
+      },
+      "block_order": [
+        "q0",
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "settings": {
+        "eyebrow": "Good to know",
+        "heading": "BEFORE YOU COMMIT.",
+        "support_email": "lb@legendary-branding.com",
+        "anchor": "",
+        "color_scheme": "scheme-5"
       }
     },
     "product_recommendations_qnzPkn": {
@@ -789,184 +979,6 @@
         "padding-block-end": 16
       }
     },
-    "lb_gsm_pdp": {
-      "type": "lb-gsm-selector",
-      "blocks": {
-        "w0": {
-          "type": "weight",
-          "settings": {
-            "number": "300",
-            "name": "Substantial everyday weight",
-            "description": "Everyday wear with real body and drape, without heat or bulk."
-          }
-        },
-        "w1": {
-          "type": "weight",
-          "settings": {
-            "number": "380",
-            "name": "Stronger structure",
-            "description": "A heavier hand that holds its shape and sits with intent."
-          }
-        },
-        "w2": {
-          "type": "weight",
-          "settings": {
-            "number": "400",
-            "name": "Heavyweight presence",
-            "description": "Exceptional weight and a wide, structured silhouette."
-          }
-        },
-        "w3": {
-          "type": "weight",
-          "settings": {
-            "number": "460",
-            "name": "Maximum weight",
-            "description": "Dense, substantial, made for a presence of its own."
-          }
-        }
-      },
-      "block_order": [
-        "w0",
-        "w1",
-        "w2",
-        "w3"
-      ],
-      "settings": {
-        "eyebrow": "The fabric",
-        "heading": "BUILT ON WEIGHT.",
-        "body": "<p>GSM is the weight of the fabric in grams per square metre. The higher the number, the more structure, drape, and physical presence the garment has.</p>",
-        "color_scheme": "scheme-5"
-      }
-    },
-    "lb_fit_pdp": {
-      "type": "lb-fit-guide",
-      "settings": {
-        "eyebrow": "Your fit",
-        "heading": "OVERSIZED, ON YOUR TERMS.",
-        "body": "<p>Your usual letter size gives you the intended, structured oversized look. Go one size up for a baggier silhouette. Product measurements take priority — compare with a piece you already own.</p>",
-        "sizes": "S,M,L,XL,2XL",
-        "default_size": "M",
-        "button_label": "View size guide",
-        "button_url": "/pages/size-guide",
-        "color_scheme": "scheme-5"
-      }
-    },
-    "reviews_pdp": {
-      "type": "lb-edit-reviews",
-      "blocks": {
-        "judge_me_reviews_testimonials_carousel_product_Xah9K6": {
-          "type": "shopify://apps/judge-me-reviews/blocks/testimonials_carousel_product/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "show_sample_reviews": true,
-            "reviews_selection": "current_product",
-            "products": [],
-            "star_rating": "all",
-            "max_reviews": 20,
-            "quote_marks_size": "small",
-            "product_name_text_size": "small",
-            "verified_badge_style": "icon",
-            "card_height": "medium",
-            "text_size": "small",
-            "stars_size": "medium",
-            "arrows_position": "bottom",
-            "max_width": 1100,
-            "corner_styling": "soft",
-            "quote_marks_style": "serif",
-            "card_color": "#f9f9f9",
-            "stars_and_quote_marks_color": "#ffd700",
-            "text_color": "#000000",
-            "arrows_color": "#000000",
-            "show_border": false,
-            "border_color": "#108474",
-            "show_drop_shadow": true,
-            "transition_speed": 5,
-            "header_text": "Customers are saying",
-            "show_average_rating": true
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_testimonials_carousel_product_Xah9K6"
-      ],
-      "settings": {
-        "eyebrow": "From the community",
-        "heading": "WHAT THEY'RE SAYING.",
-        "color_scheme": "scheme-5"
-      }
-    },
-    "lb_feature_pdp": {
-      "type": "lb-edit-feature",
-      "settings": {
-        "media_type": "video",
-        "video": "shopify://files/videos/hf_20260505_154356_c220951d-9e0a-431f-b565-bfd43700fc9c.mp4",
-        "media_side": "left",
-        "eyebrow": "Made with intent",
-        "heading": "BUILT TO OUTLAST.",
-        "body": "<p>Every piece is DTG printed on heavyweight, ring-spun cotton and built for repeat wear — the prints hold, the shape holds, season after season.</p>",
-        "cta_label": "Explore the collection",
-        "cta_url": "shopify://collections/all-products",
-        "color_scheme": "scheme-5"
-      }
-    },
-    "faq_pdp": {
-      "type": "lb-edit-faq",
-      "blocks": {
-        "q0": {
-          "type": "faq",
-          "settings": {
-            "question": "What will shipping cost?",
-            "answer": "<p>Standard shipping is $5. Orders over $100 get free standard shipping. Express is $12 where available. Taxes and duties are shown at checkout.</p>",
-            "open": true
-          }
-        },
-        "q1": {
-          "type": "faq",
-          "settings": {
-            "question": "What is your return policy?",
-            "answer": "<p>Request a return within 30 days of delivery. Items must be unworn, unwashed and in original condition. Contact support for approval before sending anything back. For a size change or change of mind, return shipping is your responsibility. Final sale and other exclusions apply.</p>",
-            "open": false
-          }
-        },
-        "q2": {
-          "type": "faq",
-          "settings": {
-            "question": "How do I choose my size?",
-            "answer": "<p>Start with your usual size for the intended oversized look, or size up for a baggier fit. Product measurements take priority: compare chest width and length with a garment you already wear.</p>",
-            "open": false
-          }
-        },
-        "q3": {
-          "type": "faq",
-          "settings": {
-            "question": "How should I care for it?",
-            "answer": "<p>Machine wash cold, inside out, with like colors. Hang or lay flat to dry to preserve the fit and the print. Avoid high heat.</p>",
-            "open": false
-          }
-        },
-        "q4": {
-          "type": "faq",
-          "settings": {
-            "question": "What payment methods can I use?",
-            "answer": "<p>Visa, Mastercard, American Express, Shop Pay and Apple Pay. Available methods are confirmed at checkout for your destination.</p>",
-            "open": false
-          }
-        }
-      },
-      "block_order": [
-        "q0",
-        "q1",
-        "q2",
-        "q3",
-        "q4"
-      ],
-      "settings": {
-        "eyebrow": "Good to know",
-        "heading": "BEFORE YOU COMMIT.",
-        "support_email": "lb@legendary-branding.com",
-        "anchor": "",
-        "color_scheme": "scheme-5"
-      }
-    },
     "pdp_styles": {
       "type": "custom-liquid",
       "settings": {
@@ -980,10 +992,10 @@
   },
   "order": [
     "main",
+    "reviews_pdp",
     "lb_gsm_pdp",
     "lb_fit_pdp",
     "lb_feature_pdp",
-    "reviews_pdp",
     "faq_pdp",
     "product_recommendations_qnzPkn",
     "pdp_styles"
