@@ -385,3 +385,29 @@
     color: rgba(255, 255, 255, 0.68) !important;
   }
 }
+
+
+/* Modern sale badge over collection product imagery. */
+.product-grid-container .product-badges__badge--rectangle:not(.product-badges__badge--sold-out) {
+  padding: 7px 11px;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 8px !important;
+  background: rgba(5, 5, 5, 0.88) !important;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.20);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+@media screen and (max-width: 749px) {
+  .product-grid-container .product-badges__badge--rectangle:not(.product-badges__badge--sold-out) {
+    padding: 6px 9px;
+    font-size: 0.625rem;
+  }
+}
