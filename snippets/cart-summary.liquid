@@ -283,41 +283,12 @@
   </div>
 {%- endunless -%}
 
-{%- comment -%} LB International Checkout Notice {%- endcomment -%}
 {%- if settings.show_international_payment_notice and shop.address.country and localization.country and localization.country.iso_code != shop.address.country.iso_code -%}
   <div class="lb-international-notice" role="note">
     <span class="svg-wrapper" aria-hidden="true">
       {{- 'icon-info.svg' | inline_asset_content -}}
     </span>
-    <div class="lb-international-notice__body">
-      <p class="lb-international-notice__text">
-        {%- if localization.country.iso_code == 'ID' -%}
-          Your Legendary Branding order is securely processed and prepared with care. At checkout, select dLocal Go Local Payments to access familiar Indonesian options such as OVO, DANA, QRIS, Alfamart, and local bank transfer.
-        {%- elsif localization.country.iso_code == 'MX' -%}
-          Your Legendary Branding order is securely processed and prepared with care. At checkout, select dLocal Go Local Payments to access OXXO and other local checkout options available for your order.
-        {%- elsif localization.country.iso_code == 'BR' -%}
-          Your Legendary Branding order is securely processed and prepared with care. At checkout, select dLocal Go Local Payments to access PIX, Boleto, and other local checkout options available for your order.
-        {%- elsif localization.country.iso_code == 'EC' -%}
-          Your Legendary Branding order is securely processed and prepared with care. At checkout, select dLocal Go Local Payments to view the local cash, bank transfer, and card options available for your order.
-        {%- elsif localization.country.iso_code == 'KE' -%}
-          Your Legendary Branding order is securely processed and prepared with care. At checkout, select dLocal Go Local Payments to access M-Pesa and other local payment options available for your order.
-        {%- elsif localization.country.iso_code == 'NG' -%}
-          Your Legendary Branding order is securely processed and prepared with care. At checkout, select dLocal Go Local Payments to access local bank transfer options in Nigeria.
-        {%- else -%}
-          Wherever you are in the world, your Legendary Branding order is securely processed and prepared with care. International delivery options, tracking, and available local payment methods are shown at checkout, so you can review everything before placing your order. Thank you for supporting the movement and becoming part of the GOATED family.
-        {%- endif -%}
-      </p>
-      {%- if settings.cart_ships_to_countries_count > 0 -%}
-        <p class="lb-international-notice__text lb-international-notice__text--secondary">
-          {{ 'content.cart_international_reassurance' | t: count: settings.cart_ships_to_countries_count }}
-        </p>
-      {%- endif -%}
-      {%- if shop.email != blank -%}
-        <p class="lb-international-notice__text lb-international-notice__text--secondary">
-          {{ 'content.cart_international_support_html' | t: email: shop.email }}
-        </p>
-      {%- endif -%}
-    </div>
+    <p class="lb-international-notice__text">{{ 'content.cart_international_notice' | t }}</p>
   </div>
 {%- endif -%}
 
