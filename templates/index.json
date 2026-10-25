@@ -428,9 +428,54 @@
         "body": "<p>Use fabric weight, silhouette, and delivery expectations to narrow the edit before you open a product page.</p>",
         "color_scheme": "scheme-5"
       }
+    },
+    "ed_nav": {
+      "type": "lb-edit-nav",
+      "blocks": {
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "The edit",
+            "target": "edit"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "The weight",
+            "target": "weight"
+          }
+        },
+        "n3": {
+          "type": "link",
+          "settings": {
+            "label": "Your fit",
+            "target": "fit"
+          }
+        },
+        "n4": {
+          "type": "link",
+          "settings": {
+            "label": "Good to know",
+            "target": "good-to-know"
+          }
+        }
+      },
+      "block_order": [
+        "n1",
+        "n2",
+        "n3",
+        "n4"
+      ],
+      "settings": {
+        "label": "The Heavyweight Edit",
+        "aria_label": "On this page",
+        "color_scheme": "scheme-5"
+      }
     }
   },
   "order": [
+    "ed_nav",
     "ed_hero",
     "ed_marquee",
     "ed_trust",

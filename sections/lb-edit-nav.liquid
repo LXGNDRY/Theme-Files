@@ -1,0 +1,145 @@
+{%- liquid
+  assign scheme = section.settings.color_scheme | default: 'scheme-5'
+-%}
+{%- if section.blocks.size > 0 -%}
+<nav class="lb-enav color-{{ scheme }}" aria-label="{{ section.settings.aria_label | default: 'On this page' }}">
+  <div class="lb-enav__inner">
+    {%- if section.settings.label != blank -%}
+      <span class="lb-enav__brand">{{ section.settings.label }}</span>
+    {%- endif -%}
+    <ul class="lb-enav__list">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign target = block.settings.target | strip
+          unless target contains '#' or target contains '/'
+            assign target = '#' | append: target
+          endunless
+        -%}
+        <li {{ block.shopify_attributes }}>
+          <a class="lb-enav__link" href="{{ target }}">{{ block.settings.label }}</a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</nav>
+{%- endif -%}
+
+{% stylesheet %}
+.lb-enav {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  border-bottom: 1px solid rgba(var(--color-foreground-rgb, 238, 238, 231), 0.14);
+}
+
+.lb-enav__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 12px var(--lb-sp-md, 22px);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.lb-enav__inner::-webkit-scrollbar {
+  display: none;
+}
+
+.lb-enav__brand {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0.7;
+}
+
+.lb-enav__list {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lb-enav__link {
+  display: inline-block;
+  padding: 6px 0;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.8;
+  border-bottom: 1px solid transparent;
+  transition: opacity 0.18s ease, border-color 0.18s ease;
+}
+
+.lb-enav__link:hover,
+.lb-enav__link:focus-visible {
+  opacity: 1;
+  border-color: currentColor;
+}
+
+@media (max-width: 749px) {
+  .lb-enav__brand {
+    display: none;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Editorial Anchor Nav",
+  "tag": "section",
+  "class": "lb-enav-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Left label",
+      "default": "The Heavyweight Edit"
+    },
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "Accessible label",
+      "default": "On this page"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-5"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Nav link",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "The edit" },
+        { "type": "text", "id": "target", "label": "Anchor id or URL", "info": "e.g. edit, weight, fit, good-to-know", "default": "edit" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Editorial Anchor Nav",
+      "blocks": [
+        { "type": "link", "settings": { "label": "The edit", "target": "edit" } },
+        { "type": "link", "settings": { "label": "The weight", "target": "weight" } },
+        { "type": "link", "settings": { "label": "Your fit", "target": "fit" } },
+        { "type": "link", "settings": { "label": "Good to know", "target": "good-to-know" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
