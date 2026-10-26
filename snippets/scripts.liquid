@@ -1,3 +1,4 @@
+
 <script type="importmap">
   {
     "imports": {
@@ -88,14 +89,23 @@
   })();
 </script>
 <script src="{{ 'overflow-list.js' | asset_url }}" type="module" fetchpriority="low"></script>
-{%- comment -%}
-  quick-add.js + product-card.js: gated away from templates with no product grids (2026-07-24).
-  cart, 404, password, and gift_card never render product cards or quick-add triggers.
-  Saves two module fetches + parse on those pages.
-{%- endcomment -%}
-{%- unless template.name == 'cart' or template.name == '404' or template.name == 'password' or template.name == 'gift_card' -%}
-<script src="{{ 'quick-add.js' | asset_url }}" type="module" fetchpriority="low"></script>
-{%- endunless -%}
+<script type="module">
+  if (document.querySelector('quick-add-component')) {
+    import({{ 'quick-add.js' | asset_url | json }});
+  }
+
+  if (document.querySelector('product-card, product-card-link')) {
+    import({{ 'product-card.js' | asset_url | json }});
+  }
+
+  if (document.querySelector('product-price')) {
+    import({{ 'product-price.js' | asset_url | json }});
+  }
+
+  if (document.querySelector('quantity-selector-component')) {
+    import({{ 'component-quantity-selector.js' | asset_url | json }});
+  }
+</script>
 
 {% if settings.show_add_discount_code %}
   <script src="{{ 'cart-discount.js' | asset_url }}" type="module" fetchpriority="low"></script>
@@ -105,9 +115,6 @@
 {% if template == 'product' or template.name == 'product' or request.page_type == 'product' %}
 <script src="{{ 'variant-picker.js' | asset_url }}" type="module" fetchpriority="low"></script>
 {% endif %}
-{%- unless template.name == 'cart' or template.name == '404' or template.name == 'password' or template.name == 'gift_card' -%}
-<script src="{{ 'product-card.js' | asset_url }}" type="module" fetchpriority="low"></script>
-{%- endunless -%}
 {% if template == 'product' or template.name == 'product' or request.page_type == 'product' %}
 <script src="{{ 'product-form.js' | asset_url }}" type="module" fetchpriority="low"></script>
 {% endif %}
@@ -132,7 +139,6 @@
 <script src="{{ 'slideshow.js' | asset_url }}" type="module" fetchpriority="low"></script>
 <script src="{{ 'media.js' | asset_url }}" type="module" fetchpriority="low"></script>
 {% endif %}
-<script src="{{ 'product-price.js' | asset_url }}" type="module" fetchpriority="low"></script>
 {% if template == 'product' or template.name == 'product' or request.page_type == 'product' %}
 <script src="{{ 'product-sku.js' | asset_url }}" type="module" fetchpriority="low"></script>
 {% endif %}
@@ -145,7 +151,6 @@
 <script src="{{ 'product-inventory.js' | asset_url }}" type="module" fetchpriority="low"></script>
 <script src="{{ 'media-gallery.js' | asset_url }}" type="module" fetchpriority="low"></script>
 {% endif %}
-<script src="{{ 'component-quantity-selector.js' | asset_url }}" type="module" fetchpriority="low"></script>
 
 {% if localization.available_countries.size > 1 or localization.available_languages.size > 1 %}
 
@@ -254,3 +259,4 @@
     ? requestIdleCallback(loadIdleScripts, { timeout: 5000 })
     : setTimeout(loadIdleScripts, 5000);
 </script>
+
