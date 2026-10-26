@@ -209,7 +209,7 @@
             "quote_marks_style": "serif",
             "card_color": "#F9F9F9",
             "stars_and_quote_marks_color": "#108474",
-            "text_color": "#000000",
+            "text_color": "#6B6B6B",
             "arrows_color": "#000000",
             "show_border": false,
             "border_color": "#108474",
@@ -236,7 +236,7 @@
         "eyebrow": "From the community",
         "heading": "",
         "subheading": "",
-        "color_scheme": "scheme-2"
+        "color_scheme": "scheme-5"
       }
     },
     "ed_steps": {
