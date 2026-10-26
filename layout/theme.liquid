@@ -62,17 +62,14 @@
   {%- render 'lb-collection-lcp-preload' -%}
   {%- render 'lb-article-lcp-preload' -%}
 
-  {%- comment -%}── 4 + 5. CHAOS UNLEASHED ────────────────────────────────────
-    Must render BEFORE content_for_header is emitted so Chaos can
-    intercept and defer app CSS/JS injected by Shopify into CFH.
-    cfh_defer receives the raw CFH string as a parameter — it parses it
-    server-side and re-emits only non-blocking resources.
+  {%- comment -%}── 4. PERFORMANCE GUARDS + SHOPIFY HEADER ───────────────────
+    Shopify can stream eligible JSON-template responses only when
+    content_for_header is emitted directly. Do not capture, assign, wrap, or
+    rewrite it. The app and theme safeguards above remain independent of that
+    streamed response path.
   {%- endcomment -%}
   {%- render 'chaos_unleashed_master' -%}
-  {% # theme-check-disable ContentForHeaderModification %}
-  {%- capture Chaos_Raw_CFH -%}{{ content_for_header }}{%- endcapture -%}
-  {%- render 'chaos_unleashed_cfh_defer', raw_cfh: Chaos_Raw_CFH -%}
-  {% # theme-check-enable ContentForHeaderModification %}
+  {{ content_for_header }}
 
   {%- comment -%}── 6. DATALAYER (single authoritative init) ─────────────────
     Must exist before GTM and before any app script pushes events.
