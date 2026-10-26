@@ -137,7 +137,7 @@
                 "width": "100%",
                 "alignment": "center",
                 "font": "var(--font-accent--family)",
-                "font_size": "2rem",
+                "font_size": "1.5rem",
                 "line_height": "tight",
                 "letter_spacing": "normal",
                 "case": "uppercase",
