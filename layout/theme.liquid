@@ -288,9 +288,9 @@
                      state, section divider, navigation beat
     lb-editorial   : film grain + display-type bleed
 
-    Site-wide, so preload-swap like the rest of the non-critical group. Neither
-    file paints during LCP: the scroll rail is driven by a scroll timeline and
-    the grain overlay starts at opacity 0 behind a delay.
+    Neither file paints during LCP: the scroll rail is driven by a scroll
+    timeline and the grain overlay starts at opacity 0 behind a delay. Both
+    stylesheets are loaded by lb-idle-defer after first paint.
 
     --lb-goat-mark is defined here rather than in the stylesheets because a
     stylesheet cannot resolve asset_url. It points at assets/goat-mark.svg — a
@@ -303,10 +303,8 @@
     versioned with the theme, and no ?v= cache-buster that changes on re-upload.
   {%- endcomment -%}
   <style>:root{--lb-goat-mark:url({{ 'goat-mark.svg' | asset_url }});}</style>
-  <link rel="preload" href="{{ 'lb-goat-system.css' | asset_url }}" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet';">
   <noscript><link rel="stylesheet" href="{{ 'lb-goat-system.css' | asset_url }}"></noscript>
 
-  <link rel="preload" href="{{ 'lb-editorial.css' | asset_url }}" as="style" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet';">
   <noscript><link rel="stylesheet" href="{{ 'lb-editorial.css' | asset_url }}"></noscript>
 
   {%- if template.name == 'product' -%}
@@ -519,4 +517,5 @@
   {%- render 'lb-ga4-events' -%}
 </body>
 </html>
+
 
