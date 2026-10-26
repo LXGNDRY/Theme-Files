@@ -140,8 +140,8 @@
       // v1.0 2026-05-20: IntersectionObserver trigger for deferred-media[autoplay].
       // Replaces the bare {{ media_content }} render in video.liquid that caused
       // Chrome's preload scanner to fetch 4-5 MB of video bytes on every PDP load.
-      // Anchored to the first autoplay deferred-media element; falls back to idle
-      // on pages with no such elements (e.g. collection, cart).
+      // Anchored to the first autoplay deferred-media element. Pages without
+      // matching media do not download this helper.
       src:     '{{ "lb-deferred-media-autoplay.js" | asset_url }}',
       trigger: 'visible',
       anchor:  'deferred-media[autoplay]'
@@ -196,9 +196,6 @@
       var anchor = item.anchor && document.querySelector(item.anchor);
       if (anchor) {
         whenVisible(anchor, function () { loader(item.src); });
-      } else {
-        // No matching element on this page — still load on idle as fallback
-        whenIdle(function () { loader(item.src); });
       }
     }
   });
