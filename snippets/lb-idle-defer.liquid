@@ -290,20 +290,30 @@
   }
 
   // ─────────────────────────────────────────────────────────────────────────
-  //  5. BELOW-FOLD CSS — lb-seo-components.css
-  //     lb-keyword-footer, lb-related-collections, lb-collection-nav,
-  //     lb-related-products are below-the-fold components. Their CSS was
-  //     previously inlined in theme.liquid blocking first paint.
-  //     Loaded here via idle callback — no layout impact on above-fold. (2026-05-20)
+  //  5. NON-CRITICAL CSS
+  //     These stylesheets do not contribute to first paint. Loading them after
+  //     the critical path keeps decorative and below-fold CSS out of the early
+  //     request queue.
   // ─────────────────────────────────────────────────────────────────────────
+  function loadStylesheet(href) {
+    if (document.querySelector('link[data-lb-idle-style="' + href + '"]')) return;
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    link.dataset.lbIdleStyle = href;
+    document.head.appendChild(link);
+  }
+
   whenIdle(function () {
-    var lbSeoLink = document.createElement('link');
-    lbSeoLink.rel = 'stylesheet';
-    lbSeoLink.href = {{ 'lb-seo-components.css' | asset_url | json }};
-    document.head.appendChild(lbSeoLink);
+    [
+      {{ 'lb-seo-components.css' | asset_url | json }},
+      {{ 'lb-goat-system.css' | asset_url | json }},
+      {{ 'lb-editorial.css' | asset_url | json }}
+    ].forEach(loadStylesheet);
   });
 
   log('lb-idle-defer v2.0.0 initialized');
 
 })();
 </script>
+
