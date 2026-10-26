@@ -107,7 +107,7 @@
                 "alignment": "center",
                 "type_preset": "custom",
                 "font": "var(--font-body--family)",
-                "font_size": "1.25rem",
+                "font_size": "1.5rem",
                 "line_height": "tight",
                 "letter_spacing": "normal",
                 "case": "uppercase",
@@ -137,7 +137,7 @@
                 "width": "100%",
                 "alignment": "center",
                 "font": "var(--font-accent--family)",
-                "font_size": "1.5rem",
+                "font_size": "2rem",
                 "line_height": "tight",
                 "letter_spacing": "normal",
                 "case": "uppercase",
@@ -193,6 +193,7 @@
             },
             "lb_size_guide_pdp": {
               "type": "lb-size-guide",
+              "disabled": true,
               "settings": {},
               "blocks": {}
             },
@@ -285,46 +286,6 @@
                 "padding-inline-end": 0
               },
               "blocks": {
-                "accordion_row_NdBezV": {
-                  "type": "_accordion-row",
-                  "settings": {
-                    "heading": "Product Description",
-                    "open_by_default": false,
-                    "icon": "chat_bubble",
-                    "width": 20
-                  },
-                  "blocks": {
-                    "text_n7A9da": {
-                      "type": "text",
-                      "settings": {
-                        "text": "{{ closest.product.description }}",
-                        "bleed": false,
-                        "width": "100%",
-                        "max_width": "normal",
-                        "alignment": "center",
-                        "type_preset": "custom",
-                        "font": "var(--font-secondary--family)",
-                        "font_size": "var(--font-size--body-lg)",
-                        "line_height": "tight",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "pretty",
-                        "color": "",
-                        "background": false,
-                        "background_color": "#00000026",
-                        "corner_radius": 0,
-                        "padding-block-start": 12,
-                        "padding-block-end": 0,
-                        "padding-inline-start": 0,
-                        "padding-inline-end": 0
-                      },
-                      "blocks": {}
-                    }
-                  },
-                  "block_order": [
-                    "text_n7A9da"
-                  ]
-                },
                 "accordion_row_7PAkUx": {
                   "type": "_accordion-row",
                   "disabled": true,
@@ -364,6 +325,46 @@
                   },
                   "block_order": [
                     "text_DLmEPK"
+                  ]
+                },
+                "accordion_row_XdEepH": {
+                  "type": "_accordion-row",
+                  "settings": {
+                    "heading": "Our Quality Standard",
+                    "open_by_default": false,
+                    "icon": "check_box",
+                    "width": 20
+                  },
+                  "blocks": {
+                    "text_BtQAUd": {
+                      "type": "text",
+                      "settings": {
+                        "text": "<h2><strong>Built for Heavy Rotation</strong></h2><p>Every piece is engineered to handle real wear, not just photo shoots. We control fabric, print, and construction so your favorite tee still feels and looks right after countless washes.</p><h2><strong>Zero Shortcuts, Ever</strong></h2><p>From yarn selection to final inspection, we reject anything that doesn’t meet our internal benchmarks. If it wouldn’t make our own rotation, it never reaches yours.</p><h2><strong>Precision in Every Detail</strong></h2><p>Seams, prints, and fit are measured against strict tolerances on every production run. That’s how we deliver a consistent, premium feel, drop after drop, size after size.</p>",
+                        "bleed": false,
+                        "width": "100%",
+                        "max_width": "normal",
+                        "alignment": "center",
+                        "type_preset": "custom",
+                        "font": "var(--font-secondary--family)",
+                        "font_size": "var(--font-size--body-lg)",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                        "wrap": "pretty",
+                        "color": "",
+                        "background": false,
+                        "background_color": "#00000026",
+                        "corner_radius": 0,
+                        "padding-block-start": 12,
+                        "padding-block-end": 0,
+                        "padding-inline-start": 0,
+                        "padding-inline-end": 0
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "text_BtQAUd"
                   ]
                 },
                 "accordion_row_GUNjLB": {
@@ -406,19 +407,19 @@
                     "text_VGFaLm"
                   ]
                 },
-                "accordion_row_XdEepH": {
+                "accordion_row_NdBezV": {
                   "type": "_accordion-row",
                   "settings": {
-                    "heading": "Our Quality Standard",
+                    "heading": "Product Description",
                     "open_by_default": false,
-                    "icon": "check_box",
+                    "icon": "chat_bubble",
                     "width": 20
                   },
                   "blocks": {
-                    "text_BtQAUd": {
+                    "text_n7A9da": {
                       "type": "text",
                       "settings": {
-                        "text": "<h2><strong>Built for Heavy Rotation</strong></h2><p>Every piece is engineered to handle real wear, not just photo shoots. We control fabric, print, and construction so your favorite tee still feels and looks right after countless washes.</p><h2><strong>Zero Shortcuts, Ever</strong></h2><p>From yarn selection to final inspection, we reject anything that doesn’t meet our internal benchmarks. If it wouldn’t make our own rotation, it never reaches yours.</p><h2><strong>Precision in Every Detail</strong></h2><p>Seams, prints, and fit are measured against strict tolerances on every production run. That’s how we deliver a consistent, premium feel, drop after drop, size after size.</p>",
+                        "text": "{{ closest.product.description }}",
                         "bleed": false,
                         "width": "100%",
                         "max_width": "normal",
@@ -426,7 +427,7 @@
                         "type_preset": "custom",
                         "font": "var(--font-secondary--family)",
                         "font_size": "var(--font-size--body-lg)",
-                        "line_height": "normal",
+                        "line_height": "tight",
                         "letter_spacing": "normal",
                         "case": "none",
                         "wrap": "pretty",
@@ -443,15 +444,15 @@
                     }
                   },
                   "block_order": [
-                    "text_BtQAUd"
+                    "text_n7A9da"
                   ]
                 }
               },
               "block_order": [
-                "accordion_row_NdBezV",
                 "accordion_row_7PAkUx",
+                "accordion_row_XdEepH",
                 "accordion_row_GUNjLB",
-                "accordion_row_XdEepH"
+                "accordion_row_NdBezV"
               ]
             }
           },
