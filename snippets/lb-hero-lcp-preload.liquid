@@ -1,19 +1,20 @@
+
 {%- comment -%}
   lb-hero-lcp-preload.liquid
   Version:      4.0.0
   Last updated: 2026-08-21
   Status:       Intentionally no-op.
 
-  The homepage hero already owns LCP preloading inside sections/hero.liquid.
-  That implementation uses Shopify's preload_tag and mirrors the exact image
-  widths/sizes selected by the rendered hero branch. Keeping a second, head-
-  level preload path here caused duplicate high-priority image discovery and
-  could make Chrome download competing desktop/mobile candidates.
+  Each hero section owns its own preload so it can use the exact image object,
+  widths, and sizes emitted by its markup. Keeping a second, head-level path
+  here would duplicate high-priority discovery and could make Chrome download
+  competing desktop/mobile candidates.
 
   This compatibility snippet remains because layout/theme.liquid renders it.
   Rendering nothing preserves that call site while establishing a single
-  source of truth for hero LCP preloading: sections/hero.liquid.
+  source of truth for hero LCP preloading: the rendered hero section.
 
   Do not re-introduce manual homepage hero <link rel="preload"> tags here
   unless the section-level preload mechanism is removed in the same release.
 {%- endcomment -%}
+

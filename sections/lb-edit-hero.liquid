@@ -2,6 +2,16 @@
   assign scheme = section.settings.color_scheme | default: 'scheme-5'
   assign img = section.settings.image
 -%}
+{%- if img != blank and section.index == 1 -%}
+  <link
+    rel="preload"
+    as="image"
+    href="{{ img | image_url: width: 1200, format: 'webp' }}"
+    imagesrcset="{{ img | image_url: width: 480, format: 'webp' }} 480w, {{ img | image_url: width: 750, format: 'webp' }} 750w, {{ img | image_url: width: 1200, format: 'webp' }} 1200w, {{ img | image_url: width: 1600, format: 'webp' }} 1600w, {{ img | image_url: width: 2400, format: 'webp' }} 2400w"
+    imagesizes="100vw"
+    fetchpriority="high"
+  >
+{%- endif -%}
 <section class="lb-ehero color-{{ scheme }}{% if img %} lb-ehero--media{% endif %}" data-lb-ehero>
   {%- if img -%}
     <div class="lb-ehero__bg" aria-hidden="true">
@@ -300,3 +310,4 @@
   ]
 }
 {% endschema %}
+
