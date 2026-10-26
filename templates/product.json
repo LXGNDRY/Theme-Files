@@ -443,11 +443,11 @@
         }
       },
       "settings": {
-        "content_width": "content-full-width",
+        "content_width": "content-center-aligned",
         "desktop_media_position": "right",
         "equal_columns": false,
         "limit_details_width": true,
-        "gap": 28,
+        "gap": 48,
         "enable_sticky_add_to_cart": true,
         "color_scheme": "scheme-5",
         "padding-block-start": 0,
